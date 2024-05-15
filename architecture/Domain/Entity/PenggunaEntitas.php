@@ -1,0 +1,21 @@
+<?php
+namespace Architecture\Domain\Entity;
+
+use Architecture\Domain\Contract\IPengguna;
+
+class PenggunaEntitas extends IPengguna{
+    public static function make($id=null, $username=null, $password=null, $nama=null, $faculty=null, $programStudy=null, $position=null, $level=null, $active=true){
+        $instance = new self();
+        $instance->id = $id;
+        $instance->username = $username;
+        $instance->password = $password;
+        $instance->nama = $nama;
+        $instance->faculty = $faculty;
+        $instance->programStudy = $programStudy;
+        $instance->position = $position;
+        $instance->level = $level;
+        $instance->active = $active;
+
+        return $instance;
+    }
+}

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Dynamic Linked Select2</title>
+  <link href="https://sippm.unpak.ac.id/assets/css/style.css" rel="stylesheet">
+  <link href="https://sippm.unpak.ac.id/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+  <style>
+    /* Menetapkan lebar untuk setiap select */
+    .select2-container {
+      width: 100%;
+      /* Sesuaikan dengan lebar yang diinginkan */
+    }
+  </style>
+</head>
+
+<body>
+  <form>
+    <div class="row">
+      <div class="col-lg-12">
+        <table id="dynamic-table" class="table">
+          <tbody id="select-container"></tbody>
+        </table>
+      </div>
+    </div>
+    <button type="button" id="add-select" class="btn btn-primary">Add Select</button>
+  </form>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script>
+    $(document).ready(function () {
+
+      function createNewRow(i) {
+        var newRow = $(`
+          <tr>
+            <td>
+              <select name="select1[${i}]" class="form-control dynamic-select1" style="width: 100%;">
+                <option value="">--pilih--</option>
+              </select>
+            </td>
+            <td>
+              <select name="select2[${i}]" class="form-control dynamic-select2" style="width: 100%;">
+                <option value="">--pilih--</option>
+              </select>
+            </td>
+            <td>
+              <select name="select3[${i}]" class="form-control dynamic-select3" style="width: 100%;">
+                <option value="">--pilih--</option>
+              </select>
+            </td>
+            <td>
+              <button type="button" class="btn btn-danger delete-row">Hapus</button>
+            </td>
+          </tr>`);
+
+        setOptions(newRow.find('.dynamic-select1'), data);
+        setOptions(newRow.find('.dynamic-select2'), []);
+        setOptions(newRow.find('.dynamic-select3'), []);
+
+        // Hapus baris jika tombol "Hapus" diklik
+        newRow.find('.delete-row').on('click', function () {
+          $(this).closest('tr').remove();
+        });
+
+        return newRow;
+      }
+      function findDataById(data, id) {
+        for (var i = 0; i < data.length; i++) {
+          if (data[i].id === id) {
+            return data[i].data;
+          }
+        }
+        return [];
+      }
+      function setOptions(selectElement, options, clear=false) {
+        options.unshift({
+          id: '',
+          text: '--pilih--'
+        });
+
+        if(clear){
+          selectElement.empty();
+        }
+        selectElement.select2({
+          // placeholder: '--pilih--',
+          data: options
+        });
+      }
+      function createInput(index, selected) {
+        var newRow = createNewRow(index);
+        $('#select-container').append(newRow);
+
+        // Ambil data yang sesuai berdasarkan ID yang dipilih pada select1
+        newRow.find('.dynamic-select1').on('change', function () {
+          var selectedValue = $(this).val();
+          var dynamicSelect2 = $(this).closest('tr').find('.dynamic-select2');
+          var dynamicSelect3 = $(this).closest('tr').find('.dynamic-select3');
+          var options2 = [];
+          var options3 = [];
+
+          if (selectedValue !== '') {
+            options2 = findDataById(data, selectedValue);
+
+            setOptions(dynamicSelect2, options2,true);
+            setOptions(dynamicSelect3, [],true);
+          } else {
+            setOptions(dynamicSelect2, [],true);
+            setOptions(dynamicSelect3, [],true);
+          }
+
+          // Event listener untuk dynamicSelect2
+          dynamicSelect2.on('change', function () {
+            var selectedValue2 = $(this).val();
+            if (selectedValue2 !== '') {
+              options3 = findDataById(options2, selectedValue2);
+              setOptions(dynamicSelect3, options3,true);
+            } else {
+              setOptions(dynamicSelect3, [],true);
+            }
+          });
+        });
+
+        // Jika ada nilai yang dipilih sebelumnya, isi dropdown sesuai
+        if (selected.length > 0) {
+          newRow.find('.dynamic-select1').val(selected[0]).trigger('change');
+          if (selected.length > 1) {
+            newRow.find('.dynamic-select2').val(selected[1]).trigger('change');
+            if (selected.length > 2) {
+              newRow.find('.dynamic-select3').val(selected[2]).trigger('change');
+            }
+          }
+        }
+      }
+
+      var data = [
+        {
+          "id": "1",
+          "text": "pilihan 1",
+          "data": [
+            {
+              "id": "11",
+              "text": "pilihan 11",
+              "data": [
+                {
+                  "id": "111",
+                  "text": "pilihan 111"
+                },
+                {
+                  "id": "112",
+                  "text": "pilihan 112"
+                }
+              ]
+            },
+            {
+              "id": "12",
+              "text": "pilihan 12",
+              "data": [
+                {
+                  "id": "121",
+                  "text": "pilihan 121"
+                },
+                {
+                  "id": "122",
+                  "text": "pilihan 122"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "2",
+          "text": "pilihan 2",
+          "data": []
+        },
+        {
+          "id": "3",
+          "text": "pilihan 3",
+          "data": []
+        }
+      ];
+
+      var loadDataLocal = [
+        [1,11,112]
+      ];
+      var lengtLoadData = loadDataLocal.length;
+      for (let index = 0; index < loadDataLocal.length; index++) {
+        const element = loadDataLocal[index];
+        createInput(index, element)
+      }
+
+      $('#add-select').on('click', function () {
+        createInput(lengtLoadData,[]);
+        lengtLoadData++;
+      });
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Stepper Tab - Bootstrap 5</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<style>
+    .circle-tab-container {
+      display: flex;
+      align-items: center;
+    }
+    .circle-tab-container-box {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+    }
+    .circle-tab {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      text-align: center;
+      padding-top: 8px;
+      margin-right: 10px;
+      font-weight: bold;
+      border: 2px solid #ccc;
+      background-color: #fff;
+      color: #000;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .circle-tab,.step-label {
+        display: block;
+        text-align: center;
+        font-size: 12px;
+    }
+    .circle-tab.active {
+      background-color: #007bff;
+      color: #fff;
+      border-color: #007bff;
+    }
+    .line {
+      flex: 1;
+      border-top: 2px solid #ccc;
+    }
+</style>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div id="stepperForm">
+        <div class="row">
+          <div class="col-12">
+            <div class="nav circle-tab-container mb-3" id="pills-tab" role="tablist">
+              <div class="circle-tab-container-box">
+                <button class="nav-link circle-tab active" id="step1-tab" data-bs-toggle="pill" data-bs-target="#step1" type="button" role="tab" aria-controls="step1" aria-selected="true">1</button>
+                <span class="step-label">Step 1 - Stepper</span>
+              </div>              
+              <div class="line"></div>
+              <div class="circle-tab-container-box">
+                <button class="nav-link circle-tab" id="step2-tab" data-bs-toggle="pill" data-bs-target="#step2" type="button" role="tab" aria-controls="step2" aria-selected="false" disabled>2</button>
+                <span class="step-label">Step 2 - Stepper</span>
+              </div>
+              <div class="line"></div>
+              <div class="circle-tab-container-box">
+                <button class="nav-link circle-tab" id="step3-tab" data-bs-toggle="pill" data-bs-target="#step3" type="button" role="tab" aria-controls="step3" aria-selected="false" disabled>3</button>
+                <span class="step-label">Step 3 - Stepper</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="tab-content" id="pills-tabContent">
+              <div class="tab-pane fade show active" id="step1" role="tabpanel" aria-labelledby="step1-tab">
+                <h3>Step 1 Content</h3>
+                <p>This is the content for step 1.</p>
+                <button class="btn btn-primary" id="nextStep1">Next</button>
+              </div>
+              <div class="tab-pane fade" id="step2" role="tabpanel" aria-labelledby="step2-tab">
+                <h3>Step 2 Content</h3>
+                <p>This is the content for step 2.</p>
+                <button class="btn btn-secondary mr-2" id="prevStep2">Previous</button>
+                <button class="btn btn-primary" id="nextStep2">Next</button>
+              </div>
+              <div class="tab-pane fade" id="step3" role="tabpanel" aria-labelledby="step3-tab">
+                <h3>Step 3 Content</h3>
+                <p>This is the content for step 3.</p>
+                <button class="btn btn-secondary mr-2" id="prevStep3">Previous</button>
+                <button type="submit" class="btn btn-success">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+<script>
+  // JavaScript to handle form stepper functionality
+  document.addEventListener("DOMContentLoaded", function () {
+    const step1Tab = document.getElementById("step1-tab");
+    const step2Tab = document.getElementById("step2-tab");
+    const step3Tab = document.getElementById("step3-tab");
+
+    const step1Content = document.getElementById("step1");
+    const step2Content = document.getElementById("step2");
+    const step3Content = document.getElementById("step3");
+
+    const nextStep1 = document.getElementById("nextStep1");
+    const nextStep2 = document.getElementById("nextStep2");
+    const prevStep2 = document.getElementById("prevStep2");
+    const prevStep3 = document.getElementById("prevStep3");
+
+    nextStep1.addEventListener("click", function () {
+      step2Tab.removeAttribute("disabled");
+      step2Tab.click();
+    });
+
+    nextStep2.addEventListener("click", function () {
+      step3Tab.removeAttribute("disabled");
+      step3Tab.click();
+    });
+
+    prevStep2.addEventListener("click", function () {
+      step1Tab.click();
+    });
+
+    prevStep3.addEventListener("click", function () {
+      step2Tab.click();
+    });
+  });
+</script>
+
+</body>
+</html>
