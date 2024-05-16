@@ -10,6 +10,8 @@ use Architecture\Application\Izin\Delete\DeleteIzinCommand;
 use Architecture\Application\Izin\Delete\DeleteIzinCommandHandler;
 use Architecture\Application\Izin\FirstData\GetIzinQuery;
 use Architecture\Application\Izin\List\GetAllIzinQuery;
+use Architecture\Application\Izin\Update\ApprovalIzinCommand;
+use Architecture\Application\Izin\Update\ApprovalIzinCommandHandler;
 use Architecture\Application\Izin\Update\UpdateIzinCommand;
 use Architecture\Application\Izin\Update\UpdateIzinCommandHandler;
 use Architecture\External\Persistance\Queries\Izin\GetAllIzinQueryHandler;
@@ -39,6 +41,7 @@ class IzinServiceProvider extends ServiceProvider
             CreateIzinCommand::class => CreateIzinCommandHandler::class,
             UpdateIzinCommand::class => UpdateIzinCommandHandler::class,
             DeleteIzinCommand::class => DeleteIzinCommandHandler::class,
+            ApprovalIzinCommand::class => ApprovalIzinCommandHandler::class,
         ]);
 
         app(QueryBusImpl::class)->register([

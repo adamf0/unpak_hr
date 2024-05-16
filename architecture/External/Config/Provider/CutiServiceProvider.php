@@ -10,6 +10,8 @@ use Architecture\Application\Cuti\Delete\DeleteCutiCommand;
 use Architecture\Application\Cuti\Delete\DeleteCutiCommandHandler;
 use Architecture\Application\Cuti\FirstData\GetCutiQuery;
 use Architecture\Application\Cuti\List\GetAllCutiQuery;
+use Architecture\Application\Cuti\Update\ApprovalCutiCommand;
+use Architecture\Application\Cuti\Update\ApprovalCutiCommandHandler;
 use Architecture\Application\Cuti\Update\UpdateCutiCommand;
 use Architecture\Application\Cuti\Update\UpdateCutiCommandHandler;
 use Architecture\External\Persistance\Queries\Cuti\GetAllCutiQueryHandler;
@@ -39,6 +41,7 @@ class CutiServiceProvider extends ServiceProvider
             CreateCutiCommand::class => CreateCutiCommandHandler::class,
             UpdateCutiCommand::class => UpdateCutiCommandHandler::class,
             DeleteCutiCommand::class => DeleteCutiCommandHandler::class,
+            ApprovalCutiCommand::class => ApprovalCutiCommandHandler::class,
         ]);
 
         app(QueryBusImpl::class)->register([

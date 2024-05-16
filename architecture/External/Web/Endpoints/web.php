@@ -38,6 +38,7 @@ Route::middleware(['throwSession'])->group(function () {
     Route::get('cuti/edit/{id}', [CutiController::class,'edit'])->name('cuti.edit');
     Route::post('cuti/update', [CutiController::class,'update'])->name('cuti.update');
     Route::get('cuti/delete/{id}', [CutiController::class,'delete'])->name('cuti.delete');
+    Route::get('cuti/approval/{id}/{type}', [CutiController::class,'approval'])->name('cuti.approval');
 
     Route::get('jenis_cuti', [JenisCutiController::class,'index'])->name('jenis_cuti.index');
     Route::get('jenis_cuti/create', [JenisCutiController::class,'create'])->name('jenis_cuti.create');
@@ -52,6 +53,7 @@ Route::middleware(['throwSession'])->group(function () {
     Route::get('izin/edit/{id}', [IzinController::class,'edit'])->name('izin.edit');
     Route::post('izin/update', [IzinController::class,'update'])->name('izin.update');
     Route::get('izin/delete/{id}', [IzinController::class,'delete'])->name('izin.delete');
+    Route::get('izin/approval/{id}/{type}', [IzinController::class,'approval'])->name('izin.approval');
 
     Route::get('jenis_izin', [JenisIzinController::class,'index'])->name('jenis_izin.index');
     Route::get('jenis_izin/create', [JenisIzinController::class,'create'])->name('jenis_izin.create');

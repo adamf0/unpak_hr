@@ -9,6 +9,7 @@ use Architecture\Application\Abstractions\Pattern\OptionFileDefault;
 use Architecture\Application\Cuti\Create\CreateCutiCommand;
 use Architecture\Application\Cuti\Delete\DeleteCutiCommand;
 use Architecture\Application\Cuti\FirstData\GetCutiQuery;
+use Architecture\Application\Cuti\Update\ApprovalCutiCommand;
 use Architecture\Application\Cuti\Update\UpdateCutiCommand;
 use Architecture\Domain\Creational\Creator;
 use Architecture\Domain\Entity\JenisCutiReferensi;
@@ -140,6 +141,19 @@ class CutiController extends Controller
             
             $this->commandBus->dispatch(new DeleteCutiCommand($id));
             Session::flash(TypeNotif::Create->val(), "berhasil hapus data");
+
+            return redirect()->route('cuti.index');
+        } catch (Exception $e) {
+            Session::flash(TypeNotif::Error->val(), $e->getMessage());
+            return redirect()->route('cuti.index');
+        }
+    }
+    public function approval($id,$type){
+        try {
+            if(!in_array($type,["terima","tolak"])) throw new Exception("command invalid");
+
+            $this->commandBus->dispatch(new ApprovalCutiCommand($id,$type));
+            Session::flash(TypeNotif::Create->val(), "berhasil $type cuti");
 
             return redirect()->route('cuti.index');
         } catch (Exception $e) {

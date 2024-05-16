@@ -9,6 +9,7 @@ use Architecture\Application\Abstractions\Pattern\OptionFileDefault;
 use Architecture\Application\Izin\Create\CreateIzinCommand;
 use Architecture\Application\Izin\Delete\DeleteIzinCommand;
 use Architecture\Application\Izin\FirstData\GetIzinQuery;
+use Architecture\Application\Izin\Update\ApprovalIzinCommand;
 use Architecture\Application\Izin\Update\UpdateIzinCommand;
 use Architecture\Domain\Creational\Creator;
 use Architecture\Domain\Entity\JenisIzinReferensi;
@@ -135,6 +136,19 @@ class IzinController extends Controller
             
             $this->commandBus->dispatch(new DeleteIzinCommand($id));
             Session::flash(TypeNotif::Create->val(), "berhasil hapus data");
+
+            return redirect()->route('izin.index');
+        } catch (Exception $e) {
+            Session::flash(TypeNotif::Error->val(), $e->getMessage());
+            return redirect()->route('izin.index');
+        }
+    }
+    public function approval($id,$type){
+        try {
+            if(!in_array($type,["terima","tolak"])) throw new Exception("command invalid");
+
+            $this->commandBus->dispatch(new ApprovalIzinCommand($id,$type));
+            Session::flash(TypeNotif::Create->val(), "berhasil $type izin");
 
             return redirect()->route('izin.index');
         } catch (Exception $e) {
