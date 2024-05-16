@@ -16,10 +16,12 @@
 // });
 
 use Architecture\External\Datatable\Controller\DatatableCutiController;
+use Architecture\External\Datatable\Controller\DatatableIzinController;
 use Architecture\External\Datatable\Controller\DatatableJenisCutiController;
 use Architecture\External\Datatable\Controller\DatatableJenisizinController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('cuti', [DatatableCutiController::class,'index'])->name('datatable.Cuti.index');
+Route::get('ixin', [DatatableIzinController::class,'index'])->name('datatable.Izin.index');
 Route::get('jenis_cuti', [DatatableJenisCutiController::class,'index'])->name('datatable.JenisCuti.index');
 Route::get('jenis_izin', [DatatableJenisizinController::class,'index'])->name('datatable.JenisIzin.index');

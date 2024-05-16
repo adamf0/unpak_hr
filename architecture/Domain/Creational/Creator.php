@@ -2,11 +2,13 @@
 namespace Architecture\Domain\Creational;
 
 use Architecture\Domain\Contract\ICuti;
+use Architecture\Domain\Contract\IIzin;
 use Architecture\Domain\Contract\IJenisCuti;
 use Architecture\Domain\Contract\IJenisIzin;
 use Architecture\Domain\Contract\IPengguna;
 use Architecture\Domain\Contract\IVideoKegiatan;
 use Architecture\Domain\Entity\Cuti;
+use Architecture\Domain\Entity\Izin;
 use Architecture\Domain\Entity\JenisCuti;
 use Architecture\Domain\Entity\JenisIzin;
 use Architecture\Domain\Entity\Pengguna;
@@ -63,6 +65,19 @@ class Creator{
             $factory->GetTanggalMulai(),
             $factory->GetTanggalAkhir(),
             $factory->GetTujuan(),
+            $factory->GetDokumen(),
+            $factory->GetCatatan(),
+            $factory->GetStatus(),
+        );
+    }
+    public static function buildIzin(IIzin $factory){
+        return new Izin(
+            $factory->GetId(),
+            $factory->GetNIDN(),
+            $factory->GetNIP(),
+            $factory->GetTanggalPengajuan(),
+            $factory->GetTujuan(),
+            $factory->GetJenisIzin(),
             $factory->GetDokumen(),
             $factory->GetCatatan(),
             $factory->GetStatus(),

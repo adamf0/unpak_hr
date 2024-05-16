@@ -35,8 +35,7 @@
                                         <x-input-number title="Max" name="max" default="{{ old('max') }}"/>
                                     </div>
                                     <div class="col-12">
-                                        <label>Kondisi</label>
-                                        <textarea name="kondisi" class="form-control" style="min-height: 45vmin;" placeholder="masukkan kondisi">{}</textarea>
+                                        <x-text title="Kondisi" name="kondisi" class="kondisi" default="{{ old('kondisi') }}"/>
                                     </div>
                                     <div class="col-12">
                                         <div class="form-check">

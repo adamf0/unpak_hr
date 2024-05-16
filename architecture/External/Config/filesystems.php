@@ -51,6 +51,13 @@ return [
             'throw' => false,
         ],
 
+        'dokumen_izin' => [
+            'driver' => 'local',
+            'root'   => public_path('dokumen_izin'),
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
         'dokumen_sppd' => [
             'driver' => 'local',
             'root'   => public_path('dokumen_sppd'),

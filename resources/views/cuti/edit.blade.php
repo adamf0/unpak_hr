@@ -43,16 +43,13 @@
                                         <x-input-number title="Lama Cuti" name="lama_cuti" class="lama_cuti" default="{{ old('lama_cuti',$Cuti->GetLamaCuti()) }}"/>
                                     </div>
                                     <div class="col-12">
-                                        <label>Tujuan</label>
-                                        <textarea name="tujuan" class="form-control" style="min-height: 45vmin;" placeholder="masukkan tujuan">{{old('tujuan',$Cuti->GetTujuan())}}</textarea>
+                                        <x-text title="Tujuan" name="tujuan" class="tujuan" default="{{ old('tujuan',$Cuti->GetTujuan()) }}"/>
                                     </div>
                                     <div class="col-12">
-                                        <label>Dokumen</label>
-                                        <x-input-file title="Dokumen" name="dokumen"/>
+                                        <x-input-file title="Dokumen" name="dokumen" default="{{ old('tujuan',$Cuti->GetDokumen()) }}"/>
                                     </div>
                                     <div class="col-12">
-                                        <label>Catatan</label>
-                                        <textarea name="catatan" class="form-control" style="min-height: 45vmin;" placeholder="masukkan catatan">{{old('catatan',$Cuti->GetCatatan())}}</textarea>
+                                        <x-text title="catatan" name="catatan" class="catatan" default="{{ old('catatan',$Cuti->Getcatatan()) }}"/>
                                     </div>
                                 </div>
                                 <input type="submit" name="submit" class="btn btn-primary mt-3" value="submit">

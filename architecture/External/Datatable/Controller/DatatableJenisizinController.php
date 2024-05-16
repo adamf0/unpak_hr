@@ -5,11 +5,11 @@ namespace Architecture\External\Datatable\Controller;
 use App\Http\Controllers\Controller;
 use Architecture\Application\Abstractions\Messaging\ICommandBus;
 use Architecture\Application\Abstractions\Messaging\IQueryBus;
-use Architecture\Application\Jenisizin\List\GetAllJenisizinQuery;
+use Architecture\Application\JenisIzin\List\GetAllJenisIzinQuery;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables as DataTables;
 
-class DatatableJenisizinController extends Controller
+class DatatableJenisIzinController extends Controller
 {
     public function __construct(
         protected ICommandBus $commandBus,
@@ -17,13 +17,13 @@ class DatatableJenisizinController extends Controller
     ) {}
     
     public function index(Request $request){
-        $q = new GetAllJenisizinQuery();
+        $q = new GetAllJenisIzinQuery();
         // $q->SetOffset($request->get('start')??null)->SetLimit($request->get('length')??null);
         
-        $listJenisizin = $this->queryBus->ask($q);
-        $listJenisizin = $listJenisizin->map(fn($item)=>(object)["id"=>$item->GetId(),"nama"=>$item->GetNama()]);
+        $listJenisIzin = $this->queryBus->ask($q);
+        $listJenisIzin = $listJenisIzin->map(fn($item)=>(object)["id"=>$item->GetId(),"nama"=>$item->GetNama()]);
         
-        return DataTables::of($listJenisizin)
+        return DataTables::of($listJenisIzin)
         ->addIndexColumn()
         ->addColumn('action', function ($row) {
             $actionBtn = '

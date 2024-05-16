@@ -47,7 +47,7 @@ class CutiController extends Controller
             } 
             
             $file = null;
-            if($request->has("dokumen")){
+            if($request->has("dokumen") && $request->file("dokumen")!=null){
                 $fileSystem = new FileSystem(new OptionFileDefault($request->file("dokumen"),$this->disk_cuti));
                 $file = $fileSystem->storeFileWithReplaceFileAndReturnFileLocation();
             }
@@ -95,7 +95,7 @@ class CutiController extends Controller
             } 
             
             $cuti = $this->queryBus->ask(new GetCutiQuery($request->get("id")));
-            if($request->has("dokumen")){
+            if($request->has("dokumen") && $request->file("dokumen")!=null){
                 $cuti = $this->queryBus->ask(new GetCutiQuery($request->get("id")));
                 if(Storage::disk($this->disk_cuti)->exists($cuti->GetDokumen()->getFileName())){
                     Storage::disk($this->disk_cuti)->delete($cuti->GetDokumen()->getFileName());

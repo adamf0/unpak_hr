@@ -3,6 +3,7 @@
 use Architecture\External\Web\Controller\AuthController;
 use Architecture\External\Web\Controller\CutiController;
 use Architecture\External\Web\Controller\DashboardController;
+use Architecture\External\Web\Controller\IzinController;
 use Architecture\External\Web\Controller\JenisCutiController;
 use Architecture\External\Web\Controller\JenisIzinController;
 use Architecture\External\Web\Controller\VideoKegiatanController;
@@ -42,6 +43,13 @@ Route::middleware(['throwSession'])->group(function () {
     Route::get('jenis_cuti/edit/{id}', [JenisCutiController::class,'edit'])->name('jenis_cuti.edit');
     Route::post('jenis_cuti/update', [JenisCutiController::class,'update'])->name('jenis_cuti.update');
     Route::get('jenis_cuti/delete/{id}', [JenisCutiController::class,'delete'])->name('jenis_cuti.delete');
+
+    Route::get('izin', [IzinController::class,'index'])->name('izin.index');
+    Route::get('izin/create', [IzinController::class,'create'])->name('izin.create');
+    Route::post('izin/store', [IzinController::class,'store'])->name('izin.store');
+    Route::get('izin/edit/{id}', [IzinController::class,'edit'])->name('izin.edit');
+    Route::post('izin/update', [IzinController::class,'update'])->name('izin.update');
+    Route::get('izin/delete/{id}', [IzinController::class,'delete'])->name('izin.delete');
 
     Route::get('jenis_izin', [JenisIzinController::class,'index'])->name('jenis_izin.index');
     Route::get('jenis_izin/create', [JenisIzinController::class,'create'])->name('jenis_izin.create');

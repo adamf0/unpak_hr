@@ -36,8 +36,7 @@
                                         <x-input-number title="Max" name="max" default="{{ old('max',$JenisCuti->GetMax()) }}"/>
                                     </div>
                                     <div class="col-12">
-                                        <label>Kondisi</label>
-                                        <textarea name="kondisi" class="form-control" style="min-height: 45vmin;" placeholder="masukkan kondisi">{{ $JenisCuti->GetKondisi() }}</textarea>
+                                        <x-text title="Kondisi" name="kondisi" class="kondisi" default="{!! old('kondisi',$JenisCuti->GetKondisi()) !!}"/>
                                     </div>
                                     <div class="col-12">
                                         <div class="form-check">

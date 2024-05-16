@@ -164,6 +164,7 @@ return [
         Architecture\External\Config\Provider\JenisCutiServiceProvider::class,
         Architecture\External\Config\Provider\CutiServiceProvider::class,
         Architecture\External\Config\Provider\JenisIzinServiceProvider::class,
+        Architecture\External\Config\Provider\IzinServiceProvider::class,
         /*
          * Application Service Providers...
          */

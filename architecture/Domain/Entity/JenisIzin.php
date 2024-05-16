@@ -1,9 +1,9 @@
 <?php
 namespace Architecture\Domain\Entity;
 
-use Architecture\Application\JenisCuti\JenisCutiBase;
+use Architecture\Domain\Shared\NamingEntity;
 
 class JenisIzin extends BaseEntity{
-    use JenisCutiBase;
+    use NamingEntity;
     public function __construct(public $id=null,public $nama){}
 }
