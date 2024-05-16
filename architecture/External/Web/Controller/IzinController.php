@@ -62,7 +62,7 @@ class IzinController extends Controller
                 $request->get("catatan"),
                 "menunggu",
             ));
-            Session::flash(TypeNotif::Create->val(), "berhasil tambah data ".$request->get('nama'));
+            Session::flash(TypeNotif::Create->val(), "berhasil tambah data");
 
             return redirect()->route('izin.index');
         } catch (Exception $e) {
@@ -116,7 +116,7 @@ class IzinController extends Controller
                 $request->get("catatan"),
                 $izin->GetStatus(),
             ));
-            Session::flash(TypeNotif::Update->val(), "berhasil ubah data ".$request->get('nama'));
+            Session::flash(TypeNotif::Update->val(), "berhasil ubah data");
 
             return redirect()->route('izin.index');
         } catch (Exception $e) {

@@ -42,7 +42,7 @@ class JenisIzinController extends Controller
             $this->commandBus->dispatch(new CreateJenisIzinCommand(
                 $request->get("nama"),
             ));
-            Session::flash(TypeNotif::Create->val(), "berhasil tambah data ".$request->get('nama'));
+            Session::flash(TypeNotif::Create->val(), "berhasil tambah data");
 
             return redirect()->route('jenis_izin.index');
         } catch (Exception $e) {
@@ -77,7 +77,7 @@ class JenisIzinController extends Controller
                 $request->get('id'), 
                 $request->get("nama"),
             ));
-            Session::flash(TypeNotif::Update->val(), "berhasil ubah data ".$request->get('nama'));
+            Session::flash(TypeNotif::Update->val(), "berhasil ubah data");
 
             return redirect()->route('jenis_izin.index');
         } catch (Exception $e) {

@@ -5,13 +5,17 @@ use Architecture\Domain\Contract\ICuti;
 use Architecture\Domain\Contract\IIzin;
 use Architecture\Domain\Contract\IJenisCuti;
 use Architecture\Domain\Contract\IJenisIzin;
+use Architecture\Domain\Contract\IJenisSPPD;
 use Architecture\Domain\Contract\IPengguna;
+use Architecture\Domain\Contract\ISPPD;
 use Architecture\Domain\Contract\IVideoKegiatan;
 use Architecture\Domain\Entity\Cuti;
 use Architecture\Domain\Entity\Izin;
 use Architecture\Domain\Entity\JenisCuti;
 use Architecture\Domain\Entity\JenisIzin;
+use Architecture\Domain\Entity\JenisSPPD;
 use Architecture\Domain\Entity\Pengguna;
+use Architecture\Domain\Entity\SPPD;
 use Architecture\Domain\Entity\VideoKegiatan;
 
 class Creator{
@@ -55,6 +59,12 @@ class Creator{
             $factory->GetNama(),
         );
     }
+    public static function buildJenisSPPD(IJenisSPPD $factory){
+        return new JenisSPPD(
+            $factory->GetId(),
+            $factory->GetNama(),
+        );
+    }
     public static function buildCuti(ICuti $factory){
         return new Cuti(
             $factory->GetId(),
@@ -83,11 +93,17 @@ class Creator{
             $factory->GetStatus(),
         );
     }
-    public static function buildVideoKegiatan(IVideoKegiatan $factory){
-        return new VideoKegiatan(
+    public static function buildSPPD(ISPPD $factory){
+        return new SPPD(
             $factory->GetId(),
-            $factory->GetNama(),
-            $factory->GetNilai(),
+            $factory->GetNIDN(),
+            $factory->GetNIP(),
+            $factory->GetJenisSPPD(),
+            $factory->GetTanggalBerangkat(),
+            $factory->GetTanggalKembali(),
+            $factory->GetTujuan(),
+            $factory->GetKeterangan(),
+            $factory->GetStatus(),
         );
     }
 }

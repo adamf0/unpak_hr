@@ -49,7 +49,7 @@ class JenisCutiController extends Controller
                 $request->get("dokumen"),
                 $request->get("kondisi")==""? "{}":$request->get("kondisi"),
             ));
-            Session::flash(TypeNotif::Create->val(), "berhasil tambah data ".$request->get('nama'));
+            Session::flash(TypeNotif::Create->val(), "berhasil tambah data");
 
             return redirect()->route('jenis_cuti.index');
         } catch (Exception $e) {
@@ -88,7 +88,7 @@ class JenisCutiController extends Controller
                 $request->get("dokumen"),
                 $request->get("kondisi")==""? "{}":$request->get("kondisi"),
             ));
-            Session::flash(TypeNotif::Update->val(), "berhasil ubah data ".$request->get('nama'));
+            Session::flash(TypeNotif::Update->val(), "berhasil ubah data");
 
             return redirect()->route('jenis_cuti.index');
         } catch (Exception $e) {

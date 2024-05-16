@@ -206,8 +206,10 @@
       <x-sidebar-item-menu title="Izin" icon="bi bi-menu-button-wide" link="{{route('izin.index')}}" :active="Utility::stateMenu(['izin'],request())" />
       <x-sidebar-item-menu title="JenisIzin" icon="bi bi-menu-button-wide" link="{{route('jenis_izin.index')}}" :active="Utility::stateMenu(['jenis_izin'],request())" />
 
+      <x-sidebar-item-menu title="SPPD" icon="bi bi-menu-button-wide" link="{{route('sppd.index')}}" :active="Utility::stateMenu(['sppd'],request())" />
+      <x-sidebar-item-menu title="Jenis SPPD" icon="bi bi-menu-button-wide" link="{{route('jenis_sppd.index')}}" :active="Utility::stateMenu(['jenis_sppd'],request())" />
+
       <x-sidebar-item-menu title="Lupa Absen Keluar" icon="bi bi-menu-button-wide" link="{{route('dashboard.index')}}" :active="Utility::stateMenu([''],request())" />
-      <x-sidebar-item-menu title="SPPD" icon="bi bi-menu-button-wide" link="{{route('dashboard.index')}}" :active="Utility::stateMenu([''],request())" />
       <x-sidebar-item-menu title="Lpaoran Absen" icon="bi bi-menu-button-wide" link="{{route('dashboard.index')}}" :active="Utility::stateMenu([''],request())" /> 
 
       <!-- <li class="nav-heading">PAGES</li> -->

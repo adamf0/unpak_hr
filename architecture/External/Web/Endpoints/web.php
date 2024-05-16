@@ -6,6 +6,8 @@ use Architecture\External\Web\Controller\DashboardController;
 use Architecture\External\Web\Controller\IzinController;
 use Architecture\External\Web\Controller\JenisCutiController;
 use Architecture\External\Web\Controller\JenisIzinController;
+use Architecture\External\Web\Controller\JenisSPPDController;
+use Architecture\External\Web\Controller\SPPDController;
 use Architecture\External\Web\Controller\VideoKegiatanController;
 use Illuminate\Support\Facades\Route;
 
@@ -58,10 +60,17 @@ Route::middleware(['throwSession'])->group(function () {
     Route::post('jenis_izin/update', [JenisIzinController::class,'update'])->name('jenis_izin.update');
     Route::get('jenis_izin/delete/{id}', [JenisIzinController::class,'delete'])->name('jenis_izin.delete');
 
-    Route::get('videoKegiatan', [VideoKegiatanController::class,'index'])->name('videoKegiatan.index');
-    Route::get('videoKegiatan/create', [VideoKegiatanController::class,'create'])->name('videoKegiatan.create');
-    Route::post('videoKegiatan/store', [VideoKegiatanController::class,'store'])->name('videoKegiatan.store');
-    Route::get('videoKegiatan/edit/{id}', [VideoKegiatanController::class,'edit'])->name('videoKegiatan.edit');
-    Route::post('videoKegiatan/update', [VideoKegiatanController::class,'update'])->name('videoKegiatan.update');
-    Route::get('videoKegiatan/delete/{id}', [VideoKegiatanController::class,'delete'])->name('videoKegiatan.delete');
+    Route::get('sppd', [SPPDController::class,'index'])->name('sppd.index');
+    Route::get('sppd/create', [SPPDController::class,'create'])->name('sppd.create');
+    Route::post('sppd/store', [SPPDController::class,'store'])->name('sppd.store');
+    Route::get('sppd/edit/{id}', [SPPDController::class,'edit'])->name('sppd.edit');
+    Route::post('sppd/update', [SPPDController::class,'update'])->name('sppd.update');
+    Route::get('sppd/delete/{id}', [SPPDController::class,'delete'])->name('sppd.delete');
+
+    Route::get('jenis_sppd', [JenisSPPDController::class,'index'])->name('jenis_sppd.index');
+    Route::get('jenis_sppd/create', [JenisSPPDController::class,'create'])->name('jenis_sppd.create');
+    Route::post('jenis_sppd/store', [JenisSPPDController::class,'store'])->name('jenis_sppd.store');
+    Route::get('jenis_sppd/edit/{id}', [JenisSPPDController::class,'edit'])->name('jenis_sppd.edit');
+    Route::post('jenis_sppd/update', [JenisSPPDController::class,'update'])->name('jenis_sppd.update');
+    Route::get('jenis_sppd/delete/{id}', [JenisSPPDController::class,'delete'])->name('jenis_sppd.delete');
 });

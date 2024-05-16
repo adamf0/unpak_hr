@@ -39,8 +39,7 @@
                                         <x-input-file title="Dokumen" name="dokumen" default="{{ old('dokumen',$Izin->GetDokumen()) }}"/>
                                     </div>
                                     <div class="col-12">
-                                        <label>Catatan</label>
-                                        <textarea name="tujuan" class="form-control" style="min-height: 45vmin;" placeholder="masukkan tujuan">{{old('tujuan',$Izin->GetCatatan())}}</textarea>
+                                        <x-text title="Catatan" name="catatan" class="catatan" default="{{ old('catatan',$Izin->GetCatatan()) }}"/>
                                     </div>
                                 </div>
                                 
