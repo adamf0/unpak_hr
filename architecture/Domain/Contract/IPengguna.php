@@ -6,6 +6,8 @@ use Architecture\Domain\Shared\NamingEntity;
 
 abstract class IPengguna extends BaseEntity{
     use NamingEntity;
+    public $nidn=null;
+    public $nip=null;
     public $username=null;
     public $password=null;
     public $faculty=null;
@@ -14,6 +16,12 @@ abstract class IPengguna extends BaseEntity{
     public $level=null;
     public $active=true;
 
+    public function GetNIDN(){
+        return $this->nidn;
+    }
+    public function GetNIP(){
+        return $this->nip;
+    }
     public function GetUsername(){
         return $this->username;
     }

@@ -18,6 +18,8 @@ class AuthenticationSimpeg implements IAuthentication {
                                 ->transform(function($row){
                                     return Creator::buildPengguna(PenggunaEntitas::make(
                                         $row->id,
+                                        null,
+                                        $row->NPribadi?->nip,
                                         $row->username,
                                         $row->password,
                                         $row->NPribadi?->nama,

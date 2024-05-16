@@ -33,6 +33,8 @@ class Creator{
     public static function buildPengguna(IPengguna $factory){
         return new Pengguna(
             $factory->GetId(),
+            $factory->GetNIDN(),
+            $factory->GetNIP(),
             $factory->GetUsername(),
             $factory->GetPassword(),
             $factory->GetNama(),

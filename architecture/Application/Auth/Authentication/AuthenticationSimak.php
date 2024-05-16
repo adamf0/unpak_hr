@@ -23,6 +23,8 @@ class AuthenticationSimak implements IAuthentication {
                                 ->transform(function($row){
                                     return Creator::buildPengguna(PenggunaEntitas::make(
                                         $row->userid,
+                                        $row->Dosen?->NIDN,
+                                        null,
                                         $row->username,
                                         $row->password,
                                         $row->nama,

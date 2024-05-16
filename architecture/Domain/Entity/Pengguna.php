@@ -4,10 +4,16 @@ namespace Architecture\Domain\Entity;
 use Illuminate\Support\Facades\Hash;
 
 class Pengguna{
-    public function __construct(public $id=null, public $username, public $password=null, public $name=null, public $faculty=null, public $programStudy=null, public $position=null, public $level=null, public $active=true){}
+    public function __construct(public $id=null, public $nidn=null, public $nip=null, public $username, public $password=null, public $name=null, public $faculty=null, public $programStudy=null, public $position=null, public $level=null, public $active=true){}
 
     public function GetId(){
         return $this->id;
+    }
+    public function GetNIDN(){
+        return $this->nidn;
+    }
+    public function GetNIP(){
+        return $this->nip;
     }
     public function GetUsername(){
         return $this->username;

@@ -23,8 +23,8 @@ class AuthenticationCommandHandler extends CommandHandler
         $dataPengguna   = $dataPengguna->Authentication($pengguna);
 
         Session::put('id', $dataPengguna->GetId());
-        // Session::put('nidn', $dataPengguna->GetNidn());
-        // Session::put('nip', $dataPengguna->GetNip());
+        Session::put('nidn', $dataPengguna->GetNIDN());
+        Session::put('nip', $dataPengguna->GetNIP());
         Session::put('name', $dataPengguna->GetName());
         // Session::put('level', '[]');
         Session::put('levelActive', $dataPengguna->GetLevel());
