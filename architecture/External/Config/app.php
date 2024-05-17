@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 use Architecture\Shared\Facades\Utility;
+use Illuminate\Support\Facades\Session;
 
 return [
 
@@ -167,6 +168,8 @@ return [
         Architecture\External\Config\Provider\IzinServiceProvider::class,
         Architecture\External\Config\Provider\JenisSPPDServiceProvider::class,
         Architecture\External\Config\Provider\SPPDServiceProvider::class,
+        Architecture\External\Config\Provider\PresensiServiceProvider::class,
+        Architecture\External\Config\Provider\MasterKalendarServiceProvider::class,
         /*
          * Application Service Providers...
          */

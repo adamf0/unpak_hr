@@ -45,30 +45,26 @@
                 <h5 class="card-title">Presensi</h5>
                 <div class="row">
                     <div class="col-12">
-                        <div class="d-flex flex-row flex-wrap flex-grow-1 align-items-center">
+                        <div class="d-flex flex-row flex-wrap flex-grow-1 align-items-center placeholder-glow">
                             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                 <i class="bi bi-file-earmark-x"></i>
                             </div>
-                            <h6 class="mx-3 flex-grow-1"><span class="placeholder col-2"></span></h6>
+                            <h6 class="mx-3 flex-grow-1 presensi_total"><span class="placeholder col-2"></span></h6>
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="grid-card">
-                            <div>
-                                <span class="text-success small pt-1 fw-bold"><span class="placeholder col-2"></span></span> 
-                                <span class="text-muted small pt-2 ps-1">Tepat Waktu</span>                            
+                            <div class="presensi_tepat_waktu placeholder-glow">
+                                <span class="placeholder col-4"></span>
                             </div>
-                            <div>
-                                <span class="text-danger small pt-1 fw-bold"><span class="placeholder col-2"></span></span> 
-                                <span class="text-muted small pt-2 ps-1">Telat</span>                            
+                            <div class="presensi_telat placeholder-glow">
+                                <span class="placeholder col-4"></span>
                             </div>
-                            <div>
-                                <span class="text-success small pt-1 fw-bold"><span class="placeholder col-2"></span></span> 
-                                <span class="text-muted small pt-2 ps-1">&ge;8 Jam</span>                            
+                            <div class="presensi_r8jam placeholder-glow">
+                                <span class="placeholder col-4"></span>
                             </div>
-                            <div>
-                                <span class="text-danger small pt-1 fw-bold"><span class="placeholder col-2"></span></span> 
-                                <span class="text-muted small pt-2 ps-1">&lt;8 Jam</span>                            
+                            <div class="presensi_l8jam placeholder-glow">
+                                <span class="placeholder col-4"></span>
                             </div>
                         </div>
                     </div>
@@ -82,22 +78,20 @@
                 <h5 class="card-title">Cuti</h5>
                 <div class="row">
                     <div class="col-12">
-                        <div class="d-flex flex-row flex-wrap flex-grow-1 align-items-center">
+                        <div class="d-flex flex-row flex-wrap flex-grow-1 align-items-center placeholder-glow">
                             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                 <i class="bi bi-file-earmark-x"></i>
                             </div>
-                            <h6 class="mx-3 flex-grow-1"><span class="placeholder col-2"></span></h6>
+                            <h6 class="mx-3 flex-grow-1 cuti_total"><span class="placeholder col-2"></span></h6>
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="grid-card">
-                            <div>
-                                <span class="text-danger small pt-1 fw-bold"><span class="placeholder col-2"></span></span> 
-                                <span class="text-muted small pt-2 ps-1">Tolak</span>                            
+                            <div class="cuti_tolak placeholder-glow">
+                                <span class="placeholder col-4"></span>
                             </div>
-                            <div>
-                                <span class="text-warning small pt-1 fw-bold"><span class="placeholder col-2"></span></span> 
-                                <span class="text-muted small pt-2 ps-1">Menunggu</span>                            
+                            <div class="cuti_tunggu placeholder-glow">
+                                <span class="placeholder col-4"></span>
                             </div>
                         </div>
                     </div>
@@ -111,22 +105,20 @@
                 <h5 class="card-title">Izin</h5>
                 <div class="row">
                     <div class="col-12">
-                        <div class="d-flex flex-row flex-wrap flex-grow-1 align-items-center">
+                        <div class="d-flex flex-row flex-wrap flex-grow-1 align-items-center placeholder-glow">
                             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                 <i class="bi bi-file-earmark-x"></i>
                             </div>
-                            <h6 class="mx-3 flex-grow-1"><span class="placeholder col-2"></span></h6>
+                            <h6 class="mx-3 flex-grow-1 izin_total"><span class="placeholder col-2"></span></h6>
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="grid-card">
-                            <div>
-                                <span class="text-danger small pt-1 fw-bold"><span class="placeholder col-2"></span></span> 
-                                <span class="text-muted small pt-2 ps-1">Tolak</span>                            
+                            <div class="izin_tolak placeholder-glow">
+                                <span class="placeholder col-4"></span>
                             </div>
-                            <div>
-                                <span class="text-warning small pt-1 fw-bold"><span class="placeholder col-2"></span></span> 
-                                <span class="text-muted small pt-2 ps-1">Menunggu</span>                            
+                            <div class="izin_tunggu placeholder-glow">
+                                <span class="placeholder col-4"></span>
                             </div>
                         </div>
                     </div>
@@ -140,22 +132,20 @@
                 <h5 class="card-title">SPPD</h5>
                 <div class="row">
                     <div class="col-12">
-                        <div class="d-flex flex-row flex-wrap flex-grow-1 align-items-center">
+                        <div class="d-flex flex-row flex-wrap flex-grow-1 align-items-center placeholder-glow">
                             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                 <i class="bi bi-file-earmark-x"></i>
                             </div>
-                            <h6 class="mx-3 flex-grow-1"><span class="placeholder col-2"></span></h6>
+                            <h6 class="mx-3 flex-grow-1 sppd_total"><span class="placeholder col-2"></span></h6>
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="grid-card">
-                            <div>
-                                <span class="text-danger small pt-1 fw-bold"><span class="placeholder col-2"></span></span> 
-                                <span class="text-muted small pt-2 ps-1">Tolak</span>                            
+                            <div class="sppd_tolak placeholder-glow">
+                                <span class="placeholder col-4"></span>
                             </div>
-                            <div>
-                                <span class="text-warnings small pt-1 fw-bold"><span class="placeholder col-2"></span></span> 
-                                <span class="text-muted small pt-2 ps-1">Menunggu</span>                            
+                            <div class="sppd_tunggu placeholder-glow">
+                                <span class="placeholder col-4"></span>
                             </div>
                         </div>
                     </div>
@@ -238,9 +228,22 @@
         </div>
     </div>
 </div>
+@php
+    $refid = match(true){
+        Session::get('nidn')!=null => Session::get('nidn'),
+        Session::get('nip')!=null => Session::get('nip'),
+        default => '-',
+    };
+    $type = match(true){
+        Session::get('nidn')!=null => 'nidn',
+        Session::get('nip')!=null => 'nip',
+        default => '-',
+    };
+@endphp
 @stop
 
 @push('scripts')
+    <script type="text/javascript" src="{{ Utility::loadAsset('my.js') }}"></script>
     <script>
         $(document).ready(function () {
             // $('#tb').DataTable();
@@ -252,25 +255,32 @@
                 center: 'title',
                 right: 'listDay,listWeek,month,prevYear,prev,next,nextYear' 
                 },
-                events: [
-                    {
-                        title: 'All Day Event',
-                        start: '2024-05-01'
-                    },
-                    {
-                        title: 'Long Event',
-                        start: '2024-05-01',
-                        end: '2024-05-02',
-                        // backgroundColor: '#000',
-                        borderColor: "transparent",
-                        className: "bg-danger"
-                    },
-                ]
+                events: function(fetchInfo, successCallback, failureCallback) {
+                    $.ajax({
+                        url: "{{ route('api.kalendar.index', ['tahun' => date('Y-m-d'), 'format' => 'full-calendar']) }}",
+                        method: 'GET',
+                        success: function(response) {
+                            var events = response.data.map(function(eventData) {
+                                return {
+                                    id: eventData.id,
+                                    title: eventData.title,
+                                    start: eventData.start,
+                                    end: eventData.end,
+                                    description: eventData.description,
+                                    backgroundColor: eventData.backgroundColor,
+                                    borderColor: eventData.borderColor,
+                                };
+                            });
+                            console.log(events)
+                            successCallback(events);
+                        },
+                        error: function(xhr, status, error) {
+                            failureCallback(error);
+                        }
+                    });
+                }
             });
             calendar.render();
-            const getCurrentTime = () => {
-                return moment("2024-05-17 18:11:00").tz('Asia/Jakarta')
-            }
 
             const refAbsenForm = '.absen_form';
             const refAbsenMessage = '.absen_message';
@@ -281,12 +291,94 @@
             const refInfoAbsenKeluar = '.info_absen_keluar'
             const refInfoAbsenTelat = '.info_absen_telat'
             const refInfoAbsenJamKerja = '.info_absen_jam_kerja'
+
+            const refPresensiTotal = '.presensi_total'
+            const refPresensiTepatWaktu = '.presensi_tepat_waktu'
+            const refPresensiTelat = '.presensi_telat'
+            const refPresensiR8 = '.presensi_r8jam'
+            const refPresensiL8 = '.presensi_l8jam'
+
+            const refCutiTotal = '.cuti_total'
+            const refCutiTolak = '.cuti_tolak'
+            const refCutiTunggu = '.cuti_tunggu'
+
+            const refIzinTotal = '.izin_total'
+            const refIzinTolak = '.izin_tolak'
+            const refIzinTunggu = '.izin_tunggu'
+
+            const refSPPDTotal = '.sppd_total'
+            const refSPPDTolak = '.sppd_tolak'
+            const refSPPDTunggu = '.sppd_tunggu'
             
+            const getCurrentTime = () => {
+                return moment("2024-05-17 18:11:00").tz('Asia/Jakarta')
+            }
+
             const dateNow = getCurrentTime().format('YYYY-MM-DD');
             const timeAbsenString = "08:00:00"; 
             const timeAbsen = parseInt(timeAbsenString.split(":")[0]);
             let absenMasuk = '2024-05-17 08:10:00';
             let absenKeluar = '2024-05-17 17:10:00';
+
+            $.ajax({
+                url: "{{ route('api.infoDashboard.index', ['type' => $type, 'id' => $refid]) }}",
+                method: 'GET',
+                success: function(response) {
+                    setTimeout(function(){
+                        var data = response.data
+                        $(refPresensiTotal).html(data?.presensi?.total??0)
+                        $(refPresensiTepatWaktu).html(`
+                            <span class="text-success small pt-1 fw-bold">${data?.presensi?.tepat??0}</span> 
+                            <span class="text-muted small pt-2 ps-1">Tepat Waktu</span>
+                        `)
+                        $(refPresensiTelat).html(`
+                            <span class="text-danger small pt-1 fw-bold">${data?.presensi?.telat??0}</span> 
+                            <span class="text-muted small pt-2 ps-1">Telat</span>
+                        `)
+                        $(refPresensiR8).html(`
+                            <span class="text-success small pt-1 fw-bold">${data?.presensi?.r8??0}</span> 
+                            <span class="text-muted small pt-2 ps-1">&ge;8 Jam</span>
+                        `)
+                        $(refPresensiL8).html(`
+                            <span class="text-danger small pt-1 fw-bold">${data?.presensi?.l8??0}</span> 
+                            <span class="text-muted small pt-2 ps-1">&lt;8 Jam</span>
+                        `)
+
+                        $(refCutiTotal).html(data?.cuti?.total??0)
+                        $(refCutiTolak).html(`
+                            <span class="text-danger small pt-1 fw-bold">${data?.cuti?.tolak??0}</span> 
+                            <span class="text-muted small pt-2 ps-1">Tolak</span>
+                        `)
+                        $(refCutiTunggu).html(`
+                            <span class="text-warning small pt-1 fw-bold">${data?.cuti?.tunggu??0}</span> 
+                            <span class="text-muted small pt-2 ps-1">Menunggu</span>
+                        `)
+                        
+                        $(refIzinTotal).html(data?.izin?.total??0)
+                        $(refIzinTolak).html(`
+                            <span class="text-danger small pt-1 fw-bold">${data?.izin?.tolak??0}</span> 
+                            <span class="text-muted small pt-2 ps-1">Tolak</span>
+                        `)
+                        $(refIzinTunggu).html(`
+                            <span class="text-warning small pt-1 fw-bold">${data?.izin?.tunggu??0}</span> 
+                            <span class="text-muted small pt-2 ps-1">Menunggu</span>
+                        `)
+                        
+                        $(refSPPDTotal).html(data?.sppd?.total??0)
+                        $(refSPPDTolak).html(`
+                            <span class="text-danger small pt-1 fw-bold">${data?.sppd?.tolak??0}</span> 
+                            <span class="text-muted small pt-2 ps-1">Tolak</span>
+                        `)
+                        $(refSPPDTunggu).html(`
+                            <span class="text-warning small pt-1 fw-bold">${data?.sppd?.tunggu??0}</span> 
+                            <span class="text-muted small pt-2 ps-1">Menunggu</span>
+                        `)
+                    },1000)
+                },
+                error: function(xhr, status, error) {
+                    handleAjaxError(xhr, status, error)
+                }
+            });
 
             function changeClass(elemen, old_style, new_style) {
                 if (elemen.hasClass(old_style)) {

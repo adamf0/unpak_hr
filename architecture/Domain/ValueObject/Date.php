@@ -38,6 +38,9 @@ class Date {
     function differentDays(Date $target){
         return $target->val()->diff($this->value)->days;
     }
+    function differentHours(Date $target){
+        return $target->val()->diffInHours($this->value);
+    }
     function inRangeDate(Date $start,Date $end){
         return now()->between($start->val(),$end->val());
     }
