@@ -18,7 +18,14 @@ class GetAllSPPDQueryHandler extends Query
 
     public function handle(GetAllSPPDQuery $query)
     {
-        $datas = SPPDModel::with(['JenisSPPD'])->get();
+        $datas = SPPDModel::with(['JenisSPPD']);
+        if(!is_null($query->GetNIDN())){
+            $datas = $datas->where('nidn',$query->GetNIDN());
+        }
+        if(!is_null($query->GetNIP())){
+            $datas = $datas->where('nip',$query->GetNIP());
+        }
+        $datas = $datas->get();
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 

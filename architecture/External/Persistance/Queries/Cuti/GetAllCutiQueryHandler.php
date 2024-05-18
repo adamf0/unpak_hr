@@ -19,7 +19,14 @@ class GetAllCutiQueryHandler extends Query
 
     public function handle(GetAllCutiQuery $query)
     {
-        $datas = CutiModel::with(['JenisCuti'])->get();
+        $datas = CutiModel::with(['JenisCuti']);
+        if(!is_null($query->GetNIDN())){
+            $datas = $datas->where('nidn',$query->GetNIDN());
+        }
+        if(!is_null($query->GetNIP())){
+            $datas = $datas->where('nip',$query->GetNIP());
+        }
+        $datas = $datas->get();
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 

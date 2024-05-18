@@ -18,7 +18,10 @@ class DatatableCutiController extends Controller
     ) {}
     
     public function index(Request $request){
-        $q = new GetAllCutiQuery();
+        $nidn = $request->has('nidn')? $request->query('nidn'):null;
+        $nip = $request->has('nip')? $request->query('nip'):null;
+        $level = $request->has('level')? $request->query('level'):null;
+        $q = new GetAllCutiQuery($nidn,$nip);
         // $q->SetOffset($request->get('start')??null)->SetLimit($request->get('length')??null);
         
         $listCuti = $this->queryBus->ask($q);
@@ -46,13 +49,20 @@ class DatatableCutiController extends Controller
             $render = $row->tanggal_akhir==null || $row->tanggal_akhir==$row->tanggal_mulai? $row->tanggal_mulai : "{$row->tanggal_mulai} - {$row->tanggal_akhir}";
             return $render;
         })
-        ->addColumn('action', function ($row) {
-            $render = '
-            <a href="'.route('cuti.edit',['id'=>$row->id]).'" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
-            <a href="'.route('cuti.delete',['id'=>$row->id]).'" class="btn btn-danger"><i class="bi bi-trash"></i></a>
-            <a href="'.route('cuti.approval',['id'=>$row->id,'type'=>'terima']).'" class="btn btn-success"><i class="bi bi-check-lg"></i></a>
-            <a href="'.route('cuti.approval',['id'=>$row->id,'type'=>'tolak']).'" class="btn btn-danger"><i class="bi bi-x-lg"></i></a>
-            ';
+        ->addColumn('action', function ($row) use($level){
+            $render = '';
+            if(in_array($level,['dosen','pegawai']) && in_array($row->status, ['menunggu','tolak'])){
+                $render = '
+                <a href="'.route('cuti.edit',['id'=>$row->id]).'" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
+                <a href="'.route('cuti.delete',['id'=>$row->id]).'" class="btn btn-danger"><i class="bi bi-trash"></i></a>
+                ';
+            }
+            else if($level=="sdm"){
+                $render = '
+                <a href="'.route('cuti.approval',['id'=>$row->id,'type'=>'terima']).'" class="btn btn-success"><i class="bi bi-check-lg"></i></a>
+                <a href="'.route('cuti.approval',['id'=>$row->id,'type'=>'tolak']).'" class="btn btn-danger"><i class="bi bi-x-lg"></i></a>
+                ';
+            }
             return $render;
         })
         ->rawColumns(['action'])

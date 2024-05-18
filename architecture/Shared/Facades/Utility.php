@@ -30,11 +30,11 @@ trait Utility
     public static function getLevel($toLower=false)
     {
         return match (Session::get('levelActive')) {
-            "lppm"      => $toLower? "lppm":"LPPM",
+            "admin"     => $toLower? "admin":"Admin",
+            "sdm"       => $toLower? "sdm":"SDM",
             "dosen"     => $toLower? "dosen":"Dosen",
-            "user"      => $toLower? "user":"User",
-            "reviewer"  => $toLower? "reviewer":"Reviewer",
-            "fakultas"  => $toLower? "fakultas":"Fakultas",
+            "pegawai"   => $toLower? "pegawai":"Pegawai",
+            "warek"     => $toLower? "warek":"Warek",
             default     => $toLower? "n/a":"N/A"
         };
     }
@@ -46,25 +46,29 @@ trait Utility
     {
         return (Session::get('level')??collect([]))->count()>1;
     }
-    public static function hasLPPM()
+    public static function hasSDM()
     {
-        return Session::get('levelActive') == "lppm";
+        return Session::get('levelActive') == "sdm";
     }
     public static function hasDosen()
     {
         return Session::get('levelActive') == "dosen";
     }
-    public static function hasFakultas()
+    public static function hasPegawai()
     {
-        return Session::get('levelActive') == "fakultas";
+        return Session::get('levelActive') == "pegawai";
+    }
+    public static function hasWarek()
+    {
+        return Session::get('levelActive') == "warek";
+    }
+    public static function hasAdmin()
+    {
+        return Session::get('levelActive') == "admin";
     }
     public static function hasUser()
     {
-        return Session::get('levelActive') == "user";
-    }
-    public static function hasReviewer()
-    {
-        return Session::get('levelActive') == "reviewer";
+        return self::hasDosen() || self::hasPegawai();
     }
     
     public static function loadAsset($path)

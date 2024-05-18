@@ -200,17 +200,22 @@
 
       <!-- <li class="nav-heading">Form Pengajuan</li> -->
 
-      <x-sidebar-item-menu title="Cuti" icon="bi bi-menu-button-wide" link="{{route('cuti.index')}}" :active="Utility::stateMenu(['cuti'],request())" />
-      <x-sidebar-item-menu title="JenisCuti" icon="bi bi-menu-button-wide" link="{{route('jenis_cuti.index')}}" :active="Utility::stateMenu(['jenis_cuti'],request())" />
+      @if (Utility::hasAdmin())
+        <x-sidebar-item-menu title="JenisCuti" icon="bi bi-menu-button-wide" link="{{route('jenis_cuti.index')}}" :active="Utility::stateMenu(['jenis_cuti'],request())" />  
+        <x-sidebar-item-menu title="JenisIzin" icon="bi bi-menu-button-wide" link="{{route('jenis_izin.index')}}" :active="Utility::stateMenu(['jenis_izin'],request())" />
+        <x-sidebar-item-menu title="Jenis SPPD" icon="bi bi-menu-button-wide" link="{{route('jenis_sppd.index')}}" :active="Utility::stateMenu(['jenis_sppd'],request())" />
+      @endif
 
-      <x-sidebar-item-menu title="Izin" icon="bi bi-menu-button-wide" link="{{route('izin.index')}}" :active="Utility::stateMenu(['izin'],request())" />
-      <x-sidebar-item-menu title="JenisIzin" icon="bi bi-menu-button-wide" link="{{route('jenis_izin.index')}}" :active="Utility::stateMenu(['jenis_izin'],request())" />
+      @if (Utility::hasUser() || Utility::hasSDM())
+        <x-sidebar-item-menu title="Cuti" icon="bi bi-menu-button-wide" link="{{route('cuti.index')}}" :active="Utility::stateMenu(['cuti'],request())" />
+        <x-sidebar-item-menu title="Izin" icon="bi bi-menu-button-wide" link="{{route('izin.index')}}" :active="Utility::stateMenu(['izin'],request())" />
+        <x-sidebar-item-menu title="SPPD" icon="bi bi-menu-button-wide" link="{{route('sppd.index')}}" :active="Utility::stateMenu(['sppd'],request())" />
+        <x-sidebar-item-menu title="Lupa Absen Keluar" icon="bi bi-menu-button-wide" link="{{route('dashboard.index')}}" :active="Utility::stateMenu([''],request())" />
+      @endif
 
-      <x-sidebar-item-menu title="SPPD" icon="bi bi-menu-button-wide" link="{{route('sppd.index')}}" :active="Utility::stateMenu(['sppd'],request())" />
-      <x-sidebar-item-menu title="Jenis SPPD" icon="bi bi-menu-button-wide" link="{{route('jenis_sppd.index')}}" :active="Utility::stateMenu(['jenis_sppd'],request())" />
-
-      <x-sidebar-item-menu title="Lupa Absen Keluar" icon="bi bi-menu-button-wide" link="{{route('dashboard.index')}}" :active="Utility::stateMenu([''],request())" />
-      <x-sidebar-item-menu title="Lpaoran Absen" icon="bi bi-menu-button-wide" link="{{route('dashboard.index')}}" :active="Utility::stateMenu([''],request())" /> 
+      @if (Utility::hasSDM())
+        <x-sidebar-item-menu title="Laporan Absen" icon="bi bi-menu-button-wide" link="{{route('dashboard.index')}}" :active="Utility::stateMenu([''],request())" />
+      @endif
 
       <!-- <li class="nav-heading">PAGES</li> -->
     </ul>

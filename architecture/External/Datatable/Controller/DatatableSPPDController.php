@@ -18,7 +18,10 @@ class DatatableSPPDController extends Controller
     ) {}
     
     public function index(Request $request){
-        $q = new GetAllSPPDQuery();
+        $nidn = $request->has('nidn')? $request->query('nidn'):null;
+        $nip = $request->has('nip')? $request->query('nip'):null;
+        $level = $request->has('level')? $request->query('level'):null;
+        $q = new GetAllSPPDQuery($nidn,$nip);
         // $q->SetOffset($request->get('start')??null)->SetLimit($request->get('length')??null);
         
         $listSPPD = $this->queryBus->ask($q);
@@ -36,12 +39,21 @@ class DatatableSPPDController extends Controller
         
         return DataTables::of($listSPPD)
         ->addIndexColumn()
-        ->addColumn('action', function ($row) {
-            $actionBtn = '
-            <a href="'.route('sppd.edit',['id'=>$row->id]).'" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
-            <a href="'.route('sppd.delete',['id'=>$row->id]).'" class="btn btn-danger"><i class="bi bi-trash"></i></a>
-            ';
-            return $actionBtn;
+        ->addColumn('action', function ($row) use($level){
+            $render = '';
+            if(in_array($level,['dosen','pegawai']) && in_array($row->status, ['menunggu','tolak'])){
+                $render = '
+                <a href="'.route('sppd.edit',['id'=>$row->id]).'" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
+                <a href="'.route('sppd.delete',['id'=>$row->id]).'" class="btn btn-danger"><i class="bi bi-trash"></i></a>
+                ';
+            }
+            else if($level=="sdm"){
+                $render = '
+                <a href="'.route('sppd.approval',['id'=>$row->id,'type'=>'terima']).'" class="btn btn-success"><i class="bi bi-check-lg"></i></a>
+                <a href="'.route('sppd.approval',['id'=>$row->id,'type'=>'tolak']).'" class="btn btn-danger"><i class="bi bi-x-lg"></i></a>
+                ';
+            }
+            return $render;
         })
         ->rawColumns(['action'])
         ->make(true);

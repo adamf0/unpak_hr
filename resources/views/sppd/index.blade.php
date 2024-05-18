@@ -55,8 +55,11 @@
         $(document).ready(function () {
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             
+            const nidn = `{{Session::get('nidn')}}`
+            const nip = `{{Session::get('nip')}}`
+            const level = `{{Session::get('levelActive')}}`
             let table = eTable({
-                url: `{{ route('datatable.SPPD.index') }}`,
+                url: `{{ route('datatable.SPPD.index') }}?level=${level}&nidn=${nidn}&nip=${nip}`,
             }, [
                 {
                     data: 'DT_RowIndex', 

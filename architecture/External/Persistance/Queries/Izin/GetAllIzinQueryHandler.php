@@ -18,7 +18,14 @@ class GetAllIzinQueryHandler extends Query
 
     public function handle(GetAllIzinQuery $query)
     {
-        $datas = IzinModel::with(['JenisIzin'])->get();
+        $datas = IzinModel::with(['JenisIzin']);
+        if(!is_null($query->GetNIDN())){
+            $datas = $datas->where('nidn',$query->GetNIDN());
+        }
+        if(!is_null($query->GetNIP())){
+            $datas = $datas->where('nip',$query->GetNIP());
+        }
+        $datas = $datas->get();
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 
