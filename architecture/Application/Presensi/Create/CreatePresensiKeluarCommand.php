@@ -10,7 +10,7 @@ use Architecture\Shared\TypeData;
 class CreatePresensiKeluarCommand extends Command
 {
     use PresensiBase;
-    public function __construct($nidn=null,$nip=null,?Date $tanggal=null,$absen_keluar,$catatan_pulang=null, public TypeData $option = TypeData::Entity) {
+    public function __construct($nidn=null,$nip=null,?Date $tanggal=null,?Date $absen_keluar=null,$catatan_pulang=null, public TypeData $option = TypeData::Entity) {
         $this->nidn = $nidn;
         $this->nip = $nip;
         $this->tanggal = $tanggal;

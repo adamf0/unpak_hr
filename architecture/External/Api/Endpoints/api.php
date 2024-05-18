@@ -17,7 +17,9 @@
 
 use Architecture\External\Api\Controller\ApiInfoDashboardController;
 use Architecture\External\Api\Controller\ApiKalendarController;
+use Architecture\External\Api\Controller\ApiPresensiController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('kalendar/{tahun}/{format}', [ApiKalendarController::class,'index'])->name('api.kalendar.index');
 Route::get('info_dashboard/{type}/{id}', [ApiInfoDashboardController::class,'index'])->name('api.infoDashboard.index');
+Route::post('presensi', [ApiPresensiController::class,'index'])->name('api.presensi.index');

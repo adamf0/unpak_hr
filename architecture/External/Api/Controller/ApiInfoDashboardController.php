@@ -14,7 +14,10 @@ use Architecture\Application\Presensi\List\GetAllPresensiByNIPQuery;
 use Architecture\Application\SPPD\List\GetAllSPPDByNIDNQuery;
 use Architecture\Application\SPPD\List\GetAllSPPDByNIPQuery;
 use Architecture\Domain\ValueObject\Date;
+use Carbon\Carbon;
 use Exception;
+
+use function PHPUnit\Framework\isEmpty;
 
 class ApiInfoDashboardController extends Controller
 {
@@ -28,9 +31,9 @@ class ApiInfoDashboardController extends Controller
     }
     public function is8Hour($p){
         if(!$this->isLate($p)) 
-            return $p->GetAbsenKeluar()->isGreater(new Date($p->GetTanggal()->val()->setTimeFromTimeString("14:59:00")));
+            return $p->GetAbsenKeluar()==null? false:$p->GetAbsenKeluar()->isGreater(new Date($p->GetTanggal()->val()->setTimeFromTimeString("14:59:00")));
         else if($this->isLate($p))
-            return $p->GetAbsenKeluar()->isGreater(new Date($p->GetAbsenMasuk()->val()->addHour(8)));
+            return $p->GetAbsenKeluar()==null? false:$p->GetAbsenKeluar()->isGreater(new Date($p->GetAbsenMasuk()->val()->addHour(8)));
         else 
             return false;
     }
@@ -40,6 +43,30 @@ class ApiInfoDashboardController extends Controller
             $presensi = $this->queryBus->ask(
                 $type=="nidn"? new GetAllPresensiByNIDNQuery($id):new GetAllPresensiByNIPQuery($id)
             );
+            $list_presensi = $presensi->reduce(function ($carry, $item){
+                if($item->GetAbsenMasuk() instanceof Date){
+                    $carry[] = $item;   
+                }
+
+                return $carry;
+            });
+            $list_tidak_masuk = $presensi->reduce(function ($carry, $item){ //
+                $dateNow = Carbon::now()->format('Y-m-d');
+                if( isEmpty($item->GetAbsenMasuk() && $item->GetTanggal()->isLess(new Date($dateNow))) ){
+                    $carry[] = $item;   
+                }
+
+                return $carry;
+            });
+            $list_belum_absen = $presensi->reduce(function ($carry, $item){ //
+                $dateNow = Carbon::now()->format('Y-m-d');
+                if( isEmpty($item->GetAbsenMasuk() && !$item->GetTanggal()->isLess(new Date($dateNow))) ){
+                    $carry[] = $item;   
+                }
+
+                return $carry;
+            });
+            
             $cuti = $this->queryBus->ask(
                 $type=="nidn"? new GetAllCutiByNIDNQuery($id):new GetAllCutiByNIPQuery($id)
             );
@@ -56,10 +83,12 @@ class ApiInfoDashboardController extends Controller
                 "data"=>(object)[
                     "presensi"=>[
                         "total"=>($presensi??collect([]))->count(),
-                        "tepat"=>($presensi??collect([]))->filter(fn($p)=>!$this->isLate($p))->count(),
-                        "telat"=>($presensi??collect([]))->filter(fn($p)=>$this->isLate($p))->count(),
-                        "l8"=>($presensi??collect([]))->filter(fn($p)=>!$this->is8Hour($p))->count(),
-                        "r8"=>($presensi??collect([]))->filter(fn($p)=>$this->is8Hour($p))->count(),
+                        "tepat"=>collect($list_presensi)->filter(fn($p)=>!$this->isLate($p))->count(),
+                        "telat"=>collect($list_presensi)->filter(fn($p)=>$this->isLate($p))->count(),
+                        "l8"=>collect($list_presensi)->filter(fn($p)=>!$this->is8Hour($p))->count(),
+                        "r8"=>collect($list_presensi)->filter(fn($p)=>$this->is8Hour($p))->count(),
+                        "tidak_masuk"=>collect($list_tidak_masuk)->count(),
+                        "belum_absen"=>collect($list_belum_absen)->count(),
                     ],
                     "cuti"=>[
                         "total"=>$cuti->count(),
@@ -83,7 +112,7 @@ class ApiInfoDashboardController extends Controller
                 "status"=>"fail",
                 "message"=>"data tidak ditemukan",
                 "data"=>null,
-                ""=>$e->getMessage()
+                "log"=>$e->getMessage()
             ]);
         }
     }

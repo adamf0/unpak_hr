@@ -31,10 +31,42 @@
         grid-template-rows: 2;
         grid-template-columns: minmax(min-content, 1fr) minmax(min-content, 1fr);
     }
+    .fc .fc-button{
+        padding: clamp(.1em,.09em + 2vmax,.4em) clamp(.2em,.2em + 20vmax,.65em) !important;
+    }
+    .legend-calendar{
+        & .col p{
+            font-size: clamp(0.6rem,0.6rem + 2vmax,1.2rem);
+        }
+    }
+    .fc .fc-view-harness{
+        min-height: 75vmax !important;
+    }
+    .fc-toolbar-title{
+        font-size: clamp(0.8rem, 0.8rem + 40vmax, 1.2rem);
+    }
+    .fc-header-toolbar .fc-toolbar {
+        flex-wrap: wrap;
+    }
+    .fc-toolbar-chunk {
+        min-width: fit-content;
+    }
     @media (max-width: 350px) {
         .grid-card{
             grid-template-rows: 1;
             grid-template-columns: minmax(min-content, 1fr);
+        }       
+    }
+    @media (max-width: 470px) {
+        .legend-calendar{
+            flex-direction: column;
+            gap: .5rem;
+            & .col{
+                display: inline-flex;
+                /* align-items: center; */
+                justify-content: flex-start;
+                flex-wrap: wrap;
+            }
         }       
     }
 </style>
@@ -160,6 +192,14 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="grid-card">
+                            <!-- <div>
+                                <span class="text-success small pt-1 fw-bold">Belum Absen</span> 
+                                <span class="text-muted small pt-2 ps-1 info_belum_absen"><span class="placeholder col-2"></span></span>                            
+                            </div>
+                            <div>
+                                <span class="text-success small pt-1 fw-bold">Tidak Absen</span> 
+                                <span class="text-muted small pt-2 ps-1 info_tidak_absen"><span class="placeholder col-2"></span></span>                            
+                            </div> -->
                             <div>
                                 <span class="text-success small pt-1 fw-bold">Masuk</span> 
                                 <span class="text-muted small pt-2 ps-1 info_absen_masuk"><span class="placeholder col-2"></span></span>                            
@@ -223,6 +263,26 @@
                 <h5 class="card-title">Calendar</h5>
                 <div class="row">
                     <div id="calendar"></div>
+                </div>
+                <div class="row legend-calendar">
+                    <div class="col">
+                        <span class="badge bg-danger rounded-pill">&nbsp;</span>&nbsp;<p>Tidak Masuk / Libur</p>
+                    </div>
+                    <div class="col">
+                        <span class="badge bg-warning rounded-pill">&nbsp;</span>&nbsp;<p>Cuti</p>
+                    </div>
+                    <div class="col">
+                        <span class="badge bg-primary rounded-pill">&nbsp;</span>&nbsp;<p>Izin</p>
+                    </div>
+                    <div class="col">
+                        <span class="badge bg-info rounded-pill">&nbsp;</span>&nbsp;<p>SPPD</p>
+                    </div>
+                    <div class="col">
+                        <span class="badge bg-success rounded-pill">&nbsp;</span>&nbsp;<p>Masuk</p>
+                    </div>
+                    <div class="col">
+                        <span class="badge bg-black rounded-pill">&nbsp;</span>&nbsp;<p>Telat Masuk</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -311,74 +371,80 @@
             const refSPPDTunggu = '.sppd_tunggu'
             
             const getCurrentTime = () => {
-                return moment("2024-05-17 18:11:00").tz('Asia/Jakarta')
+                return moment().tz('Asia/Jakarta')
             }
+            String.prototype.isEmpty = function() {
+                return (this.length === 0 || !this.trim());
+            };
 
             const dateNow = getCurrentTime().format('YYYY-MM-DD');
             const timeAbsenString = "08:00:00"; 
             const timeAbsen = parseInt(timeAbsenString.split(":")[0]);
-            let absenMasuk = '2024-05-17 08:10:00';
-            let absenKeluar = '2024-05-17 17:10:00';
+            var absenMasuk = "{{$presensi?->GetAbsenMasuk()?->toFormat(FormatDate::YMDHIS)}}";
+            var absenKeluar = "{{$presensi?->GetAbsenKeluar()?->toFormat(FormatDate::YMDHIS)}}";
 
-            $.ajax({
-                url: "{{ route('api.infoDashboard.index', ['type' => $type, 'id' => $refid]) }}",
-                method: 'GET',
-                success: function(response) {
-                    setTimeout(function(){
-                        var data = response.data
-                        $(refPresensiTotal).html(data?.presensi?.total??0)
-                        $(refPresensiTepatWaktu).html(`
-                            <span class="text-success small pt-1 fw-bold">${data?.presensi?.tepat??0}</span> 
-                            <span class="text-muted small pt-2 ps-1">Tepat Waktu</span>
-                        `)
-                        $(refPresensiTelat).html(`
-                            <span class="text-danger small pt-1 fw-bold">${data?.presensi?.telat??0}</span> 
-                            <span class="text-muted small pt-2 ps-1">Telat</span>
-                        `)
-                        $(refPresensiR8).html(`
-                            <span class="text-success small pt-1 fw-bold">${data?.presensi?.r8??0}</span> 
-                            <span class="text-muted small pt-2 ps-1">&ge;8 Jam</span>
-                        `)
-                        $(refPresensiL8).html(`
-                            <span class="text-danger small pt-1 fw-bold">${data?.presensi?.l8??0}</span> 
-                            <span class="text-muted small pt-2 ps-1">&lt;8 Jam</span>
-                        `)
+            function loadInfo(){
+                $.ajax({
+                    url: "{{ route('api.infoDashboard.index', ['type' => $type, 'id' => $refid]) }}",
+                    method: 'GET',
+                    success: function(response) {
+                        setTimeout(function(){
+                            var data = response.data
+                            $(refPresensiTotal).html(data?.presensi?.total??0)
+                            $(refPresensiTepatWaktu).html(`
+                                <span class="text-success small pt-1 fw-bold">${data?.presensi?.tepat??0}</span> 
+                                <span class="text-muted small pt-2 ps-1">Tepat Waktu</span>
+                            `)
+                            $(refPresensiTelat).html(`
+                                <span class="text-danger small pt-1 fw-bold">${data?.presensi?.telat??0}</span> 
+                                <span class="text-muted small pt-2 ps-1">Telat</span>
+                            `)
+                            $(refPresensiR8).html(`
+                                <span class="text-success small pt-1 fw-bold">${data?.presensi?.r8??0}</span> 
+                                <span class="text-muted small pt-2 ps-1">&ge;8 Jam</span>
+                            `)
+                            $(refPresensiL8).html(`
+                                <span class="text-danger small pt-1 fw-bold">${data?.presensi?.l8??0}</span> 
+                                <span class="text-muted small pt-2 ps-1">&lt;8 Jam</span>
+                            `)
 
-                        $(refCutiTotal).html(data?.cuti?.total??0)
-                        $(refCutiTolak).html(`
-                            <span class="text-danger small pt-1 fw-bold">${data?.cuti?.tolak??0}</span> 
-                            <span class="text-muted small pt-2 ps-1">Tolak</span>
-                        `)
-                        $(refCutiTunggu).html(`
-                            <span class="text-warning small pt-1 fw-bold">${data?.cuti?.tunggu??0}</span> 
-                            <span class="text-muted small pt-2 ps-1">Menunggu</span>
-                        `)
-                        
-                        $(refIzinTotal).html(data?.izin?.total??0)
-                        $(refIzinTolak).html(`
-                            <span class="text-danger small pt-1 fw-bold">${data?.izin?.tolak??0}</span> 
-                            <span class="text-muted small pt-2 ps-1">Tolak</span>
-                        `)
-                        $(refIzinTunggu).html(`
-                            <span class="text-warning small pt-1 fw-bold">${data?.izin?.tunggu??0}</span> 
-                            <span class="text-muted small pt-2 ps-1">Menunggu</span>
-                        `)
-                        
-                        $(refSPPDTotal).html(data?.sppd?.total??0)
-                        $(refSPPDTolak).html(`
-                            <span class="text-danger small pt-1 fw-bold">${data?.sppd?.tolak??0}</span> 
-                            <span class="text-muted small pt-2 ps-1">Tolak</span>
-                        `)
-                        $(refSPPDTunggu).html(`
-                            <span class="text-warning small pt-1 fw-bold">${data?.sppd?.tunggu??0}</span> 
-                            <span class="text-muted small pt-2 ps-1">Menunggu</span>
-                        `)
-                    },1000)
-                },
-                error: function(xhr, status, error) {
-                    handleAjaxError(xhr, status, error)
-                }
-            });
+                            $(refCutiTotal).html(data?.cuti?.total??0)
+                            $(refCutiTolak).html(`
+                                <span class="text-danger small pt-1 fw-bold">${data?.cuti?.tolak??0}</span> 
+                                <span class="text-muted small pt-2 ps-1">Tolak</span>
+                            `)
+                            $(refCutiTunggu).html(`
+                                <span class="text-warning small pt-1 fw-bold">${data?.cuti?.tunggu??0}</span> 
+                                <span class="text-muted small pt-2 ps-1">Menunggu</span>
+                            `)
+                            
+                            $(refIzinTotal).html(data?.izin?.total??0)
+                            $(refIzinTolak).html(`
+                                <span class="text-danger small pt-1 fw-bold">${data?.izin?.tolak??0}</span> 
+                                <span class="text-muted small pt-2 ps-1">Tolak</span>
+                            `)
+                            $(refIzinTunggu).html(`
+                                <span class="text-warning small pt-1 fw-bold">${data?.izin?.tunggu??0}</span> 
+                                <span class="text-muted small pt-2 ps-1">Menunggu</span>
+                            `)
+                            
+                            $(refSPPDTotal).html(data?.sppd?.total??0)
+                            $(refSPPDTolak).html(`
+                                <span class="text-danger small pt-1 fw-bold">${data?.sppd?.tolak??0}</span> 
+                                <span class="text-muted small pt-2 ps-1">Tolak</span>
+                            `)
+                            $(refSPPDTunggu).html(`
+                                <span class="text-warning small pt-1 fw-bold">${data?.sppd?.tunggu??0}</span> 
+                                <span class="text-muted small pt-2 ps-1">Menunggu</span>
+                            `)
+                        },1000)
+                    },
+                    error: function(xhr, status, error) {
+                        handleAjaxError(xhr, status, error)
+                    }
+                });
+            }
+            loadInfo()
 
             function changeClass(elemen, old_style, new_style) {
                 if (elemen.hasClass(old_style)) {
@@ -397,6 +463,7 @@
                     $(refAbsenMessage).show()
                     $(refAbsenKeterangan).show()
                     changeClass($(refAbsenSubmit), "btn-warning", "btn-success")
+                    $(refAbsenSubmit).html("Presensi Masuk")
                 } else if(state=="initial but late"){
                     $(refAbsenForm).show()
                     $(refAbsenDone).hide()
@@ -405,6 +472,7 @@
                     $(refAbsenMessage).show()
                     $(refAbsenKeterangan).show()
                     changeClass($(refAbsenSubmit), "btn-success", "btn-warning")
+                    $(refAbsenSubmit).html("Presensi Masuk")
                 } else if(state=="less 8 hour work" || state=="8 hour work"){
                     $(refAbsenForm).show()
                     $(refAbsenDone).hide()
@@ -467,7 +535,7 @@
                 return checkBefore8AM;
             }
             const has8hour = () => { //kena
-                if(absenMasuk==null || absenMasuk=='') return false;
+                if(absenMasuk.isEmpty()) return false;
 
                 let lama = timeAbsen
                 if(getCurrentTime().day()==5){
@@ -482,7 +550,7 @@
                 return check;
             }
             const checkCurrentAbove15 = () => {
-                if(absenMasuk==null || absenMasuk=='') return false;
+                if(absenMasuk.isEmpty()) return false;
                 
                 let jam_pulang = '14:59:00'
                 if(getCurrentTime().day()==5){
@@ -495,7 +563,7 @@
                 return check;
             }
             const isLate = () => {
-                if(absenMasuk==null || absenMasuk=='') return false;
+                if(absenMasuk.isEmpty()) return false;
 
                 const currentTime = (absenMasuk == null ? getCurrentTime() : moment(absenMasuk)).tz('Asia/Jakarta');
                 const absenMasukTime = moment(dateNow + ' '+ timeAbsenString).tz('Asia/Jakarta').add('1', 'minutes');
@@ -503,17 +571,63 @@
                 return checkLate;
             }
 
+            $(refAbsenSubmit).click(function(e){
+                e.preventDefault();
+
+                const exec = getCurrentTime().format('YYYY-MM-DD HH:mm:ss')
+                const keterangan = $(refAbsenKeterangan).val();
+                let type = null
+
+                let data = new FormData();
+                if(absenMasuk.isEmpty()){
+                    data.append("type", 'absen_masuk')
+                    data.append("nidn", '{{Session::get("nidn")}}')
+                    data.append("nip", '{{Session::get("nip")}}')
+                    data.append('absen_masuk', exec)
+                    data.append("catatan_telat",keterangan)
+                    type = "masuk";
+                } else if(!absenMasuk.isEmpty() && absenKeluar.isEmpty()){
+                    data.append("type", 'absen_keluar')
+                    data.append("nidn", '{{Session::get("nidn")}}')
+                    data.append("nip", '{{Session::get("nip")}}')
+                    data.append('absen_keluar', exec)
+                    data.append("catatan_pulang",keterangan)
+                    type = "keluar";
+                }
+                data.append("tanggal",moment().format('YYYY-MM-DD'))
+
+                $.ajax({
+                    url: "{{ route('api.presensi.index') }}",
+                    method: 'POST',
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        console.log(response)
+                        if(type=="masuk"){
+                            absenMasuk = exec
+                        } else if(type=="keluar"){
+                            absenKeluar = exec
+                        }
+                        loadInfo()
+                    },
+                    error: function(xhr, status, error) {
+                        handleAjaxError(xhr, status, error)
+                    }
+                });
+            })
             setInterval(function(){
                 console.log({
-                    "absenMasuk":absenMasuk != null,
+                    "absenMasuk":absenMasuk,
+                    "absenKeluar":absenKeluar,
                     "isBefore8Time":isBefore8Time(),
                     "isLate":isLate(),
                     "has8hour":has8hour(),
                     "checkCurrentAbove15":checkCurrentAbove15()
                 })
-                if(absenMasuk!=null && absenMasuk!='' && absenKeluar!=null){
+                if(!absenMasuk.isEmpty() && !absenKeluar.isEmpty()){
                     showLayoutAbsen("done")
-                } else if(absenMasuk == null || absenMasuk==''){ //belum absen jam <08:00
+                } else if(absenMasuk.isEmpty()){ //belum absen jam <08:00
                     showLayoutAbsen(isBefore8Time()? "initial":"initial but late")
                 } else{
                     if( (isLate() && !has8hour()) || (!isLate() && !checkCurrentAbove15()) ){
@@ -522,14 +636,17 @@
                         showLayoutAbsen("8 hour work")   
                     }
                 }
-                $(refInfoAbsenMasuk).html(getCurrentTime().format("HH:mm:ss"))
-                $(refInfoAbsenTelat).html(absenMasuk==null || absenMasuk==''? "-":`${getCurrentTime().diff(moment(absenMasuk).tz('Asia/Jakarta'), 'hours')} Jam`)
 
-                $(refInfoAbsenKeluar).html(absenKeluar==null || absenKeluar==''? "-":moment(absenKeluar).tz('Asia/Jakarta').format("HH:mm:ss"))
+                const _jamMasuk = moment(absenMasuk).tz('Asia/Jakarta')
+                const _JamAturanmasuk = moment(dateNow+' 08:00:00').tz('Asia/Jakarta');
+                const selisihJam = _jamMasuk.diff(_JamAturanmasuk, 'hours');
+                $(refInfoAbsenMasuk).html(absenMasuk.isEmpty()? getCurrentTime().format("HH:mm:ss"):moment(absenMasuk).tz('Asia/Jakarta').format("HH:mm:ss"))
+                $(refInfoAbsenTelat).html(absenMasuk.isEmpty()? "-":`${selisihJam<0? '0':selisihJam} Jam`)
+
+                $(refInfoAbsenKeluar).html(absenKeluar.isEmpty()? (absenMasuk.isEmpty()? "-":getCurrentTime().format("HH:mm:ss")):moment(absenKeluar).tz('Asia/Jakarta').format("HH:mm:ss"))
                 $(refInfoAbsenJamKerja).html(
                     (
-                        (absenMasuk==null || absenMasuk=='') || 
-                        (absenKeluar==null || absenKeluar=='')
+                        absenMasuk.isEmpty() || absenKeluar.isEmpty()
                     )? "-":`${moment(absenKeluar).tz('Asia/Jakarta').diff(moment(absenMasuk).tz('Asia/Jakarta'), 'hours')} Jam`
                 )
             }, 1000);

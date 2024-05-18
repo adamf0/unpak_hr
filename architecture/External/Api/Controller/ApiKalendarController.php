@@ -10,9 +10,7 @@ use Architecture\Shared\TypeData;
 use Carbon\Carbon;
 use Exception;
 
-use function PHPUnit\Framework\isNull;
-
-class ApiKalendarController extends Controller
+class ApiKalendarController extends Controller //data cuti, izin, sppd, absen belum masuk
 {
     public function __construct(
         protected ICommandBus $commandBus,
@@ -57,7 +55,7 @@ class ApiKalendarController extends Controller
                 "status"=>"fail",
                 "message"=>"data tidak ditemukan",
                 "data"=>null,
-                ""=>$e->getMessage()
+                "log"=>$e->getMessage()
             ]);
         }
     }

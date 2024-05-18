@@ -11,11 +11,16 @@ class CreatePresensiMasukCommandHandler extends CommandHandler
     public function handle(CreatePresensiMasukCommand $command)
     {
         $tanggal = $command->GetTanggal()->toFormat(FormatDate::Default);
+        $absen_masuk = $command->GetAbsenMasuk()->toFormat(FormatDate::YMDHIS);
 
-        $Absensi = Absensi::where('tanggal', $tanggal)->findOrFail();
-        $Absensi->nidn = $command->GetNIDN();
-        $Absensi->nip = $command->GetNIP();
-        $Absensi->absen_masuk = $tanggal." ".$command->GetAbsenMasuk();
+        $Absensi = Absensi::where('tanggal', $tanggal);
+        if($command->GetNIDN()!=null){
+            $Absensi->nidn = $Absensi->GetNIDN();    
+        } else if($command->GetNIP()!=null){
+            $Absensi->nip = $Absensi->GetNIP();
+        }
+        $Absensi = $Absensi->firstOrFail();
+        $Absensi->absen_masuk = $absen_masuk;
         $Absensi->catatan_telat = $command->GetCatatanTelat();
         $Absensi->saveOrFail();
     }
