@@ -19,7 +19,40 @@
                 {{ Utility::showNotif() }}
             </div>
             <div class="col-12">
-                <a href="{{ route('sppd.create') }}" class="btn btn-primary">Tambah</a>
+                @if (Utility::hasUser())
+                    <a href="{{ route('sppd.create') }}" class="btn btn-primary">Tambah</a>
+                @else
+                    <div class="card">
+                        <div class="card-body row">
+                            <div class="col-3">
+                                <x-input-text title="NIDN" name="nidn" class="nidn" default=""/>
+                            </div>
+                            <div class="col-3">
+                                <x-input-text title="NIP" name="nip" class="nip" default=""/>
+                            </div>
+                            <div class="col-3">
+                                <x-input-select title="Jenis SPPD" name="jenis_sppd" class="jenis_sppd"></x-input-select>
+                            </div>
+                            <div class="col-3">
+                                <x-input-select title="Status" name="status" class="status"></x-input-select>
+                            </div>
+                            <div class="col-5">
+                                <x-input-text title="Tanggal Mulai" name="tanggal_berangkat" class="tanggal_berangkat" default=""/>
+                            </div>
+                            <div class="col-5">
+                                <x-input-text title="tanggal Akhir" name="tanggal_kembali" class="tanggal_kembali" default=""/>
+                            </div>
+                            <div class="col-2">
+                                <x-input-select title="Cetak Sebagai" name="type_export" class="type_export"></x-input-select>
+                            </div>
+                            <div class="col-12">
+                                <button class="btn btn-primary btn_cetak">Cetak</button>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            </div>
+            <div class="col-12">
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
@@ -127,6 +160,130 @@
                     name: 'action'
                 },
             ]);
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            let cetak_nidn = null;
+            let cetak_nip = null;
+            let cetak_jenis_sppd = null;
+            let cetak_status = null;
+            let cetak_tanggal_berangkat = null;
+            let cetak_tanggal_kembali = null;
+            let cetak_type_export = null;
+
+            const status = [
+                {
+                    "id":"semua",
+                    "text":"Semua",
+                },
+                {
+                    "id":"menunggu",
+                    "text":"Menunggu",
+                },
+                {
+                    "id":"tolak",
+                    "text":"Tolak",
+                },
+                {
+                    "id":"terima",
+                    "text":"Terima",
+                },
+            ];
+            const type_export = [
+                {
+                    "id":"pdf",
+                    "text":"PDF",
+                },
+                {
+                    "id":"xls",
+                    "text":"Excel",
+                },
+            ];
+            load_dropdown('.jenis_sppd', null, `{{ route('select2.JenisSPPD.List') }}`, null, '-- Pilih Jenis sppd --');
+            load_dropdown('.status', status, null, null, '-- Pilih Status --');
+            load_dropdown('.type_export', type_export, null, null, '-- Pilih --');
+
+            $('.tanggal_berangkat').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayHighlidht: true,
+                orientation: 'bottom',
+                datesDisabled:[],
+                daysOfWeekDisabled:[],
+                }).on('show', function(e) {
+                // Mengatur posisi popover Datepicker ke center (middle).
+                var $input = $(e.currentTarget);
+                var $datepicker = $input.data('datepicker').picker;
+                var $parent = $input.parent();
+                var bottom = ($parent.offset().bottom - $datepicker.outerHeight()) + $parent.outerHeight();
+                $datepicker.css({
+                    bottom: bottom,
+                    left: $parent.offset().left
+                });
+            });
+            $('.tanggal_kembali').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayHighlidht: true,
+                orientation: 'bottom',
+                datesDisabled:[],
+                daysOfWeekDisabled:[],
+                startDate:"{{old('tanggal_berangkat')}}",
+                }).on('show', function(e) {
+                // Mengatur posisi popover Datepicker ke center (middle).
+                var $input = $(e.currentTarget);
+                var $datepicker = $input.data('datepicker').picker;
+                var $parent = $input.parent();
+                var bottom = ($parent.offset().bottom - $datepicker.outerHeight()) + $parent.outerHeight();
+                $datepicker.css({
+                    bottom: bottom,
+                    left: $parent.offset().left
+                });
+            });
+
+            $('.tanggal_berangkat').change(function(e) {
+                const min = $(this).val()
+                cetak_tanggal_berangkat = min
+                $('.tanggal_kembali').datepicker('setStartDate', min);
+            });
+            $('.tanggal_kembali').change(function(e) {
+                const min = $(this).val()
+                cetak_tanggal_kembali = min
+            });
+            $('.jenis_sppd').on('select2:select', function(e) {
+                // var data = e.params.data;
+                cetak_jenis_sppd = $(this).val()
+            });
+            $('.status').on('select2:select', function(e) {
+                // var data = e.params.data;
+                cetak_status = $(this).val()
+            });
+            $('.type_export').on('select2:select', function(e) {
+                // var data = e.params.data;
+                cetak_type_export = $(this).val()
+            });
+            $('.nidn').on('change', function(e) {
+                cetak_nidn = $(this).val()
+            });
+            $('.nip').on('change', function(e) {
+                cetak_nip = $(this).val()
+            });
+            $('.btn_cetak').click(function(e){
+                e.preventDefault();
+
+                const data = {
+                    _token: '{{ csrf_token() }}',
+                    nidn : cetak_nidn,
+                    nip : cetak_nip,
+                    jenis_sppd : cetak_jenis_sppd,
+                    status : cetak_status,
+                    tanggal_berangkat : cetak_tanggal_berangkat,
+                    tanggal_kembali : cetak_tanggal_kembali,
+                    type_export : cetak_type_export
+                };
+
+                console.log(data)
+                $.redirect(`{{url('sppd/export')}}`,data,"GET","_blank")
+            });
         });
     </script>
 @endpush

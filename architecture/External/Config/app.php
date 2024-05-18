@@ -173,6 +173,7 @@ return [
         /*
          * Application Service Providers...
          */
+        \Barryvdh\DomPDF\ServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
         Architecture\External\Config\Provider\AppServiceProvider::class,
         Architecture\External\Config\Provider\AuthServiceProvider::class,
@@ -197,6 +198,7 @@ return [
         'Utility' => Utility::class,
         'FormatDate' => Architecture\Domain\Enum\FormatDate::class,
         // 'TypePeran'=> Architecture\Domain\Enum\TypePeran::class,
+        'Carbon' => Carbon\Carbon::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),

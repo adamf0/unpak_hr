@@ -39,6 +39,7 @@ Route::middleware(['throwSession'])->group(function () {
     Route::post('cuti/update', [CutiController::class,'update'])->name('cuti.update');
     Route::get('cuti/delete/{id}', [CutiController::class,'delete'])->name('cuti.delete');
     Route::get('cuti/approval/{id}/{type}', [CutiController::class,'approval'])->name('cuti.approval');
+    Route::get('cuti/export', [CutiController::class,'export'])->name('cuti.export');
 
     Route::get('jenis_cuti', [JenisCutiController::class,'index'])->name('jenis_cuti.index');
     Route::get('jenis_cuti/create', [JenisCutiController::class,'create'])->name('jenis_cuti.create');
@@ -54,6 +55,7 @@ Route::middleware(['throwSession'])->group(function () {
     Route::post('izin/update', [IzinController::class,'update'])->name('izin.update');
     Route::get('izin/delete/{id}', [IzinController::class,'delete'])->name('izin.delete');
     Route::get('izin/approval/{id}/{type}', [IzinController::class,'approval'])->name('izin.approval');
+    Route::get('izin/export', [IzinController::class,'export'])->name('izin.export');
 
     Route::get('jenis_izin', [JenisIzinController::class,'index'])->name('jenis_izin.index');
     Route::get('jenis_izin/create', [JenisIzinController::class,'create'])->name('jenis_izin.create');
@@ -68,6 +70,9 @@ Route::middleware(['throwSession'])->group(function () {
     Route::get('sppd/edit/{id}', [SPPDController::class,'edit'])->name('sppd.edit');
     Route::post('sppd/update', [SPPDController::class,'update'])->name('sppd.update');
     Route::get('sppd/delete/{id}', [SPPDController::class,'delete'])->name('sppd.delete');
+    Route::get('sppd/reject/{id}', [SPPDController::class,'reject'])->name('sppd.reject');
+    Route::get('sppd/approval/{id}', [SPPDController::class,'approval'])->name('sppd.approval');
+    Route::get('sppd/export', [SPPDController::class,'export'])->name('sppd.export');
 
     Route::get('jenis_sppd', [JenisSPPDController::class,'index'])->name('jenis_sppd.index');
     Route::get('jenis_sppd/create', [JenisSPPDController::class,'create'])->name('jenis_sppd.create');

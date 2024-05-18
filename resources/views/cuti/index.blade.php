@@ -19,7 +19,40 @@
                 {{ Utility::showNotif() }}
             </div>
             <div class="col-12">
-                <a href="{{ route('cuti.create') }}" class="btn btn-primary">Tambah</a>
+                @if (Utility::hasUser())
+                    <a href="{{ route('cuti.create') }}" class="btn btn-primary">Tambah</a>
+                @else
+                    <div class="card">
+                        <div class="card-body row">
+                            <div class="col-3">
+                                <x-input-text title="NIDN" name="nidn" class="nidn" default=""/>
+                            </div>
+                            <div class="col-3">
+                                <x-input-text title="NIP" name="nip" class="nip" default=""/>
+                            </div>
+                            <div class="col-3">
+                                <x-input-select title="Jenis Cuti" name="jenis_cuti" class="jenis_cuti"></x-input-select>
+                            </div>
+                            <div class="col-3">
+                                <x-input-select title="Status" name="status" class="status"></x-input-select>
+                            </div>
+                            <div class="col-5">
+                                <x-input-text title="Tanggal Mulai" name="tanggal_mulai" class="tanggal_mulai" default=""/>
+                            </div>
+                            <div class="col-5">
+                                <x-input-text title="tanggal Akhir" name="tanggal_akhir" class="tanggal_akhir" default=""/>
+                            </div>
+                            <div class="col-2">
+                                <x-input-select title="Cetak Sebagai" name="type_export" class="type_export"></x-input-select>
+                            </div>
+                            <div class="col-12">
+                                <button class="btn btn-primary btn_cetak">Cetak</button>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            </div>
+            <div class="col-12">
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
@@ -135,6 +168,130 @@
                     name: 'action'
                 },
             ]);
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            let cetak_nidn = null;
+            let cetak_nip = null;
+            let cetak_jenis_cuti = null;
+            let cetak_status = null;
+            let cetak_tanggal_mulai = null;
+            let cetak_tanggal_akhir = null;
+            let cetak_type_export = null;
+
+            const status = [
+                {
+                    "id":"semua",
+                    "text":"Semua",
+                },
+                {
+                    "id":"menunggu",
+                    "text":"Menunggu",
+                },
+                {
+                    "id":"tolak",
+                    "text":"Tolak",
+                },
+                {
+                    "id":"terima",
+                    "text":"Terima",
+                },
+            ];
+            const type_export = [
+                {
+                    "id":"pdf",
+                    "text":"PDF",
+                },
+                {
+                    "id":"xls",
+                    "text":"Excel",
+                },
+            ];
+            load_dropdown('.jenis_cuti', null, `{{ route('select2.JenisCuti.List') }}`, null, '-- Pilih Jenis Cuti --');
+            load_dropdown('.status', status, null, null, '-- Pilih Status --');
+            load_dropdown('.type_export', type_export, null, null, '-- Pilih --');
+
+            $('.tanggal_mulai').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayHighlidht: true,
+                orientation: 'bottom',
+                datesDisabled:[],
+                daysOfWeekDisabled:[],
+                }).on('show', function(e) {
+                // Mengatur posisi popover Datepicker ke center (middle).
+                var $input = $(e.currentTarget);
+                var $datepicker = $input.data('datepicker').picker;
+                var $parent = $input.parent();
+                var bottom = ($parent.offset().bottom - $datepicker.outerHeight()) + $parent.outerHeight();
+                $datepicker.css({
+                    bottom: bottom,
+                    left: $parent.offset().left
+                });
+            });
+            $('.tanggal_akhir').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayHighlidht: true,
+                orientation: 'bottom',
+                datesDisabled:[],
+                daysOfWeekDisabled:[],
+                startDate:"{{old('tanggal_mulai')}}",
+                }).on('show', function(e) {
+                // Mengatur posisi popover Datepicker ke center (middle).
+                var $input = $(e.currentTarget);
+                var $datepicker = $input.data('datepicker').picker;
+                var $parent = $input.parent();
+                var bottom = ($parent.offset().bottom - $datepicker.outerHeight()) + $parent.outerHeight();
+                $datepicker.css({
+                    bottom: bottom,
+                    left: $parent.offset().left
+                });
+            });
+
+            $('.tanggal_mulai').change(function(e) {
+                const min = $(this).val()
+                cetak_tanggal_mulai = min
+                $('.tanggal_akhir').datepicker('setStartDate', min);
+            });
+            $('.tanggal_akhir').change(function(e) {
+                const min = $(this).val()
+                cetak_tanggal_akhir = min
+            });
+            $('.jenis_cuti').on('select2:select', function(e) {
+                // var data = e.params.data;
+                cetak_jenis_cuti = $(this).val()
+            });
+            $('.status').on('select2:select', function(e) {
+                // var data = e.params.data;
+                cetak_status = $(this).val()
+            });
+            $('.type_export').on('select2:select', function(e) {
+                // var data = e.params.data;
+                cetak_type_export = $(this).val()
+            });
+            $('.nidn').on('change', function(e) {
+                cetak_nidn = $(this).val()
+            });
+            $('.nip').on('change', function(e) {
+                cetak_nip = $(this).val()
+            });
+            $('.btn_cetak').click(function(e){
+                e.preventDefault();
+
+                const data = {
+                    _token: '{{ csrf_token() }}',
+                    nidn : cetak_nidn,
+                    nip : cetak_nip,
+                    jenis_cuti : cetak_jenis_cuti,
+                    status : cetak_status,
+                    tanggal_mulai : cetak_tanggal_mulai,
+                    tanggal_akhir : cetak_tanggal_akhir,
+                    type_export : cetak_type_export
+                };
+
+                console.log(data)
+                $.redirect(`{{url('cuti/export')}}`,data,"GET","_blank")
+            });
         });
     </script>
 @endpush

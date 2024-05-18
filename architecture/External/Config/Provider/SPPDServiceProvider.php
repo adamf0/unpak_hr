@@ -12,6 +12,8 @@ use Architecture\Application\SPPD\FirstData\GetSPPDQuery;
 use Architecture\Application\SPPD\List\GetAllSPPDByNIDNQuery;
 use Architecture\Application\SPPD\List\GetAllSPPDByNIPQuery;
 use Architecture\Application\SPPD\List\GetAllSPPDQuery;
+use Architecture\Application\SPPD\Update\RejectSPPDCommand;
+use Architecture\Application\SPPD\Update\RejectSPPDCommandHandler;
 use Architecture\Application\SPPD\Update\UpdateSPPDCommand;
 use Architecture\Application\SPPD\Update\UpdateSPPDCommandHandler;
 use Architecture\External\Persistance\Queries\SPPD\GetAllSPPDByNIDNQueryHandler;
@@ -43,6 +45,7 @@ class SPPDServiceProvider extends ServiceProvider
             CreateSPPDCommand::class => CreateSPPDCommandHandler::class,
             UpdateSPPDCommand::class => UpdateSPPDCommandHandler::class,
             DeleteSPPDCommand::class => DeleteSPPDCommandHandler::class,
+            RejectSPPDCommand::class => RejectSPPDCommandHandler::class,
         ]);
 
         app(QueryBusImpl::class)->register([

@@ -12,6 +12,7 @@ use Architecture\Application\Izin\FirstData\GetIzinQuery;
 use Architecture\Application\Izin\Update\ApprovalIzinCommand;
 use Architecture\Application\Izin\Update\UpdateIzinCommand;
 use Architecture\Domain\Creational\Creator;
+use Architecture\Domain\Entity\FolderX;
 use Architecture\Domain\Entity\JenisIzinReferensi;
 use Architecture\Domain\Enum\TypeNotif;
 use Architecture\Domain\RuleValidationRequest\Izin\CreateIzinRuleReq;
@@ -19,8 +20,11 @@ use Architecture\Domain\RuleValidationRequest\Izin\DeleteIzinRuleReq;
 use Architecture\Domain\RuleValidationRequest\Izin\UpdateIzinRuleReq;
 use Architecture\Domain\ValueObject\Date;
 use Architecture\External\Port\FileSystem;
+use Architecture\External\Port\PdfX;
+use Architecture\Shared\Creational\FileManager;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
@@ -151,6 +155,68 @@ class IzinController extends Controller
             Session::flash(TypeNotif::Create->val(), "berhasil $type izin");
 
             return redirect()->route('izin.index');
+        } catch (Exception $e) {
+            Session::flash(TypeNotif::Error->val(), $e->getMessage());
+            return redirect()->route('izin.index');
+        }
+    }
+    public function export(Request $request){
+        try {
+            $nidn           = $request->has('nidn')? $request->query('nidn'):null;
+            $nip            = $request->has('nip')? $request->query('nip'):null;
+            $jenis_izin     = $request->has('jenis_izin')? $request->query('jenis_izin'):null;
+            $status         = $request->has('status')? $request->query('status'):null;
+            $tanggal_mulai  = $request->has('tanggal_mulai')? $request->query('tanggal_mulai'):null;
+            $tanggal_akhir  = $request->has('tanggal_akhir')? $request->query('tanggal_akhir'):null;
+            $type_export    = $request->has('type_export')? $request->query('type_export'):null;
+
+            $file_name = "izin";
+            $izin = DB::table('izin');
+            if($nidn){
+                $izin->where('nidn',$nidn);
+                $file_name = $file_name."_$nidn";
+            }
+            if($nip){
+                $izin->where('nip',$nip);
+                $file_name = $file_name."_$nip";
+            }
+            if($jenis_izin){
+                $izin->where('id_jenis_izin',$jenis_izin);
+                $file_name = $file_name."_$jenis_izin";
+            }
+            if($status){
+                $izin->where('status',$status);
+                $file_name = $file_name."_$status";
+            }
+            if($tanggal_mulai && is_null($tanggal_akhir)){
+                $izin->where('tanggal_mulai',$tanggal_mulai);
+                $file_name = $file_name."_$tanggal_mulai";
+            }
+            else if($tanggal_akhir && is_null($tanggal_mulai)){
+                $izin->where('tanggal_akhir',$tanggal_akhir);
+                $file_name = $file_name."_$tanggal_akhir";
+            } else if($tanggal_mulai && $tanggal_akhir){
+                $izin->whereBetween('tanggal_pengajuan', [$tanggal_mulai, $tanggal_akhir]);
+
+                $file_name = $file_name."_$tanggal_mulai-$tanggal_akhir";
+            }
+            $list_izin = $izin->get();
+
+            if($type_export=="pdf"){
+                $file = PdfX::From(
+                    "template.export_izin", 
+                    [
+                        "list_izin"=>$list_izin
+                    ], 
+                    FolderX::FromPath(public_path('export/pdf')), 
+                    "$file_name.pdf"
+                );
+            } else{
+                throw new Exception("export type '$type_export' not implementation");
+            }
+    
+            return FileManager::StreamFile($file);
+
         } catch (Exception $e) {
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
             return redirect()->route('izin.index');
