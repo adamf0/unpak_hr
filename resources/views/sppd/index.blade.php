@@ -68,6 +68,7 @@
                                         <th>Tujuan</th>
                                         <th>Keterangan</th>
                                         <th>Status</th>
+                                        <th>Catatan</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -77,6 +78,17 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+<div class="modal modal-lg fade" id="modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title modalTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body modalBody"></div>
         </div>
     </div>
 </div>
@@ -149,6 +161,13 @@
                     }
                 },
                 {
+                    data: 'catatan', 
+                    name: 'catatan',
+                    render: function ( data, type, row, meta ) {
+                        return data;
+                    }
+                },
+                {
                     data: 'status', 
                     name: 'status',
                     render: function ( data, type, row, meta ) {
@@ -160,6 +179,54 @@
                     name: 'action'
                 },
             ]);
+
+            let modal = new bootstrap.Modal(document.getElementById('modal'));
+            let modalTitle = $('.modalTitle');
+            let modalBody = $('.modalBody');
+
+            $('#tb tbody').on('click', '.btn-reject', function(e) {
+                e.preventDefault();
+                const rowData = table.row($(this).closest('tr')).data();
+                modalTitle.text("Informasi Penolakan");
+                modalBody.html(`
+                <div class="row">
+                    <input type="hidden" class="id_sppd" value="${rowData?.id}">
+                    <div class="col-12">
+                        <x-text title="Catatan" name="catatan" class="catatan" default="${rowData?.catatan}"/>
+                    </div>
+                    <div class="col-12">
+                        <input type="submit" class="btn btn-success btn-tolak" value="Simpan">
+                    </div>
+                </div>`);
+                modal.show();
+            });
+
+            $('#modal').on('click', '.btn-tolak', function(e){
+                const id = $(".id_sppd").val();
+                const catatan = $(".catatan").val();
+                let dataForm = new FormData()
+                dataForm.append("id",id)
+                dataForm.append("catatan",catatan)
+
+                $.ajax({
+                    url: "{{ route('api.sppd.reject') }}",
+                    method: 'POST',
+                    data: dataForm,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        console.log(response)
+                        modal.hide();
+                        alert(response.message);
+                        table.ajax.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        handleAjaxError(xhr, status, error)
+                        modal.hide();
+                        table.ajax.reload();
+                    }
+                });
+            });
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             let cetak_nidn = null;

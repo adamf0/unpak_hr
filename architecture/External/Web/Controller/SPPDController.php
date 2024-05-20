@@ -137,18 +137,6 @@ class SPPDController extends Controller
         }
     }
 
-    public function reject($id){
-        try {
-            $this->commandBus->dispatch(new RejectSPPDCommand($id));
-            Session::flash(TypeNotif::Create->val(), "berhasil tolak SPPD");
-
-            return redirect()->route('sppd.index');
-        } catch (Exception $e) {
-            Session::flash(TypeNotif::Error->val(), $e->getMessage());
-            return redirect()->route('sppd.index');
-        }
-    }
-
     public function export(Request $request){
         try {
             $nidn           = $request->has('nidn')? $request->query('nidn'):null;

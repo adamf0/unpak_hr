@@ -15,6 +15,7 @@ trait SPPDBase
     public $tujuan;
     public $keterangan;
     public $status;
+    public $catatan=null;
 
     public function GetNIDN(){
         return $this->nidn;

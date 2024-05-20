@@ -42,6 +42,7 @@ class GetAllSPPDQueryHandler extends Query
             $data->tujuan,
             $data->keterangan,
             $data->status,
+            $data->catatan,
         )) );
     }
 }

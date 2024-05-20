@@ -34,6 +34,7 @@ class DatatableSPPDController extends Controller
             "tanggal_kembali"=> $item->GetTanggalKembali()->toFormat(FormatDate::LDFY),
             "tujuan"=> $item->GetTujuan(),
             "keterangan"=> $item->GetKeterangan(),
+            "catatan"=> $item->GetCatatan(),
             "status"=> $item->GetStatus(),
         ]);
         
@@ -50,7 +51,7 @@ class DatatableSPPDController extends Controller
             else if($level=="sdm"){
                 $render = '
                 <a href="'.route('sppd.approval',['id'=>$row->id]).'" class="btn btn-success"><i class="bi bi-check-lg"></i></a>
-                <a href="'.route('sppd.reject',['id'=>$row->id]).'" class="btn btn-danger"><i class="bi bi-x-lg"></i></a>
+                <a href="#" class="btn btn-danger btn-reject"><i class="bi bi-x-lg"></i></a>
                 ';
             }
             return $render;

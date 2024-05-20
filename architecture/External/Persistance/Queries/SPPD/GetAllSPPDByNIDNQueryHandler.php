@@ -35,6 +35,7 @@ class GetAllSPPDByNIDNQueryHandler extends Query
             $data->tujuan,
             $data->keterangan,
             $data->status,
+            $data->catatan,
         )) );
     }
 }

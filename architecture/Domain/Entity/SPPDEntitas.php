@@ -14,6 +14,7 @@ class SPPDEntitas extends ISPPD{
         $tujuan=null,
         $keterangan=null,
         $status=null,
+        $catatan=null,
     ){
         $instance = new self();
         $instance->id = $id;
@@ -25,6 +26,7 @@ class SPPDEntitas extends ISPPD{
         $instance->tujuan = $tujuan;
         $instance->keterangan = $keterangan;
         $instance->status = $status;
+        $instance->catatan = $catatan;
         return $instance;
     }
 }

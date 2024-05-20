@@ -11,6 +11,9 @@ class RejectSPPDCommandHandler extends CommandHandler
     {
         $SPPD = ModelSPPD::findOrFail($command->GetId());
         $SPPD->status = 'tolak';
+        if(!empty($command->GetCatatan())){
+            $SPPD->catatan = $command->GetCatatan();
+        }
         if($SPPD->isDirty()) $SPPD->saveOrFail();
     }
 }
