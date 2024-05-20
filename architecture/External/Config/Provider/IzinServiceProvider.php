@@ -4,6 +4,7 @@ namespace Architecture\External\Config\Provider;
 
 use Architecture\Application\Abstractions\Messaging\CommandBusImpl;
 use Architecture\Application\Abstractions\Messaging\QueryBusImpl;
+use Architecture\Application\Izin\Count\CountIzinQuery;
 use Architecture\Application\Izin\Create\CreateIzinCommand;
 use Architecture\Application\Izin\Create\CreateIzinCommandHandler;
 use Architecture\Application\Izin\Delete\DeleteIzinCommand;
@@ -16,6 +17,7 @@ use Architecture\Application\Izin\Update\ApprovalIzinCommand;
 use Architecture\Application\Izin\Update\ApprovalIzinCommandHandler;
 use Architecture\Application\Izin\Update\UpdateIzinCommand;
 use Architecture\Application\Izin\Update\UpdateIzinCommandHandler;
+use Architecture\External\Persistance\Queries\Izin\CountIzinQueryHandler;
 use Architecture\External\Persistance\Queries\Izin\GetAllIzinByNIDNQueryHandler;
 use Architecture\External\Persistance\Queries\Izin\GetAllIzinByNIPQueryHandler;
 use Architecture\External\Persistance\Queries\Izin\GetAllIzinQueryHandler;
@@ -53,6 +55,7 @@ class IzinServiceProvider extends ServiceProvider
             GetAllIzinByNIDNQuery::class       => GetAllIzinByNIDNQueryHandler::class,
             GetAllIzinByNIPQuery::class        => GetAllIzinByNIPQueryHandler::class,
             GetIzinQuery::class                => GetIzinQueryHandler::class,
+            CountIzinQuery::class              => CountIzinQueryHandler::class,
         ]);
 
         if(env('DEPLOY','dev')=='prod'){

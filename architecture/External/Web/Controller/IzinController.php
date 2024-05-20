@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Architecture\Application\Abstractions\Messaging\ICommandBus;
 use Architecture\Application\Abstractions\Messaging\IQueryBus;
 use Architecture\Application\Abstractions\Pattern\OptionFileDefault;
+use Architecture\Application\Cuti\Count\CountCutiQuery;
+use Architecture\Application\Izin\Count\CountIzinQuery;
 use Architecture\Application\Izin\Create\CreateIzinCommand;
 use Architecture\Application\Izin\Delete\DeleteIzinCommand;
 use Architecture\Application\Izin\FirstData\GetIzinQuery;
@@ -49,7 +51,23 @@ class IzinController extends Controller
 
             if(count($validator->errors())){
                 return redirect()->route('izin.create')->withInput()->withErrors($validator->errors()->toArray());    
-            } 
+            }
+            $waitingCuti = $this->queryBus->ask(new CountCutiQuery(
+                Session::get("nidn"),
+                Session::get("nip"),
+                "menunggu",
+            ));
+            if($waitingCuti>0){
+                throw new Exception("pengajuan di tolak karena masih ada pengajuan cuti yg masih menunggu persetujuan SDM");
+            }
+            $waitingIzin = $this->queryBus->ask(new CountIzinQuery(
+                Session::get("nidn"),
+                Session::get("nip"),
+                "menunggu",
+            ));
+            if($waitingIzin>0){
+                throw new Exception("pengajuan di tolak karena masih ada pengajuan izin yg masih menunggu persetujuan SDM");
+            }
             
             $file = null;
             if($request->has("dokumen") && $request->file("dokumen")!=null){

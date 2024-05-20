@@ -4,6 +4,7 @@ namespace Architecture\External\Config\Provider;
 
 use Architecture\Application\Abstractions\Messaging\CommandBusImpl;
 use Architecture\Application\Abstractions\Messaging\QueryBusImpl;
+use Architecture\Application\Cuti\Count\CountCutiQuery;
 use Architecture\Application\Cuti\Create\CreateCutiCommand;
 use Architecture\Application\Cuti\Create\CreateCutiCommandHandler;
 use Architecture\Application\Cuti\Delete\DeleteCutiCommand;
@@ -16,6 +17,7 @@ use Architecture\Application\Cuti\Update\ApprovalCutiCommand;
 use Architecture\Application\Cuti\Update\ApprovalCutiCommandHandler;
 use Architecture\Application\Cuti\Update\UpdateCutiCommand;
 use Architecture\Application\Cuti\Update\UpdateCutiCommandHandler;
+use Architecture\External\Persistance\Queries\Cuti\CountCutiQueryHandler;
 use Architecture\External\Persistance\Queries\Cuti\GetAllCutiByNIDNQueryHandler;
 use Architecture\External\Persistance\Queries\Cuti\GetAllCutiByNIPQueryHandler;
 use Architecture\External\Persistance\Queries\Cuti\GetAllCutiQueryHandler;
@@ -53,6 +55,7 @@ class CutiServiceProvider extends ServiceProvider
             GetAllCutiByNIDNQuery::class       => GetAllCutiByNIDNQueryHandler::class,
             GetAllCutiByNIPQuery::class        => GetAllCutiByNIPQueryHandler::class,
             GetCutiQuery::class                => GetCutiQueryHandler::class,
+            CountCutiQuery::class              => CountCutiQueryHandler::class,
         ]);
 
         if(env('DEPLOY','dev')=='prod'){

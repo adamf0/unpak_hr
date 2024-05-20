@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use Architecture\Application\Abstractions\Messaging\ICommandBus;
 use Architecture\Application\Abstractions\Messaging\IQueryBus;
 use Architecture\Application\Abstractions\Pattern\OptionFileDefault;
+use Architecture\Application\Cuti\Count\CountCutiQuery;
 use Architecture\Application\Cuti\Create\CreateCutiCommand;
 use Architecture\Application\Cuti\Delete\DeleteCutiCommand;
 use Architecture\Application\Cuti\FirstData\GetCutiQuery;
 use Architecture\Application\Cuti\Update\ApprovalCutiCommand;
 use Architecture\Application\Cuti\Update\UpdateCutiCommand;
+use Architecture\Application\Izin\Count\CountIzinQuery;
 use Architecture\Domain\Creational\Creator;
 use Architecture\Domain\Entity\FolderX;
 use Architecture\Domain\Entity\JenisCutiReferensi;
@@ -19,9 +21,11 @@ use Architecture\Domain\RuleValidationRequest\Cuti\CreateCutiRuleReq;
 use Architecture\Domain\RuleValidationRequest\Cuti\DeleteCutiRuleReq;
 use Architecture\Domain\RuleValidationRequest\Cuti\UpdateCutiRuleReq;
 use Architecture\Domain\ValueObject\Date;
+use Architecture\External\Persistance\ORM\Cuti;
 use Architecture\External\Port\FileSystem;
 use Architecture\External\Port\PdfX;
 use Architecture\Shared\Creational\FileManager;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -45,11 +49,27 @@ class CutiController extends Controller
     }
     public function store(Request $request){
         try {
-            $validator      = validator($request->all(), CreateCutiRuleReq::create());
+            $validator      = validator($request->all(), CreateCutiRuleReq::create($request, Session::get("nidn"), Session::get("nip")));
 
             if(count($validator->errors())){
                 return redirect()->route('cuti.create')->withInput()->withErrors($validator->errors()->toArray());    
             } 
+            $waitingCuti = $this->queryBus->ask(new CountCutiQuery(
+                Session::get("nidn"),
+                Session::get("nip"),
+                "menunggu",
+            ));
+            if($waitingCuti>0){
+                throw new Exception("pengajuan di tolak karena masih ada pengajuan cuti yg masih menunggu persetujuan SDM");
+            }
+            $waitingIzin = $this->queryBus->ask(new CountIzinQuery(
+                Session::get("nidn"),
+                Session::get("nip"),
+                "menunggu",
+            ));
+            if($waitingIzin>0){
+                throw new Exception("pengajuan di tolak karena masih ada pengajuan izin yg masih menunggu persetujuan SDM");
+            }
             
             $file = null;
             if($request->has("dokumen") && $request->file("dokumen")!=null){
