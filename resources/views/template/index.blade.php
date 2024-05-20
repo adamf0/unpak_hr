@@ -6,7 +6,7 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta name="csrf-token" content="{{ csrf_token() }}" />
   <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" /> -->
-  <title>SIPAKSI</title>
+  <title>HR Portal</title>
   <link href="{{ Utility::loadAsset('assets/css/style.css') }}" rel="stylesheet">
   <link href="{{ Utility::loadAsset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
   <link href="{{ Utility::loadAsset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -126,7 +126,7 @@
     <div class="d-flex align-items-center justify-content-between">
       <a href="{{route('dashboard.index')}}" class="logo d-flex align-items-center">
         <x-img path="{{ Utility::loadAsset('assets/img/logo.webp') }}" islazy="true"></x-img>
-        <span class="d-none d-lg-block">SIPAKSI</span>
+        <span class="d-none d-lg-block">HR Portal</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div>

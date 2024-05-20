@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta name="csrf-token" content="{{ csrf_token() }}" />
-  <title>SIPAKSI</title>
+  <title>HR Portal</title>
   <link href="{{ Utility::loadAsset('assets/css/style.css') }}" rel="stylesheet">
   <link href="{{ Utility::loadAsset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
   <link href="{{ Utility::loadAsset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -32,9 +32,9 @@
               <div class="flex-row align-items-center justify-content-center py-4">
                 <a href="#" class="logo text-decoration-none align-items-center">
                   <img src="{{ Utility::loadAsset('assets/img/logo.webp') }}" alt="">
-                  <span class="d-none d-lg-block">SIPAKSI</span>
+                  <span class="d-none d-lg-block">HR Portal</span>
                 </a>
-                <small class="d-none d-lg-block">Sistem Informasi Penelitian, Abdimas dan PubliKaSI</small>
+                <!-- <small class="d-none d-lg-block">Sistem Informasi Penelitian, Abdimas dan PubliKaSI</small> -->
               </div><!-- End Logo -->
 
               <div class="card mb-3">
