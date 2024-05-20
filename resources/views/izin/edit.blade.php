@@ -38,9 +38,6 @@
                                     <div class="col-12">
                                         <x-input-file title="Dokumen" name="dokumen" default="{{ old('dokumen',$Izin->GetDokumen()) }}"/>
                                     </div>
-                                    <div class="col-12">
-                                        <x-text title="Catatan" name="catatan" class="catatan" default="{{ old('catatan',$Izin->GetCatatan()) }}"/>
-                                    </div>
                                 </div>
                                 
                                 <input type="submit" name="submit" class="btn btn-primary" value="submit">

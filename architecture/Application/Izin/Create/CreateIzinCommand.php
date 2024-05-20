@@ -18,7 +18,6 @@ class CreateIzinCommand extends Command
         $tujuan,
         ?JenisIzin $jenis_izin=null,
         $dokumen,
-        $catatan,
         $status, 
         public TypeData $option = TypeData::Entity
     ) {
@@ -29,6 +28,5 @@ class CreateIzinCommand extends Command
         $this->jenis_izin = $jenis_izin;
         $this->dokumen = $dokumen;
         $this->status = $status;
-        $this->catatan = $catatan;
     }
 }

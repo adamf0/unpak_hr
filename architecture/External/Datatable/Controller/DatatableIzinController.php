@@ -50,7 +50,7 @@ class DatatableIzinController extends Controller
             else if($level=="sdm"){
                 $render = '
                 <a href="'.route('izin.approval',['id'=>$row->id,'type'=>'terima']).'" class="btn btn-success"><i class="bi bi-check-lg"></i></a>
-                <a href="'.route('izin.approval',['id'=>$row->id,'type'=>'tolak']).'" class="btn btn-danger"><i class="bi bi-x-lg"></i></a>
+                <a href="#" class="btn btn-danger btn-tolak"><i class="bi bi-x-lg"></i></a>
                 ';
             }
             return $render;

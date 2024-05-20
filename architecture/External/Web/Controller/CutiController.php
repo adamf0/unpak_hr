@@ -88,7 +88,6 @@ class CutiController extends Controller
                 $request->get("tanggal_akhir")!=""? new Date($request->get("tanggal_akhir")):null,
                 $request->get("tujuan"),
                 $file,
-                $request->get("catatan"),
                 "menunggu",
             ));
             Session::flash(TypeNotif::Create->val(), "berhasil tambah data");
@@ -143,7 +142,6 @@ class CutiController extends Controller
                 $request->get("tanggal_akhir")!=""? new Date($request->get("tanggal_akhir")):null,
                 $request->get("tujuan"),
                 $file,
-                $request->get("catatan"),
                 "menunggu",
             ));
             Session::flash(TypeNotif::Update->val(), "berhasil ubah data");

@@ -43,9 +43,6 @@
                                     <div class="col-12">
                                         <x-input-file title="Dokumen" name="dokumen"/>
                                     </div>
-                                    <div class="col-12">
-                                        <x-text title="Catatan" name="catatan" class="catatan" default="{{ old('catatan') }}"/>
-                                    </div>
                                 </div>
                                 <input type="submit" name="submit" class="btn btn-primary mt-3" value="submit">
                             </form>

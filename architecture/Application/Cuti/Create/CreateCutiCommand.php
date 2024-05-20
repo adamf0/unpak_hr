@@ -11,7 +11,7 @@ use Architecture\Shared\TypeData;
 class CreateCutiCommand extends Command
 {
     use CutiBase;
-    public function __construct($nidn,$nip,?JenisCuti $jenis_cuti=null,$lama_cuti,Date $tanggal_mulai,?Date $tanggal_akhir=null,$tujuan,$dokumen,$catatan,$status, public TypeData $option = TypeData::Entity) {
+    public function __construct($nidn,$nip,?JenisCuti $jenis_cuti=null,$lama_cuti,Date $tanggal_mulai,?Date $tanggal_akhir=null,$tujuan,$dokumen,$status, public TypeData $option = TypeData::Entity) {
         $this->nidn = $nidn;
         $this->nip = $nip;
         $this->jenis_cuti = $jenis_cuti;
@@ -20,7 +20,6 @@ class CreateCutiCommand extends Command
         $this->tanggal_akhir = $tanggal_akhir;
         $this->tujuan = $tujuan;
         $this->dokumen = $dokumen;
-        $this->catatan = $catatan;
         $this->status = $status;
     }
 }

@@ -82,7 +82,6 @@ class IzinController extends Controller
                 $request->get("tujuan"),
                 Creator::buildJenisIzin(JenisIzinReferensi::make($request->get("jenis_izin"))),
                 $file,
-                $request->get("catatan"),
                 "menunggu",
             ));
             Session::flash(TypeNotif::Create->val(), "berhasil tambah data");
@@ -136,7 +135,6 @@ class IzinController extends Controller
                 $request->get("tujuan"),
                 Creator::buildJenisIzin(JenisIzinReferensi::make($request->get("jenis_izin"))),
                 $file,
-                $request->get("catatan"),
                 $izin->GetStatus(),
             ));
             Session::flash(TypeNotif::Update->val(), "berhasil ubah data");
