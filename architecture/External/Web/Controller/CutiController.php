@@ -224,6 +224,10 @@ class CutiController extends Controller
 
                 $file_name = $file_name."_$tanggal_mulai-$tanggal_akhir";
             }
+            $cuti = $cuti->leftJoin('jenis_cuti','cuti.id_jenis_cuti',"=","jenis_cuti.id")
+                        ->leftJoin(DB::raw(config('database.connections.simak.database') . '.m_dosen'), 'cuti.nidn', '=', 'm_dosen.nidn')
+                        ->leftJoin(DB::raw(config('database.connections.simpeg.database') . '.n_pribadi'), 'cuti.nip', '=', 'n_pribadi.nip')
+                        ->select('cuti.*','jenis_cuti.nama as nama_cuti', 'm_dosen.nama_dosen as nama_dosen','n_pribadi.nama as nama_pegawai');
             $list_cuti = $cuti->get();
 
             if($type_export=="pdf"){

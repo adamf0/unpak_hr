@@ -216,6 +216,10 @@ class IzinController extends Controller
 
                 $file_name = $file_name."_$tanggal_mulai-$tanggal_akhir";
             }
+            $izin = $izin->leftJoin('jenis_izin','izin.id_jenis_izin',"=","jenis_izin.id")
+                        ->leftJoin(DB::raw(config('database.connections.simak.database') . '.m_dosen'), 'izin.nidn', '=', 'm_dosen.nidn')
+                        ->leftJoin(DB::raw(config('database.connections.simpeg.database') . '.n_pribadi'), 'izin.nip', '=', 'n_pribadi.nip')
+                        ->select('izin.*','jenis_izin.nama as nama_izin', 'm_dosen.nama_dosen as nama_dosen','n_pribadi.nama as nama_pegawai');
             $list_izin = $izin->get();
 
             if($type_export=="pdf"){
