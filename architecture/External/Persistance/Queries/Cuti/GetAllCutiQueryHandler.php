@@ -12,6 +12,7 @@ use Architecture\Domain\ValueObject\Date;
 use Architecture\External\Persistance\ORM\Cuti as CutiModel;
 use Architecture\Shared\TypeData;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 class GetAllCutiQueryHandler extends Query
 {
@@ -20,11 +21,14 @@ class GetAllCutiQueryHandler extends Query
     public function handle(GetAllCutiQuery $query)
     {
         $datas = CutiModel::with(['JenisCuti']);
-        if(!is_null($query->GetNIDN())){
+        if(!empty($query->GetNIDN())){
             $datas = $datas->where('nidn',$query->GetNIDN());
         }
-        if(!is_null($query->GetNIP())){
+        if(!empty($query->GetNIP())){
             $datas = $datas->where('nip',$query->GetNIP());
+        }
+        if(!empty($query->GetTahun())){
+            $datas = $datas->where(DB::raw('YEAR(tanggal_mulai)'),'>=',$query->GetTahun())->where(DB::raw('YEAR(tanggal_akhir)'),'<=',$query->GetTahun());
         }
         $datas = $datas->get();
 

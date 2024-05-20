@@ -10,16 +10,16 @@ class GetAllMasterKalendarQuery extends Query
 {
     use PagingQuery;
     public function __construct(
-        public $tanggal,
         public $tahun_sebelum=0,
         public $tahun_sesudah=0,
+        public $tahun,
         public TypeData $option = TypeData::Entity
     ) {
         return $this;
     }
 
-    public function GetTanggal(){
-        return $this->tanggal;
+    public function GetTahun(){
+        return $this->tahun;
     }
     public function GetTahunSebelum(){
         return $this->tahun_sebelum;

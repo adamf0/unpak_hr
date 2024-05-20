@@ -10,6 +10,7 @@ use Architecture\Domain\ValueObject\Date;
 use Architecture\External\Persistance\ORM\MasterKalendar as ModelMasterKalendar;
 use Architecture\Shared\TypeData;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 class GetAllMasterKalendarQueryHandler extends Query
 {
@@ -17,7 +18,11 @@ class GetAllMasterKalendarQueryHandler extends Query
 
     public function handle(GetAllMasterKalendarQuery $query)
     {
-        $datas = ModelMasterKalendar::get();
+        if(!is_null($query->GetTahun())){
+            $datas = ModelMasterKalendar::where(DB::raw('YEAR(tanggal_mulai)'),'>=',$query->GetTahun())->where(DB::raw('YEAR(tanggal_berakhir)'),'<=',$query->GetTahun())->get();
+        } else{
+            $datas = ModelMasterKalendar::get();
+        }
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 

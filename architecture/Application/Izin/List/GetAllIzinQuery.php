@@ -12,6 +12,7 @@ class GetAllIzinQuery extends Query
     public function __construct(
         public $nidn=null,
         public $nip=null,
+        public $tahun=null,
         public TypeData $option = TypeData::Entity
     ) {
         return $this;
@@ -22,5 +23,8 @@ class GetAllIzinQuery extends Query
     }
     public function GetNip(){
         return $this->nip;
+    }
+    public function GetTahun(){
+        return $this->tahun;
     }
 }

@@ -11,6 +11,7 @@ use Architecture\Domain\ValueObject\Date;
 use Architecture\External\Persistance\ORM\SPPD as SPPDModel;
 use Architecture\Shared\TypeData;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 class GetAllSPPDQueryHandler extends Query
 {
@@ -24,6 +25,9 @@ class GetAllSPPDQueryHandler extends Query
         }
         if(!is_null($query->GetNIP())){
             $datas = $datas->where('nip',$query->GetNIP());
+        }
+        if(!empty($query->GetTahun())){
+            $datas = $datas->where(DB::raw('YEAR(tanggal_berangkat)'),'>=',$query->GetTahun())->where(DB::raw('YEAR(tanggal_kembali)'),'<=',$query->GetTahun());
         }
         $datas = $datas->get();
 

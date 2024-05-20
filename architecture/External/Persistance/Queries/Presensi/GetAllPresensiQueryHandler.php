@@ -10,6 +10,7 @@ use Architecture\Domain\ValueObject\Date;
 use Architecture\External\Persistance\ORM\Absensi as ModelAbsensi;
 use Architecture\Shared\TypeData;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 class GetAllPresensiQueryHandler extends Query
 {
@@ -17,7 +18,17 @@ class GetAllPresensiQueryHandler extends Query
 
     public function handle(GetAllPresensiQuery $query)
     {
-        $datas = ModelAbsensi::get();
+        $datas = DB::table('absen');
+        if(!empty($query->GetNIDN())){
+            $datas = $datas->where('nidn',$query->GetNIDN());
+        }
+        if(!empty($query->GetNIP())){
+            $datas = $datas->where('nip',$query->GetNIP());
+        }
+        if(!empty($query->GetTahun())){
+            $datas = $datas->where(DB::raw('YEAR(tanggal)'),$query->GetTahun());
+        }
+        $datas = $datas->get();
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 

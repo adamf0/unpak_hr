@@ -11,6 +11,8 @@ use Architecture\Domain\ValueObject\Date;
 use Architecture\External\Persistance\ORM\Izin as IzinModel;
 use Architecture\Shared\TypeData;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
+use Termwind\Components\Dd;
 
 class GetAllIzinQueryHandler extends Query
 {
@@ -19,11 +21,14 @@ class GetAllIzinQueryHandler extends Query
     public function handle(GetAllIzinQuery $query)
     {
         $datas = IzinModel::with(['JenisIzin']);
-        if(!is_null($query->GetNIDN())){
+        if(!empty($query->GetNIDN())){
             $datas = $datas->where('nidn',$query->GetNIDN());
         }
-        if(!is_null($query->GetNIP())){
+        if(!empty($query->GetNIP())){
             $datas = $datas->where('nip',$query->GetNIP());
+        }
+        if(!empty($query->GetTahun())){
+            $datas = $datas->where(DB::raw('YEAR(tanggal_pengajuan)'),$query->GetTahun());
         }
         $datas = $datas->get();
 
