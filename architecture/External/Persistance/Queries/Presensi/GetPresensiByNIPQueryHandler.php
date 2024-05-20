@@ -20,7 +20,7 @@ class GetPresensiByNIPQueryHandler extends Query
 
         if($query->getOption()==TypeData::Default) return $data;
 
-        return Creator::buildPresensi(PresensiEntitas::make(
+        return is_null($data)? null:Creator::buildPresensi(PresensiEntitas::make(
             $data->id,
             $data->nidn,
             $data->nip,
