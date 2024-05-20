@@ -12,8 +12,6 @@ use Architecture\Domain\ValueObject\Date;
 use Exception;
 use Illuminate\Http\Request;
 
-use function PHPUnit\Framework\isEmpty;
-
 class ApiPresensiController extends Controller
 {
     public function __construct(
@@ -29,13 +27,13 @@ class ApiPresensiController extends Controller
                 return response()->json([
                     "status"=>"fail",
                     "message"=>"data absensi tidak valid",
-                    "data"=>null,
+                    "data"=>$request->all(),
                     "log"=>$validator->errors()->toArray()
                 ]);
             } 
 
-            $nidn = isEmpty($request?->nidn)? null:$request?->nidn;
-            $nip = isEmpty($request?->nip)? null:$request?->nip;
+            $nidn = empty($request?->nidn)? null:$request?->nidn;
+            $nip = empty($request?->nip)? null:$request?->nip;
 
             if($request->type=="absen_masuk"){
                 $this->commandBus->dispatch(new CreatePresensiMasukCommand(
@@ -60,13 +58,14 @@ class ApiPresensiController extends Controller
             return response()->json([
                 "status"=>"ok",
                 "message"=>"",
-                "data"=>null,
+                "data"=>$request->all(),
             ]);
         } catch (Exception $e) {
+            throw $e;
             return response()->json([
                 "status"=>"fail",
                 "message"=>"data tidak ditemukan",
-                "data"=>null,
+                "data"=>$request->all(),
                 "log"=>$e->getMessage()
             ]);
         }

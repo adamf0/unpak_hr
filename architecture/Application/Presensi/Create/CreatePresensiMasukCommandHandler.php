@@ -15,9 +15,9 @@ class CreatePresensiMasukCommandHandler extends CommandHandler
 
         $Absensi = Absensi::where('tanggal', $tanggal);
         if($command->GetNIDN()!=null){
-            $Absensi->nidn = $Absensi->GetNIDN();    
+            $Absensi->where('nidn',$command->GetNIDN());    
         } else if($command->GetNIP()!=null){
-            $Absensi->nip = $Absensi->GetNIP();
+            $Absensi->where('nip',$command->GetNIP());
         }
         $Absensi = $Absensi->firstOrFail();
         $Absensi->absen_masuk = $absen_masuk;

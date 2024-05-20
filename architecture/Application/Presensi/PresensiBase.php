@@ -6,8 +6,8 @@ use Architecture\Domain\ValueObject\Date;
 
 trait PresensiBase 
 {
-    public $nidn;
-    public $nip;
+    public $nidn=null;
+    public $nip=null;
     public ?Date $tanggal=null;
     public ?Date $absen_masuk=null;
     public ?Date $absen_keluar=null;
