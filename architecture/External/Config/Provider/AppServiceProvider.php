@@ -10,6 +10,10 @@ use Architecture\Application\Auth\Authentication\AuthenticationCommand;
 use Architecture\Application\Auth\Authentication\AuthenticationCommandHandler;
 use Architecture\Application\Auth\LogOut\LogOutCommand;
 use Architecture\Application\Auth\LogOut\LogOutCommandHandler;
+use Architecture\Application\Dosen\GetInfoDosenQuery;
+use Architecture\Application\Pegawai\FirstData\GetInfoPegawaiQuery;
+use Architecture\External\Persistance\Queries\Dosen\GetInfoDosenQueryHandler;
+use Architecture\External\Persistance\Queries\Dosen\GetInfoPegawaiQueryHandler;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -38,7 +42,8 @@ class AppServiceProvider extends ServiceProvider
         ]);
 
         app(QueryBusImpl::class)->register([
-
+            GetInfoDosenQuery::class => GetInfoDosenQueryHandler::class,
+            GetInfoPegawaiQuery::class => GetInfoPegawaiQueryHandler::class,
         ]);
 
         if(env('DEPLOY','dev')=='prod'){

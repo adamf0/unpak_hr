@@ -26,21 +26,21 @@ class GetInfoDosenQueryHandler extends Query
             },
         ])
         ->where('NIDN',$query->getNIDN())
-        ->firstOrFail();
+        ->first();
         if($query->getOption()==TypeData::Default) return $data;
 
-        return Creator::buildDosen(DosenEntitas::make(
-            $data->NIDN,
-            $data->nama_dosen,
-            Creator::buildFakultas(FakultasEntitas::make(
-                $data->Fakultas?->kode_fakultas,
-                $data->Fakultas?->nama_fakultas
-            )),
-            $data->kode_jurusan,
-            Creator::buildProdi(ProdiEntitas::make(
-                $data->Prodi?->kode_prodi,
-                $data->Prodi?->nama_prodi
-            )),
-        ));
+        // return Creator::buildDosen(DosenEntitas::make(
+        //     $data->NIDN,
+        //     $data->nama_dosen,
+        //     Creator::buildFakultas(FakultasEntitas::make(
+        //         $data->Fakultas?->kode_fakultas,
+        //         $data->Fakultas?->nama_fakultas
+        //     )),
+        //     $data->kode_jurusan,
+        //     Creator::buildProdi(ProdiEntitas::make(
+        //         $data->Prodi?->kode_prodi,
+        //         $data->Prodi?->nama_prodi
+        //     )),
+        // ));
     }
 }
