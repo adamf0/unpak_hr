@@ -19,6 +19,7 @@ class CreatePresensiKeluarCommandHandler extends CommandHandler
         } else if($command->GetNIP()!=null){
             $Absensi->where('nip',$command->GetNIP());
         }
+        $Absensi = $Absensi->firstOrFail();
         $Absensi->absen_keluar = $absen_keluar;
         $Absensi->catatan_pulang = $command->GetCatatanPulang();
         $Absensi->saveOrFail();

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Architecture\Application\Abstractions\Messaging\ICommandBus;
 use Architecture\Application\Abstractions\Messaging\IQueryBus;
 use Architecture\Application\Presensi\FirstData\GetPresensiByNIDNQuery;
+use Architecture\Application\Presensi\FirstData\GetPresensiByNIPQuery;
 use Architecture\Domain\Enum\TypeNotif;
 
 use Exception;
@@ -20,15 +21,19 @@ class DashboardController extends Controller
     
     public function Index(){
         try {
-            $commandPresensi = match(true){
-                Session::get('nidn')!=null => new GetPresensiByNIDNQuery(Session::get('nidn')),
-                Session::get('nip')!=null => new GetPresensiByNIDNQuery(Session::get('nip')),
-                default => null,
-            };
-            $presensi = $commandPresensi? $this->queryBus->ask($commandPresensi):null;
-
+            if(!is_null(Session::get('nidn'))){
+                $presensi = $this->queryBus->ask(new GetPresensiByNIDNQuery(Session::get('nidn')));
+                return view('dashboard.index',[
+                    "presensi"=>$presensi
+                ]);
+            } else if(!is_null(Session::get('nip'))){
+                $presensi = $this->queryBus->ask(new GetPresensiByNIPQuery(Session::get('nip')));
+                return view('dashboard.index',[
+                    "presensi"=>$presensi
+                ]);
+            }
             return view('dashboard.index',[
-                "presensi"=>$presensi
+                "presensi"=>null
             ]);
         } catch (Exception $e) {
             Session::flash(TypeNotif::Error->val(), $e->getMessage());

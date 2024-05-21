@@ -17,7 +17,6 @@ class GetPresensiByNIPQueryHandler extends Query
     public function handle(GetPresensiByNIPQuery $query)
     {
         $data = ModelAbsensi::where('nip',$query->GetNIP())->where('tanggal',date('Y-m-d'))->first();
-
         if($query->getOption()==TypeData::Default) return $data;
 
         return is_null($data)? null:Creator::buildPresensi(PresensiEntitas::make(

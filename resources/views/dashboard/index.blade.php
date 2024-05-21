@@ -604,12 +604,16 @@
                     contentType: false,
                     success: function(response) {
                         console.log(response)
-                        if(type=="masuk"){
-                            absenMasuk = exec
-                        } else if(type=="keluar"){
-                            absenKeluar = exec
+
+                        if(response.status=="ok"){
+                            if(type=="masuk"){
+                                absenMasuk = exec
+                            } else if(type=="keluar"){
+                                absenKeluar = exec
+                            }
+                            loadInfo()
                         }
-                        loadInfo()
+                        alert(response.message);
                     },
                     error: function(xhr, status, error) {
                         handleAjaxError(xhr, status, error)

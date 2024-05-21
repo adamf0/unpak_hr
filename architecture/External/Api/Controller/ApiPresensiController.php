@@ -43,6 +43,12 @@ class ApiPresensiController extends Controller
                     new Date($request->absen_masuk),
                     $request->catatan_telat,
                 ));
+
+                return response()->json([
+                    "status"=>"ok",
+                    "message"=>"anda berhasil absen masuk",
+                    "data"=>$request->all(),
+                ]);
             } else if($request->type=="absen_keluar"){
                 $this->commandBus->dispatch(new CreatePresensiKeluarCommand(
                     $nidn,
@@ -51,15 +57,15 @@ class ApiPresensiController extends Controller
                     new Date($request->absen_keluar),
                     $request->catatan_pulang,
                 ));
+
+                return response()->json([
+                    "status"=>"ok",
+                    "message"=>"anda berhasil absen keluar",
+                    "data"=>$request->all(),
+                ]);
             } else{
                 throw new Exception('invalid command');
             }
-
-            return response()->json([
-                "status"=>"ok",
-                "message"=>"",
-                "data"=>$request->all(),
-            ]);
         } catch (Exception $e) {
             return response()->json([
                 "status"=>"fail",
