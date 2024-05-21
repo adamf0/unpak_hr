@@ -317,7 +317,7 @@
                 },
                 events: function(fetchInfo, successCallback, failureCallback) {
                     $.ajax({
-                        url: "{{ route('api.kalendar.index', ['tahun' => date('Y-m-d'), 'format' => 'full-calendar']) }}",
+                        url: "{{ route('api.kalendar.index', ['tahun' => date('Y'), 'format' => 'full-calendar']) }}",
                         method: 'GET',
                         success: function(response) {
                             var events = response.data.map(function(eventData) {
