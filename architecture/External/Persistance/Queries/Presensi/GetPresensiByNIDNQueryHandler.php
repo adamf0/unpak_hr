@@ -16,7 +16,7 @@ class GetPresensiByNIDNQueryHandler extends Query
 
     public function handle(GetPresensiByNIDNQuery $query)
     {
-        $data = ModelAbsensi::where('nidn',$query->GetNIDN())->first();
+        $data = ModelAbsensi::where('nidn',$query->GetNIDN())->where('tanggal',date('Y-m-d'))->first();
 
         if($query->getOption()==TypeData::Default) return $data;
 
