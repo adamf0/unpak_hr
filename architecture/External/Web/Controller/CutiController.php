@@ -21,11 +21,9 @@ use Architecture\Domain\RuleValidationRequest\Cuti\CreateCutiRuleReq;
 use Architecture\Domain\RuleValidationRequest\Cuti\DeleteCutiRuleReq;
 use Architecture\Domain\RuleValidationRequest\Cuti\UpdateCutiRuleReq;
 use Architecture\Domain\ValueObject\Date;
-use Architecture\External\Persistance\ORM\Cuti;
 use Architecture\External\Port\FileSystem;
 use Architecture\External\Port\PdfX;
 use Architecture\Shared\Creational\FileManager;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -174,7 +172,7 @@ class CutiController extends Controller
         try {
             if(!in_array($type,["terima","tolak"])) throw new Exception("command invalid");
 
-            $this->commandBus->dispatch(new ApprovalCutiCommand($id,$type));
+            $this->commandBus->dispatch(new ApprovalCutiCommand($id,$type,null,Session::get('id')));
             Session::flash(TypeNotif::Create->val(), "berhasil $type cuti");
 
             return redirect()->route('cuti.index');

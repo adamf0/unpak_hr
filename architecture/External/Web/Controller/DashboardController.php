@@ -31,7 +31,6 @@ class DashboardController extends Controller
                 "presensi"=>$presensi
             ]);
         } catch (Exception $e) {
-            throw $e;
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
         }
     }

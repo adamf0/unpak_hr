@@ -1,6 +1,6 @@
 <?php
 
-namespace Architecture\External\Persistance\Queries\Dosen;
+namespace Architecture\External\Persistance\Queries\Pegawai;
 
 use Architecture\Application\Abstractions\Messaging\Query;
 use Architecture\Application\Pegawai\FirstData\GetInfoPegawaiQuery;

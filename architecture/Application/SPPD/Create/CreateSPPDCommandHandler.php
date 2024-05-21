@@ -19,7 +19,8 @@ class CreateSPPDCommandHandler extends CommandHandler
         $SPPDBaru->tujuan = $command->GetTujuan();
         $SPPDBaru->keterangan = $command->GetKeterangan();
         $SPPDBaru->status = $command->GetStatus();
-
         $SPPDBaru->saveOrFail();
+        
+        return $SPPDBaru;
     }
 }

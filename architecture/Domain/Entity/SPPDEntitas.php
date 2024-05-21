@@ -2,6 +2,7 @@
 namespace Architecture\Domain\Entity;
 
 use Architecture\Domain\Contract\ISPPD;
+use Illuminate\Support\Collection;
 
 class SPPDEntitas extends ISPPD{
     public static function make(
@@ -15,6 +16,7 @@ class SPPDEntitas extends ISPPD{
         $keterangan=null,
         $status=null,
         $catatan=null,
+        ?Collection $list_anggota=null,
     ){
         $instance = new self();
         $instance->id = $id;
@@ -27,6 +29,7 @@ class SPPDEntitas extends ISPPD{
         $instance->keterangan = $keterangan;
         $instance->status = $status;
         $instance->catatan = $catatan;
+        $instance->list_anggota = $list_anggota;
         return $instance;
     }
 }

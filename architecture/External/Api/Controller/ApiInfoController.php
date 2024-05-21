@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Architecture\Application\Abstractions\Messaging\ICommandBus;
 use Architecture\Application\Abstractions\Messaging\IQueryBus;
 use Architecture\Application\Dosen\GetInfoDosenQuery;
+use Architecture\Application\Pegawai\FirstData\GetInfoPegawaiQuery;
 use Architecture\Shared\TypeData;
 use Exception;
 use Illuminate\Http\Request;
@@ -20,8 +21,12 @@ class ApiInfoController extends Controller
     public function index(Request $request){
         try {
             $dosen = $this->queryBus->ask(new GetInfoDosenQuery($request->nidn, TypeData::Default));
-            $pegawai = $this->queryBus->ask(new GetInfoDosenQuery($request->nidn, TypeData::Default));
+            $pegawai = $this->queryBus->ask(new GetInfoPegawaiQuery($request->nip, TypeData::Default));
 
+            if(!is_null($dosen)){
+                $dosen->nidn = $dosen->NIDN;
+            }
+            
             return response()->json([
                 "status"=>"ok",
                 "message"=>"",

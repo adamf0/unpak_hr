@@ -196,8 +196,7 @@ function getInputArrays(name,column){
 }
 function isDuplicatValueDynamicInput(name,column,targetValue){
     var duplicates = getInputArrays(name,column).filter(function (value) {
-        return value === targetValue;
+        return value === targetValue && value !== '';
     });
-    
     return duplicates.length > 0
 }

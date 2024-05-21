@@ -200,6 +200,19 @@
                 </div>`);
                 modal.show();
             });
+            $('#tb tbody').on('click', '.btn-download-pdf', function(e) {
+                e.preventDefault();
+                const rowData = table.row($(this).closest('tr')).data();
+                
+                const data = {
+                    _token: '{{ csrf_token() }}',
+                    id : rowData?.id,
+                    type_export : "pdf"
+                };
+
+                console.log(data)
+                $.redirect(`{{url('sppd/export')}}`,data,"GET","_blank")
+            });
 
             $('#modal').on('click', '.btn-tolak', function(e){
                 const id = $(".id_sppd").val();
@@ -207,6 +220,7 @@
                 let dataForm = new FormData()
                 dataForm.append("id",id)
                 dataForm.append("catatan",catatan)
+                dataForm.append("pic","{{Session::get('id')}}")
 
                 $.ajax({
                     url: "{{ route('api.sppd.reject') }}",

@@ -4,8 +4,12 @@ namespace Architecture\External\Config\Provider;
 
 use Architecture\Application\Abstractions\Messaging\CommandBusImpl;
 use Architecture\Application\Abstractions\Messaging\QueryBusImpl;
+use Architecture\Application\SPPD\Create\CreateAnggotaSPPDCommand;
+use Architecture\Application\SPPD\Create\CreateAnggotaSPPDCommandHandler;
 use Architecture\Application\SPPD\Create\CreateSPPDCommand;
 use Architecture\Application\SPPD\Create\CreateSPPDCommandHandler;
+use Architecture\Application\SPPD\Delete\DeleteAllAnggotaSPPDCommand;
+use Architecture\Application\SPPD\Delete\DeleteAllAnggotaSPPDCommandHandler;
 use Architecture\Application\SPPD\Delete\DeleteSPPDCommand;
 use Architecture\Application\SPPD\Delete\DeleteSPPDCommandHandler;
 use Architecture\Application\SPPD\FirstData\GetSPPDQuery;
@@ -14,6 +18,8 @@ use Architecture\Application\SPPD\List\GetAllSPPDByNIPQuery;
 use Architecture\Application\SPPD\List\GetAllSPPDQuery;
 use Architecture\Application\SPPD\Update\RejectSPPDCommand;
 use Architecture\Application\SPPD\Update\RejectSPPDCommandHandler;
+use Architecture\Application\SPPD\Update\UpdateAnggotaSPPDCommand;
+use Architecture\Application\SPPD\Update\UpdateAnggotaSPPDCommandHandler;
 use Architecture\Application\SPPD\Update\UpdateSPPDCommand;
 use Architecture\Application\SPPD\Update\UpdateSPPDCommandHandler;
 use Architecture\External\Persistance\Queries\SPPD\GetAllSPPDByNIDNQueryHandler;
@@ -46,6 +52,10 @@ class SPPDServiceProvider extends ServiceProvider
             UpdateSPPDCommand::class => UpdateSPPDCommandHandler::class,
             DeleteSPPDCommand::class => DeleteSPPDCommandHandler::class,
             RejectSPPDCommand::class => RejectSPPDCommandHandler::class,
+
+            CreateAnggotaSPPDCommand::class => CreateAnggotaSPPDCommandHandler::class,
+            UpdateAnggotaSPPDCommand::class => UpdateAnggotaSPPDCommandHandler::class,
+            DeleteAllAnggotaSPPDCommand::class => DeleteAllAnggotaSPPDCommandHandler::class,
         ]);
 
         app(QueryBusImpl::class)->register([

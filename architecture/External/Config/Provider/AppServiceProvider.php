@@ -13,7 +13,7 @@ use Architecture\Application\Auth\LogOut\LogOutCommandHandler;
 use Architecture\Application\Dosen\GetInfoDosenQuery;
 use Architecture\Application\Pegawai\FirstData\GetInfoPegawaiQuery;
 use Architecture\External\Persistance\Queries\Dosen\GetInfoDosenQueryHandler;
-use Architecture\External\Persistance\Queries\Dosen\GetInfoPegawaiQueryHandler;
+use Architecture\External\Persistance\Queries\Pegawai\GetInfoPegawaiQueryHandler;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

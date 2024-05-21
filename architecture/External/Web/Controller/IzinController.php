@@ -167,7 +167,7 @@ class IzinController extends Controller
         try {
             if(!in_array($type,["terima","tolak"])) throw new Exception("command invalid");
 
-            $this->commandBus->dispatch(new ApprovalIzinCommand($id,$type));
+            $this->commandBus->dispatch(new ApprovalIzinCommand($id,$type,null,Session::get('id')));
             Session::flash(TypeNotif::Create->val(), "berhasil $type izin");
 
             return redirect()->route('izin.index');

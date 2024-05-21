@@ -21,5 +21,7 @@ class UpdateSPPDCommandHandler extends CommandHandler
         $SPPD->keterangan = $command->GetKeterangan();
         $SPPD->status = $command->GetStatus();
         if($SPPD->isDirty()) $SPPD->saveOrFail();
+
+        return $SPPD;
     }
 }

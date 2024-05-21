@@ -3,6 +3,7 @@ namespace Architecture\Domain\Entity;
 
 use Architecture\Application\SPPD\SPPDBase;
 use Architecture\Domain\ValueObject\Date;
+use Illuminate\Support\Collection;
 
 class SPPD extends BaseEntity{
     use SPPDBase;
@@ -17,6 +18,7 @@ class SPPD extends BaseEntity{
         $keterangan,
         $status,
         $catatan=null,
+        ?Collection $list_anggota=null,
     ){
         $this->id = $id;
         $this->nidn = $nidn;
@@ -28,5 +30,6 @@ class SPPD extends BaseEntity{
         $this->keterangan = $keterangan;
         $this->status = $status;
         $this->catatan = $catatan;
+        $this->list_anggota = $list_anggota;
     }
 }

@@ -17,6 +17,7 @@ trait CutiBase
     public $dokumen;
     public $status;
     public $catatan;
+    public $pic;
 
     public function GetNIDN(){
         return $this->nidn;
@@ -47,5 +48,8 @@ trait CutiBase
     }
     public function GetCatatan(){
         return $this->catatan;
+    }
+    public function GetPIC(){
+        return $this->pic;
     }
 }

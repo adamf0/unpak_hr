@@ -61,7 +61,6 @@ class ApiPresensiController extends Controller
                 "data"=>$request->all(),
             ]);
         } catch (Exception $e) {
-            throw $e;
             return response()->json([
                 "status"=>"fail",
                 "message"=>"data tidak ditemukan",

@@ -9,12 +9,16 @@ use Architecture\Shared\TypeData;
 class RejectSPPDCommand extends Command
 {
     use IdentityCommand;
-    public function __construct($id,public $catatan=null, public TypeData $option = TypeData::Entity) {
+    public function __construct($id,public $catatan=null, public $pic=null, public TypeData $option = TypeData::Entity) {
         $this->id = $id;
         $this->catatan = $catatan;
+        $this->pic = $pic;
     }
 
     public function GetCatatan(){
         return $this->catatan;
+    }
+    public function GetPIC(){
+        return $this->pic;
     }
 }

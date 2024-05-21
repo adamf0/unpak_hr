@@ -199,6 +199,7 @@
                 let dataForm = new FormData()
                 dataForm.append("id",id)
                 dataForm.append("catatan",catatan)
+                dataForm.append("pic","{{Session::get('id')}}")
 
                 $.ajax({
                     url: "{{ route('api.izin.reject') }}",

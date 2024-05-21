@@ -44,10 +44,14 @@
                                         <a href="#" class="btn btn-primary btnModalAddAnggota">Tambah</a>
                                     </div>
                                     <div class="col-12">
+                                        @error('anggota')
+                                        <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                         <table id="tbAnggota" class="table table-striped">
                                             <thead>
                                                 <tr>
                                                     <th>NIDN</th>
+                                                    <th>NIP</th>
                                                     <th>Nama</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -57,7 +61,8 @@
                                                     @foreach (old('anggota') as $value)
                                                     <tr>
                                                         <td><input type="hidden" class="pe-none" name="anggota[{{ $loop->index }}][nidn]" value="{{ $value['nidn'] }}"/>{{ $value['nidn'] }}</td>
-                                                        <td><input type="hidden" class="pe-none" name="anggota[{{ $loop->index }}][nama]" value="{{ $value['nama'] }}"/>{{ $value['nama']." - ".($value['prodi']??"-")." (".($value['fakultas']??"-").")" }}</td>
+                                                        <td><input type="hidden" class="pe-none" name="anggota[{{ $loop->index }}][nip]" value="{{ $value['nip'] }}"/>{{ $value['nip'] }}</td>
+                                                        <td><input type="hidden" class="pe-none" name="anggota[{{ $loop->index }}][nama]" value="{{ $value['nama'] }}"/>{{ $value['nama'] }}</td>
                                                         <td><a href="#" class="btn btn-danger btnHapusAnggota">Hapus</a></td>
                                                     </tr>  
                                                     @endforeach
@@ -168,6 +173,9 @@
                 nidnAddAnggota.blur().val("");
                 nipAddAnggota.blur().val("");
             });
+            String.prototype.isEmpty = function() {
+                return (this.length === 0 || !this.trim());
+            };
 
             //optimal
             const deleteStrategy = {
@@ -187,11 +195,16 @@
             }
             const createTableRowStrategy = {
                 anggota: function(row,length,response,btnClassName) {
+                    let nidn = response?.data?.dosen?.nidn??"";
+                    let nip = response?.data?.pegawai?.nip??"";
+                    let nama_lengkap = response?.data?.dosen?.nama_dosen ?? response?.data?.pegawai?.nama;
+                    console.log()
+
                     row.setAttribute('data-id', length);
-                    row.insertCell(0).innerHTML = `<input type="hidden" class="pe-none" name="anggota[${length}][nidn]" value="${response.data.nidn}"/> ${response.data.nidn}`;
-                    row.insertCell(0).innerHTML = `<input type="hidden" class="pe-none" name="anggota[${length}][nip]" value="${response.data.nip}"/> ${response.data.nip}`;
-                    row.insertCell(1).innerHTML = `<input type="hidden" class="pe-none" name="anggota[${length}][nama]" value="${response.data.nama}"/> ${response.data.nama}`;
-                    row.insertCell(2).innerHTML = `<a href="#" class="btn btn-danger ${btnClassName}">Hapus</a>`;
+                    row.insertCell(0).innerHTML = `<input type="hidden" class="pe-none" name="anggota[${length}][nidn]" value="${nidn}"/> ${nidn}`;
+                    row.insertCell(1).innerHTML = `<input type="hidden" class="pe-none" name="anggota[${length}][nip]" value="${nip}"/> ${nip}`;
+                    row.insertCell(2).innerHTML = `<input type="hidden" class="pe-none" name="anggota[${length}][nama]" value="${nama_lengkap}"/> ${nama_lengkap}`;
+                    row.insertCell(3).innerHTML = `<a href="#" class="btn btn-danger ${btnClassName}">Hapus</a>`;
                     return row;
                 }
             };

@@ -10,9 +10,10 @@ use Architecture\Shared\TypeData;
 class ApprovalCutiCommand extends Command
 {
     use IdentityCommand,CutiBase;
-    public function __construct($id,$status,$catatan=null, public TypeData $option = TypeData::Entity) {
+    public function __construct($id,$status,$catatan=null,$pic=null, public TypeData $option = TypeData::Entity) {
         $this->id = $id;
         $this->status = $status;
         $this->catatan = $catatan;
+        $this->pic = $pic;
     }
 }

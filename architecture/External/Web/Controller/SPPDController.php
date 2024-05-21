@@ -5,10 +5,11 @@ namespace Architecture\External\Web\Controller;
 use App\Http\Controllers\Controller;
 use Architecture\Application\Abstractions\Messaging\ICommandBus;
 use Architecture\Application\Abstractions\Messaging\IQueryBus;
+use Architecture\Application\SPPD\Create\CreateAnggotaSPPDCommand;
 use Architecture\Application\SPPD\Create\CreateSPPDCommand;
+use Architecture\Application\SPPD\Delete\DeleteAllAnggotaSPPDCommand;
 use Architecture\Application\SPPD\Delete\DeleteSPPDCommand;
 use Architecture\Application\SPPD\FirstData\GetSPPDQuery;
-use Architecture\Application\SPPD\Update\RejectSPPDCommand;
 use Architecture\Application\SPPD\Update\UpdateSPPDCommand;
 use Architecture\Domain\Creational\Creator;
 use Architecture\Domain\Entity\FolderX;
@@ -17,13 +18,18 @@ use Architecture\Domain\Enum\TypeNotif;
 use Architecture\Domain\RuleValidationRequest\SPPD\CreateSPPDRuleReq;
 use Architecture\Domain\RuleValidationRequest\SPPD\DeleteSPPDRuleReq;
 use Architecture\Domain\RuleValidationRequest\SPPD\UpdateSPPDRuleReq;
+use Architecture\Domain\Structural\AnggotaAdapter;
+use Architecture\Domain\Structural\ListContext;
 use Architecture\Domain\ValueObject\Date;
+use Architecture\External\Persistance\ORM\SPPD;
 use Architecture\External\Port\PdfX;
 use Architecture\Shared\Creational\FileManager;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Architecture\Shared\Facades\Utility;
 
 class SPPDController extends Controller
 {
@@ -47,7 +53,8 @@ class SPPDController extends Controller
                 return redirect()->route('sppd.create')->withInput()->withErrors($validator->errors()->toArray());    
             } 
             
-            $this->commandBus->dispatch(new CreateSPPDCommand(
+            DB::beginTransaction();
+            $sppd = $this->commandBus->dispatch(new CreateSPPDCommand(
                 Session::get('nidn'),
                 Session::get('nip'),
                 Creator::buildJenisSPPD(JenisSppdReferensi::make(
@@ -59,10 +66,21 @@ class SPPDController extends Controller
                 $request->get('keterangan'),
                 "menunggu"
             ));
+
+            foreach($request->get('anggota') as $anggota){
+                $anggota = (object) $anggota;
+                $this->commandBus->dispatch(new CreateAnggotaSPPDCommand(
+                    $sppd->id,
+                    $anggota->nidn,
+                    $anggota->nip,
+                ));
+            }
+            DB::commit();
             Session::flash(TypeNotif::Create->val(), "berhasil tambah data");
 
             return redirect()->route('sppd.index');
         } catch (Exception $e) {
+            DB::rollBack();
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
             return redirect()->route('sppd.create')->withInput();
         }
@@ -70,9 +88,11 @@ class SPPDController extends Controller
     public function edit($id){
         try {
             $SPPD = $this->queryBus->ask(new GetSPPDQuery($id));
-            
+            $list = new ListContext();
+
             return view('sppd.edit',[
-                "SPPD"=>$SPPD
+                "SPPD"=>$SPPD,
+                "listAnggota"=> $list->setAdapter(new AnggotaAdapter())->getList($SPPD->GetListAnggota()),
             ]);
         } catch (Exception $e) {
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
@@ -87,8 +107,9 @@ class SPPDController extends Controller
                 return redirect()->route('sppd.edit',["id"=>$request->get("id")])->withInput()->withErrors($validator->errors()->toArray());    
             } 
 
+            DB::beginTransaction();
             $sppd = $this->queryBus->ask(new GetSPPDQuery($request->get("id")));            
-            $this->commandBus->dispatch(new UpdateSPPDCommand(
+            $sppd = $this->commandBus->dispatch(new UpdateSPPDCommand(
                 $request->get('id'), 
                 Session::get('nidn'),
                 Session::get('nip'),
@@ -101,10 +122,23 @@ class SPPDController extends Controller
                 $request->get('keterangan'),
                 $sppd->GetStatus()
             ));
+
+            $this->commandBus->dispatch(new DeleteAllAnggotaSPPDCommand($sppd->id));
+
+            foreach($request->get('anggota') as $anggota){
+                $anggota = (object) $anggota;
+                $this->commandBus->dispatch(new CreateAnggotaSPPDCommand(
+                    $sppd->id,
+                    $anggota->nidn,
+                    $anggota->nip,
+                ));
+            }
+            DB::commit();
             Session::flash(TypeNotif::Update->val(), "berhasil ubah data");
 
             return redirect()->route('sppd.index');
         } catch (Exception $e) {
+            DB::rollBack();
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
             return redirect()->route('sppd.edit',["id"=>$request->get('id')])->withInput();
         }
@@ -139,6 +173,7 @@ class SPPDController extends Controller
 
     public function export(Request $request){
         try {
+            $id             = $request->has('id')? $request->query('id'):null;
             $nidn           = $request->has('nidn')? $request->query('nidn'):null;
             $nip            = $request->has('nip')? $request->query('nip'):null;
             $jenis_sppd     = $request->has('jenis_sppd')? $request->query('jenis_sppd'):null;
@@ -148,7 +183,11 @@ class SPPDController extends Controller
             $type_export    = $request->has('type_export')? $request->query('type_export'):null;
 
             $file_name = "sppd";
-            $sppd = DB::table('sppd');
+            $sppd = SPPD::with(['SDM','Dosen','Pegawai','JenisSPPD','Anggota','Anggota.Dosen','Anggota.Pegawai']);
+            
+            if($id){
+                $sppd->where('id',$id);
+            }
             if($nidn){
                 $sppd->where('nidn',$nidn);
                 $file_name = $file_name."_$nidn";
@@ -172,7 +211,8 @@ class SPPDController extends Controller
             else if($tanggal_kembali && is_null($tanggal_berangkat)){
                 $sppd->where('tanggal_kembali',$tanggal_kembali);
                 $file_name = $file_name."_$tanggal_kembali";
-            } else if($tanggal_berangkat && $tanggal_kembali){
+            } 
+            else if($tanggal_berangkat && $tanggal_kembali){
                 $sppd->whereBetween('tanggal_berangkat', [$tanggal_berangkat, $tanggal_kembali])
                     ->whereBetween('tanggal_kembali', [$tanggal_berangkat, $tanggal_kembali]);
 
@@ -196,6 +236,7 @@ class SPPDController extends Controller
             return FileManager::StreamFile($file);
 
         } catch (Exception $e) {
+            throw $e;
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
             return redirect()->route('sppd.index');
         }

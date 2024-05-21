@@ -20,7 +20,7 @@ class ApiIzinController extends Controller
         try {
             if(empty($request->id)) throw new Exception("invalid reject izin");
 
-            $this->commandBus->dispatch(new ApprovalIzinCommand($request->id,"reject",$request->catatan));
+            $this->commandBus->dispatch(new ApprovalIzinCommand($request->id,"tolak",$request->catatan,$request->pic));
             
             return response()->json([
                 "status"=>"ok",

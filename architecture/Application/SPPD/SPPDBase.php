@@ -4,6 +4,7 @@ namespace Architecture\Application\SPPD;
 
 use Architecture\Domain\Entity\JenisSPPD;
 use Architecture\Domain\ValueObject\Date;
+use Illuminate\Support\Collection;
 
 trait SPPDBase 
 {
@@ -16,6 +17,7 @@ trait SPPDBase
     public $keterangan;
     public $status;
     public $catatan=null;
+    public ?Collection $list_anggota=null;
 
     public function GetNIDN(){
         return $this->nidn;
@@ -43,5 +45,8 @@ trait SPPDBase
     }
     public function GetCatatan(){
         return $this->catatan;
+    }
+    public function GetListAnggota(){
+        return $this->list_anggota;
     }
 }

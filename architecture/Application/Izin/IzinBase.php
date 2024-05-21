@@ -15,6 +15,7 @@ trait IzinBase
     public $dokumen;
     public $status;
     public $catatan;
+    public $pic;
 
     public function GetNIDN(){
         return $this->nidn;
@@ -39,5 +40,8 @@ trait IzinBase
     }
     public function GetStatus(){
         return $this->status;
+    }
+    public function GetPIC(){
+        return $this->pic;
     }
 }

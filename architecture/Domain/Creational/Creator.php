@@ -111,6 +111,7 @@ class Creator{
             $factory->GetKeterangan(),
             $factory->GetStatus(),
             $factory->GetCatatan(),
+            $factory->GetListAnggota(),
         );
     }
     public static function buildPresensi(IPresensi $factory){
