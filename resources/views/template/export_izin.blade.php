@@ -21,14 +21,14 @@
             <td>
                 @php
                     $nama = match(true){
-                        !empty($izin->nama_dosen) && empty($izin->nama_pegawai) => $izin->nama_dosen."<br>".$izin->nidn,
-                        empty($izin->nama_dosen) && !empty($izin->nama_pegawai) => $izin->nama_pegawai."<br>".$izin->nip
+                        !empty($izin->Dosen) && empty($izin->Pegawai) => $izin->Dosen?->nama."<br>".$izin->nidn,
+                        empty($izin->Dosen) && !empty($izin->Pegawai) => $izin->Pegawai?->nama."<br>".$izin->nip
                     };
                     echo $nama;
                 @endphp
             </td>
             <td>{{Carbon::parse($izin->tanggal_pengajuan)->format("L F Y")}}</td>
-            <td>{{$izin->nama_izin}}</td>
+            <td>{{$izin->JenisIzin?->nama}}</td>
             <td>{{$izin->tujuan}}</td>
             <td>{{$izin->catatan}}</td>
         </tr>

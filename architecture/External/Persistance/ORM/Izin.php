@@ -14,4 +14,10 @@ class Izin extends Model
    public function JenisIzin(){
       return $this->hasOne(JenisIzin::class, 'id', 'id_jenis_izin');
    }
+   public function Dosen(){
+      return $this->hasOne(Dosen::class, 'nidn', 'nidn'); 
+   }
+   public function Pegawai(){
+      return $this->hasOne(NPribadi::class, 'nip' ,'nip');
+   }
 }

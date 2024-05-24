@@ -35,6 +35,7 @@ trait Utility
             "dosen"     => $toLower? "dosen":"Dosen",
             "pegawai"   => $toLower? "pegawai":"Pegawai",
             "warek"     => $toLower? "warek":"Warek",
+            "keuangan"  => $toLower? "keuangan":"Keuangan",
             default     => $toLower? "n/a":"N/A"
         };
     }

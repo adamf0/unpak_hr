@@ -23,8 +23,8 @@
             <td>
                 @php
                     $nama = match(true){
-                        !empty($cuti->nama_dosen) && empty($cuti->nama_pegawai) => $cuti->nama_dosen."<br>".$cuti->nidn,
-                        empty($cuti->nama_dosen) && !empty($cuti->nama_pegawai) => $cuti->nama_pegawai."<br>".$cuti->nip
+                        !empty($cuti->Dosen) && empty($cuti->Pegawai) => $cuti->Dosen?->nama_dosen."<br>".$cuti->nidn,
+                        empty($cuti->Dosen) && !empty($cuti->Pegawai) => $cuti->Pegawai?->nama."<br>".$cuti->nip
                     };
                     echo $nama;
                 @endphp
@@ -32,7 +32,7 @@
             </td>
             <td>{{Carbon::parse($cuti->tanggal_mulai)->format("L F Y")}} - {{Carbon::parse($cuti->tanggal_akhir)->format("L F Y")}}</td>
             <td>{{$cuti->lama_cuti}} hari</td>
-            <td>{{$cuti->nama_cuti}}</td>
+            <td>{{$cuti->JenisCuti?->nama}}</td>
             <td>{{$cuti->tujuan}}</td>
             <td>{{$cuti->catatan}}</td>
         </tr>

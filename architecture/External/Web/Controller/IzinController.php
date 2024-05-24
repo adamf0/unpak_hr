@@ -21,6 +21,7 @@ use Architecture\Domain\RuleValidationRequest\Izin\CreateIzinRuleReq;
 use Architecture\Domain\RuleValidationRequest\Izin\DeleteIzinRuleReq;
 use Architecture\Domain\RuleValidationRequest\Izin\UpdateIzinRuleReq;
 use Architecture\Domain\ValueObject\Date;
+use Architecture\External\Persistance\ORM\Izin;
 use Architecture\External\Port\FileSystem;
 use Architecture\External\Port\PdfX;
 use Architecture\Shared\Creational\FileManager;
@@ -187,7 +188,7 @@ class IzinController extends Controller
             $type_export    = $request->has('type_export')? $request->query('type_export'):null;
 
             $file_name = "izin";
-            $izin = DB::table('izin');
+            $izin = Izin::with(['JenisIzin','Dosen','Pegawai']);
             if($nidn){
                 $izin->where('nidn',$nidn);
                 $file_name = $file_name."_$nidn";
@@ -216,10 +217,10 @@ class IzinController extends Controller
 
                 $file_name = $file_name."_$tanggal_mulai-$tanggal_akhir";
             }
-            $izin = $izin->leftJoin('jenis_izin','izin.id_jenis_izin',"=","jenis_izin.id")
-                        ->leftJoin(DB::raw(config('database.connections.simak.database') . '.m_dosen'), 'izin.nidn', '=', 'm_dosen.nidn')
-                        ->leftJoin(DB::raw(config('database.connections.simpeg.database') . '.n_pribadi'), 'izin.nip', '=', 'n_pribadi.nip')
-                        ->select('izin.*','jenis_izin.nama as nama_izin', 'm_dosen.nama_dosen as nama_dosen','n_pribadi.nama as nama_pegawai');
+            // $izin = $izin->leftJoin('jenis_izin','izin.id_jenis_izin',"=","jenis_izin.id")
+            //             ->leftJoin(DB::raw(config('database.connections.simak.database') . '.m_dosen'), 'izin.nidn', '=', 'm_dosen.nidn')
+            //             ->leftJoin(DB::raw(config('database.connections.simpeg.database') . '.n_pribadi'), 'izin.nip', '=', 'n_pribadi.nip')
+            //             ->select('izin.*','jenis_izin.nama as nama_izin', 'm_dosen.nama_dosen as nama_dosen','n_pribadi.nama as nama_pegawai');
             $list_izin = $izin->get();
 
             if($type_export=="pdf"){

@@ -71,6 +71,7 @@
     }
 </style>
 <div class="row">
+    @if (Utility::hasUser())
     <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6">
         <div class="card info-card sales-card">
             <div class="card-body">
@@ -289,6 +290,11 @@
             </div>
         </div>
     </div>
+    @elseif (Utility::hasSDM() || Utility::hasWarek())
+    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        Daftar Absen
+    </div>
+    @endif
 </div>
 @php
     $refid = match(true){

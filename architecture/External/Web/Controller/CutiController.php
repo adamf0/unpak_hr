@@ -21,6 +21,7 @@ use Architecture\Domain\RuleValidationRequest\Cuti\CreateCutiRuleReq;
 use Architecture\Domain\RuleValidationRequest\Cuti\DeleteCutiRuleReq;
 use Architecture\Domain\RuleValidationRequest\Cuti\UpdateCutiRuleReq;
 use Architecture\Domain\ValueObject\Date;
+use Architecture\External\Persistance\ORM\Cuti;
 use Architecture\External\Port\FileSystem;
 use Architecture\External\Port\PdfX;
 use Architecture\Shared\Creational\FileManager;
@@ -192,7 +193,7 @@ class CutiController extends Controller
             $type_export    = $request->has('type_export')? $request->query('type_export'):null;
 
             $file_name = "cuti";
-            $cuti = DB::table('cuti');
+            $cuti = Cuti::with(['JenisCuti','Dosen','Pegawai']);
             if($nidn){
                 $cuti->where('nidn',$nidn);
                 $file_name = $file_name."_$nidn";
@@ -222,10 +223,10 @@ class CutiController extends Controller
 
                 $file_name = $file_name."_$tanggal_mulai-$tanggal_akhir";
             }
-            $cuti = $cuti->leftJoin('jenis_cuti','cuti.id_jenis_cuti',"=","jenis_cuti.id")
-                        ->leftJoin(DB::raw(config('database.connections.simak.database') . '.m_dosen'), 'cuti.nidn', '=', 'm_dosen.nidn')
-                        ->leftJoin(DB::raw(config('database.connections.simpeg.database') . '.n_pribadi'), 'cuti.nip', '=', 'n_pribadi.nip')
-                        ->select('cuti.*','jenis_cuti.nama as nama_cuti', 'm_dosen.nama_dosen as nama_dosen','n_pribadi.nama as nama_pegawai');
+            // $cuti = $cuti->leftJoin('jenis_cuti','cuti.id_jenis_cuti',"=","jenis_cuti.id")
+            //             ->leftJoin(DB::raw(config('database.connections.simak.database') . '.m_dosen'), 'cuti.nidn', '=', 'm_dosen.nidn')
+            //             ->leftJoin(DB::raw(config('database.connections.simpeg.database') . '.n_pribadi'), 'cuti.nip', '=', 'n_pribadi.nip')
+            //             ->select('cuti.*','jenis_cuti.nama as nama_cuti', 'm_dosen.nama_dosen as nama_dosen','n_pribadi.nama as nama_pegawai');
             $list_cuti = $cuti->get();
 
             if($type_export=="pdf"){
