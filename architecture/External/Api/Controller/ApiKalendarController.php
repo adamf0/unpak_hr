@@ -55,6 +55,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
             $list_sppd = in_array($level, ["dosen","pegawai"])? $this->queryBus->ask(new GetAllSPPDQuery($nidn,$nip,$tahun,TypeData::Default)) : collect([]);
             $list_absen = in_array($level, ["dosen","pegawai"])? $this->queryBus->ask(new GetAllPresensiQuery($nidn,$nip,$tahun,TypeData::Default)) : collect([]);
             $master_kalendar = $this->queryBus->ask(new GetAllMasterKalendarQuery(1,1,$tahun,TypeData::Default));
+            // dd($list_cuti, $list_izin, $list_sppd, $master_kalendar);
             
             $listKalendar = $master_kalendar->reduce(function ($carry, $item) use ($format) {
                 if($format=="full-calendar"){
@@ -146,25 +147,17 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                 return $carry;
             }, []);
 
-            // $listTidakMasuk = $list_absen->reduce(function ($carry, $item){ //
-            //     $dateNow = Carbon::now()->format('Y-m-d');
-            //     if( isEmpty($item->GetAbsenMasuk() && $item->GetTanggal()->isLess(new Date($dateNow))) ){
-            //         $carry[] = $item;   
-            //     }
-
-            //     return $carry;
-            // });
             $listAbsen = $list_absen->reduce(function ($carry, $item) use ($format) {
                 if($format=="full-calendar"){
                     $background = match(true){
-                        empty($item->absen_masuk) && empty($item->absen_keluar) => "dc3545", //tidak masuk
-                        !empty($item->absen_masuk) => "198754", //masuk
+                        empty($item->absen_masuk) && Carbon::parse($item->tanggal)->lessThan(Carbon::now()->format('Y-m-d')) => "#dc3545", //tidak masuk
+                        !empty($item->absen_masuk) && Carbon::parse($item->tanggal)->equalTo(Carbon::now()->format('Y-m-d')) => "#198754", //masuk
                         default => "#000"
                     };
                     $title = match(true){
-                        empty($item->absen_masuk) && empty($item->absen_keluar) => "tidak masuk", //tidak masuk
-                        !empty($item->absen_masuk) => Carbon::parse($item->absen_masuk)->format("H:m:s").(empty($item->absen_keluar)? "":" - ".Carbon::parse($item->absen_keluar)->format("H:m:s")), //masuk
-                        default => "NA"
+                        empty($item->absen_masuk) && Carbon::parse($item->tanggal)->lessThan(Carbon::now()->format('Y-m-d')) => "tidak masuk", //tidak masuk
+                        !empty($item->absen_masuk) && Carbon::parse($item->tanggal)->equalTo(Carbon::now()->format('Y-m-d')) => Carbon::parse($item->absen_masuk)->format("H:m:s").(empty($item->absen_keluar)? "":" - ".Carbon::parse($item->absen_keluar)->format("H:m:s")), //masuk
+                        default => $item->tanggal
                     };
                     $carry[] = [
                         "title"=>$title,
@@ -185,7 +178,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
             }, []);
             // dd($listAbsen);
 
-            $list = array_merge($listKalendar,$listCuti,$listIzin,$listSPPD);
+            $list = array_merge($listKalendar,$listCuti,$listIzin,$listSPPD,$listAbsen);
 
             return response()->json([
                 "status"=>"ok",

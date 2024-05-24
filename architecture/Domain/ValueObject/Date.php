@@ -35,6 +35,9 @@ class Date {
     function isLess(Date $target){
         return $this->value->lt($target->val());
     }
+    function isEqual(Date $target){
+        return $this->value->toString() == $target->toString();
+    }
     function differentDays(Date $target){
         return $target->val()->diff($this->value)->days;
     }

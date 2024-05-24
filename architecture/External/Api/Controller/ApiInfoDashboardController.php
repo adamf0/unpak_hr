@@ -30,8 +30,15 @@ class ApiInfoDashboardController extends Controller
         return $p->GetAbsenMasuk()->isGreater(new Date($p->GetTanggal()->val()->setTimeFromTimeString("08:01:00")));
     }
     public function is8Hour($p){
-        if(!$this->isLate($p)) 
-            return $p->GetAbsenKeluar()==null? false:$p->GetAbsenKeluar()->isGreater(new Date($p->GetTanggal()->val()->setTimeFromTimeString("14:59:00")));
+        if(!$this->isLate($p)){
+            $jam_pulang = "14:59:00";
+            if (Carbon::now()->dayOfWeek == Carbon::FRIDAY) {
+                $jam_pulang = "13:59:00";
+            } elseif (Carbon::now()->dayOfWeek == Carbon::SATURDAY) {
+                $jam_pulang = "11:59:00";
+            }
+            return $p->GetAbsenKeluar()==null? false:$p->GetAbsenKeluar()->isGreater(new Date($p->GetTanggal()->val()->setTimeFromTimeString($jam_pulang)));
+        }
         else if($this->isLate($p))
             return $p->GetAbsenKeluar()==null? false:$p->GetAbsenKeluar()->isGreater(new Date($p->GetAbsenMasuk()->val()->addHour(8)));
         else 
@@ -50,23 +57,14 @@ class ApiInfoDashboardController extends Controller
 
                 return $carry;
             });
-            $list_tidak_masuk = $presensi->reduce(function ($carry, $item){ //
-                $dateNow = Carbon::now()->format('Y-m-d');
-                if( isEmpty($item->GetAbsenMasuk() && $item->GetTanggal()->isLess(new Date($dateNow))) ){
-                    $carry[] = $item;   
-                }
+            $list_tidak_masuk = $presensi->filter(function($item){
+                                            return isEmpty($item->GetAbsenMasuk()) && $item->GetTanggal()->isLess(new Date(Carbon::now()->format('Y-m-d')));
+                                        });
 
-                return $carry;
-            });
-            $list_belum_absen = $presensi->reduce(function ($carry, $item){ //
-                $dateNow = Carbon::now()->format('Y-m-d');
-                if( isEmpty($item->GetAbsenMasuk() && !$item->GetTanggal()->isLess(new Date($dateNow))) ){
-                    $carry[] = $item;   
-                }
+            $list_belum_absen = $presensi->filter(function($item){
+                                            return isEmpty($item->GetAbsenMasuk()) && $item->GetTanggal()->isEqual(new Date(Carbon::now()->format('Y-m-d')));
+                                        });
 
-                return $carry;
-            });
-            
             $cuti = $this->queryBus->ask(
                 $type=="nidn"? new GetAllCutiByNIDNQuery($id):new GetAllCutiByNIPQuery($id)
             );
@@ -87,8 +85,8 @@ class ApiInfoDashboardController extends Controller
                         "telat"=>collect($list_presensi)->filter(fn($p)=>$this->isLate($p))->count(),
                         "l8"=>collect($list_presensi)->filter(fn($p)=>!$this->is8Hour($p))->count(),
                         "r8"=>collect($list_presensi)->filter(fn($p)=>$this->is8Hour($p))->count(),
-                        "tidak_masuk"=>collect($list_tidak_masuk)->count(),
-                        "belum_absen"=>collect($list_belum_absen)->count(),
+                        "tidak_masuk"=>$list_tidak_masuk->count(),
+                        "belum_absen"=>$list_belum_absen->count(),
                     ],
                     "cuti"=>[
                         "total"=>$cuti->count(),

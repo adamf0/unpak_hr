@@ -308,6 +308,10 @@
         $(document).ready(function () {
             // $('#tb').DataTable();
 
+            const nidn = `{{Session::get('nidn')}}`
+            const nip = `{{Session::get('nip')}}`
+            const level = `{{Session::get('levelActive')}}`
+
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 header: {
@@ -317,7 +321,7 @@
                 },
                 events: function(fetchInfo, successCallback, failureCallback) {
                     $.ajax({
-                        url: "{{ route('api.kalendar.index', ['tahun' => date('Y'), 'format' => 'full-calendar']) }}",
+                        url: `{{ route('api.kalendar.index', ['tahun' => date('Y'), 'format' => 'full-calendar']) }}?level=${level}&nidn=${nidn}&nip=${nip}`,
                         method: 'GET',
                         success: function(response) {
                             var events = response.data.map(function(eventData) {
