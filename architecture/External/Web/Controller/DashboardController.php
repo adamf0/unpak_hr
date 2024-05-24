@@ -33,7 +33,7 @@ class DashboardController extends Controller
                 ]);
             }
 
-            $list_absen = Absensi::with(['Pegawai','Dosen'])->where('tanggal',now())->get();
+            $list_absen = Absensi::with(['Pegawai','Dosen'])->where('tanggal',date('Y-m-d'))->get();
             return view('dashboard.index',[
                 "presensi"=>null,
                 "list_absen"=>$list_absen,
