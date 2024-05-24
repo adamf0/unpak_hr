@@ -20,7 +20,6 @@
         <tr>
             <td>{{$key+1}}</td>
             <td>
-            <td>
                 @php
                     $nama = match(true){
                         !empty($cuti->Dosen) && empty($cuti->Pegawai) => $cuti->Dosen?->nama_dosen."<br>".$cuti->nidn,
@@ -29,7 +28,6 @@
                     };
                     echo $nama;
                 @endphp
-            </td>
             </td>
             <td>{{Carbon::parse($cuti->tanggal_mulai)->format("L F Y")}} - {{Carbon::parse($cuti->tanggal_akhir)->format("L F Y")}}</td>
             <td>{{$cuti->lama_cuti}} hari</td>
