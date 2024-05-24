@@ -86,6 +86,12 @@
                     </div>
                     <div class="col-12">
                         <div class="grid-card">
+                            <div class="presensi_belum_absen placeholder-glow">
+                                <span class="placeholder col-4"></span>
+                            </div>
+                            <div class="presensi_tidak_masuk placeholder-glow">
+                                <span class="placeholder col-4"></span>
+                            </div>
                             <div class="presensi_tepat_waktu placeholder-glow">
                                 <span class="placeholder col-4"></span>
                             </div>
@@ -192,14 +198,6 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="grid-card">
-                            <!-- <div>
-                                <span class="text-success small pt-1 fw-bold">Belum Absen</span> 
-                                <span class="text-muted small pt-2 ps-1 info_belum_absen"><span class="placeholder col-2"></span></span>                            
-                            </div>
-                            <div>
-                                <span class="text-success small pt-1 fw-bold">Tidak Absen</span> 
-                                <span class="text-muted small pt-2 ps-1 info_tidak_absen"><span class="placeholder col-2"></span></span>                            
-                            </div> -->
                             <div>
                                 <span class="text-success small pt-1 fw-bold">Masuk</span> 
                                 <span class="text-muted small pt-2 ps-1 info_absen_masuk"><span class="placeholder col-2"></span></span>                            
@@ -357,6 +355,8 @@
             const refInfoAbsenJamKerja = '.info_absen_jam_kerja'
 
             const refPresensiTotal = '.presensi_total'
+            const refPresensiTidakMasuk = '.presensi_tidak_masuk'
+            const refPresensiBelumAbsen = '.presensi_belum_absen'
             const refPresensiTepatWaktu = '.presensi_tepat_waktu'
             const refPresensiTelat = '.presensi_telat'
             const refPresensiR8 = '.presensi_r8jam'
@@ -395,6 +395,14 @@
                         setTimeout(function(){
                             var data = response.data
                             $(refPresensiTotal).html(data?.presensi?.total??0)
+                            $(refPresensiTidakMasuk).html(`
+                                <span class="text-danger small pt-1 fw-bold">${data?.presensi?.tidak_masuk??0}</span> 
+                                <span class="text-muted small pt-2 ps-1">Tidak Masuk</span>
+                            `)
+                            $(refPresensiBelumAbsen).html(`
+                                <span class="text-danger small pt-1 fw-bold">${data?.presensi?.belum_absen??0}</span> 
+                                <span class="text-muted small pt-2 ps-1">Belum Absen</span>
+                            `)
                             $(refPresensiTepatWaktu).html(`
                                 <span class="text-success small pt-1 fw-bold">${data?.presensi?.tepat??0}</span> 
                                 <span class="text-muted small pt-2 ps-1">Tepat Waktu</span>
