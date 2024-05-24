@@ -236,6 +236,10 @@
                     <img src="{{ Utility::loadAsset('assets/img/delivery_man_5_with_dog.png') }}" alt="sudah pulang">
                     <h4>Anda udah Pulang</h4>
                 </div>
+                <div class="absen_libur" style="display: none;">
+                    <img src="{{ Utility::loadAsset('assets/img/set-of-travel-on-holiday-icon-free-vector.jpg') }}" style="width:100%" alt="libur">
+                    <h4 class="text-center">Tidak ada absen untuk hari libur</h4>
+                </div>
             </div>
         </div>
     </div>
@@ -353,6 +357,7 @@
             const refInfoAbsenKeluar = '.info_absen_keluar'
             const refInfoAbsenTelat = '.info_absen_telat'
             const refInfoAbsenJamKerja = '.info_absen_jam_kerja'
+            const refAbsenLibur = '.absen_libur';
 
             const refPresensiTotal = '.presensi_total'
             const refPresensiTidakMasuk = '.presensi_tidak_masuk'
@@ -467,7 +472,20 @@
                 } 
             }
             const showLayoutAbsen = (state) => {
-                if(state=="initial"){
+                $(refAbsenLibur).hide()
+
+                console.log(getCurrentTime().day())
+                if(getCurrentTime().day()==5){
+                    $(refAbsenForm).hide()
+                    $(refAbsenDone).hide()
+                    $(refAbsenLibur).show()
+                    $(refAbsenMessage).html("")
+
+                    $(refAbsenMessage).hide()
+                    $(refAbsenKeterangan).hide()
+                    changeClass($(refAbsenSubmit), "btn-warning", "btn-success")
+                }
+                else if(state=="initial"){
                     $(refAbsenForm).show()
                     $(refAbsenDone).hide()
                     $(refAbsenMessage).html("Masih belum terlambat, ayo presensi masuk!")
@@ -550,9 +568,9 @@
                 if(absenMasuk.isEmpty()) return false;
 
                 let lama = timeAbsen
-                if(getCurrentTime().day()==5){
+                if(getCurrentTime().day()==5){ //jumat
                     lama = timeAbsen-1
-                } else if(getCurrentTime().day()==6){
+                } else if(getCurrentTime().day()==6){ //sabtu
                     lama = timeAbsen-3
                 }
                 const masuk = moment(absenMasuk).tz('Asia/Jakarta')
