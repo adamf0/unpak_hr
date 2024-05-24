@@ -170,6 +170,7 @@ return [
         Architecture\External\Config\Provider\SPPDServiceProvider::class,
         Architecture\External\Config\Provider\PresensiServiceProvider::class,
         Architecture\External\Config\Provider\MasterKalendarServiceProvider::class,
+        Architecture\External\Config\Provider\PenggunaServiceProvider::class,
         /*
          * Application Service Providers...
          */

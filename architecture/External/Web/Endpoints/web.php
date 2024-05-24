@@ -8,6 +8,7 @@ use Architecture\External\Web\Controller\JenisCutiController;
 use Architecture\External\Web\Controller\JenisIzinController;
 use Architecture\External\Web\Controller\JenisSPPDController;
 use Architecture\External\Web\Controller\MasterKalendarController;
+use Architecture\External\Web\Controller\PenggunaController;
 use Architecture\External\Web\Controller\SPPDController;
 use Architecture\External\Web\Controller\VideoKegiatanController;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,13 @@ Route::get('logout', [AuthController::class,'Logout'])->name('auth.logout');
 Route::middleware(['throwSession'])->group(function () {
     Route::get('dashboard', [DashboardController::class,'index'])->name('dashboard.index');
     
+    Route::get('pengguna', [PenggunaController::class,'index'])->name('pengguna.index');
+    Route::get('pengguna/create', [PenggunaController::class,'create'])->name('pengguna.create');
+    Route::post('pengguna/store', [PenggunaController::class,'store'])->name('pengguna.store');
+    Route::get('pengguna/edit/{id}', [PenggunaController::class,'edit'])->name('pengguna.edit');
+    Route::post('pengguna/update', [PenggunaController::class,'update'])->name('pengguna.update');
+    Route::get('pengguna/delete/{id}', [PenggunaController::class,'delete'])->name('pengguna.delete');
+
     Route::get('master_kalendar', [MasterKalendarController::class,'index'])->name('master_kalendar.index');
     Route::get('master_kalendar/create', [MasterKalendarController::class,'create'])->name('master_kalendar.create');
     Route::post('master_kalendar/store', [MasterKalendarController::class,'store'])->name('master_kalendar.store');

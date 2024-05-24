@@ -16,6 +16,8 @@ use Architecture\Application\SPPD\FirstData\GetSPPDQuery;
 use Architecture\Application\SPPD\List\GetAllSPPDByNIDNQuery;
 use Architecture\Application\SPPD\List\GetAllSPPDByNIPQuery;
 use Architecture\Application\SPPD\List\GetAllSPPDQuery;
+use Architecture\Application\SPPD\Update\ApprovalSPPDCommand;
+use Architecture\Application\SPPD\Update\ApprovalSPPDCommandHandler;
 use Architecture\Application\SPPD\Update\RejectSPPDCommand;
 use Architecture\Application\SPPD\Update\RejectSPPDCommandHandler;
 use Architecture\Application\SPPD\Update\UpdateAnggotaSPPDCommand;
@@ -52,6 +54,7 @@ class SPPDServiceProvider extends ServiceProvider
             UpdateSPPDCommand::class => UpdateSPPDCommandHandler::class,
             DeleteSPPDCommand::class => DeleteSPPDCommandHandler::class,
             RejectSPPDCommand::class => RejectSPPDCommandHandler::class,
+            ApprovalSPPDCommand::class => ApprovalSPPDCommandHandler::class,
 
             CreateAnggotaSPPDCommand::class => CreateAnggotaSPPDCommandHandler::class,
             UpdateAnggotaSPPDCommand::class => UpdateAnggotaSPPDCommandHandler::class,

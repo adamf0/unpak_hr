@@ -201,7 +201,8 @@
       <!-- <li class="nav-heading">Form Pengajuan</li> -->
 
       @if (Utility::hasAdmin())
-        <x-sidebar-item-menu title="JenisCuti" icon="bi bi-menu-button-wide" link="{{route('jenis_cuti.index')}}" :active="Utility::stateMenu(['jenis_cuti'],request())" />  
+        <x-sidebar-item-menu title="Pengguna" icon="bi bi-menu-button-wide" link="{{route('pengguna.index')}}" :active="Utility::stateMenu(['pengguna'],request())" />
+        <x-sidebar-item-menu title="Jenis Cuti" icon="bi bi-menu-button-wide" link="{{route('jenis_cuti.index')}}" :active="Utility::stateMenu(['jenis_cuti'],request())" />  
         <x-sidebar-item-menu title="JenisIzin" icon="bi bi-menu-button-wide" link="{{route('jenis_izin.index')}}" :active="Utility::stateMenu(['jenis_izin'],request())" />
         <x-sidebar-item-menu title="Jenis SPPD" icon="bi bi-menu-button-wide" link="{{route('jenis_sppd.index')}}" :active="Utility::stateMenu(['jenis_sppd'],request())" />
       @endif

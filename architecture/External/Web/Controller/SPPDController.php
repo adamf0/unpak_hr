@@ -10,6 +10,7 @@ use Architecture\Application\SPPD\Create\CreateSPPDCommand;
 use Architecture\Application\SPPD\Delete\DeleteAllAnggotaSPPDCommand;
 use Architecture\Application\SPPD\Delete\DeleteSPPDCommand;
 use Architecture\Application\SPPD\FirstData\GetSPPDQuery;
+use Architecture\Application\SPPD\Update\ApprovalSPPDCommand;
 use Architecture\Application\SPPD\Update\UpdateSPPDCommand;
 use Architecture\Domain\Creational\Creator;
 use Architecture\Domain\Entity\FolderX;
@@ -164,7 +165,11 @@ class SPPDController extends Controller
 
     public function approval($id){
         try {
-            throw new Exception("not impelementation");
+            if(empty($id)) throw new Exception("invalid reject sppd");
+            $this->commandBus->dispatch(new ApprovalSPPDCommand($id,Session::get('id')));
+
+            Session::flash(TypeNotif::Create->val(), "berhasil terima SPPD");
+            return redirect()->route('sppd.index');
         } catch (Exception $e) {
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
             return redirect()->route('sppd.index');
