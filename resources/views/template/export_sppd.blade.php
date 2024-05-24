@@ -62,9 +62,16 @@
             /* text-align: center; */
         }
     }
+    .page-break {
+        page-break-after: always;
+    }
+    .page-break:last-child {
+        page-break-after: avoid;
+    }
 </style>
 <body>
     @foreach($list_sppd as $key => $sppd)
+        <div class="page-break">
         <div class="header">
             <h3 class="header__title">Surat Pengajuan Perjalan Dinas</h3>
         </div>
@@ -140,7 +147,7 @@
             <div class="paraf__container">
             <p>Penjabat Pembuat Komitmen</p>
             @if (!empty($sppd->SDM) && $sppd->status=="terima")
-            <img src='data:image/png;base64, {!! base64_encode(QrCode::size(100)->generate("Nama : ".$sppd->SDM->nama)) !!}' alt="tanda tangan SDM"/>
+            <img src='data:image/png;base64, {!! base64_encode(QrCode::size(100)->generate("Nama : ".$sppd->SDM->name)) !!}' alt="tanda tangan SDM"/>
             <br>
             @else
             <br>
@@ -149,6 +156,85 @@
             <b>SDM</b>
             </div>
         </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <table class="styled-table">
+            @php
+                $total_anggota = count($sppd->AnggotaFlat);
+            @endphp
+            @foreach ($sppd->AnggotaFlat as $key => $anggota)
+                @if ($total_anggota>1 && $key%2==0)
+                    <tr>
+                        <td>
+                            <center>
+                            <p>Tanggal {{$anggota->tanggal}}</p>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <b>{{ $anggota->nama }}</b><br>
+                            {{ $anggota->kodePengenal }}
+                            </center>     
+                        </td>
+                    @elseif($total_anggota>1 && $key%2==1)
+                        <td>
+                            <center>
+                            <p>Tanggal {{$anggota->tanggal}}</p>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <b>{{ $anggota->nama }}</b><br>
+                            {{ $anggota->kodePengenal }}
+                            </center>    
+                        </td>
+                    </tr>
+                    @else
+                    <tr>
+                        <td colspan="2">
+                            <center>
+                            <p>Tanggal {{$anggota->tanggal}}</p>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <b>{{ $anggota->nama }}</b><br>
+                            {{ $anggota->kodePengenal }}
+                            </center>  
+                        </td>
+                    </tr>
+                    @endif
+                @endforeach
+        </table>
+    </div>    
     @endforeach
 </body>
 </html>

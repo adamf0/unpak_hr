@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Architecture\Shared\Facades\Utility;
+use Carbon\Carbon;
 
 class SPPDController extends Controller
 {
@@ -224,12 +225,41 @@ class SPPDController extends Controller
                 $file_name = $file_name."_$tanggal_berangkat-$tanggal_kembali";
             }
             $list_sppd = $sppd->get();
+            $list_sppd = $list_sppd->map(function($row){
+                $tanggal_berangkat = empty($row->tanggal_berangkat)? null:Carbon::parse($row->tanggal_berangkat);
+                $tanggal_kembali = empty($row->tanggal_kembali)? null:Carbon::parse($row->tanggal_kembali);
+                
+                $row->AnggotaFlat = (!empty($tanggal_berangkat) && !empty($tanggal_kembali))? $row->Anggota?->reduce(function ($carry, $item) use($tanggal_berangkat,$tanggal_kembali){
+                    $lama_hari = $tanggal_kembali->diff($tanggal_berangkat)->days;
+                    $nama = match(true){
+                        !empty($item->Dosen) => $item->Dosen->nama_dosen,
+                        !empty($item->Pegawai) => $item->Pegawai->nama,
+                        default=> "NA"
+                    };
+                    $kodePengenal = match(true){
+                        !empty($item->Dosen) => $item->Dosen->NIDN,
+                        !empty($item->Pegawai) => $item->Pegawai->nip,
+                        default=> "NA"
+                    };
+
+                    for ($i=0; $i<$lama_hari; $i++) { 
+                        $carry[] = (object)[
+                            "nama"=>$nama??"NA",
+                            "kodePengenal"=>$kodePengenal,
+                            "tanggal"=>Carbon::parse($tanggal_berangkat->format("Y-m-d"))->addDays($i)->format("L F Y"),
+                        ];
+                    }
+                    return $carry;
+                })??[]:[];
+
+                return $row;
+            });
 
             if($type_export=="pdf"){
                 $file = PdfX::From(
                     "template.export_sppd", 
                     [
-                        "list_sppd"=>$list_sppd
+                        "list_sppd"=>$list_sppd,
                     ], 
                     FolderX::FromPath(public_path('export/pdf')), 
                     "$file_name.pdf"
@@ -241,6 +271,7 @@ class SPPDController extends Controller
             return FileManager::StreamFile($file);
 
         } catch (Exception $e) {
+            throw $e;
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
             return redirect()->route('sppd.index');
         }
