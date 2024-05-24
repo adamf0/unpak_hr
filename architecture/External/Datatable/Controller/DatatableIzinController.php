@@ -45,17 +45,25 @@ class DatatableIzinController extends Controller
         ->addIndexColumn()
         ->addColumn('action', function ($row) use($level){
             $render = '';
-            if(in_array($level,['dosen','pegawai']) && in_array($row->status, ['menunggu','tolak'])){
-                $render = '
-                <a href="'.route('izin.edit',['id'=>$row->id]).'" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
-                <a href="'.route('izin.delete',['id'=>$row->id]).'" class="btn btn-danger"><i class="bi bi-trash"></i></a>
-                ';
+            if(in_array($level,['dosen','pegawai'])){
+                if(in_array($row->status, ['menunggu','tolak'])){
+                    $render = '<div class="row">
+                    <a href="'.route('izin.edit',['id'=>$row->id]).'" class="col-6 btn btn-warning"><i class="bi bi-pencil-square"></i></a>
+                    <a href="'.route('izin.delete',['id'=>$row->id]).'" class="mx-2 col-6 btn btn-danger"><i class="bi bi-trash"></i></a>
+                    </div>
+                    ';
+                } else {
+                    $render = '<a href="#" class="btn btn-info btn-download-pdf"><i class="bi bi-file-earmark-pdf"></i></a>';
+                }
             }
             else if($level=="sdm"){
                 $render = '
-                <a href="'.route('izin.approval',['id'=>$row->id,'type'=>'terima']).'" class="btn btn-success"><i class="bi bi-check-lg"></i></a>
-                <a href="#" class="btn btn-danger btn-reject"><i class="bi bi-x-lg"></i></a>
+                    <a href="'.route('izin.approval',['id'=>$row->id,'type'=>'terima']).'" class="col-4 btn btn-success"><i class="bi bi-check-lg"></i></a>
+                    <a href="#" class="btn btn-danger btn-reject"><i class="bi bi-x-lg"></i></a>
                 ';
+                if($row->status=="terima"){
+                $render .= '<a href="#" class="\btn btn-info btn-download-pdf"><i class="bi bi-file-earmark-pdf"></i></a>';
+                }
             }
             return $render;
         })
