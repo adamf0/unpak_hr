@@ -24,7 +24,8 @@
                 @php
                     $nama = match(true){
                         !empty($cuti->Dosen) && empty($cuti->Pegawai) => $cuti->Dosen?->nama_dosen."<br>".$cuti->nidn,
-                        empty($cuti->Dosen) && !empty($cuti->Pegawai) => $cuti->Pegawai?->nama."<br>".$cuti->nip
+                        empty($cuti->Dosen) && !empty($cuti->Pegawai) => $cuti->Pegawai?->nama."<br>".$cuti->nip,
+                        default=>"NA"
                     };
                     echo $nama;
                 @endphp

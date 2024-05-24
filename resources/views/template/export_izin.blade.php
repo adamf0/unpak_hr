@@ -22,7 +22,8 @@
                 @php
                     $nama = match(true){
                         !empty($izin->Dosen) && empty($izin->Pegawai) => $izin->Dosen?->nama."<br>".$izin->nidn,
-                        empty($izin->Dosen) && !empty($izin->Pegawai) => $izin->Pegawai?->nama."<br>".$izin->nip
+                        empty($izin->Dosen) && !empty($izin->Pegawai) => $izin->Pegawai?->nama."<br>".$izin->nip,
+                        default=>"NA"
                     };
                     echo $nama;
                 @endphp

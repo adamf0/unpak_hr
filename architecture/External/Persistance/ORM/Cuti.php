@@ -16,7 +16,7 @@ class Cuti extends Model
       return $this->hasOne(JenisCuti::class, 'id', 'id_jenis_cuti'); 
    }
    public function Dosen(){
-      return $this->hasOne(Dosen::class, 'nidn', 'nidn'); 
+      return $this->hasOne(Dosen::class, 'NIDN', 'nidn'); 
    }
    public function Pegawai(){
       return $this->hasOne(NPribadi::class, 'nip' ,'nip');

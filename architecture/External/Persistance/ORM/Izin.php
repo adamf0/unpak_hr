@@ -15,7 +15,7 @@ class Izin extends Model
       return $this->hasOne(JenisIzin::class, 'id', 'id_jenis_izin');
    }
    public function Dosen(){
-      return $this->hasOne(Dosen::class, 'nidn', 'nidn'); 
+      return $this->hasOne(Dosen::class, 'NIDN', 'nidn'); 
    }
    public function Pegawai(){
       return $this->hasOne(NPribadi::class, 'nip' ,'nip');
