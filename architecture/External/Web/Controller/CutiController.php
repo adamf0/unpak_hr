@@ -47,7 +47,7 @@ class CutiController extends Controller
     }
     public function store(Request $request){
         try {
-            $validator      = validator($request->all(), CreateCutiRuleReq::create($request, Session::get("nidn"), Session::get("nip")));
+            $validator      = validator($request->all(), CreateCutiRuleReq::create(Session::get("nidn"), Session::get("nip")));
 
             if(count($validator->errors())){
                 return redirect()->route('cuti.create')->withInput()->withErrors($validator->errors()->toArray());    

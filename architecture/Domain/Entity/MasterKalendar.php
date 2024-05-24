@@ -10,5 +10,6 @@ class MasterKalendar extends BaseEntity{
         $this->id = $id;
         $this->tanggal_mulai = $tanggal_mulai;
         $this->tanggal_berakhir = $tanggal_berakhir;
+        $this->keterangan = $keterangan;
     }
 }

@@ -157,7 +157,7 @@
                     data: 'dokumen', 
                     name: 'dokumen',
                     render: function ( data, type, row, meta ) {
-                        return data;
+                        return (data?.url? `<a href="${data?.url}" class="btn btn-success" target="_blank">Buka File</a>`:"");
                     }
                 },
                 {

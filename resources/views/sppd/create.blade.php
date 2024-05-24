@@ -270,6 +270,10 @@
                     alert(`nidn ${nidn} sudah dimasukkan sebelumnya`);
                 } else if(isDuplicatValueDynamicInput("anggota","nip",nip)){
                     alert(`nip ${nip} sudah dimasukkan sebelumnya`);
+                } else if(!nidn.isEmpty() && !nip.isEmpty()){
+                    alert(`nidn dan nip tidak boleh diinput bersamaan`);
+                } else if(nidn.isEmpty() && nip.isEmpty()){
+                    alert(`salah satu antara nidn dan nip yg harus diisi`);
                 } else{
                     $('.btnAddAnggota').attr('disabled', true);
 

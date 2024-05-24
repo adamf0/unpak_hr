@@ -12,7 +12,7 @@ class GetAllMasterKalendarQuery extends Query
     public function __construct(
         public $tahun_sebelum=0,
         public $tahun_sesudah=0,
-        public $tahun,
+        public $tahun=null,
         public TypeData $option = TypeData::Entity
     ) {
         return $this;

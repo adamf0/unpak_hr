@@ -9,6 +9,7 @@ use Architecture\Application\Cuti\List\GetAllCutiQuery;
 use Architecture\Domain\Enum\FormatDate;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables as DataTables;
+use Architecture\Shared\Facades\Utility;
 
 class DatatableCutiController extends Controller
 {
@@ -34,17 +35,16 @@ class DatatableCutiController extends Controller
             "tanggal_mulai"=>$item->GetTanggalMulai()->toFormat(FormatDate::LDFY),
             "tanggal_akhir"=>$item->GetTanggalAkhir()?->toFormat(FormatDate::LDFY),
             "tujuan"=>$item->GetTujuan(),
-            "dokumen"=>$item->GetDokumen(),
+            "dokumen"=>empty($item->GetDokumen())? "":[
+                "file"=>$item->GetDokumen(),
+                "url"=>Utility::loadAsset('dokumen_cuti/'.$item->GetDokumen()),
+            ],
             "status"=>$item->GetStatus(),
             "catatan"=>$item->GetCatatan(),
         ]);
         
         return DataTables::of($listCuti)
         ->addIndexColumn()
-        ->addColumn('tanggal_awal_akhir', function ($row) {
-            $render = $row->tanggal_akhir==null || $row->tanggal_akhir==$row->tanggal_mulai? $row->tanggal_mulai : "{$row->tanggal_mulai} - {$row->tanggal_akhir}";
-            return $render;
-        })
         ->addColumn('tanggal_awal_akhir', function ($row) {
             $render = $row->tanggal_akhir==null || $row->tanggal_akhir==$row->tanggal_mulai? $row->tanggal_mulai : "{$row->tanggal_mulai} - {$row->tanggal_akhir}";
             return $render;

@@ -30,7 +30,7 @@ class GetAllSPPDQueryHandler extends Query
         if(!empty($query->GetTahun())){
             $datas = $datas->where(DB::raw('YEAR(tanggal_berangkat)'),'>=',$query->GetTahun())->where(DB::raw('YEAR(tanggal_kembali)'),'<=',$query->GetTahun());
         }
-        $datas = $datas->get();
+        $datas = $datas->orderBy('id', 'DESC')->get();
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 
@@ -38,7 +38,13 @@ class GetAllSPPDQueryHandler extends Query
             $list_anggota = collect([]);
             if(!is_null($data->Anggota)){
                 $list_anggota = collect($data->Anggota->reduce(function ($carry, $item){
-                    $carry[] = new AnggotaSPPD($item->id,$item->nidn,$item->nip,"mockup");
+                    $nama = match (true) {
+                        !is_null($item->Dosen) && !is_null($item->Pegawai)=> "Error",
+                        !is_null($item->Dosen)=> $item->Dosen->nama_dosen,
+                        !is_null($item->Pegawai)=> $item->Pegawai->nama,
+                        default=> "NA"
+                    };
+                    $carry[] = new AnggotaSPPD($item->id,$item->nidn,$item->nip,$nama);
                     return $carry;
                 },[]));
             }

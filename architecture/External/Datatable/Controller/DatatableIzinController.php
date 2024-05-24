@@ -9,6 +9,7 @@ use Architecture\Application\Izin\List\GetAllIzinQuery;
 use Architecture\Domain\Enum\FormatDate;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables as DataTables;
+use Architecture\Shared\Facades\Utility;
 
 class DatatableIzinController extends Controller
 {
@@ -32,7 +33,10 @@ class DatatableIzinController extends Controller
             "tanggal_pengajuan" => $item->GetTanggalPengajuan()->toFormat(FormatDate::LDFY),
             "tujuan" => $item->GetTujuan(),
             "jenis_izin" => $item->GetJenisIzin()?->GetNama(),
-            "dokumen" => $item->GetDokumen(),
+            "dokumen"=>empty($item->GetDokumen())? "":[
+                "file"=>$item->GetDokumen(),
+                "url"=>Utility::loadAsset('dokumen_cuti/'.$item->GetDokumen()),
+            ],
             "catatan" => $item->GetCatatan(),
             "status" => $item->GetStatus(),
         ]);

@@ -20,9 +20,11 @@ use Architecture\External\Datatable\Controller\DatatableIzinController;
 use Architecture\External\Datatable\Controller\DatatableJenisCutiController;
 use Architecture\External\Datatable\Controller\DatatableJenisizinController;
 use Architecture\External\Datatable\Controller\DatatableJenisSPPDController;
+use Architecture\External\Datatable\Controller\DatatableMasterKalendarController;
 use Architecture\External\Datatable\Controller\DatatableSPPDController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('master_kalendar', [DatatableMasterKalendarController::class,'index'])->name('datatable.MasterKalendar.index');
 Route::get('cuti', [DatatableCutiController::class,'index'])->name('datatable.Cuti.index');
 Route::get('izin', [DatatableIzinController::class,'index'])->name('datatable.Izin.index');
 Route::get('sppd', [DatatableSPPDController::class,'index'])->name('datatable.SPPD.index');

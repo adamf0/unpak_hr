@@ -7,6 +7,7 @@ use Architecture\External\Web\Controller\IzinController;
 use Architecture\External\Web\Controller\JenisCutiController;
 use Architecture\External\Web\Controller\JenisIzinController;
 use Architecture\External\Web\Controller\JenisSPPDController;
+use Architecture\External\Web\Controller\MasterKalendarController;
 use Architecture\External\Web\Controller\SPPDController;
 use Architecture\External\Web\Controller\VideoKegiatanController;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,13 @@ Route::get('logout', [AuthController::class,'Logout'])->name('auth.logout');
 Route::middleware(['throwSession'])->group(function () {
     Route::get('dashboard', [DashboardController::class,'index'])->name('dashboard.index');
     
+    Route::get('master_kalendar', [MasterKalendarController::class,'index'])->name('master_kalendar.index');
+    Route::get('master_kalendar/create', [MasterKalendarController::class,'create'])->name('master_kalendar.create');
+    Route::post('master_kalendar/store', [MasterKalendarController::class,'store'])->name('master_kalendar.store');
+    Route::get('master_kalendar/edit/{id}', [MasterKalendarController::class,'edit'])->name('master_kalendar.edit');
+    Route::post('master_kalendar/update', [MasterKalendarController::class,'update'])->name('master_kalendar.update');
+    Route::get('master_kalendar/delete/{id}', [MasterKalendarController::class,'delete'])->name('master_kalendar.delete');
+
     Route::get('cuti', [CutiController::class,'index'])->name('cuti.index');
     Route::get('cuti/create', [CutiController::class,'create'])->name('cuti.create');
     Route::post('cuti/store', [CutiController::class,'store'])->name('cuti.store');

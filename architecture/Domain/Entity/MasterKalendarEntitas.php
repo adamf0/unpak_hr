@@ -10,6 +10,7 @@ class MasterKalendarEntitas extends IMasterKalendar{
         $instance->id = $id;
         $instance->tanggal_mulai = $tanggal_mulai;
         $instance->tanggal_berakhir = $tanggal_berakhir;
+        $instance->keterangan = $keterangan;
         
         return $instance;
     }

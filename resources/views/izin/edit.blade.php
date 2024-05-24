@@ -36,7 +36,9 @@
                                         <x-text title="Tujuan" name="tujuan" class="tujuan" default="{{ old('tujuan',$Izin->GetTujuan()) }}"/>
                                     </div>
                                     <div class="col-12">
-                                        <x-input-file title="Dokumen" name="dokumen" default="{{ old('dokumen',$Izin->GetDokumen()) }}"/>
+                                        <x-input-file title="Dokumen" name="dokumen" default="{{ old('dokumen',$Izin->GetDokumen()) }}" accept=".pdf,image/jpg,image/jpeg,image/png,,image/bmp"/>
+                                        <small class="text-primary">* PDF dan Gambar yang boleh diupload</small><br>
+                                        <small class="text-primary">* Maksimal 10Mb</small>
                                     </div>
                                 </div>
                                 
@@ -62,7 +64,7 @@
                 todayHighlidht: true,
                 orientation: 'bottom',
                 datesDisabled:[],
-                daysOfWeekDisabled:[],
+                daysOfWeekDisabled:[0],
                 }).on('show', function(e) {
                 // Mengatur posisi popover Datepicker ke center (middle).
                 var $input = $(e.currentTarget);
@@ -74,6 +76,9 @@
                     left: $parent.offset().left
                 });
             });
+
+            $('.tanggal_pengajuan').datepicker('setStartDate', new Date());
+            $('.tanggal_pengajuan').datepicker('setEndDate', new Date());
         });
     </script>
 @endpush

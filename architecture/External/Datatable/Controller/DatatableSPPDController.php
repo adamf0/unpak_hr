@@ -9,6 +9,7 @@ use Architecture\Application\SPPD\List\GetAllSPPDQuery;
 use Architecture\Domain\Enum\FormatDate;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables as DataTables;
+use Architecture\Shared\Facades\Utility;
 
 class DatatableSPPDController extends Controller
 {
@@ -42,12 +43,16 @@ class DatatableSPPDController extends Controller
         ->addIndexColumn()
         ->addColumn('action', function ($row) use($level){
             $render = '';
-            if(in_array($level,['dosen','pegawai']) && in_array($row->status, ['menunggu','tolak'])){
-                $render = '<div class="row">
-                <a href="'.route('sppd.edit',['id'=>$row->id]).'" class="col-6 btn btn-warning"><i class="bi bi-pencil-square"></i></a>
-                <a href="'.route('sppd.delete',['id'=>$row->id]).'" class="mx-2 col-6 btn btn-danger"><i class="bi bi-trash"></i></a>
-                </div>
-                ';
+            if(in_array($level,['dosen','pegawai'])){
+                if(in_array($row->status, ['menunggu','tolak'])){
+                    $render = '<div class="row">
+                    <a href="'.route('sppd.edit',['id'=>$row->id]).'" class="col-6 btn btn-warning"><i class="bi bi-pencil-square"></i></a>
+                    <a href="'.route('sppd.delete',['id'=>$row->id]).'" class="mx-2 col-6 btn btn-danger"><i class="bi bi-trash"></i></a>
+                    </div>
+                    ';
+                } else {
+                    $render = '<a href="#" class="btn btn-info btn-download-pdf"><i class="bi bi-file-earmark-pdf"></i></a>';
+                }
             }
             else if(in_array($level,['dosen','pegawai']) && in_array($row->status, ['terima'])){
                 $render = '

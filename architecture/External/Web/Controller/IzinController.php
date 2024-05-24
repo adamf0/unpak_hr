@@ -47,7 +47,7 @@ class IzinController extends Controller
     }
     public function store(Request $request){
         try {
-            $validator      = validator($request->all(), CreateIzinRuleReq::create());
+            $validator      = validator($request->all(), CreateIzinRuleReq::create(Session::get("nidn"), Session::get("nip")));
 
             if(count($validator->errors())){
                 return redirect()->route('izin.create')->withInput()->withErrors($validator->errors()->toArray());    
@@ -109,7 +109,7 @@ class IzinController extends Controller
             if(!$request->has('dokumen'))
                 $request = request()->merge(["dokumen"=> "0"]);
 
-            $validator      = validator($request->all(), UpdateIzinRuleReq::create());
+            $validator      = validator($request->all(), UpdateIzinRuleReq::create(Session::get("nidn"), Session::get("nip")));
 
             if(count($validator->errors())){
                 return redirect()->route('izin.edit',["id"=>$request->get("id")])->withInput()->withErrors($validator->errors()->toArray());    

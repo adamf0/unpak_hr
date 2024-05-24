@@ -27,7 +27,13 @@ class GetAllSPPDByNIPQueryHandler extends Query
             $list_anggota = collect([]);
             if(!is_null($data->Anggota)){
                 $list_anggota = collect($data->Anggota->reduce(function ($carry, $item){
-                    $carry[] = new AnggotaSPPD($item->id,$item->nidn,$item->nip,"mockup");
+                    $nama = match (true) {
+                        !is_null($item->Dosen) && !is_null($item->Pegawai)=> "Error",
+                        !is_null($item->Dosen)=> $item->Dosen->nama_dosen,
+                        !is_null($item->Pegawai)=> $item->Pegawai->nama,
+                        default=> "NA"
+                    };
+                    $carry[] = new AnggotaSPPD($item->id,$item->nidn,$item->nip,$nama);
                     return $carry;
                 },[]));
             }

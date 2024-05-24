@@ -1,11 +1,11 @@
 @extends('template.index')
  
 @section('page-title')
-    <x-page-title title="Cuti">
+    <x-page-title title="Master Kalendar">
         <nav>
             <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('cuti.index') }}">Cuti</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('master_kalendar.index') }}">Master Kalendar</a></li>
             <li class="breadcrumb-item active">Tambah</li>
             </ol>
         </nav>
@@ -22,28 +22,18 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <form action="{{ route('cuti.store') }}" method="post" enctype="multipart/form-data">
+                            <form action="{{ route('master_kalendar.update') }}" method="post" enctype="multipart/form-data">
                                 @csrf
+                                <input type="hidden" name="id" value="{{$MasterKalendar->GetId()}}">
                                 <div class="row">
-                                    <div class="col-12">
-                                        <x-input-select title="Jenis Cuti" name="jenis_cuti" class="jenis_cuti"></x-input-select>
+                                    <div class="col-6">
+                                        <x-input-text title="Tanggal Mulai" name="tanggal_mulai" class="tanggal_mulai" default="{{ old('tanggal_mulai',$MasterKalendar->GetTanggalMulai()?->toFormat(FormatDate::Default)) }}"/>
                                     </div>
                                     <div class="col-6">
-                                        <x-input-text title="Tanggal Mulai" name="tanggal_mulai" class="tanggal_mulai" default="{{ old('tanggal_mulai') }}"/>
-                                    </div>
-                                    <div class="col-6">
-                                        <x-input-text title="Tanggal Akhir" name="tanggal_akhir" class="tanggal_akhir" default="{{ old('tanggal_akhir') }}"/>
+                                        <x-input-text title="Tanggal Akhir" name="tanggal_berakhir" class="tanggal_berakhir" default="{{ old('tanggal_berakhir',$MasterKalendar->GetTanggalAkhir()?->toFormat(FormatDate::Default)) }}"/>
                                     </div>
                                     <div class="col-12">
-                                        <x-input-number title="Lama Cuti" name="lama_cuti" class="lama_cuti" default="{{ old('lama_cuti') }}"/>
-                                    </div>
-                                    <div class="col-12">
-                                        <x-text title="Tujuan" name="tujuan" class="tujuan" default="{{ old('tujuan') }}"/>
-                                    </div>
-                                    <div class="col-12">
-                                        <x-input-file title="Dokumen" name="dokumen" accept=".pdf,image/jpg,image/jpeg,image/png,,image/bmp"/>
-                                        <small class="text-primary">* PDF dan Gambar yang boleh diupload</small><br>
-                                        <small class="text-primary">* Maksimal 10Mb</small>
+                                        <x-text title="Keterangan" name="keterangan" class="keterangan" default="{{ old('keterangan',$MasterKalendar->GetKeterangan()) }}"/>
                                     </div>
                                 </div>
                                 <input type="submit" name="submit" class="btn btn-primary mt-3" value="submit">
@@ -62,16 +52,13 @@
         $(document).ready(function () {
             var CSRF_TOKEN      = $('meta[name="csrf-token"]').attr('content');
 
-            //load calendar
-            load_dropdown('.jenis_cuti', null, `{{ route('select2.JenisCuti.List') }}`, "{{ old('jenis_cuti') }}", '-- Pilih Jenis Cuti --');
-
             $('.tanggal_mulai').datepicker({
                 format: 'yyyy-mm-dd',
                 autoclose: true,
                 todayHighlidht: true,
                 orientation: 'bottom',
-                datesDisabled:[],
-                daysOfWeekDisabled:[],
+                datesDisabled: [],
+                daysOfWeekDisabled:[0],
                 }).on('show', function(e) {
                 // Mengatur posisi popover Datepicker ke center (middle).
                 var $input = $(e.currentTarget);
@@ -83,14 +70,14 @@
                     left: $parent.offset().left
                 });
             });
-            $('.tanggal_akhir').datepicker({
+            $('.tanggal_berakhir').datepicker({
                 format: 'yyyy-mm-dd',
                 autoclose: true,
                 todayHighlidht: true,
                 orientation: 'bottom',
                 datesDisabled:[],
-                daysOfWeekDisabled:[],
-                startDate:"{{old('tanggal_mulai')}}",
+                daysOfWeekDisabled:[0],
+                startDate:"{{old('tanggal_mulai',$MasterKalendar->GetTanggalMulai()?->toFormat(FormatDate::Default))}}",
                 }).on('show', function(e) {
                 // Mengatur posisi popover Datepicker ke center (middle).
                 var $input = $(e.currentTarget);
@@ -102,20 +89,11 @@
                     left: $parent.offset().left
                 });
             });
-            $('.tanggal_mulai').datepicker('setStartDate', new Date());
             // $('.tanggal_mulai').datepicker('setDatesDisabled', ['2024-05-01']);
 
             $('.tanggal_mulai').change(function(e) {
                 const min = $(this).val()
-                $('.tanggal_akhir').datepicker('setStartDate', min);
-            });
-            $('.jenis_cuti').on('select2:select', function(e) {
-                var data = e.params.data;
-                $('.lama_cuti').prop("min",data.min).prop("max",data.max)
-                console.log(data?.kondisi?.hitung_libur)
-
-                $('.tanggal_mulai').datepicker('setDaysOfWeekDisabled', data?.kondisi?.hitung_libur??[0]);
-                $('.tanggal_akhir').datepicker('setDaysOfWeekDisabled', data?.kondisi?.hitung_libur??[0]);
+                $('.tanggal_berakhir').datepicker('setStartDate', min);
             });
         });
     </script>

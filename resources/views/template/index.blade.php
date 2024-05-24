@@ -214,6 +214,7 @@
       @endif
 
       @if (Utility::hasSDM())
+        <x-sidebar-item-menu title="Master Kalendar" icon="bi bi-menu-button-wide" link="{{route('master_kalendar.index')}}" :active="Utility::stateMenu(['master_kalendar'],request())" />
         <x-sidebar-item-menu title="Laporan Absen" icon="bi bi-menu-button-wide" link="{{route('dashboard.index')}}" :active="Utility::stateMenu([''],request())" />
       @endif
 

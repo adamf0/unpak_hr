@@ -161,15 +161,15 @@
                     }
                 },
                 {
-                    data: 'catatan', 
-                    name: 'catatan',
+                    data: 'status', 
+                    name: 'status',
                     render: function ( data, type, row, meta ) {
                         return data;
                     }
                 },
                 {
-                    data: 'status', 
-                    name: 'status',
+                    data: 'catatan', 
+                    name: 'catatan',
                     render: function ( data, type, row, meta ) {
                         return data;
                     }

@@ -4,8 +4,16 @@ namespace Architecture\External\Config\Provider;
 
 use Architecture\Application\Abstractions\Messaging\CommandBusImpl;
 use Architecture\Application\Abstractions\Messaging\QueryBusImpl;
+use Architecture\Application\MasterKalendar\Create\CreateMasterKalendarCommand;
+use Architecture\Application\MasterKalendar\Create\CreateMasterKalendarCommandHandler;
+use Architecture\Application\MasterKalendar\Delete\DeleteMasterKalendarCommand;
+use Architecture\Application\MasterKalendar\Delete\DeleteMasterKalendarCommandHandler;
+use Architecture\Application\MasterKalendar\FirstData\GetMasterKalendarQuery;
 use Architecture\Application\MasterKalendar\List\GetAllMasterKalendarQuery;
+use Architecture\Application\MasterKalendar\Update\UpdateMasterKalendarCommand;
+use Architecture\Application\MasterKalendar\Update\UpdateMasterKalendarCommandHandler;
 use Architecture\External\Persistance\Queries\MasterKalendar\GetAllMasterKalendarQueryHandler;
+use Architecture\External\Persistance\Queries\MasterKalendar\GetMasterKalendarQueryHandler;
 use Illuminate\Support\ServiceProvider;
 
 class MasterKalendarServiceProvider extends ServiceProvider
@@ -28,14 +36,14 @@ class MasterKalendarServiceProvider extends ServiceProvider
     public function boot(): void
     {
         app(CommandBusImpl::class)->register([
-            // CreateMasterKalendarCommand::class => CreateMasterKalendarCommandHandler::class,
-            // UpdateMasterKalendarCommand::class => UpdateMasterKalendarCommandHandler::class,
-            // DeleteMasterKalendarCommand::class => DeleteMasterKalendarCommandHandler::class,
+            CreateMasterKalendarCommand::class => CreateMasterKalendarCommandHandler::class,
+            UpdateMasterKalendarCommand::class => UpdateMasterKalendarCommandHandler::class,
+            DeleteMasterKalendarCommand::class => DeleteMasterKalendarCommandHandler::class,
         ]);
 
         app(QueryBusImpl::class)->register([
             GetAllMasterKalendarQuery::class             => GetAllMasterKalendarQueryHandler::class,
-            // GetMasterKalendarQuery::class                => GetMasterKalendarQueryHandler::class,
+            GetMasterKalendarQuery::class                => GetMasterKalendarQueryHandler::class,
         ]);
 
         if(env('DEPLOY','dev')=='prod'){

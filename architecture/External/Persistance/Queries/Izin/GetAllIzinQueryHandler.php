@@ -12,7 +12,6 @@ use Architecture\External\Persistance\ORM\Izin as IzinModel;
 use Architecture\Shared\TypeData;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
-use Termwind\Components\Dd;
 
 class GetAllIzinQueryHandler extends Query
 {
@@ -30,7 +29,7 @@ class GetAllIzinQueryHandler extends Query
         if(!empty($query->GetTahun())){
             $datas = $datas->where(DB::raw('YEAR(tanggal_pengajuan)'),$query->GetTahun());
         }
-        $datas = $datas->get();
+        $datas = $datas->orderBy('id', 'DESC')->get();
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 

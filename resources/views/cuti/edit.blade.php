@@ -46,7 +46,9 @@
                                         <x-text title="Tujuan" name="tujuan" class="tujuan" default="{{ old('tujuan',$Cuti->GetTujuan()) }}"/>
                                     </div>
                                     <div class="col-12">
-                                        <x-input-file title="Dokumen" name="dokumen" default="{{ old('tujuan',$Cuti->GetDokumen()) }}"/>
+                                        <x-input-file title="Dokumen" name="dokumen" default="{{ old('tujuan',$Cuti->GetDokumen()) }}" accept=".pdf,image/jpg,image/jpeg,image/png,,image/bmp"/>
+                                        <small class="text-primary">* PDF dan Gambar yang boleh diupload</small><br>
+                                        <small class="text-primary">* Maksimal 10Mb</small>
                                     </div>
                                 </div>
                                 <input type="submit" name="submit" class="btn btn-primary mt-3" value="submit">
@@ -105,7 +107,7 @@
                     left: $parent.offset().left
                 });
             });
-
+            $('.tanggal_mulai').datepicker('setStartDate', new Date());
             // $('.tanggal_mulai').datepicker('setDatesDisabled', ['2024-05-01']);
 
             $('.tanggal_mulai').change(function(e) {

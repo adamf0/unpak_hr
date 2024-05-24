@@ -18,14 +18,20 @@ class GetSPPDQueryHandler extends Query
 
     public function handle(GetSPPDQuery $query)
     {
-        $data = SPPDModel::with(['JenisSPPD','Anggota'])->where('id',$query->GetId())->first();
+        $data = SPPDModel::with(['JenisSPPD','Anggota','Anggota.Dosen','Anggota.Pegawai'])->where('id',$query->GetId())->first();
 
         if($query->getOption()==TypeData::Default) return $data;
 
         $list_anggota = collect([]);
         if(!is_null($data->Anggota)){
             $list_anggota = collect($data->Anggota->reduce(function ($carry, $item){
-                $carry[] = new AnggotaSPPD($item->id,$item->nidn,$item->nip,"mockup");
+                $nama = match (true) {
+                     !is_null($item->Dosen) && !is_null($item->Pegawai)=> "Error",
+                     !is_null($item->Dosen)=> $item->Dosen->nama_dosen,
+                     !is_null($item->Pegawai)=> $item->Pegawai->nama,
+                     default=> "NA"
+                };
+                $carry[] = new AnggotaSPPD($item->id,$item->nidn,$item->nip,$nama);
                 return $carry;
             },[]));
         }

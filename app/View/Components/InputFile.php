@@ -17,7 +17,8 @@ class InputFile extends Component
     public $default=false;
     public $class='';
     public $enable=false;
-    public function __construct($title=false,$name,$default=false,$class='',$enable=false)
+    public $accept=false;
+    public function __construct($title=false,$name,$default=false,$class='',$accept=false,$enable=false)
     {
         // if($title==null) throw new Exception('title in component indicator cannot be null'); 
         if($name==null) throw new Exception('name in component indicator cannot be null'); 
@@ -26,6 +27,7 @@ class InputFile extends Component
         $this->name = $name;
         $this->default = $default;
         $this->class = $class;
+        $this->accept = $accept;
         $this->enable = $enable;
     }
 
@@ -39,6 +41,7 @@ class InputFile extends Component
             'name'=>$this->name,
             'default'=>$this->default,
             'class'=>$this->class,
+            'accept'=>$this->accept,
             'enable'=>$this->enable,
         ]);
     }
