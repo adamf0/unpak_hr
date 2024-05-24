@@ -163,16 +163,18 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                     $title = match(true){
                         empty($item->absen_masuk) && Carbon::parse($item->tanggal)->lessThan(Carbon::now()->format('Y-m-d')) => "tidak masuk", //tidak masuk
                         !empty($item->absen_masuk) && !$this->isLate($item->absen_masuk, $item->tanggal) => Carbon::parse($item->absen_masuk)->format("H:m:s").(empty($item->absen_keluar)? "":" - ".Carbon::parse($item->absen_keluar)->format("H:m:s")), //masuk
-                        default => Carbon::parse($item->absen_masuk)->format("H:m:s")
+                        default => empty($item->absen_masuk)? null:Carbon::parse($item->absen_masuk)->format("H:m:s")
                     };
-                    $carry[] = [
-                        "title"=>$title,
-                        "start"=>$item->tanggal,
-                        "end"=>$item->tanggal,
-                        "backgroundColor"=>$background,
-                        "borderColor"=>"transparent",
-                        // "className"=>"bg-danger"
-                    ];
+                    if(!empty($title)){
+                        $carry[] = [
+                            "title"=>$title,
+                            "start"=>$item->tanggal,
+                            "end"=>$item->tanggal,
+                            "backgroundColor"=>$background,
+                            "borderColor"=>"transparent",
+                            // "className"=>"bg-danger"
+                        ];
+                    }
                 } else{
                     $carry[] = [
                         "id"=>$item->id,
