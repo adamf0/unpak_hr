@@ -624,6 +624,7 @@
                                 absenKeluar = exec
                             }
                             loadInfo()
+                            calendar.fullCalendar('refetchEvents')
                         }
                         alert(response.message);
                     },
