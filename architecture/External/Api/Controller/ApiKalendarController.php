@@ -23,22 +23,28 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
         protected IQueryBus $queryBus
     ) {}
 
-    public function isLate($jam_masuk=null,$jam_keluar=null){
-        $jamMasuk = new Date($jam_masuk);
-        $jamKeluar = new Date($jam_keluar." 08:01:00");
-        return $jamMasuk->isGreater($jamKeluar);
+    public function isLate($tanggal_jam_masuk=null,$tanggal=null){
+        $masuk = new Date($tanggal_jam_masuk);
+        $keluar = new Date($tanggal." 08:01:00");
+        return $masuk->isGreater($keluar);
     }
-    public function is8Hour($jam_masuk=null,$jam_keluar=null){
-        $jamMasuk = new Date($jam_masuk);
-        $jamKeluar = new Date($jam_keluar);
+    public function is8Hour($tanggal_jam_masuk=null,$tanggal_jam_keluar=null){
+        $masuk = new Date($tanggal_jam_masuk);
+        $keluar = new Date($tanggal_jam_keluar);
 
-        if(!empty($jamKeluar) && !$this->isLate($jamMasuk,$jamKeluar)){
-            $jamKeluar = new Date($jam_keluar." 14:59:00");
-            return $jamKeluar->isGreater($jamKeluar);
+        if(!empty($keluar) && !$this->isLate($masuk,$keluar)){
+            $jam_pulang = "14:59:00";
+            if (Carbon::now()->dayOfWeek == Carbon::FRIDAY) {
+                $jam_pulang = "13:59:00";
+            } elseif (Carbon::now()->dayOfWeek == Carbon::SATURDAY) {
+                $jam_pulang = "11:59:00";
+            }
+            $keluar = new Date($tanggal_jam_keluar." $jam_pulang");
+            return $keluar->isGreater($keluar);
         } 
-        else if(!empty($jamKeluar) && $this->isLate($jamMasuk,$jamKeluar)){
-            $jamKeluar = new Date(Carbon::parse($jam_keluar)->addHour(8)->toISOString());
-            return $jamKeluar->isGreater($jamKeluar);
+        else if(!empty($keluar) && $this->isLate($masuk,$keluar)){
+            $keluar = new Date(Carbon::parse($tanggal_jam_keluar)->addHour(8)->toISOString());
+            return $keluar->isGreater($keluar);
         }
         else 
             return false;
@@ -151,13 +157,13 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                 if($format=="full-calendar"){
                     $background = match(true){
                         empty($item->absen_masuk) && Carbon::parse($item->tanggal)->lessThan(Carbon::now()->format('Y-m-d')) => "#dc3545", //tidak masuk
-                        !empty($item->absen_masuk) && Carbon::parse($item->tanggal)->equalTo(Carbon::now()->format('Y-m-d')) => "#198754", //masuk
+                        !empty($item->absen_masuk) && !$this->isLate($item->absen_masuk, $item->tanggal) => "#198754", //masuk
                         default => "#000"
                     };
                     $title = match(true){
                         empty($item->absen_masuk) && Carbon::parse($item->tanggal)->lessThan(Carbon::now()->format('Y-m-d')) => "tidak masuk", //tidak masuk
-                        !empty($item->absen_masuk) && Carbon::parse($item->tanggal)->equalTo(Carbon::now()->format('Y-m-d')) => Carbon::parse($item->absen_masuk)->format("H:m:s").(empty($item->absen_keluar)? "":" - ".Carbon::parse($item->absen_keluar)->format("H:m:s")), //masuk
-                        default => $item->tanggal
+                        !empty($item->absen_masuk) && !$this->isLate($item->absen_masuk, $item->tanggal) => Carbon::parse($item->absen_masuk)->format("H:m:s").(empty($item->absen_keluar)? "":" - ".Carbon::parse($item->absen_keluar)->format("H:m:s")), //masuk
+                        default => Carbon::parse($item->absen_masuk)->format("H:m:s")
                     };
                     $carry[] = [
                         "title"=>$title,
