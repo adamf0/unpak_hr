@@ -291,8 +291,56 @@
         </div>
     </div>
     @elseif (Utility::hasSDM() || Utility::hasWarek())
-    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        Daftar Absen
+    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 table-responsive">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <h4 class="card-title">Info Presensi {{Carbon::now()->format("L F Y")}}</h4>
+                    </div>
+                    <div class="col-12">
+                        <table id="tb" class="table table-stripped">
+                            <thead>
+                                <tr>
+                                    <td>#</td>
+                                    <td>Nama</td>
+                                    <td>Tanggal</td>
+                                    <td>Absen Masuk</td>
+                                    <td>Catatan Telat</td>
+                                    <td>Absen Keluar</td>
+                                    <td>Catatan Pulang</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($list_absen as $absen)
+                                @php
+                                    $nama = match(true){
+                                        !empty($absen->Dosen) => $absen->Dosen->nama_dosen,
+                                        !empty($absen->Pegawai) => $absen->Pegawai->nama,
+                                        default=> "NA"
+                                    };
+                                    $kodePengenal = match(true){
+                                        !empty($absen->Dosen) => $absen->Dosen->NIDN,
+                                        !empty($absen->Pegawai) => $absen->Pegawai->nip,
+                                        default=> "NA"
+                                    };
+                                @endphp
+                                <tr>
+                                    <td>{{$loop->iteration}}</td>
+                                    <td>{{$nama}} - {{$kodePengenal}}</td>
+                                    <td>{{Carbon::parse($absen->tanggal)->format("L F Y")}}</td>
+                                    <td>{{Carbon::parse($absen->absen_masuk)->format("H:m:s")}}</td>
+                                    <td>{{$absen->catatan_telat}}</td>
+                                    <td>{{Carbon::parse($absen->absen_keluar)->format("H:m:s")}}</td>
+                                    <td>{{$absen->catatan_pulang_cepat}}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     @endif
 </div>
@@ -311,6 +359,11 @@
 @stop
 
 @push('scripts')
+    <script>
+        $(document).ready(function () {
+            $("#tb").DataTable();
+        });
+    </script>
     <script type="text/javascript" src="{{ Utility::loadAsset('my.js') }}"></script>
     <script>
         $(document).ready(function () {

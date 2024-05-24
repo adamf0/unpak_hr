@@ -10,4 +10,11 @@ class Absensi extends Model
    use HasFactory;
    protected $table = 'absen';
    protected $fillable = ['*'];
+
+   public function Pegawai(){
+      return $this->hasOne(NPribadi::class, 'nip' ,'nip');
+   }
+   public function Dosen(){
+      return $this->hasOne(Dosen::class, 'NIDN' ,'nidn');
+   }
 }
