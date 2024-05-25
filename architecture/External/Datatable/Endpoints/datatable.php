@@ -20,6 +20,7 @@ use Architecture\External\Datatable\Controller\DatatableIzinController;
 use Architecture\External\Datatable\Controller\DatatableJenisCutiController;
 use Architecture\External\Datatable\Controller\DatatableJenisizinController;
 use Architecture\External\Datatable\Controller\DatatableJenisSPPDController;
+use Architecture\External\Datatable\Controller\DatatableLaporanAbsenController;
 use Architecture\External\Datatable\Controller\DatatableMasterKalendarController;
 use Architecture\External\Datatable\Controller\DatatablePenggunaController;
 use Architecture\External\Datatable\Controller\DatatableSPPDController;
@@ -33,3 +34,4 @@ Route::get('sppd', [DatatableSPPDController::class,'index'])->name('datatable.SP
 Route::get('jenis_cuti', [DatatableJenisCutiController::class,'index'])->name('datatable.JenisCuti.index');
 Route::get('jenis_izin', [DatatableJenisIzinController::class,'index'])->name('datatable.JenisIzin.index');
 Route::get('jenis_sppd', [DatatableJenisSPPDController::class,'index'])->name('datatable.JenisSPPD.index');
+Route::get('laporan_absen', [DatatableLaporanAbsenController::class,'index'])->name('datatable.LaporanAbsen.index');
