@@ -92,7 +92,8 @@ class LaporanAbsenController extends Controller
 
                 $file_name = $file_name."_$tanggal_mulai-$tanggal_akhir";
             }
-            $list_data = $laporan->limit(500)->get();
+            $list_data = $laporan->limit(50)->get();
+            // dd($list_data);
             
             $start = is_null($tanggal_mulai)? Carbon::parse($tanggal_mulai)->startOfMonth():Carbon::parse($tanggal_mulai);
             $end = is_null($tanggal_akhir)? Carbon::parse($tanggal_mulai)->endOfMonth():Carbon::parse($tanggal_akhir);
