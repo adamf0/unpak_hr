@@ -56,6 +56,8 @@ class LaporanAbsenController extends Controller
     public function export(Request $request){
         try {
             ini_set('memory_limit', '-1');
+            ini_set('max_execution_time','-1');
+            
             $nidn           = $request->has('nidn')? $request->query('nidn'):null;
             $nip            = $request->has('nip')? $request->query('nip'):null;
             $tanggal_mulai  = $request->has('tanggal_mulai')? $request->query('tanggal_mulai'):Carbon::now()->startOfMonth();
