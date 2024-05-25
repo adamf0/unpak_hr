@@ -58,7 +58,7 @@ class LaporanAbsenController extends Controller
             ini_set('memory_limit', '-1');
             $nidn           = $request->has('nidn')? $request->query('nidn'):null;
             $nip            = $request->has('nip')? $request->query('nip'):null;
-            $tanggal_mulai  = $request->has('tanggal_mulai')? $request->query('tanggal_mulai'):null;
+            $tanggal_mulai  = $request->has('tanggal_mulai')? $request->query('tanggal_mulai'):Carbon::now()->startOfMonth();
             $tanggal_akhir  = $request->has('tanggal_akhir')? $request->query('tanggal_akhir'):Carbon::parse($tanggal_mulai)->endOfMonth()->format('Y-m-d');
             $type_export    = $request->has('type_export')? $request->query('type_export'):null;
 
@@ -90,7 +90,8 @@ class LaporanAbsenController extends Controller
 
                 $file_name = $file_name."_$tanggal_mulai-$tanggal_akhir";
             }
-            $list_data = $laporan->get();
+            $list_data = $laporan->toRawSql();
+            dd($list_data);
             
             $start = is_null($tanggal_mulai)? Carbon::parse($tanggal_mulai)->startOfMonth():Carbon::parse($tanggal_mulai);
             $end = is_null($tanggal_akhir)? Carbon::parse($tanggal_mulai)->endOfMonth():Carbon::parse($tanggal_akhir);
