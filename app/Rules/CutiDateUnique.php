@@ -11,13 +11,11 @@ class CutiDateUnique implements ValidationRule
 {
     protected $nidn;
     protected $nip;
-    protected $status;
 
-    public function __construct($nidn = null, $nip = null, $status = null)
+    public function __construct($nidn = null, $nip = null)
     {
         $this->nidn = $nidn;
         $this->nip = $nip;
-        $this->status = $status;
     }
     
     function intersectionIzin($listDate = [], Closure $fail)
@@ -30,9 +28,7 @@ class CutiDateUnique implements ValidationRule
         if (!is_null($this->nip)) {
             $intersectionDateIzin->where('nip', $this->nip);
         }
-        if (!is_null($this->status)) {
-            $intersectionDateIzin->where('status', $this->status);
-        }
+        $intersectionDateIzin->whereIn('status', ["menunggu","terima"]);
         $intersectionDateIzin = $intersectionDateIzin->count();
 
         if ($intersectionDateIzin) {
@@ -58,9 +54,7 @@ class CutiDateUnique implements ValidationRule
         if (!is_null($this->nip)) {
             $intersectionDateCuti->where('nip', $this->nip);
         }
-        if (!is_null($this->status)) {
-            $intersectionDateCuti->where('status', $this->status);
-        }
+        $intersectionDateCuti->whereIn('status', ["menunggu","terima"]);
         $intersectionDateCuti = $intersectionDateCuti->count();
 
         if ($intersectionDateCuti) {

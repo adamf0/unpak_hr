@@ -13,12 +13,12 @@ class CreateCutiRuleReq
             "lama_cuti"     => "required",
             "tanggal_mulai" =>  [
                 "required",
-                new CutiDateUnique($nidn, $nip, 'menunggu')
+                new CutiDateUnique($nidn, $nip)
             ],
             "tanggal_akhir" => [
                 "required",
                 "after_or_equal:tanggal_mulai",
-                new CutiDateUnique($nidn, $nip, 'menunggu')
+                new CutiDateUnique($nidn, $nip)
             ],
             "tujuan"        => "required",
             "dokumen"       => "nullable|file|mimes:pdf,jpg,jpeg,png|max:10000",

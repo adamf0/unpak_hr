@@ -9,7 +9,7 @@ class CreateIzinRuleReq{
         return [
             "tanggal_pengajuan" =>  [
                 "required",
-                new IzinDateUnique($nidn, $nip, 'menunggu')
+                new IzinDateUnique($nidn, $nip)
             ],
             "tujuan"            => "required",
             "jenis_izin"        => "required",
