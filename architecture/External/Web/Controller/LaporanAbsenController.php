@@ -101,20 +101,32 @@ class LaporanAbsenController extends Controller
                 $list_tanggal[] = $date->copy()->format('Y-m-d');
             }            
             $groupedData = collect($list_data)->groupBy(function ($item) {
-                return $item->tanggal . $item->nidn . $item->nip;
+                return $item->nidn . $item->nip;
             });
+            
             $list_data = $groupedData->map(function ($group) {
-                return $group->reduce(function ($carry, $item) {
-                    $info = json_decode($item->info, true);
-                    $carry['info'][] = $info;
-                    return $carry;
-                }, [
+                $data = collect([
                     'nidn' => $group->first()->nidn,
                     'nip' => $group->first()->nip,
-                    'tanggal' => $group->first()->tanggal,
-                    'info' => []
+                    'list_tanggal' => collect()
                 ]);
+            
+                $tanggalGrouped = $group->groupBy('tanggal');
+            
+                $tanggalGrouped->each(function ($items, $tanggal) use ($data) {
+                    $infoArray = $items->map(function ($item) {
+                        return json_decode($item->info, true);
+                    });
+            
+                    $data['list_tanggal']->push([
+                        'tanggal' => $tanggal,
+                        'info' => $infoArray
+                    ]);
+                });
+            
+                return $data;
             })->values();
+            // dd($list_data);
 
             if($type_export=="pdf"){
                 $file = PdfX::From(
@@ -136,7 +148,7 @@ class LaporanAbsenController extends Controller
             return FileManager::StreamFile($file);
 
         } catch (Exception $e) {
-            // throw $e;
+            throw $e;
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
             return redirect()->route('izin.index');
         }

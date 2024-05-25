@@ -23,65 +23,69 @@
                             <th>NIDN</th>
                             <th>NIP</th>
                             @foreach ($list_tanggal as $tanggal)
-                            <th>{{Carbon::parse($tanggal)->format('d')}}</th>
+                                <th>{{ Carbon::parse($tanggal)->format('d') }}</th>
                             @endforeach
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($list_data as $data)
-                        <tr>
-                            <td>{{$loop->iteration}}</td>
-                            <td>{{$data['nidn']}}</td>
-                            <td>{{$data['nip']}}</td>
-                            @foreach ($list_tanggal as $tanggal)
-                            <td>
-                                <table>
-                                    <tr>
-                                        <td class="column_min">
-                                            @php
-                                                $aturan_jam = "08:00 - 15:00";
-                                                $tgl = Carbon::parse($tanggal);
-                                                if ($tgl->dayOfWeek == Carbon::FRIDAY) {
-                                                    $aturan_jam = "08:00 - 14:00";
-                                                } elseif ($tgl->dayOfWeek == Carbon::SATURDAY) {
-                                                    $aturan_jam = "08:00 - 12:00";
-                                                }
-                                            @endphp
-                                            {{ $aturan_jam }}
-                                        </td>
-                                    </tr>
-                                    @if ($tanggal==$data['tanggal'])
-                                        @foreach ($data['info'] as $info)
-                                            @php
-                                                $info = (object) $info;
-                                                $info->keterangan = (object) $info?->keterangan;
-                                                $keterangan = "";
-                                            if($info->type=="absen"){
-                                                if(empty($info->keterangan?->masuk) && empty($info->keterangan?->keluar)){
-                                                    $keterangan = "<span class='badge bg-danger'>Tidak Masuk</span>";
-                                                } else if(!empty($info->keterangan?->masuk) && empty($info->keterangan?->keluar)){
-                                                    $masuk = Carbon::parse($info->keterangan?->masuk);
-                                                    $keterangan = "<span class='badge bg-success'>".$masuk->format('H:m')."</span> - <span class='badge bg-danger'>Masih Masuk</span>";
-                                                } else{
-                                                    $masuk = Carbon::parse($info->keterangan?->masuk);
-                                                    $keluar = Carbon::parse($info->keterangan?->keluar);
-                                                    $keterangan = "<span class='badge bg-success'>".$masuk->format('H:m')."</span> - <span class='badge bg-danger'>".$keluar->format('H:m')."</span>";
-                                                }
-                                            } else if($info->type=="izin"){
-                                                $keterangan = "<span class='badge bg-primary'>Izin</span>";
-                                            } else if($info->type=="cuti"){
-                                                $keterangan = "<span class='badge bg-warning text-black'>Cuti</span>";
-                                            }
-                                            @endphp
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $data['nidn'] }}</td>
+                                <td>{{ $data['nip'] }}</td>
+                                @foreach ($list_tanggal as $tanggal)
+                                    <td>
+                                        <table>
                                             <tr>
-                                                <td>{!! $keterangan !!}</td>
+                                                <td class="column_min">
+                                                    @php
+                                                        $aturan_jam = "08:00 - 15:00";
+                                                        $dayOfWeek = Carbon::parse($tanggal)->dayOfWeek;
+                                                        if ($dayOfWeek == Carbon::FRIDAY) {
+                                                            $aturan_jam = "08:00 - 14:00";
+                                                        } elseif ($dayOfWeek == Carbon::SATURDAY) {
+                                                            $aturan_jam = "08:00 - 12:00";
+                                                        }
+                                                    @endphp
+                                                    {{ $aturan_jam }}
+                                                </td>
                                             </tr>
-                                        @endforeach
-                                    @endif
-                                </table>
-                            </td>
-                            @endforeach
-                        </tr>
+                                            @foreach ($data['list_tanggal']->where('tanggal', $tanggal) as $objek)
+                                                @foreach ($objek['info'] as $info)
+                                                    @php
+                                                        $info = (object) $info;
+                                                        $info->keterangan = (object) $info->keterangan;
+                                                        $keterangan = "";
+                                                        switch ($info->type) {
+                                                            case 'absen':
+                                                                if (empty($info->keterangan->masuk) && empty($info->keterangan->keluar)) {
+                                                                    $keterangan = "<span class='badge bg-danger'>Tidak Masuk</span>";
+                                                                } elseif (!empty($info->keterangan->masuk) && empty($info->keterangan->keluar)) {
+                                                                    $masuk = Carbon::parse($info->keterangan->masuk)->format('H:i');
+                                                                    $keterangan = "<span class='badge bg-success'>{$masuk}</span> - <span class='badge bg-danger'>Masih Masuk</span>";
+                                                                } else {
+                                                                    $masuk = Carbon::parse($info->keterangan->masuk)->format('H:i');
+                                                                    $keluar = Carbon::parse($info->keterangan->keluar)->format('H:i');
+                                                                    $keterangan = "<span class='badge bg-success'>{$masuk}</span> - <span class='badge bg-danger'>{$keluar}</span>";
+                                                                }
+                                                                break;
+                                                            case 'izin':
+                                                                $keterangan = "<span class='badge bg-primary'>Izin</span>";
+                                                                break;
+                                                            case 'cuti':
+                                                                $keterangan = "<span class='badge bg-warning text-black'>Cuti</span>";
+                                                                break;
+                                                        }
+                                                    @endphp
+                                                    <tr>
+                                                        <td>{!! $keterangan !!}</td>
+                                                    </tr>
+                                                @endforeach
+                                            @endforeach
+                                        </table>
+                                    </td>
+                                @endforeach
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>
