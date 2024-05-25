@@ -211,6 +211,7 @@
         <x-sidebar-item-menu title="Cuti" icon="bi bi-menu-button-wide" link="{{route('cuti.index')}}" :active="Utility::stateMenu(['cuti'],request())" />
         <x-sidebar-item-menu title="Izin" icon="bi bi-menu-button-wide" link="{{route('izin.index')}}" :active="Utility::stateMenu(['izin'],request())" />
         <x-sidebar-item-menu title="Lupa Absen Keluar" icon="bi bi-menu-button-wide" link="{{route('dashboard.index')}}" :active="Utility::stateMenu([''],request())" />
+        <x-sidebar-item-menu title="SPPD" icon="bi bi-menu-button-wide" link="{{route('sppd.index')}}" :active="Utility::stateMenu(['sppd'],request())" />
       @endif
 
       @if (Utility::hasSDM() || Utility::hasWarek())
