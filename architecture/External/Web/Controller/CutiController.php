@@ -245,7 +245,7 @@ class CutiController extends Controller
             return FileManager::StreamFile($file);
 
         } catch (Exception $e) {
-            throw $e;
+            // throw $e;
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
             return redirect()->route('cuti.index');
         }

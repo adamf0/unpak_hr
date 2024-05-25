@@ -12,20 +12,33 @@ class PdfX implements Export, Stream
 {
     private $compile;
 
-    function __construct(private $view, private $datas = [],private FolderX $folder,private $file){
-        $this->compile = Pdf::setOptions([
-            'isHtml5ParserEnabled' => true,
-            'isRemoteEnabled' => true,
-            // 'enable_remote' => true, 
-            'chroot' => public_path('assets')
-        ])
-        // ->setPaper('legal', 'landscape')
-        ->loadHTML(
-            view($view)->with($datas)->render()
-        );
+    function __construct(private $view, private $datas = [],private FolderX $folder,private $file, private $custom_width=false){
+        if($custom_width){
+            $this->compile = Pdf::setOptions([
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true,
+                // 'enable_remote' => true, 
+                'chroot' => public_path('assets')
+            ])
+            ->setPaper(array(0,0,2048,1024))
+            ->loadHTML(
+                view($view)->with($datas)->render()
+            );
+        } else{
+            $this->compile = Pdf::setOptions([
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true,
+                // 'enable_remote' => true, 
+                'chroot' => public_path('assets')
+            ])
+            ->setPaper('legal')
+            ->loadHTML(
+                view($view)->with($datas)->render()
+            );
+        }
     }
 
-    public static function From($view, $datas = [],FolderX $folder,$file){
+    public static function From($view, $datas = [],FolderX $folder,$file,$custom_width=false){
         match (true) {
             is_null($view)     => throw new Exception("view export can't be null"),
             is_null($folder)   => throw new Exception("destination folder export can't be null"),
@@ -33,7 +46,7 @@ class PdfX implements Export, Stream
             default            => false
        };
 
-       return new self($view, $datas,$folder,$file);
+       return new self($view, $datas,$folder,$file,$custom_width);
     }
     public function export()
     {

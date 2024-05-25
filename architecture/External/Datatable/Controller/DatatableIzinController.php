@@ -52,9 +52,10 @@ class DatatableIzinController extends Controller
                     <a href="'.route('izin.delete',['id'=>$row->id]).'" class="mx-2 col-6 btn btn-danger"><i class="bi bi-trash"></i></a>
                     </div>
                     ';
-                } else {
-                    $render = '<a href="#" class="btn btn-info btn-download-pdf"><i class="bi bi-file-earmark-pdf"></i></a>';
-                }
+                } 
+                // else {
+                //     $render = '<a href="#" class="btn btn-info btn-download-pdf"><i class="bi bi-file-earmark-pdf"></i></a>';
+                // }
             }
             else if($level=="sdm"){
                 $render = '
