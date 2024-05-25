@@ -194,6 +194,13 @@ class CutiController extends Controller
 
             $file_name = "cuti";
             $cuti = Cuti::with(['JenisCuti','Dosen','Pegawai']);
+
+            if(!empty($nidn) && !empty($nidn)){
+                throw new Exception("harus salah satu antara nidn dan nip");
+            } else if(empty($type_export)){
+                throw new Exception("belum pilih cetak sebagai apa");
+            }
+
             if($nidn){
                 $cuti->where('nidn',$nidn);
                 $file_name = $file_name."_$nidn";

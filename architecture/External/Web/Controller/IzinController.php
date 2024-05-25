@@ -189,6 +189,13 @@ class IzinController extends Controller
 
             $file_name = "izin";
             $izin = Izin::with(['JenisIzin','Dosen','Pegawai']);
+
+            if(!empty($nidn) && !empty($nidn)){
+                throw new Exception("harus salah satu antara nidn dan nip");
+            } else if(empty($type_export)){
+                throw new Exception("belum pilih cetak sebagai apa");
+            }
+
             if($nidn){
                 $izin->where('nidn',$nidn);
                 $file_name = $file_name."_$nidn";

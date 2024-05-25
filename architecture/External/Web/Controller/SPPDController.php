@@ -191,6 +191,12 @@ class SPPDController extends Controller
             $file_name = "sppd";
             $sppd = SPPD::with(['SDM','Dosen','Pegawai','JenisSPPD','Anggota','Anggota.Dosen','Anggota.Pegawai']);
             
+            if(!empty($nidn) && !empty($nidn)){
+                throw new Exception("harus salah satu antara nidn dan nip");
+            } else if(empty($type_export)){
+                throw new Exception("belum pilih cetak sebagai apa");
+            }
+
             if($id){
                 $sppd->where('id',$id);
             }

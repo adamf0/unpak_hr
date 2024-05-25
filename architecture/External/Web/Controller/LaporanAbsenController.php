@@ -60,6 +60,12 @@ class LaporanAbsenController extends Controller
             $tanggal_akhir  = $request->has('tanggal_akhir')? $request->query('tanggal_akhir'):Carbon::parse($tanggal_mulai)->endOfMonth()->format('Y-m-d');
             $type_export    = $request->has('type_export')? $request->query('type_export'):null;
 
+            if(!empty($nidn) && !empty($nidn)){
+                throw new Exception("harus salah satu antara nidn dan nip");
+            } else if(empty($type_export)){
+                throw new Exception("belum pilih cetak sebagai apa");
+            }
+
             $file_name = "laporan_absen";
             $laporan = DB::table('laporan_merge_absen_izin_cuti');
             if($nidn){
