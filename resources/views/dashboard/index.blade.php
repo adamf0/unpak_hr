@@ -700,7 +700,7 @@
                             } else if(type=="keluar"){
                                 absenKeluar = exec
                             }
-                            $(refAbsenKeterangan).reset()
+                            $(refAbsenKeterangan).val('')
                             loadInfo()
                             calendar.refetchEvents()
                         }
