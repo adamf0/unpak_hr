@@ -10,11 +10,11 @@ class Date {
     function __construct($value = null) {
         // if(is_null($value)) throw new Exception("object Date can't be null");
         // if(strtotime($value) == false) throw new Exception("object Date invalid format");
-        $this->value = Carbon::parse($value);
+        $this->value = Carbon::parse($value)->setTimezone('Asia/Jakarta');
     }
 
     function now(){
-        $this->value = Carbon::now();
+        $this->value = Carbon::now()->setTimezone('Asia/Jakarta');
         return $this;
     }
     function val(){
