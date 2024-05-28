@@ -25,10 +25,10 @@ class LaporanAbsenController extends Controller
     
     public function Index(){
         ini_set('memory_limit', '-1');
-        $start = Carbon::now()->startOfMonth();
-        $end = Carbon::now()->endOfMonth();
+        $start = Carbon::now()->setTimezone('Asia/Jakarta')->startOfMonth();
+        $end = Carbon::now()->setTimezone('Asia/Jakarta')->endOfMonth();
         $list_tanggal = [];
-        for ($date = Carbon::now()->startOfMonth(); $date->lte($end); $date->addDay()) {
+        for ($date = Carbon::now()->setTimezone('Asia/Jakarta')->startOfMonth(); $date->lte($end); $date->addDay()) {
             $list_tanggal[] = $date->copy()->format('Y-m-d');
         }
         $list_data = DB::table('laporan_merge_absen_izin_cuti')->whereBetween('tanggal',[$start->format('Y-m-d'),$end->format('Y-m-d')])->orderBy('tanggal')->get();
@@ -60,7 +60,7 @@ class LaporanAbsenController extends Controller
             
             $nidn           = $request->has('nidn')? $request->query('nidn'):null;
             $nip            = $request->has('nip')? $request->query('nip'):null;
-            $tanggal_mulai  = $request->has('tanggal_mulai')? $request->query('tanggal_mulai'):Carbon::now()->startOfMonth();
+            $tanggal_mulai  = $request->has('tanggal_mulai')? $request->query('tanggal_mulai'):Carbon::now()->setTimezone('Asia/Jakarta')->startOfMonth();
             $tanggal_akhir  = $request->has('tanggal_akhir')? $request->query('tanggal_akhir'):Carbon::parse($tanggal_mulai)->endOfMonth()->format('Y-m-d');
             $type_export    = $request->has('type_export')? $request->query('type_export'):null;
 
@@ -94,10 +94,10 @@ class LaporanAbsenController extends Controller
             }
             $list_data = $laporan->limit(50)->get(); //masalah
             
-            $start = is_null($tanggal_mulai)? Carbon::parse($tanggal_mulai)->startOfMonth():Carbon::parse($tanggal_mulai);
-            $end = is_null($tanggal_akhir)? Carbon::parse($tanggal_mulai)->endOfMonth():Carbon::parse($tanggal_akhir);
+            $start = is_null($tanggal_mulai)? Carbon::parse($tanggal_mulai)->setTimezone('Asia/Jakarta')->startOfMonth():Carbon::parse($tanggal_mulai)->setTimezone('Asia/Jakarta');
+            $end = is_null($tanggal_akhir)? Carbon::parse($tanggal_mulai)->setTimezone('Asia/Jakarta')->endOfMonth():Carbon::parse($tanggal_akhir)->setTimezone('Asia/Jakarta');
             $list_tanggal = [];
-            for ($date = (is_null($tanggal_mulai)? Carbon::parse($tanggal_mulai)->startOfMonth():Carbon::parse($tanggal_mulai)); $date->lte($end); $date->addDay()) {
+            for ($date = (is_null($tanggal_mulai)? Carbon::parse($tanggal_mulai)->setTimezone('Asia/Jakarta')->startOfMonth():Carbon::parse($tanggal_mulai)->setTimezone('Asia/Jakarta')); $date->lte($end); $date->addDay()) {
                 $list_tanggal[] = $date->copy()->format('Y-m-d');
             }            
             $groupedData = collect($list_data)->groupBy(function ($item) {

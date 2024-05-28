@@ -296,7 +296,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <h4 class="card-title">Info Presensi {{Carbon::now()->format("L F Y")}}</h4>
+                        <h4 class="card-title">Info Presensi {{Carbon::now()->setTimezone('Asia/Jakarta')->format("d F Y")}}</h4>
                     </div>
                     <div class="col-12">
                         <table id="tb" class="table table-stripped">
@@ -328,10 +328,10 @@
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
                                     <td>{{$nama}} - {{$kodePengenal}}</td>
-                                    <td>{{Carbon::parse($absen->tanggal)->format("L F Y")}}</td>
-                                    <td>{{Carbon::parse($absen->absen_masuk)->format("H:m:s")}}</td>
+                                    <td>{{Carbon::parse($absen->tanggal)->setTimezone('Asia/Jakarta')->format("d F Y")}}</td>
+                                    <td>{{Carbon::parse($absen->absen_masuk)->setTimezone('Asia/Jakarta')->format("H:m:s")}}</td>
                                     <td>{{$absen->catatan_telat}}</td>
-                                    <td>{{Carbon::parse($absen->absen_keluar)->format("H:m:s")}}</td>
+                                    <td>{{Carbon::parse($absen->absen_keluar)->setTimezone('Asia/Jakarta')->format("H:m:s")}}</td>
                                     <td>{{$absen->catatan_pulang_cepat}}</td>
                                 </tr>
                                 @endforeach

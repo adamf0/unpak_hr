@@ -232,8 +232,8 @@ class SPPDController extends Controller
             }
             $list_sppd = $sppd->get();
             $list_sppd = $list_sppd->map(function($row){
-                $tanggal_berangkat = empty($row->tanggal_berangkat)? null:Carbon::parse($row->tanggal_berangkat);
-                $tanggal_kembali = empty($row->tanggal_kembali)? null:Carbon::parse($row->tanggal_kembali);
+                $tanggal_berangkat = empty($row->tanggal_berangkat)? null:Carbon::parse($row->tanggal_berangkat)->setTimezone('Asia/Jakarta');
+                $tanggal_kembali = empty($row->tanggal_kembali)? null:Carbon::parse($row->tanggal_kembali)->setTimezone('Asia/Jakarta');
                 
                 $row->AnggotaFlat = (!empty($tanggal_berangkat) && !empty($tanggal_kembali))? $row->Anggota?->reduce(function ($carry, $item) use($tanggal_berangkat,$tanggal_kembali){
                     $lama_hari = $tanggal_kembali->diff($tanggal_berangkat)->days;
@@ -252,7 +252,7 @@ class SPPDController extends Controller
                         $carry[] = (object)[
                             "nama"=>$nama??"NA",
                             "kodePengenal"=>$kodePengenal,
-                            "tanggal"=>Carbon::parse($tanggal_berangkat->format("Y-m-d"))->addDays($i)->format("L F Y"),
+                            "tanggal"=>Carbon::parse($tanggal_berangkat->format("Y-m-d"))->setTimezone('Asia/Jakarta')->addDays($i)->format("d F Y"),
                         ];
                     }
                     return $carry;

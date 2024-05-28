@@ -23,7 +23,7 @@
                             <th>NIDN</th>
                             <th>NIP</th>
                             @foreach ($list_tanggal as $tanggal)
-                                <th>{{ Carbon::parse($tanggal)->format('d') }}</th>
+                                <th>{{ Carbon::parse($tanggal)->setTimezone('Asia/Jakarta')->format('d') }}</th>
                             @endforeach
                         </tr>
                     </thead>
@@ -40,7 +40,7 @@
                                                 <td class="column_min">
                                                     @php
                                                         $aturan_jam = "08:00 - 15:00";
-                                                        $dayOfWeek = Carbon::parse($tanggal)->dayOfWeek;
+                                                        $dayOfWeek = Carbon::parse($tanggal)->setTimezone('Asia/Jakarta')->dayOfWeek;
                                                         if ($dayOfWeek == Carbon::FRIDAY) {
                                                             $aturan_jam = "08:00 - 14:00";
                                                         } elseif ($dayOfWeek == Carbon::SATURDAY) {
@@ -61,11 +61,11 @@
                                                                 if (empty($info->keterangan->masuk) && empty($info->keterangan->keluar)) {
                                                                     $keterangan = "<span class='badge bg-danger'>Tidak Masuk</span>";
                                                                 } elseif (!empty($info->keterangan->masuk) && empty($info->keterangan->keluar)) {
-                                                                    $masuk = Carbon::parse($info->keterangan->masuk)->format('H:i');
+                                                                    $masuk = Carbon::parse($info->keterangan->masuk)->setTimezone('Asia/Jakarta')->format('H:i');
                                                                     $keterangan = "<span class='badge bg-success'>{$masuk}</span> - <span class='badge bg-danger'>Masih Masuk</span>";
                                                                 } else {
-                                                                    $masuk = Carbon::parse($info->keterangan->masuk)->format('H:i');
-                                                                    $keluar = Carbon::parse($info->keterangan->keluar)->format('H:i');
+                                                                    $masuk = Carbon::parse($info->keterangan->masuk)->setTimezone('Asia/Jakarta')->format('H:i');
+                                                                    $keluar = Carbon::parse($info->keterangan->keluar)->setTimezone('Asia/Jakarta')->format('H:i');
                                                                     $keterangan = "<span class='badge bg-success'>{$masuk}</span> - <span class='badge bg-danger'>{$keluar}</span>";
                                                                 }
                                                                 break;

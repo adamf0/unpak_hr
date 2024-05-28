@@ -28,7 +28,7 @@
                     echo $nama;
                 @endphp
             </td>
-            <td>{{Carbon::parse($izin->tanggal_pengajuan)->format("L F Y")}}</td>
+            <td>{{Carbon::parse($izin->tanggal_pengajuan)->setTimezone('Asia/Jakarta')->format("d F Y")}}</td>
             <td>{{$izin->JenisIzin?->nama}}</td>
             <td>{{$izin->tujuan}}</td>
             <td>{{$izin->catatan}}</td>

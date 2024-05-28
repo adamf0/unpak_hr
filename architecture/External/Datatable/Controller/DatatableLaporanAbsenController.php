@@ -22,11 +22,11 @@ class DatatableLaporanAbsenController extends Controller
         ini_set('memory_limit', '-1');
         ini_set('max_execution_time','-1');
         
-        $start = Carbon::now()->startOfMonth();
-        $end = Carbon::now()->endOfMonth();
+        $start = Carbon::now()->setTimezone('Asia/Jakarta')->startOfMonth();
+        $end = Carbon::now()->setTimezone('Asia/Jakarta')->endOfMonth();
         $list_tanggal = [];
         $listtgl = [];
-        for ($date = Carbon::now()->startOfMonth(); $date->lte($end); $date->addDay()) {
+        for ($date = Carbon::now()->setTimezone('Asia/Jakarta')->startOfMonth(); $date->lte($end); $date->addDay()) {
             $list_tanggal[] = $date->copy()->format('Y-m-d');
             $listtgl[] = $date->copy()->format('d');
         }

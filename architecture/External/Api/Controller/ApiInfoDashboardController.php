@@ -32,9 +32,9 @@ class ApiInfoDashboardController extends Controller
     public function is8Hour($p){
         if(!$this->isLate($p)){
             $jam_pulang = "14:59:00";
-            if (Carbon::now()->dayOfWeek == Carbon::FRIDAY) {
+            if (Carbon::now()->setTimezone('Asia/Jakarta')->dayOfWeek == Carbon::FRIDAY) {
                 $jam_pulang = "13:59:00";
-            } elseif (Carbon::now()->dayOfWeek == Carbon::SATURDAY) {
+            } elseif (Carbon::now()->setTimezone('Asia/Jakarta')->dayOfWeek == Carbon::SATURDAY) {
                 $jam_pulang = "11:59:00";
             }
             return $p->GetAbsenKeluar()==null? false:$p->GetAbsenKeluar()->isGreater(new Date($p->GetTanggal()->val()->setTimeFromTimeString($jam_pulang)));
@@ -58,11 +58,11 @@ class ApiInfoDashboardController extends Controller
                 return $carry;
             });
             $list_tidak_masuk = $presensi->filter(function($item){
-                                            return isEmpty($item->GetAbsenMasuk()) && $item->GetTanggal()->isLess(new Date(Carbon::now()->format('Y-m-d')));
+                                            return isEmpty($item->GetAbsenMasuk()) && $item->GetTanggal()->isLess(new Date(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d')));
                                         });
 
             $list_belum_absen = $presensi->filter(function($item){
-                                            return isEmpty($item->GetAbsenMasuk()) && $item->GetTanggal()->isEqual(new Date(Carbon::now()->format('Y-m-d')));
+                                            return isEmpty($item->GetAbsenMasuk()) && $item->GetTanggal()->isEqual(new Date(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d')));
                                         });
 
             $cuti = $this->queryBus->ask(

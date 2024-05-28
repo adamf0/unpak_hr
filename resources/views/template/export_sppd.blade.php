@@ -111,12 +111,12 @@
             <tr>
                 <td></td>
                 <td>1. Tanggal berangkat</td>
-                <td>{{ empty($sppd->tanggal_berangkat)? "NA":Carbon::parse($sppd->tanggal_berangkat)->format("L F Y") }}</td>
+                <td>{{ empty($sppd->tanggal_berangkat)? "NA":Carbon::parse($sppd->tanggal_berangkat)->setTimezone('Asia/Jakarta')->format("d F Y") }}</td>
             </tr>
             <tr>
                 <td></td>
                 <td>2. Tanggal harus kembali</td>
-                <td>{{ empty($sppd->tanggal_kembali)? "NA":Carbon::parse($sppd->tanggal_kembali)->format("L F Y") }}</td>
+                <td>{{ empty($sppd->tanggal_kembali)? "NA":Carbon::parse($sppd->tanggal_kembali)->setTimezone('Asia/Jakarta')->format("d F Y") }}</td>
             </tr>
             <tr>
                 <td>5</td>

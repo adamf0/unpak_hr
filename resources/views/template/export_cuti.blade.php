@@ -29,7 +29,7 @@
                     echo $nama;
                 @endphp
             </td>
-            <td>{{Carbon::parse($cuti->tanggal_mulai)->format("L F Y")}} - {{Carbon::parse($cuti->tanggal_akhir)->format("L F Y")}}</td>
+            <td>{{Carbon::parse($cuti->tanggal_mulai)->setTimezone('Asia/Jakarta')->format("d F Y")}} - {{Carbon::parse($cuti->tanggal_akhir)->setTimezone('Asia/Jakarta')->format("d F Y")}}</td>
             <td>{{$cuti->lama_cuti}} hari</td>
             <td>{{$cuti->JenisCuti?->nama}}</td>
             <td>{{$cuti->tujuan}}</td>

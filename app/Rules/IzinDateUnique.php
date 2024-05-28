@@ -64,12 +64,12 @@ class IzinDateUnique implements ValidationRule
 
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $start  = Carbon::parse(request('tanggal_pengajuan'));
-        $end    = Carbon::parse(request('tanggal_pengajuan'));
+        $start  = Carbon::parse(request('tanggal_pengajuan'))->setTimezone('Asia/Jakarta');
+        $end    = Carbon::parse(request('tanggal_pengajuan'))->setTimezone('Asia/Jakarta');
         $days   = $end->diffInDays($start);
 
         $listDate = array_reduce(range(0, $days+1), function ($carry, $i){
-            $carry[] = Carbon::parse(request('tanggal_pengajuan'))->addDays($i)->format('Y-m-d');
+            $carry[] = Carbon::parse(request('tanggal_pengajuan'))->setTimezone('Asia/Jakarta')->addDays($i)->format('Y-m-d');
             return $carry;
         }, []);
 
