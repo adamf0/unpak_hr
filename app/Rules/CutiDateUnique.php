@@ -2,6 +2,8 @@
 
 namespace App\Rules;
 
+use Architecture\External\Persistance\ORM\Cuti as ModelCuti;
+use Architecture\External\Persistance\ORM\Izin as ModelIzin;
 use Carbon\Carbon;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -20,7 +22,7 @@ class CutiDateUnique implements ValidationRule
     
     function intersectionIzin($listDate = [], Closure $fail)
     {
-        $intersectionDateIzin = DB::table('izin')->whereIn('tanggal_pengajuan', $listDate);
+        $intersectionDateIzin = ModelIzin::whereIn('tanggal_pengajuan', $listDate);
 
         if (!is_null($this->nidn)) {
             $intersectionDateIzin->where('nidn', $this->nidn);
@@ -38,7 +40,7 @@ class CutiDateUnique implements ValidationRule
     function intersectionCuti($listDate = [], Closure $fail)
     {
 
-        $intersectionDateCuti = DB::table('Cuti');
+        $intersectionDateCuti = ModelCuti::whereIn('status', ["menunggu","terima"]);
         if(count($listDate)>1){
             $start  = reset($listDate);
             $end    = end($listDate);
@@ -54,7 +56,6 @@ class CutiDateUnique implements ValidationRule
         if (!is_null($this->nip)) {
             $intersectionDateCuti->where('nip', $this->nip);
         }
-        $intersectionDateCuti->whereIn('status', ["menunggu","terima"]);
         $intersectionDateCuti = $intersectionDateCuti->count();
 
         if ($intersectionDateCuti) {
