@@ -51,5 +51,5 @@ $app->useConfigPath(__DIR__.'/../architecture/External/Config');
 | from the actual running of the application and sending responses.
 |
 */
-date_default_timezone_set('Europe/London');
+date_default_timezone_set('Asia/Jakarta');
 return $app;
