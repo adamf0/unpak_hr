@@ -6,7 +6,11 @@ use Architecture\Application\Abstractions\Messaging\Query;
 use Architecture\Application\SPPD\List\GetAllSPPDQuery;
 use Architecture\Domain\Creational\Creator;
 use Architecture\Domain\Entity\AnggotaSPPD;
+use Architecture\Domain\Entity\DosenEntitas;
+use Architecture\Domain\Entity\FakultasEntitas;
 use Architecture\Domain\Entity\JenisSPPDEntitas;
+use Architecture\Domain\Entity\PegawaiEntitas;
+use Architecture\Domain\Entity\ProdiEntitas;
 use Architecture\Domain\Entity\SPPDEntitas;
 use Architecture\Domain\ValueObject\Date;
 use Architecture\External\Persistance\ORM\SPPD as SPPDModel;
@@ -20,7 +24,7 @@ class GetAllSPPDQueryHandler extends Query
 
     public function handle(GetAllSPPDQuery $query)
     {
-        $datas = SPPDModel::with(['JenisSPPD']);
+        $datas = SPPDModel::with(['JenisSPPD','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai']);
         if(!is_null($query->GetNIDN())){
             $datas = $datas->where('nidn',$query->GetNIDN());
         }
@@ -51,8 +55,23 @@ class GetAllSPPDQueryHandler extends Query
 
             $item = Creator::buildSPPD(SPPDEntitas::make(
                 $data->id,
-                $data->nidn,
-                $data->nip,
+                !is_null($data->Dosen)? Creator::buildDosen(DosenEntitas::make(
+                    $data->Dosen->NIDN,
+                    $data->Dosen->nama,
+                    !is_null($data->Dosen->Fakultas)? Creator::buildFakultas(FakultasEntitas::make(
+                        $data->Dosen->Fakultas?->kode_fakultas,
+                        $data->Dosen->Fakultas?->nama_fakultas,
+                    )):null,
+                    !is_null($data->Prodi)? Creator::buildProdi(ProdiEntitas::make(
+                        $data->Prodi?->kode_prodi,
+                        $data->Prodi?->nama_prodi,
+                    )):null,
+                )):null,
+                !is_null($data->Pegawai)? Creator::buildPegawai(PegawaiEntitas::make(
+                    $data->Pegawai?->nip,
+                    $data->Pegawai?->nama,
+                    $data->Pegawai?->unit,
+                )):null,
                 Creator::buildJenisSPPD(JenisSPPDEntitas::make(
                     $data->JenisSPPD?->id,
                     $data->JenisSPPD?->nama,

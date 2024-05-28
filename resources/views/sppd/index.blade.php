@@ -60,13 +60,15 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>NIDN</th>
-                                        <th>NIP</th>
+                                        @if (!in_array(Session::get('levelActive'),["pegawai","dosen"]))
+                                        <th>Nama</th>
+                                        @endif
                                         <th>Jenis SPPD</th>
-                                        <th>Tanggal Berangakt</th>
+                                        <th>Tanggal Berangakat</th>
                                         <th>Tanggal Kembali</th>
                                         <th>Tujuan</th>
                                         <th>Keterangan</th>
+                                        <th>Anggota</th>
                                         <th>Status</th>
                                         <th>Catatan</th>
                                         <th>Action</th>
@@ -103,24 +105,88 @@
             const nidn = `{{Session::get('nidn')}}`
             const nip = `{{Session::get('nip')}}`
             const level = `{{Session::get('levelActive')}}`
-            let table = eTable({
-                url: `{{ route('datatable.SPPD.index') }}?level=${level}&nidn=${nidn}&nip=${nip}`,
-            }, [
+            const column = level=="pegawai" || level=="dosen"? 
+            [
                 {
                     data: 'DT_RowIndex', 
                     name: 'DT_RowIndex', 
                     sWidth:'3%'
                 },
                 {
-                    data: 'nidn', 
-                    name: 'nidn',
+                    data: 'jenis_sppd', 
+                    name: 'jenis_sppd',
                     render: function ( data, type, row, meta ) {
                         return data;
                     }
                 },
                 {
-                    data: 'nip', 
-                    name: 'nip',
+                    data: 'tanggal_berangkat', 
+                    name: 'tanggal_berangkat',
+                    render: function ( data, type, row, meta ) {
+                        return data;
+                    }
+                },
+                {
+                    data: 'tanggal_kembali', 
+                    name: 'tanggal_kembali',
+                    render: function ( data, type, row, meta ) {
+                        return data;
+                    }
+                },
+                {
+                    data: 'tujuan', 
+                    name: 'tujuan',
+                    render: function ( data, type, row, meta ) {
+                        return data;
+                    }
+                },
+                {
+                    data: 'keterangan', 
+                    name: 'keterangan',
+                    render: function ( data, type, row, meta ) {
+                        return data;
+                    }
+                },
+                {
+                    data: 'anggota', 
+                    name: 'anggota',
+                    render: function ( data, type, row, meta ) {
+                        let list_anggota = '<ol>';
+                        data.forEach((item, index, arr)=>{
+                            list_anggota += `<li>${item.nama??"NA"}</li>`;
+                        })
+                        list_anggota += '</ol>';
+                        return list_anggota;
+                    }
+                },
+                {
+                    data: 'status', 
+                    name: 'status',
+                    render: function ( data, type, row, meta ) {
+                        return data;
+                    }
+                },
+                {
+                    data: 'catatan', 
+                    name: 'catatan',
+                    render: function ( data, type, row, meta ) {
+                        return data;
+                    }
+                },
+                {
+                    data: 'action', 
+                    name: 'action'
+                },
+            ]:
+            [
+                {
+                    data: 'DT_RowIndex', 
+                    name: 'DT_RowIndex', 
+                    sWidth:'3%'
+                },
+                {
+                    data: 'nama', 
+                    name: 'nama',
                     render: function ( data, type, row, meta ) {
                         return data;
                     }
@@ -161,6 +227,18 @@
                     }
                 },
                 {
+                    data: 'anggota', 
+                    name: 'anggota',
+                    render: function ( data, type, row, meta ) {
+                        let list_anggota = '<ol>';
+                        data.foreach(d=>{
+                            list_anggota += `<li>${data.nama??"NA"} - ${data.nidn??data.nip??"NA"}</li>`;
+                        })
+                        list_anggota += '</ol>';
+                        return list_anggota;
+                    }
+                },
+                {
                     data: 'status', 
                     name: 'status',
                     render: function ( data, type, row, meta ) {
@@ -178,7 +256,11 @@
                     data: 'action', 
                     name: 'action'
                 },
-            ]);
+            ];
+
+            let table = eTable({
+                url: `{{ route('datatable.SPPD.index') }}?level=${level}&nidn=${nidn}&nip=${nip}`,
+            }, column);
 
             let modal = new bootstrap.Modal(document.getElementById('modal'));
             let modalTitle = $('.modalTitle');

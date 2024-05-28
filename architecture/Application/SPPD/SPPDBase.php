@@ -2,14 +2,16 @@
 
 namespace Architecture\Application\SPPD;
 
+use Architecture\Domain\Entity\Dosen;
 use Architecture\Domain\Entity\JenisSPPD;
+use Architecture\Domain\Entity\Pegawai;
 use Architecture\Domain\ValueObject\Date;
 use Illuminate\Support\Collection;
 
 trait SPPDBase 
 {
-    public $nidn;
-    public $nip;
+    public ?Dosen $dosen;
+    public ?Pegawai $pegawai;
     public ?JenisSPPD $jenis_sppd=null;
     public Date $tanggal_berangkat;
     public ?Date $tanggal_kembali=null;
@@ -19,11 +21,11 @@ trait SPPDBase
     public $catatan=null;
     public ?Collection $list_anggota=null;
 
-    public function GetNIDN(){
-        return $this->nidn;
+    public function GetDosen(){
+        return $this->dosen;
     }
-    public function GetNIP(){
-        return $this->nip;
+    public function GetPegawai(){
+        return $this->pegawai;
     }
     public function GetJenisSPPD(){
         return $this->jenis_sppd;

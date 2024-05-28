@@ -60,8 +60,9 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>NIDN</th>
-                                        <th>NIP</th>
+                                        @if (!in_array(Session::get('levelActive'),["pegawai","dosen"]))
+                                        <th>Nama</th>
+                                        @endif
                                         <th>Jenis Izin</th>
                                         <th>Tanggal Izin</th>
                                         <th>Tujuan</th>
@@ -102,24 +103,69 @@
             const nidn = `{{Session::get('nidn')}}`
             const nip = `{{Session::get('nip')}}`
             const level = `{{Session::get('levelActive')}}`
-            let table = eTable({
-                url: `{{ route('datatable.Izin.index') }}?level=${level}&nidn=${nidn}&nip=${nip}`,
-            }, [
+            const column = level=="pegawai" || level=="dosen"?
+            [
                 {
                     data: 'DT_RowIndex', 
                     name: 'DT_RowIndex', 
                     sWidth:'3%'
                 },
                 {
-                    data: 'nidn', 
-                    name: 'nidn',
+                    data: 'jenis_izin', 
+                    name: 'jenis_izin',
                     render: function ( data, type, row, meta ) {
                         return data;
                     }
                 },
                 {
-                    data: 'nip', 
-                    name: 'nip',
+                    data: 'tanggal_pengajuan', 
+                    name: 'tanggal_pengajuan',
+                    render: function ( data, type, row, meta ) {
+                        return data;
+                    }
+                },
+                {
+                    data: 'tujuan', 
+                    name: 'tujuan',
+                    render: function ( data, type, row, meta ) {
+                        return data;
+                    }
+                },
+                {
+                    data: 'dokumen', 
+                    name: 'dokumen',
+                    render: function ( data, type, row, meta ) {
+                        return (data?.url? `<a href="${data?.url}" class="btn btn-success" target="_blank">Buka File</a>`:"");
+                    }
+                },
+                {
+                    data: 'catatan', 
+                    name: 'catatan',
+                    render: function ( data, type, row, meta ) {
+                        return data;
+                    }
+                },
+                {
+                    data: 'status', 
+                    name: 'status',
+                    render: function ( data, type, row, meta ) {
+                        return data;
+                    }
+                },
+                {
+                    data: 'action', 
+                    name: 'action'
+                },
+            ]:
+            [
+                {
+                    data: 'DT_RowIndex', 
+                    name: 'DT_RowIndex', 
+                    sWidth:'3%'
+                },
+                {
+                    data: 'nama', 
+                    name: 'nama',
                     render: function ( data, type, row, meta ) {
                         return data;
                     }
@@ -170,7 +216,11 @@
                     data: 'action', 
                     name: 'action'
                 },
-            ]);
+            ];
+
+            let table = eTable({
+                url: `{{ route('datatable.Izin.index') }}?level=${level}&nidn=${nidn}&nip=${nip}`,
+            }, column);
 
             let modal = new bootstrap.Modal(document.getElementById('modal'));
             let modalTitle = $('.modalTitle');

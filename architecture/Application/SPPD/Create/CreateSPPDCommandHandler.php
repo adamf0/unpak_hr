@@ -11,8 +11,8 @@ class CreateSPPDCommandHandler extends CommandHandler
     public function handle(CreateSPPDCommand $command)
     {
         $SPPDBaru = new ModelSPPD();
-        $SPPDBaru->nidn = $command->GetNIDN();
-        $SPPDBaru->nip = $command->GetNIP();
+        $SPPDBaru->nidn = $command->GetDosen()?->GetNidn();
+        $SPPDBaru->nip = $command->GetPegawai()?->GetNip();
         $SPPDBaru->id_jenis_sppd = $command->GetJenisSPPD()?->GetId();
         $SPPDBaru->tanggal_berangkat = $command->GetTanggalBerangkat()?->toFormat(FormatDate::Default);
         $SPPDBaru->tanggal_kembali = $command->GetTanggalKembali()?->toFormat(FormatDate::Default);

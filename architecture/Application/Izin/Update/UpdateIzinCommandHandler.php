@@ -12,8 +12,8 @@ class UpdateIzinCommandHandler extends CommandHandler
     public function handle(UpdateIzinCommand $command)
     {
         $Izin = ModelIzin::findOrFail($command->GetId());
-        $Izin->nidn = $command->GetNIDN();
-        $Izin->nip = $command->GetNIP();
+        $Izin->nidn = $command->GetDosen()?->GetNidn();
+        $Izin->nip = $command->GetPegawai()?->GetNip();
         $Izin->tanggal_pengajuan = $command->GetTanggalPengajuan()->toFormat(FormatDate::Default);
         $Izin->tujuan = $command->GetTujuan();
         $Izin->id_jenis_izin = $command->GetJenisIzin()?->GetId();

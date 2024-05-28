@@ -204,8 +204,16 @@
                                 <span class="text-muted small pt-2 ps-1 info_absen_masuk"><span class="placeholder col-2"></span></span>                            
                             </div>
                             <div>
+                                <span class="text-secondary small pt-1 fw-bold">Catatan Telat</span> 
+                                <span class="text-muted small pt-2 ps-1 info_absen_catatan_telat"><span class="placeholder col-2"></span></span>                            
+                            </div>
+                            <div>
                                 <span class="text-success small pt-1 fw-bold">Keluar</span> 
                                 <span class="text-muted small pt-2 ps-1 info_absen_keluar"><span class="placeholder col-2"></span></span>                            
+                            </div>
+                            <div>
+                                <span class="text-secondary small pt-1 fw-bold">Catatan Pulang</span> 
+                                <span class="text-muted small pt-2 ps-1 info_absen_catatan_pulang"><span class="placeholder col-2"></span></span>                            
                             </div>
                             <div>
                                 <span class="text-success small pt-1 fw-bold">Telat</span> 
@@ -413,8 +421,10 @@
             const refAbsenKeterangan = '.absen_keterangan'
             const refAbsenDone = '.absen_done';
             const refInfoAbsenMasuk = '.info_absen_masuk'
+            const refInfoAbsenCatatanTelat = '.info_absen_catatan_telat'
             const refInfoAbsenKeluar = '.info_absen_keluar'
             const refInfoAbsenTelat = '.info_absen_telat'
+            const refInfoAbsenCatatanPulang = '.info_absen_catatan_pulang'
             const refInfoAbsenJamKerja = '.info_absen_jam_kerja'
             const refAbsenLibur = '.absen_libur';
 
@@ -450,6 +460,8 @@
             const timeAbsen = parseInt(timeAbsenString.split(":")[0]);
             var absenMasuk = "{{$presensi?->GetAbsenMasuk()?->toFormat(FormatDate::YMDHIS)}}";
             var absenKeluar = "{{$presensi?->GetAbsenKeluar()?->toFormat(FormatDate::YMDHIS)}}";
+            var catatanTelat = "{{!is_null($presensi?->GetAbsenMasuk())? $presensi?->GetCatatanTelat():''}}";
+            var catatanPulang = "{{!is_null($presensi?->GetAbsenKeluar())? $presensi?->GetCatatanPulang():''}}";
 
             function loadInfo(){
                 $.ajax({
@@ -697,8 +709,10 @@
                         if(response.status=="ok"){
                             if(type=="masuk"){
                                 absenMasuk = exec
+                                catatanTelat = keterangan
                             } else if(type=="keluar"){
                                 absenKeluar = exec
+                                catatanPulang = keterangan
                             }
                             $(refAbsenKeterangan).val('')
                             loadInfo()
@@ -738,11 +752,18 @@
                 $(refInfoAbsenMasuk).html(absenMasuk.isEmpty()? getCurrentTime().format("HH:mm:ss"):moment(absenMasuk).tz('Asia/Jakarta').format("HH:mm:ss"))
                 $(refInfoAbsenTelat).html(absenMasuk.isEmpty()? "-":`${selisihJam<0? '0':selisihJam} Jam`)
 
+                $(refInfoAbsenCatatanTelat).html(catatanTelat.isEmpty()? "-":catatanTelat)
+                $(refInfoAbsenCatatanPulang).html(catatanPulang.isEmpty()? "-":catatanPulang)
+
+                const waktuKeluar = (absenKeluar.isEmpty? getCurrentTime():moment(absenKeluar)).tz('Asia/Jakarta');
+                const selisihKeluarMenit = waktuKeluar.diff(moment(absenMasuk).tz('Asia/Jakarta'), 'minutes')
+                const selisihKeluarJam = waktuKeluar.diff(moment(absenMasuk).tz('Asia/Jakarta'), 'hours')
+
                 $(refInfoAbsenKeluar).html(absenKeluar.isEmpty()? (absenMasuk.isEmpty()? "-":getCurrentTime().format("HH:mm:ss")):moment(absenKeluar).tz('Asia/Jakarta').format("HH:mm:ss"))
                 $(refInfoAbsenJamKerja).html(
                     (
-                        absenMasuk.isEmpty() || absenKeluar.isEmpty()
-                    )? "-":`${moment(absenKeluar).tz('Asia/Jakarta').diff(moment(absenMasuk).tz('Asia/Jakarta'), 'hours')} Jam`
+                        absenMasuk.isEmpty()
+                    )? "-":`${selisihKeluarJam>0? selisihKeluarJam:selisihKeluarMenit} ${selisihKeluarJam>0? 'Jam':'menit'}`
                 )
             }, 1000);
         });

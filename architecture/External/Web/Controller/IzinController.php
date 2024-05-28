@@ -14,8 +14,10 @@ use Architecture\Application\Izin\FirstData\GetIzinQuery;
 use Architecture\Application\Izin\Update\ApprovalIzinCommand;
 use Architecture\Application\Izin\Update\UpdateIzinCommand;
 use Architecture\Domain\Creational\Creator;
+use Architecture\Domain\Entity\DosenReferensi;
 use Architecture\Domain\Entity\FolderX;
 use Architecture\Domain\Entity\JenisIzinReferensi;
+use Architecture\Domain\Entity\PegawaiReferensi;
 use Architecture\Domain\Enum\TypeNotif;
 use Architecture\Domain\RuleValidationRequest\Izin\CreateIzinRuleReq;
 use Architecture\Domain\RuleValidationRequest\Izin\DeleteIzinRuleReq;
@@ -27,7 +29,6 @@ use Architecture\External\Port\PdfX;
 use Architecture\Shared\Creational\FileManager;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
@@ -77,8 +78,8 @@ class IzinController extends Controller
             }
 
             $this->commandBus->dispatch(new CreateIzinCommand(
-                Session::get("nidn"),
-                Session::get("nip"),
+                Session::has("nidn")? Creator::buildDosen(DosenReferensi::make(Session::get("nidn"))):null,
+                Session::has("nip")? Creator::buildPegawai(PegawaiReferensi::make(Session::get("nip"))):null,
                 new Date($request->get("tanggal_pengajuan")),
                 $request->get("tujuan"),
                 Creator::buildJenisIzin(JenisIzinReferensi::make($request->get("jenis_izin"))),
@@ -130,8 +131,8 @@ class IzinController extends Controller
 
             $this->commandBus->dispatch(new UpdateIzinCommand(
                 $request->get('id'), 
-                Session::get("nidn"),
-                Session::get("nip"),
+                Session::has("nidn")? Creator::buildDosen(DosenReferensi::make(Session::get("nidn"))):null,
+                Session::has("nip")? Creator::buildPegawai(PegawaiReferensi::make(Session::get("nip"))):null,
                 new Date($request->get("tanggal_pengajuan")),
                 $request->get("tujuan"),
                 Creator::buildJenisIzin(JenisIzinReferensi::make($request->get("jenis_izin"))),
@@ -224,10 +225,6 @@ class IzinController extends Controller
 
                 $file_name = $file_name."_$tanggal_mulai-$tanggal_akhir";
             }
-            // $izin = $izin->leftJoin('jenis_izin','izin.id_jenis_izin',"=","jenis_izin.id")
-            //             ->leftJoin(DB::raw(config('database.connections.simak.database') . '.m_dosen'), 'izin.nidn', '=', 'm_dosen.nidn')
-            //             ->leftJoin(DB::raw(config('database.connections.simpeg.database') . '.n_pribadi'), 'izin.nip', '=', 'n_pribadi.nip')
-            //             ->select('izin.*','jenis_izin.nama as nama_izin', 'm_dosen.nama_dosen as nama_dosen','n_pribadi.nama as nama_pegawai');
             $list_izin = $izin->get();
 
             if($type_export=="pdf"){

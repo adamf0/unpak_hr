@@ -10,9 +10,9 @@ class UpdateAnggotaSPPDCommandHandler extends CommandHandler
     public function handle(UpdateAnggotaSPPDCommand $command)
     {
         $SPPD = ModelAnggotaSPPD::findOrFail($command->GetId());
-        $SPPD->id_sppd = $command->GetIDSPPD();
-        $SPPD->nidn = $command->GetNIDN();
-        $SPPD->nip = $command->GetNIP();
+        $SPPD->id_sppd = $command->GetSPPD()?->GetId();
+        $SPPD->nidn = $command->GetDosen()?->GetNidn();
+        $SPPD->nip = $command->GetPegawai()?->GetNip();
         if($SPPD->isDirty()) $SPPD->saveOrFail();
 
         return $SPPD;

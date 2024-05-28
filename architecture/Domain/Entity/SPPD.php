@@ -9,8 +9,8 @@ class SPPD extends BaseEntity{
     use SPPDBase;
     public function __construct(
         $id=null,
-        $nidn,
-        $nip,
+        ?Dosen $dosen=null,
+        ?Pegawai $pegawai=null,
         ?JenisSPPD $jenis_sppd=null,
         Date $tanggal_berangkat,
         ?Date $tanggal_kembali=null,
@@ -21,8 +21,8 @@ class SPPD extends BaseEntity{
         ?Collection $list_anggota=null,
     ){
         $this->id = $id;
-        $this->nidn = $nidn;
-        $this->nip = $nip;
+        $this->dosen = $dosen;
+        $this->pegawai = $pegawai;
         $this->jenis_sppd = $jenis_sppd;
         $this->tanggal_berangkat = $tanggal_berangkat;
         $this->tanggal_kembali = $tanggal_kembali;

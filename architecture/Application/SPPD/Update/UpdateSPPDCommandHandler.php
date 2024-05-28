@@ -12,8 +12,8 @@ class UpdateSPPDCommandHandler extends CommandHandler
     {
         $SPPD = ModelSPPD::findOrFail($command->GetId());
         $SPPD->id = $command->GetId();
-        $SPPD->nidn = $command->GetNIDN();
-        $SPPD->nip = $command->GetNIP();
+        $SPPD->nidn = $command->GetDosen()?->GetNidn();
+        $SPPD->nip = $command->GetPegawai()?->GetNip();
         $SPPD->id_jenis_sppd = $command->GetJenisSPPD()?->GetId();
         $SPPD->tanggal_berangkat = $command->GetTanggalBerangkat()?->toFormat(FormatDate::Default);
         $SPPD->tanggal_kembali = $command->GetTanggalKembali()?->toFormat(FormatDate::Default);

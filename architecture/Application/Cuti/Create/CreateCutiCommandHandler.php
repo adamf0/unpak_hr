@@ -11,8 +11,8 @@ class CreateCutiCommandHandler extends CommandHandler
     public function handle(CreateCutiCommand $command)
     {
         $CutiBaru = new ModelCuti();
-        $CutiBaru->nidn = $command->GetNIDN();
-        $CutiBaru->nip = $command->GetNIP();
+        $CutiBaru->nidn = $command->GetDosen()?->GetNidn();
+        $CutiBaru->nip = $command->GetPegawai()?->GetNip();
         $CutiBaru->id_jenis_cuti = $command->GetJenisCuti()->GetId();
         $CutiBaru->lama_cuti = $command->GetLamaCuti();
         $CutiBaru->tanggal_mulai = $command->GetTanggalMulai()->toFormat(FormatDate::Default);

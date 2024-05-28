@@ -14,8 +14,11 @@ use Architecture\Application\Cuti\Update\ApprovalCutiCommand;
 use Architecture\Application\Cuti\Update\UpdateCutiCommand;
 use Architecture\Application\Izin\Count\CountIzinQuery;
 use Architecture\Domain\Creational\Creator;
+use Architecture\Domain\Entity\Dosen;
+use Architecture\Domain\Entity\DosenReferensi;
 use Architecture\Domain\Entity\FolderX;
 use Architecture\Domain\Entity\JenisCutiReferensi;
+use Architecture\Domain\Entity\PegawaiReferensi;
 use Architecture\Domain\Enum\TypeNotif;
 use Architecture\Domain\RuleValidationRequest\Cuti\CreateCutiRuleReq;
 use Architecture\Domain\RuleValidationRequest\Cuti\DeleteCutiRuleReq;
@@ -27,7 +30,6 @@ use Architecture\External\Port\PdfX;
 use Architecture\Shared\Creational\FileManager;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
@@ -77,8 +79,8 @@ class CutiController extends Controller
             }
 
             $this->commandBus->dispatch(new CreateCutiCommand(
-                Session::get("nidn")??null,
-                Session::get("nip")??null,
+                Session::has("nidn")? Creator::buildDosen(DosenReferensi::make(Session::get("nidn"))):null,
+                Session::has("nip")? Creator::buildPegawai(PegawaiReferensi::make(Session::get("nip"))):null,
                 Creator::buildJenisCuti(JenisCutiReferensi::make(
                     $request->get("jenis_cuti")
                 )),
@@ -131,8 +133,8 @@ class CutiController extends Controller
 
             $this->commandBus->dispatch(new UpdateCutiCommand(
                 $request->get("id"),
-                Session::get("nidn")??null,
-                Session::get("nip")??null,
+                Session::has("nidn")? Creator::buildDosen(DosenReferensi::make(Session::get("nidn"))):null,
+                Session::has("nip")? Creator::buildPegawai(PegawaiReferensi::make(Session::get("nip"))):null,
                 Creator::buildJenisCuti(JenisCutiReferensi::make(
                     $request->get("jenis_cuti")
                 )),
@@ -230,10 +232,6 @@ class CutiController extends Controller
 
                 $file_name = $file_name."_$tanggal_mulai-$tanggal_akhir";
             }
-            // $cuti = $cuti->leftJoin('jenis_cuti','cuti.id_jenis_cuti',"=","jenis_cuti.id")
-            //             ->leftJoin(DB::raw(config('database.connections.simak.database') . '.m_dosen'), 'cuti.nidn', '=', 'm_dosen.nidn')
-            //             ->leftJoin(DB::raw(config('database.connections.simpeg.database') . '.n_pribadi'), 'cuti.nip', '=', 'n_pribadi.nip')
-            //             ->select('cuti.*','jenis_cuti.nama as nama_cuti', 'm_dosen.nama_dosen as nama_dosen','n_pribadi.nama as nama_pegawai');
             $list_cuti = $cuti->get();
 
             if($type_export=="pdf"){

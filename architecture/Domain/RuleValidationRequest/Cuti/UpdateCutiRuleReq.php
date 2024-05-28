@@ -20,7 +20,7 @@ class UpdateCutiRuleReq{
                 new CutiDateUnique($nidn, $nip)
             ],
             "tujuan"        => "required",
-            "dokumen"       => "nullable|file|mimes:pdf,jpg,jpeg,png|max:10000",
+            // "dokumen"       => "nullable|file|mimes:pdf,jpg,jpeg,png|max:10000",
         ]; 
     }
 }

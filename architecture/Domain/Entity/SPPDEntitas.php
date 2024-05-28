@@ -7,8 +7,8 @@ use Illuminate\Support\Collection;
 class SPPDEntitas extends ISPPD{
     public static function make(
         $id=null,
-        $nidn=null,
-        $nip=null,
+        ?Dosen $dosen=null,
+        ?Pegawai $pegawai=null,
         $jenis_sppd=null,
         $tanggal_berangkat=null,
         $tanggal_kembali=null,
@@ -20,8 +20,8 @@ class SPPDEntitas extends ISPPD{
     ){
         $instance = new self();
         $instance->id = $id;
-        $instance->nidn = $nidn;
-        $instance->nip = $nip;
+        $instance->dosen = $dosen;
+        $instance->pegawai = $pegawai;
         $instance->jenis_sppd = $jenis_sppd;
         $instance->tanggal_berangkat = $tanggal_berangkat;
         $instance->tanggal_kembali = $tanggal_kembali;

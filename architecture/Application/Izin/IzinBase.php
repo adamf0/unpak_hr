@@ -2,13 +2,15 @@
 
 namespace Architecture\Application\Izin;
 
+use Architecture\Domain\Entity\Dosen;
 use Architecture\Domain\Entity\JenisIzin;
+use Architecture\Domain\Entity\Pegawai;
 use Architecture\Domain\ValueObject\Date;
 
 trait IzinBase 
 {
-    public $nidn;
-    public $nip;
+    public ?Dosen $dosen;
+    public ?Pegawai $pegawai;
     public Date $tanggal_pengajuan;
     public $tujuan;
     public ?JenisIzin $jenis_izin=null;
@@ -17,11 +19,11 @@ trait IzinBase
     public $catatan;
     public $pic;
 
-    public function GetNIDN(){
-        return $this->nidn;
+    public function GetDosen(){
+        return $this->dosen;
     }
-    public function GetNIP(){
-        return $this->nip;
+    public function GetPegawai(){
+        return $this->pegawai;
     }
     public function GetTanggalPengajuan(){
         return $this->tanggal_pengajuan;

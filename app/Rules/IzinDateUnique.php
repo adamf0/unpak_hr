@@ -34,7 +34,7 @@ class IzinDateUnique implements ValidationRule
         $intersectionDateIzin = $intersectionDateIzin->count();
 
         if ($intersectionDateIzin) {
-            $fail("The selected dates overlap with an existing izin");
+            $fail("Tanggal yang dipilih tumpang tindih dengan tanggal izin yang sudah ada");
         }
     }
     function intersectionCuti($listDate = [], Closure $fail)
@@ -59,7 +59,7 @@ class IzinDateUnique implements ValidationRule
         $intersectionDateCuti = $intersectionDateCuti->count();
 
         if ($intersectionDateCuti) {
-            $fail("The selected dates overlap with an existing cuti");
+            $fail("Tanggal yang dipilih tumpang tindih dengan tanggal cuti yang sudah ada");
         }
     }
 

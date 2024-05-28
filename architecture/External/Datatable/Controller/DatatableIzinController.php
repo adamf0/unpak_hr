@@ -26,20 +26,39 @@ class DatatableIzinController extends Controller
         // $q->SetOffset($request->get('start')??null)->SetLimit($request->get('length')??null);
         
         $listIzin = $this->queryBus->ask($q);
-        $listIzin = $listIzin->map(fn($item)=>(object)[
-            "id" => $item->GetId(),
-            "nidn" => $item->GetNIDN(),
-            "nip" => $item->GetNIP(),
-            "tanggal_pengajuan" => $item->GetTanggalPengajuan()->toFormat(FormatDate::LDFY),
-            "tujuan" => $item->GetTujuan(),
-            "jenis_izin" => $item->GetJenisIzin()?->GetNama(),
-            "dokumen"=>empty($item->GetDokumen())? "":[
-                "file"=>$item->GetDokumen(),
-                "url"=>Utility::loadAsset('dokumen_cuti/'.$item->GetDokumen()),
-            ],
-            "catatan" => $item->GetCatatan(),
-            "status" => $item->GetStatus(),
-        ]);
+        $listIzin = $listIzin->map(function($item) use($level){
+            return match(true){
+                in_array($level,["pegawai","dosen"])=>(object)[
+                    "id" => $item->GetId(),
+                    "tanggal_pengajuan" => $item->GetTanggalPengajuan()->toFormat(FormatDate::LDFY),
+                    "tujuan" => $item->GetTujuan(),
+                    "jenis_izin" => $item->GetJenisIzin()?->GetNama(),
+                    "dokumen"=>empty($item->GetDokumen())? "":[
+                        "file"=>$item->GetDokumen(),
+                        "url"=>Utility::loadAsset('dokumen_cuti/'.$item->GetDokumen()),
+                    ],
+                    "catatan" => $item->GetCatatan(),
+                    "status" => $item->GetStatus(),
+                ],
+                default=>(object)[
+                    "id" => $item->GetId(),
+                    "nama" => match(true){
+                        !is_null($item->GetDosen()) && is_null($item->GetPegawai())=>$item->GetDosen()->GetNama(),
+                        is_null($item->GetDosen()) && !is_null($item->GetPegawai())=>$item->GetPegawai()->GetNama(),
+                        default=>"NA",
+                    },
+                    "tanggal_pengajuan" => $item->GetTanggalPengajuan()->toFormat(FormatDate::LDFY),
+                    "tujuan" => $item->GetTujuan(),
+                    "jenis_izin" => $item->GetJenisIzin()?->GetNama(),
+                    "dokumen"=>empty($item->GetDokumen())? "":[
+                        "file"=>$item->GetDokumen(),
+                        "url"=>Utility::loadAsset('dokumen_cuti/'.$item->GetDokumen()),
+                    ],
+                    "catatan" => $item->GetCatatan(),
+                    "status" => $item->GetStatus(),
+                ]
+            };
+        });
         
         return DataTables::of($listIzin)
         ->addIndexColumn()

@@ -2,13 +2,15 @@
 
 namespace Architecture\Application\Cuti;
 
+use Architecture\Domain\Entity\Dosen;
 use Architecture\Domain\Entity\JenisCuti;
+use Architecture\Domain\Entity\Pegawai;
 use Architecture\Domain\ValueObject\Date;
 
 trait CutiBase 
 {
-    public $nidn;
-    public $nip;
+    public ?Dosen $dosen;
+    public ?Pegawai $pegawai;
     public ?JenisCuti $jenis_cuti=null;
     public $lama_cuti;
     public Date $tanggal_mulai;
@@ -19,11 +21,11 @@ trait CutiBase
     public $catatan;
     public $pic;
 
-    public function GetNIDN(){
-        return $this->nidn;
+    public function GetDosen(){
+        return $this->dosen;
     }
-    public function GetNIP(){
-        return $this->nip;
+    public function GetPegawai(){
+        return $this->pegawai;
     }
     public function GetJenisCuti(){
         return $this->jenis_cuti;

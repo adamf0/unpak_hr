@@ -26,7 +26,7 @@
                                 @csrf
                                 <div class="row">
                                     <div class="col-6">
-                                        <x-input-text title="Tanggal Pengajuan" name="tanggal_pengajuan" class="tanggal_pengajuan" default="{{ old('tanggal_pengajuan') }}"/>
+                                        <x-input-text title="Tanggal Izin" name="tanggal_pengajuan" class="tanggal_pengajuan" default="{{ old('tanggal_pengajuan') }}"/>
                                     </div>
                                     <div class="col-6">
                                         <x-input-select title="Jenis Izin" name="jenis_izin" class="jenis_izin"></x-input-select>

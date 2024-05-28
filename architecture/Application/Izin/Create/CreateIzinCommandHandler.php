@@ -11,8 +11,8 @@ class CreateIzinCommandHandler extends CommandHandler
     public function handle(CreateIzinCommand $command)
     {
         $IzinBaru = new ModelIzin();
-        $IzinBaru->nidn = $command->GetNIDN();
-        $IzinBaru->nip = $command->GetNIP();
+        $IzinBaru->nidn = $command->GetDosen()?->GetNidn();
+        $IzinBaru->nip = $command->GetPegawai()?->GetNip();
         $IzinBaru->tanggal_pengajuan = $command->GetTanggalPengajuan()->toFormat(FormatDate::Default);
         $IzinBaru->tujuan = $command->GetTujuan();
         $IzinBaru->id_jenis_izin = $command->GetJenisIzin()?->GetId();

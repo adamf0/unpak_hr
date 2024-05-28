@@ -14,7 +14,7 @@ class UpdateIzinRuleReq{
             ],
             "tujuan"            => "required",
             "jenis_izin"        => "required",
-            "dokumen"           => "nullable|file|mimes:pdf,jpg,jpeg,png|max:10000",
+            // "dokumen"           => "nullable|file|mimes:pdf,jpg,jpeg,png|max:10000",
             // "catatan"           => "required",
         ]; 
     }

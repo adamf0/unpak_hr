@@ -6,7 +6,7 @@
             <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
             <li class="breadcrumb-item"><a href="{{ route('cuti.index') }}">Cuti</a></li>
-            <li class="breadcrumb-item active">Tambah</li>
+            <li class="breadcrumb-item active">Ubah</li>
             </ol>
         </nav>
     </x-page-title>

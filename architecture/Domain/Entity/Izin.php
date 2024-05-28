@@ -8,8 +8,8 @@ class Izin extends BaseEntity{
     use IzinBase;
     public function __construct(
         $id,
-        $nidn,
-        $nip,
+        ?Dosen $dosen=null,
+        ?Pegawai $pegawai=null,
         Date $tanggal_pengajuan,
         $tujuan,
         ?JenisIzin $jenis_izin=null,
@@ -18,8 +18,8 @@ class Izin extends BaseEntity{
         $status,
     ){
         $this->id = $id;
-        $this->nidn = $nidn;
-        $this->nip = $nip;
+        $this->dosen = $dosen;
+        $this->pegawai = $pegawai;
         $this->tanggal_pengajuan = $tanggal_pengajuan;
         $this->tujuan = $tujuan;
         $this->jenis_izin = $jenis_izin;

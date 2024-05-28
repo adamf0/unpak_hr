@@ -26,18 +26,37 @@ class DatatableSPPDController extends Controller
         // $q->SetOffset($request->get('start')??null)->SetLimit($request->get('length')??null);
         
         $listSPPD = $this->queryBus->ask($q);
-        $listSPPD = $listSPPD->map(fn($item)=>(object)[
-            "id"=>$item->GetId(),
-            "nidn"=> $item->GetNIDN(),
-            "nip"=> $item->GetNIP(),
-            "jenis_sppd"=> $item->GetJenisSPPD()?->GetNama(),
-            "tanggal_berangkat"=> $item->GetTanggalBerangkat()->toFormat(FormatDate::LDFY),
-            "tanggal_kembali"=> $item->GetTanggalKembali()->toFormat(FormatDate::LDFY),
-            "tujuan"=> $item->GetTujuan(),
-            "keterangan"=> $item->GetKeterangan(),
-            "catatan"=> $item->GetCatatan(),
-            "status"=> $item->GetStatus(),
-        ]);
+        $listSPPD = $listSPPD->map(function($item) use($level){
+            return match(true){
+                in_array($level,["pegawai","dosen"])=>(object)[
+                    "id"=>$item->GetId(),
+                    "jenis_sppd"=> $item->GetJenisSPPD()?->GetNama(),
+                    "tanggal_berangkat"=> $item->GetTanggalBerangkat()->toFormat(FormatDate::LDFY),
+                    "tanggal_kembali"=> $item->GetTanggalKembali()->toFormat(FormatDate::LDFY),
+                    "tujuan"=> $item->GetTujuan(),
+                    "keterangan"=> $item->GetKeterangan(),
+                    "anggota"=> $item->GetListAnggota()->toArray(),
+                    "catatan"=> $item->GetCatatan(),
+                    "status"=> $item->GetStatus(),
+                ],
+                default=>(object)[
+                    "id"=>$item->GetId(),
+                    "jenis_sppd"=> $item->GetJenisSPPD()?->GetNama(),
+                    "nama" => match(true){
+                        !is_null($item->GetDosen()) && is_null($item->GetPegawai())=>$item->GetDosen()->GetNama(),
+                        is_null($item->GetDosen()) && !is_null($item->GetPegawai())=>$item->GetPegawai()->GetNama(),
+                        default=>"NA",
+                    },
+                    "tanggal_berangkat"=> $item->GetTanggalBerangkat()->toFormat(FormatDate::LDFY),
+                    "tanggal_kembali"=> $item->GetTanggalKembali()->toFormat(FormatDate::LDFY),
+                    "tujuan"=> $item->GetTujuan(),
+                    "keterangan"=> $item->GetKeterangan(),
+                    "anggota"=> $item->GetListAnggota()->toArray(),
+                    "catatan"=> $item->GetCatatan(),
+                    "status"=> $item->GetStatus(),
+                ],
+            };
+        });
         
         return DataTables::of($listSPPD)
         ->addIndexColumn()
