@@ -145,7 +145,7 @@
         </table>
         <div class="paraf">
             <div class="paraf__container">
-            <p>Penjabat Pembuat Komitmen</p>
+            <p>Menyetujui</p>
             @if (!empty($sppd->SDM) && $sppd->status=="terima")
             <img src='data:image/png;base64, {!! base64_encode(QrCode::size(100)->generate("Nama : ".$sppd->SDM->name)) !!}' alt="tanda tangan SDM"/>
             <br>
