@@ -210,7 +210,7 @@
       @if (Utility::hasUser() || Utility::hasSDM())
         <x-sidebar-item-menu title="Cuti" icon="bi bi-menu-button-wide" link="{{route('cuti.index')}}" :active="Utility::stateMenu(['cuti'],request())" />
         <x-sidebar-item-menu title="Izin" icon="bi bi-menu-button-wide" link="{{route('izin.index')}}" :active="Utility::stateMenu(['izin'],request())" />
-        <x-sidebar-item-menu title="Lupa Absen Keluar" icon="bi bi-menu-button-wide" link="{{route('dashboard.index')}}" :active="Utility::stateMenu([''],request())" />
+        <x-sidebar-item-menu title="Klaim Absen" icon="bi bi-menu-button-wide" link="{{route('klaim_absen.index')}}" :active="Utility::stateMenu(['klaim_absen'],request())" />
       @endif
 
       @if (Utility::hasSDM() || Utility::hasWarek() || Utility::hasUser())

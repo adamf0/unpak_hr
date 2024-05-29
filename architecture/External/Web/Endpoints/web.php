@@ -7,6 +7,7 @@ use Architecture\External\Web\Controller\IzinController;
 use Architecture\External\Web\Controller\JenisCutiController;
 use Architecture\External\Web\Controller\JenisIzinController;
 use Architecture\External\Web\Controller\JenisSPPDController;
+use Architecture\External\Web\Controller\KlaimAbsenController;
 use Architecture\External\Web\Controller\LaporanAbsenController;
 use Architecture\External\Web\Controller\MasterKalendarController;
 use Architecture\External\Web\Controller\PenggunaController;
@@ -73,6 +74,14 @@ Route::middleware(['throwSession'])->group(function () {
     Route::get('izin/delete/{id}', [IzinController::class,'delete'])->name('izin.delete');
     Route::get('izin/approval/{id}/{type}', [IzinController::class,'approval'])->name('izin.approval');
     Route::get('izin/export', [IzinController::class,'export'])->name('izin.export');
+
+    Route::get('klaim_absen', [KlaimAbsenController::class,'index'])->name('klaim_absen.index');
+    Route::get('klaim_absen/create', [KlaimAbsenController::class,'create'])->name('klaim_absen.create');
+    Route::post('klaim_absen/store', [KlaimAbsenController::class,'store'])->name('klaim_absen.store');
+    Route::get('klaim_absen/edit/{id}', [KlaimAbsenController::class,'edit'])->name('klaim_absen.edit');
+    Route::post('klaim_absen/update', [KlaimAbsenController::class,'update'])->name('klaim_absen.update');
+    Route::get('klaim_absen/delete/{id}', [KlaimAbsenController::class,'delete'])->name('klaim_absen.delete');
+    Route::get('klaim_absen/approval/{id}/{type}', [KlaimAbsenController::class,'approval'])->name('klaim_absen.approval');
 
     Route::get('jenis_izin', [JenisIzinController::class,'index'])->name('jenis_izin.index');
     Route::get('jenis_izin/create', [JenisIzinController::class,'create'])->name('jenis_izin.create');

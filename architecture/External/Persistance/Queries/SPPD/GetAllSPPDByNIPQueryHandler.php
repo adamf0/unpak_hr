@@ -45,11 +45,11 @@ class GetAllSPPDByNIPQueryHandler extends Query
             $item = Creator::buildSPPD(SPPDEntitas::make(
                 $data->id,
                 !is_null($data->Dosen)? Creator::buildDosen(DosenEntitas::make(
-                    $data->Dosen->NIDN,
-                    $data->Dosen->nama,
+                    $data->Dosen?->NIDN,
+                    $data->Dosen?->nama_dosen,
                     !is_null($data->Dosen->Fakultas)? Creator::buildFakultas(FakultasEntitas::make(
-                        $data->Dosen->Fakultas?->kode_fakultas,
-                        $data->Dosen->Fakultas?->nama_fakultas,
+                        $data->Dosen?->Fakultas?->kode_fakultas,
+                        $data->Dosen?->Fakultas?->nama_fakultas,
                     )):null,
                     !is_null($data->Prodi)? Creator::buildProdi(ProdiEntitas::make(
                         $data->Prodi?->kode_prodi,

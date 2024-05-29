@@ -8,6 +8,7 @@ enum FormatDate
     case LDFYHIS;
     case LDFY;
     case DFYHIS;
+    case HIS;
     case DFY;
     case FY;
     case F;
@@ -21,6 +22,7 @@ enum FormatDate
             self::LDFYHIS  => "l, d F Y H:i:s",
             self::LDFY  => "l, d F Y",
             self::DFYHIS   => "d F Y H:i:s",
+            self::HIS   => "H:i:s",
             self::DFY      => "d F Y",
             self::FY       => "F Y",
             self::F        => "F",

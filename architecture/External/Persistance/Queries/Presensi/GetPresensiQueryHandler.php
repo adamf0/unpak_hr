@@ -28,7 +28,7 @@ class GetPresensiQueryHandler extends Query
             $data->absen_masuk==null? null:new Date($data->absen_masuk),
             $data->absen_keluar==null? null:new Date($data->absen_keluar),
             $data->catatan_telat,
-            $data->catatan_keluar,
+            $data->catatan_pulang,
             $data->otomatis_keluar,
         ));
     }

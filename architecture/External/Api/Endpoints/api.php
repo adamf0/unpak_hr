@@ -20,6 +20,7 @@ use Architecture\External\Api\Controller\ApiInfoController;
 use Architecture\External\Api\Controller\ApiInfoDashboardController;
 use Architecture\External\Api\Controller\ApiIzinController;
 use Architecture\External\Api\Controller\ApiKalendarController;
+use Architecture\External\Api\Controller\ApiKlaimAbsenController;
 use Architecture\External\Api\Controller\ApiPresensiController;
 use Architecture\External\Api\Controller\ApiSPPDController;
 use Illuminate\Support\Facades\DB;
@@ -33,6 +34,7 @@ Route::post('info_dosen_pegawai', [ApiInfoController::class,'index'])->name('api
 Route::post('cuti/approval/reject', [ApiCutiController::class,'reject'])->name('api.cuti.reject');
 Route::post('izin/approval/reject', [ApiIzinController::class,'reject'])->name('api.izin.reject');
 Route::post('sppd/approval/reject', [ApiSPPDController::class,'reject'])->name('api.sppd.reject');
+Route::post('klaim_absen/approval/reject', [ApiKlaimAbsenController::class,'reject'])->name('api.klaim_absen.reject');
 
 Route::get('tes', function(){
     // try {

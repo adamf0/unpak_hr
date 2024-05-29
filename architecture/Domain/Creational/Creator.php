@@ -8,6 +8,7 @@ use Architecture\Domain\Contract\IIzin;
 use Architecture\Domain\Contract\IJenisCuti;
 use Architecture\Domain\Contract\IJenisIzin;
 use Architecture\Domain\Contract\IJenisSPPD;
+use Architecture\Domain\Contract\IKlaimAbsen;
 use Architecture\Domain\Contract\IMasterKalendar;
 use Architecture\Domain\Contract\IPegawai;
 use Architecture\Domain\Contract\IPengguna;
@@ -21,6 +22,7 @@ use Architecture\Domain\Entity\Izin;
 use Architecture\Domain\Entity\JenisCuti;
 use Architecture\Domain\Entity\JenisIzin;
 use Architecture\Domain\Entity\JenisSPPD;
+use Architecture\Domain\Entity\KlaimAbsen;
 use Architecture\Domain\Entity\MasterKalendar;
 use Architecture\Domain\Entity\Pegawai;
 use Architecture\Domain\Entity\Pengguna;
@@ -155,6 +157,20 @@ class Creator{
             $factory->GetTanggalMulai(),
             $factory->GetTanggalAkhir(),
             $factory->GetKeterangan(),
+        );
+    }
+    public static function buildKlaimAbsen(IKlaimAbsen $factory){
+        return new KlaimAbsen(
+            $factory->GetId(),
+            $factory->GetDosen(),
+            $factory->GetPegawai(),
+            $factory->GetPresensi(),
+            $factory->GetJamMasuk(),
+            $factory->GetJamKeluar(),
+            $factory->GetTujuan(),
+            $factory->GetDokumen(),
+            $factory->GetCatatan(),
+            $factory->GetStatus(),
         );
     }
 }

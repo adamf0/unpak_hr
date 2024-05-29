@@ -3,14 +3,14 @@
 namespace Architecture\External\Persistance\Queries\Izin;
 
 use Architecture\Application\Abstractions\Messaging\Query;
-use Architecture\Application\Izin\Count\CountIzinQuery as CountCountIzinQuery;
+use Architecture\Application\Izin\Count\CountIzinQuery as CountIzinQuery;
 use Illuminate\Support\Facades\DB;
 
 class CountIzinQueryHandler extends Query
 {
     public function __construct() {}
 
-    public function handle(CountCountIzinQuery $query)
+    public function handle(CountIzinQuery $query)
     {
         $izin = DB::table('izin');
         if(!is_null($query->GetNIDN())){
