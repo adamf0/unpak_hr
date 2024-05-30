@@ -22,11 +22,11 @@
                 empty($izin->Dosen) && !empty($izin->Pegawai) => $izin->Pegawai?->nama."<br>".$izin->nip,
                 default=>"NA"
             };
-            $tanggal_pengajuan = empty($cuti->tanggal_pengajuan)? 'NA':Carbon::parse($cuti->tanggal_pengajuan)->setTimezone('Asia/Jakarta')->format("d F Y")
+            $tanggal_pengajuan = empty($izin->tanggal_pengajuan)? 'NA':Carbon::parse($izin->tanggal_pengajuan)->setTimezone('Asia/Jakarta')->format("d F Y")
         @endphp
         <tr>
             <td>{{$key+1}}</td>
-            <td>{!! $nama !!}/td>
+            <td>{!! $nama !!}</td>
             <td>{{$tanggal_pengajuan}}</td>
             <td>{{$izin->JenisIzin?->nama}}</td>
             <td>{{$izin->tujuan}}</td>
