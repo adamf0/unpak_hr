@@ -58,6 +58,7 @@ Route::middleware(['throwSession'])->group(function () {
     Route::get('cuti/delete/{id}', [CutiController::class,'delete'])->name('cuti.delete');
     Route::get('cuti/approval/{id}/{type}', [CutiController::class,'approval'])->name('cuti.approval');
     Route::get('cuti/export', [CutiController::class,'export'])->name('cuti.export');
+    Route::get('cuti/{type}', [CutiController::class,'index'])->name('cuti.index2');
 
     Route::get('jenis_cuti', [JenisCutiController::class,'index'])->name('jenis_cuti.index');
     Route::get('jenis_cuti/create', [JenisCutiController::class,'create'])->name('jenis_cuti.create');
@@ -74,6 +75,7 @@ Route::middleware(['throwSession'])->group(function () {
     Route::get('izin/delete/{id}', [IzinController::class,'delete'])->name('izin.delete');
     Route::get('izin/approval/{id}/{type}', [IzinController::class,'approval'])->name('izin.approval');
     Route::get('izin/export', [IzinController::class,'export'])->name('izin.export');
+    Route::get('izin/{type}', [IzinController::class,'index'])->name('izin.index2');
 
     Route::get('klaim_absen', [KlaimAbsenController::class,'index'])->name('klaim_absen.index');
     Route::get('klaim_absen/create', [KlaimAbsenController::class,'create'])->name('klaim_absen.create');
@@ -82,6 +84,8 @@ Route::middleware(['throwSession'])->group(function () {
     Route::post('klaim_absen/update', [KlaimAbsenController::class,'update'])->name('klaim_absen.update');
     Route::get('klaim_absen/delete/{id}', [KlaimAbsenController::class,'delete'])->name('klaim_absen.delete');
     Route::get('klaim_absen/approval/{id}/{type}', [KlaimAbsenController::class,'approval'])->name('klaim_absen.approval');
+    Route::get('klaim_absen/export', [KlaimAbsenController::class,'export'])->name('klaim_absen.export');
+    Route::get('klaim_absen/{type}', [KlaimAbsenController::class,'index'])->name('klaim_absen.index2');
 
     Route::get('jenis_izin', [JenisIzinController::class,'index'])->name('jenis_izin.index');
     Route::get('jenis_izin/create', [JenisIzinController::class,'create'])->name('jenis_izin.create');
@@ -98,6 +102,7 @@ Route::middleware(['throwSession'])->group(function () {
     Route::get('sppd/delete/{id}', [SPPDController::class,'delete'])->name('sppd.delete');
     Route::get('sppd/approval/{id}', [SPPDController::class,'approval'])->name('sppd.approval');
     Route::get('sppd/export', [SPPDController::class,'export'])->name('sppd.export');
+    Route::get('sppd/{type}', [SPPDController::class,'index'])->name('sppd.index2');
 
     Route::get('jenis_sppd', [JenisSPPDController::class,'index'])->name('jenis_sppd.index');
     Route::get('jenis_sppd/create', [JenisSPPDController::class,'create'])->name('jenis_sppd.create');

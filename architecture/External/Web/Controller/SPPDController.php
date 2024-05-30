@@ -29,8 +29,6 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use Architecture\Shared\Facades\Utility;
 use Carbon\Carbon;
 
 class SPPDController extends Controller
@@ -40,8 +38,8 @@ class SPPDController extends Controller
         protected IQueryBus $queryBus
     ) {}
     
-    public function Index(){
-        return view('sppd.index');
+    public function Index($type=null){
+        return view('sppd.index',['type'=>$type]);
     }
 
     public function create(){
@@ -180,8 +178,8 @@ class SPPDController extends Controller
     public function export(Request $request){
         try {
             $id             = $request->has('id')? $request->query('id'):null;
-            $nidn           = $request->has('nidn')? $request->query('nidn'):null;
-            $nip            = $request->has('nip')? $request->query('nip'):null;
+            $nama           = $request->has('nama')? $request->query('nama'):null;
+            $type           = $request->has('type')? $request->query('type'):null;
             $jenis_sppd     = $request->has('jenis_sppd')? $request->query('jenis_sppd'):null;
             $status         = $request->has('status')? $request->query('status'):null;
             $tanggal_berangkat  = $request->has('tanggal_berangkat')? $request->query('tanggal_berangkat'):null;
@@ -191,22 +189,20 @@ class SPPDController extends Controller
             $file_name = "sppd";
             $sppd = SPPD::with(['SDM','Dosen','Pegawai','JenisSPPD','Anggota','Anggota.Dosen','Anggota.Pegawai']);
             
-            if(!is_null($nidn) && !is_null($nip)){
-                throw new Exception("harus salah satu antara nidn dan nip");
-            } else if(is_null($type_export)){
+            if(is_null($type_export)){
                 throw new Exception("belum pilih cetak sebagai apa");
             }
 
             if($id){
                 $sppd->where('id',$id);
             }
-            if($nidn){
-                $sppd->where('nidn',$nidn);
-                $file_name = $file_name."_$nidn";
+            if($type=="dosen"){
+                $sppd->where('nidn',$nama);
+                $file_name = $file_name."_$nama";
             }
-            if($nip){
-                $sppd->where('nip',$nip);
-                $file_name = $file_name."_$nip";
+            if($type=="tendik"){
+                $sppd->where('nip',$nama);
+                $file_name = $file_name."_$nama";
             }
             if($jenis_sppd){
                 $sppd->where('id_jenis_sppd',$jenis_sppd);
@@ -279,7 +275,7 @@ class SPPDController extends Controller
         } catch (Exception $e) {
             // throw $e;
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
-            return redirect()->route('sppd.index');
+            return empty($type)? redirect()->route('sppd.index'):redirect()->route('sppd.index2',['type'=>$type]);
         }
     }
 }

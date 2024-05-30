@@ -30,6 +30,8 @@ class DatatableSPPDController extends Controller
             return match(true){
                 in_array($level,["pegawai","dosen"])=>(object)[
                     "id"=>$item->GetId(),
+                    "nidn"=>$item->GetDosen()?->GetNIDN(),
+                    "nip"=>$item->GetPegawai()?->GetNIP(),
                     "jenis_sppd"=> $item->GetJenisSPPD()?->GetNama(),
                     "tanggal_berangkat"=> $item->GetTanggalBerangkat()->toFormat(FormatDate::LDFY),
                     "tanggal_kembali"=> $item->GetTanggalKembali()->toFormat(FormatDate::LDFY),
@@ -41,6 +43,8 @@ class DatatableSPPDController extends Controller
                 ],
                 default=>(object)[
                     "id"=>$item->GetId(),
+                    "nidn"=>$item->GetDosen()?->GetNIDN(),
+                    "nip"=>$item->GetPegawai()?->GetNIP(),
                     "jenis_sppd"=> $item->GetJenisSPPD()?->GetNama(),
                     "nama" => match(true){
                         !is_null($item->GetDosen()) && is_null($item->GetPegawai())=>$item->GetDosen()->GetNama(),
@@ -60,10 +64,10 @@ class DatatableSPPDController extends Controller
         
         return DataTables::of($listSPPD)
         ->addIndexColumn()
-        ->addColumn('action', function ($row) use($level){
+        ->addColumn('action', function ($row) use($level,$nidn,$nip){
             $render = '';
             if(in_array($level,['dosen','pegawai'])){
-                if(in_array($row->status, ['menunggu','tolak'])){
+                if(in_array($row->status, ['menunggu','tolak']) && (($row->nidn==$nidn && !empty($nidn)) || ($row->nip==$nip && !empty($nip))) ){
                     $render = '<div class="row">
                     <a href="'.route('sppd.edit',['id'=>$row->id]).'" class="col-6 btn btn-warning"><i class="bi bi-pencil-square"></i></a>
                     <a href="'.route('sppd.delete',['id'=>$row->id]).'" class="mx-2 col-6 btn btn-danger"><i class="bi bi-trash"></i></a>

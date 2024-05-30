@@ -17,11 +17,20 @@ trait Utility
     {
         return AlertNotif::show();
     }
-    public static function stateMenu($segment=[],Request $request)
+    public static function stateMenu($segment=[],Request $request,$step=0)
     {
         if(count($segment)==0) throw new Exception('invalid argument');
-
-        return in_array($request->segments()[0],$segment);
+        if($step>0){
+            $result = true;
+            for ($i=0; $i <= $step; $i++) { 
+                if(!in_array($request->segments()[$i],$segment)){
+                    $result = false;
+                    break;
+                }
+            }
+            return $result;
+        }
+        return in_array($request->segments()[$step],$segment);
     }
     public static function getName()
     {

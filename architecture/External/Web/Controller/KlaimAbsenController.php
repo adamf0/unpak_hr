@@ -13,13 +13,17 @@ use Architecture\Application\KlaimAbsen\Update\ApprovalKlaimAbsenCommand;
 use Architecture\Application\KlaimAbsen\Update\UpdateKlaimAbsenCommand;
 use Architecture\Domain\Creational\Creator;
 use Architecture\Domain\Entity\DosenReferensi;
+use Architecture\Domain\Entity\FolderX;
 use Architecture\Domain\Entity\PegawaiReferensi;
 use Architecture\Domain\Entity\PresensiReferensi;
 use Architecture\Domain\Enum\TypeNotif;
 use Architecture\Domain\RuleValidationRequest\KlaimAbsen\CreateKlaimAbsenRuleReq;
 use Architecture\Domain\RuleValidationRequest\KlaimAbsen\DeleteKlaimAbsenRuleReq;
 use Architecture\Domain\RuleValidationRequest\KlaimAbsen\UpdateKlaimAbsenRuleReq;
+use Architecture\External\Persistance\ORM\KlaimAbsen;
 use Architecture\External\Port\FileSystem;
+use Architecture\External\Port\PdfX;
+use Architecture\Shared\Creational\FileManager;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -33,8 +37,8 @@ class KlaimAbsenController extends Controller
         protected IQueryBus $queryBus
     ) {}
     
-    public function Index(){
-        return view('klaim_absen.index');
+    public function Index($type=null){
+        return view('klaim_absen.index',['type'=>$type]);
     }
 
     public function create(){
@@ -153,6 +157,69 @@ class KlaimAbsenController extends Controller
         } catch (Exception $e) {
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
             return redirect()->route('klaim_absen.index');
+        }
+    }
+    public function export(Request $request){
+        try {
+            $nama           = $request->has('nama')? $request->query('nama'):null;
+            $type           = $request->has('type')? $request->query('type'):null;
+            $status         = $request->has('status')? $request->query('status'):null;
+            $tanggal_mulai  = $request->has('tanggal_mulai')? $request->query('tanggal_mulai'):null;
+            $tanggal_akhir  = $request->has('tanggal_akhir')? $request->query('tanggal_akhir'):null;
+            $type_export    = $request->has('type_export')? $request->query('type_export'):null;
+
+            $file_name = "klaim_absen";
+            $klaim_absen = KlaimAbsen::with(['Presensi','Dosen','Pegawai']);
+
+            if(is_null($type_export)){
+                throw new Exception("belum pilih cetak sebagai apa");
+            }
+
+            if($type=="dosen"){
+                $klaim_absen->where('nidn',$nama);
+                $file_name = $file_name."_$nama";
+            }
+            if($type=="tendik"){
+                $klaim_absen->where('nip',$nama);
+                $file_name = $file_name."_$nama";
+            }
+            if($status){
+                $klaim_absen->where('status',$status);
+                $file_name = $file_name."_$status";
+            }
+            if($tanggal_mulai && is_null($tanggal_akhir)){
+                $klaim_absen->where('tanggal_mulai',$tanggal_mulai);
+                $file_name = $file_name."_$tanggal_mulai";
+            }
+            else if($tanggal_akhir && is_null($tanggal_mulai)){
+                $klaim_absen->where('tanggal_akhir',$tanggal_akhir);
+                $file_name = $file_name."_$tanggal_akhir";
+            } else if($tanggal_mulai && $tanggal_akhir){
+                $klaim_absen->whereBetween('tanggal_pengajuan', [$tanggal_mulai, $tanggal_akhir]);
+
+                $file_name = $file_name."_$tanggal_mulai-$tanggal_akhir";
+            }
+            $list_klaim_absen = $klaim_absen->get();
+            
+            if($type_export=="pdf"){
+                $file = PdfX::From(
+                    "template.export_klaim_absen", 
+                    [
+                        "list_klaim_absen"=>$list_klaim_absen
+                    ], 
+                    FolderX::FromPath(public_path('export/pdf')), 
+                    "$file_name.pdf"
+                );
+            } else{
+                throw new Exception("export type '$type_export' not implementation");
+            }
+    
+            return FileManager::StreamFile($file);
+
+        } catch (Exception $e) {
+            throw $e;
+            Session::flash(TypeNotif::Error->val(), $e->getMessage());
+            return empty($type)? redirect()->route('klaim_absen.index'):redirect()->route('klaim_absen.index2',['type'=>$type]);
         }
     }
 }

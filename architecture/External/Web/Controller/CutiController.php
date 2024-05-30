@@ -14,7 +14,6 @@ use Architecture\Application\Cuti\Update\ApprovalCutiCommand;
 use Architecture\Application\Cuti\Update\UpdateCutiCommand;
 use Architecture\Application\Izin\Count\CountIzinQuery;
 use Architecture\Domain\Creational\Creator;
-use Architecture\Domain\Entity\Dosen;
 use Architecture\Domain\Entity\DosenReferensi;
 use Architecture\Domain\Entity\FolderX;
 use Architecture\Domain\Entity\JenisCutiReferensi;
@@ -41,8 +40,8 @@ class CutiController extends Controller
         protected IQueryBus $queryBus
     ) {}
     
-    public function Index(){
-        return view('cuti.index');
+    public function Index($type=null){
+        return view('cuti.index',['type'=>$type]);
     }
 
     public function create(){
@@ -186,8 +185,8 @@ class CutiController extends Controller
     }
     public function export(Request $request){
         try {
-            $nidn           = $request->has('nidn')? $request->query('nidn'):null;
-            $nip            = $request->has('nip')? $request->query('nip'):null;
+            $nama           = $request->has('nama')? $request->query('nama'):null;
+            $type           = $request->has('type')? $request->query('type'):null;
             $jenis_cuti     = $request->has('jenis_cuti')? $request->query('jenis_cuti'):null;
             $status         = $request->has('status')? $request->query('status'):null;
             $tanggal_mulai  = $request->has('tanggal_mulai')? $request->query('tanggal_mulai'):null;
@@ -197,19 +196,17 @@ class CutiController extends Controller
             $file_name = "cuti";
             $cuti = Cuti::with(['JenisCuti','Dosen','Pegawai']);
 
-            if(!is_null($nidn) && !is_null($nip)){
-                throw new Exception("harus salah satu antara nidn dan nip");
-            } else if(is_null($type_export)){
+            if(is_null($type_export)){
                 throw new Exception("belum pilih cetak sebagai apa");
             }
 
-            if($nidn){
-                $cuti->where('nidn',$nidn);
-                $file_name = $file_name."_$nidn";
+            if($type=="dosen"){
+                $cuti->where('nidn',$nama);
+                $file_name = $file_name."_$nama";
             }
-            if($nip){
-                $cuti->where('nip',$nip);
-                $file_name = $file_name."_$nip";
+            if($type=="tendik"){
+                $cuti->where('nip',$nama);
+                $file_name = $file_name."_$nama";
             }
             if($jenis_cuti){
                 $cuti->where('id_jenis_cuti',$jenis_cuti);
@@ -252,7 +249,7 @@ class CutiController extends Controller
         } catch (Exception $e) {
             // throw $e;
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
-            return redirect()->route('cuti.index');
+            return empty($type)? redirect()->route('cuti.index'):redirect()->route('cuti.index2',['type'=>$type]);
         }
     }
 }

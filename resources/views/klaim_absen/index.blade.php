@@ -19,7 +19,36 @@
                 {{ Utility::showNotif() }}
             </div>
             <div class="col-12">
-                <a href="{{ route('klaim_absen.create') }}" class="btn btn-primary">Tambah</a>
+                @if (Utility::hasUser())
+                    <a href="{{ route('izin.create') }}" class="btn btn-primary">Tambah</a>
+                @else
+                    <div class="card">
+                        <div class="card-body row">
+                            @if (in_array($type,['dosen','tendik']))
+                            <div class="col-3">
+                                <x-input-select title="Nama" name="nama" class="nama"></x-input-select>
+                            </div>
+                            @endif
+                            <div class="col-3">
+                                <x-input-select title="Status" name="status" class="status"></x-input-select>
+                            </div>
+                            <div class="col-5">
+                                <x-input-text title="Tanggal Mulai" name="tanggal_mulai" class="tanggal_mulai" default=""/>
+                            </div>
+                            <div class="col-5">
+                                <x-input-text title="tanggal Akhir" name="tanggal_akhir" class="tanggal_akhir" default=""/>
+                            </div>
+                            <div class="col-2">
+                                <x-input-select title="Cetak Sebagai" name="type_export" class="type_export"></x-input-select>
+                            </div>
+                            <div class="col-12">
+                                <button class="btn btn-primary btn_cetak">Cetak</button>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            </div>
+            <div class="col-12">
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
@@ -71,6 +100,7 @@
             const nidn = `{{Session::get('nidn')}}`
             const nip = `{{Session::get('nip')}}`
             const level = `{{Session::get('levelActive')}}`
+            const type = `{{$type}}`
             const column = level == "pegawai" || level=="dosen"?
             [
                 {
@@ -251,6 +281,131 @@
                         table.ajax.reload();
                     }
                 });
+            });
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            let cetak_nama = null;
+            let cetak_jenis_izin = null;
+            let cetak_status = null;
+            let cetak_tanggal_mulai = null;
+            let cetak_tanggal_akhir = null;
+            let cetak_type_export = null;
+
+            const status = [
+                {
+                    "id":"semua",
+                    "text":"Semua",
+                },
+                {
+                    "id":"menunggu",
+                    "text":"Menunggu",
+                },
+                {
+                    "id":"tolak",
+                    "text":"Tolak",
+                },
+                {
+                    "id":"terima",
+                    "text":"Terima",
+                },
+            ];
+            const type_export = [
+                {
+                    "id":"pdf",
+                    "text":"PDF",
+                },
+                {
+                    "id":"xls",
+                    "text":"Excel",
+                },
+            ];
+            
+            @if ($type=="dosen")
+                load_dropdown('.nama', null, `{{ route('select2.Dosen.List') }}`, null, '-- Pilih Nama --');
+            @elseif($type=="tendik")
+                load_dropdown('.nama', null, `{{ route('select2.Pegawai.List') }}`, null, '-- Pilih Nama --');
+            @endif
+            load_dropdown('.jenis_izin', null, `{{ route('select2.JenisIzin.List') }}`, null, '-- Pilih Jenis izin --');
+            load_dropdown('.status', status, null, null, '-- Pilih Status --');
+            load_dropdown('.type_export', type_export, null, null, '-- Pilih --');
+
+            $('.tanggal_mulai').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayHighlidht: true,
+                orientation: 'bottom',
+                datesDisabled:[],
+                daysOfWeekDisabled:[],
+                }).on('show', function(e) {
+                // Mengatur posisi popover Datepicker ke center (middle).
+                var $input = $(e.currentTarget);
+                var $datepicker = $input.data('datepicker').picker;
+                var $parent = $input.parent();
+                var bottom = ($parent.offset().bottom - $datepicker.outerHeight()) + $parent.outerHeight();
+                $datepicker.css({
+                    bottom: bottom,
+                    left: $parent.offset().left
+                });
+            });
+            $('.tanggal_akhir').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayHighlidht: true,
+                orientation: 'bottom',
+                datesDisabled:[],
+                daysOfWeekDisabled:[],
+                startDate:"{{old('tanggal_mulai')}}",
+                }).on('show', function(e) {
+                // Mengatur posisi popover Datepicker ke center (middle).
+                var $input = $(e.currentTarget);
+                var $datepicker = $input.data('datepicker').picker;
+                var $parent = $input.parent();
+                var bottom = ($parent.offset().bottom - $datepicker.outerHeight()) + $parent.outerHeight();
+                $datepicker.css({
+                    bottom: bottom,
+                    left: $parent.offset().left
+                });
+            });
+
+            $('.tanggal_mulai').change(function(e) {
+                const min = $(this).val()
+                cetak_tanggal_mulai = min
+                $('.tanggal_akhir').datepicker('setStartDate', min);
+            });
+            $('.tanggal_akhir').change(function(e) {
+                const min = $(this).val()
+                cetak_tanggal_akhir = min
+            });
+            $('.jenis_izin').on('select2:select', function(e) {
+                // var data = e.params.data;
+                cetak_jenis_izin = $(this).val()
+            });
+            $('.status').on('select2:select', function(e) {
+                // var data = e.params.data;
+                cetak_status = $(this).val()
+            });
+            $('.type_export').on('select2:select', function(e) {
+                // var data = e.params.data;
+                cetak_type_export = $(this).val()
+            });
+            $('.nama').on('change', function(e) {
+                cetak_nama = $(this).val()
+            });
+            $('.btn_cetak').click(function(e){
+                e.preventDefault();
+
+                const data = {
+                    _token: '{{ csrf_token() }}',
+                    nama : cetak_nama,
+                    type : type,
+                    status : cetak_status,
+                    tanggal_mulai : cetak_tanggal_mulai,
+                    tanggal_akhir : cetak_tanggal_akhir,
+                    type_export : cetak_type_export
+                };
+
+                console.log(data)
+                $.redirect(`{{url('klaim_absen/export')}}`,data,"GET","_blank")
             });
 
         });

@@ -16,19 +16,18 @@
             <td>Catatan</td>
         </tr>
         @foreach($list_izin as $key=> $izin)
+        @php
+            $nama = match(true){
+                !empty($izin->Dosen) && empty($izin->Pegawai) => $izin->Dosen?->nama_dosen."<br>".$izin->nidn,
+                empty($izin->Dosen) && !empty($izin->Pegawai) => $izin->Pegawai?->nama."<br>".$izin->nip,
+                default=>"NA"
+            };
+            $tanggal_pengajuan = empty($cuti->tanggal_pengajuan)? 'NA':Carbon::parse($cuti->tanggal_pengajuan)->setTimezone('Asia/Jakarta')->format("d F Y")
+        @endphp
         <tr>
             <td>{{$key+1}}</td>
-            <td>
-                @php
-                    $nama = match(true){
-                        !empty($izin->Dosen) && empty($izin->Pegawai) => $izin->Dosen?->nama."<br>".$izin->nidn,
-                        empty($izin->Dosen) && !empty($izin->Pegawai) => $izin->Pegawai?->nama."<br>".$izin->nip,
-                        default=>"NA"
-                    };
-                    echo $nama;
-                @endphp
-            </td>
-            <td>{{Carbon::parse($izin->tanggal_pengajuan)->setTimezone('Asia/Jakarta')->format("d F Y")}}</td>
+            <td>{!! $nama !!}/td>
+            <td>{{$tanggal_pengajuan}}</td>
             <td>{{$izin->JenisIzin?->nama}}</td>
             <td>{{$izin->tujuan}}</td>
             <td>{{$izin->catatan}}</td>

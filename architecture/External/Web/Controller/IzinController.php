@@ -40,8 +40,8 @@ class IzinController extends Controller
         protected IQueryBus $queryBus
     ) {}
     
-    public function Index(){
-        return view('izin.index');
+    public function Index($type=null){
+        return view('izin.index',['type'=>$type]);
     }
 
     public function create(){
@@ -180,8 +180,8 @@ class IzinController extends Controller
     }
     public function export(Request $request){
         try {
-            $nidn           = $request->has('nidn')? $request->query('nidn'):null;
-            $nip            = $request->has('nip')? $request->query('nip'):null;
+            $nama           = $request->has('nama')? $request->query('nama'):null;
+            $type           = $request->has('type')? $request->query('type'):null;
             $jenis_izin     = $request->has('jenis_izin')? $request->query('jenis_izin'):null;
             $status         = $request->has('status')? $request->query('status'):null;
             $tanggal_mulai  = $request->has('tanggal_mulai')? $request->query('tanggal_mulai'):null;
@@ -191,19 +191,17 @@ class IzinController extends Controller
             $file_name = "izin";
             $izin = Izin::with(['JenisIzin','Dosen','Pegawai']);
 
-            if(!is_null($nidn) && !is_null($nip)){
-                throw new Exception("harus salah satu antara nidn dan nip");
-            } else if(is_null($type_export)){
+            if(is_null($type_export)){
                 throw new Exception("belum pilih cetak sebagai apa");
             }
 
-            if($nidn){
-                $izin->where('nidn',$nidn);
-                $file_name = $file_name."_$nidn";
+            if($type=="dosen"){
+                $izin->where('nidn',$nama);
+                $file_name = $file_name."_$nama";
             }
-            if($nip){
-                $izin->where('nip',$nip);
-                $file_name = $file_name."_$nip";
+            if($type=="tendik"){
+                $izin->where('nip',$nama);
+                $file_name = $file_name."_$nama";
             }
             if($jenis_izin){
                 $izin->where('id_jenis_izin',$jenis_izin);
@@ -245,7 +243,7 @@ class IzinController extends Controller
         } catch (Exception $e) {
             // throw $e;
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
-            return redirect()->route('izin.index');
+            return empty($type)? redirect()->route('izin.index'):redirect()->route('izin.index2',['type'=>$type]);
         }
     }
 }

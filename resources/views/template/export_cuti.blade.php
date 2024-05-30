@@ -17,19 +17,19 @@
             <td>Catatan</td>
         </tr>
         @foreach($list_cuti as $key=> $cuti)
+        @php
+            $nama = match(true){
+                !empty($cuti->Dosen) && empty($cuti->Pegawai) => $cuti->Dosen?->nama_dosen."<br>".$cuti->nidn,
+                empty($cuti->Dosen) && !empty($cuti->Pegawai) => $cuti->Pegawai?->nama."<br>".$cuti->nip,
+                default=>"NA"
+            };
+            $tanggal_mulai = empty($cuti->tanggal_mulai)? 'NA':Carbon::parse($cuti->tanggal_mulai)->setTimezone('Asia/Jakarta')->format("d F Y")
+            $tanggal_akhir = empty($cuti->tanggal_akhir)? 'NA':Carbon::parse($cuti->tanggal_akhir)->setTimezone('Asia/Jakarta')->format("d F Y"); 
+        @endphp
         <tr>
             <td>{{$key+1}}</td>
-            <td>
-                @php
-                    $nama = match(true){
-                        !empty($cuti->Dosen) && empty($cuti->Pegawai) => $cuti->Dosen?->nama_dosen."<br>".$cuti->nidn,
-                        empty($cuti->Dosen) && !empty($cuti->Pegawai) => $cuti->Pegawai?->nama."<br>".$cuti->nip,
-                        default=>"NA"
-                    };
-                    echo $nama;
-                @endphp
-            </td>
-            <td>{{Carbon::parse($cuti->tanggal_mulai)->setTimezone('Asia/Jakarta')->format("d F Y")}} - {{Carbon::parse($cuti->tanggal_akhir)->setTimezone('Asia/Jakarta')->format("d F Y")}}</td>
+            <td>{!! $nama !!}/td>
+            <td>{{$tanggal_mulai}} - {{$tanggal_akhir}}</td>
             <td>{{$cuti->lama_cuti}} hari</td>
             <td>{{$cuti->JenisCuti?->nama}}</td>
             <td>{{$cuti->tujuan}}</td>

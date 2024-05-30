@@ -24,12 +24,11 @@
                 @else
                     <div class="card">
                         <div class="card-body row">
+                            @if (in_array($type,['dosen','tendik']))
                             <div class="col-3">
-                                <x-input-text title="NIDN" name="nidn" class="nidn" default=""/>
+                                <x-input-select title="Nama" name="nama" class="nama"></x-input-select>
                             </div>
-                            <div class="col-3">
-                                <x-input-text title="NIP" name="nip" class="nip" default=""/>
-                            </div>
+                            @endif
                             <div class="col-3">
                                 <x-input-select title="Jenis SPPD" name="jenis_sppd" class="jenis_sppd"></x-input-select>
                             </div>
@@ -105,6 +104,7 @@
             const nidn = `{{Session::get('nidn')}}`
             const nip = `{{Session::get('nip')}}`
             const level = `{{Session::get('levelActive')}}`
+            const type = `{{$type}}`
             const column = level=="pegawai" || level=="dosen"? 
             [
                 {
@@ -325,8 +325,7 @@
             });
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            let cetak_nidn = null;
-            let cetak_nip = null;
+            let cetak_nama = null;
             let cetak_jenis_sppd = null;
             let cetak_status = null;
             let cetak_tanggal_berangkat = null;
@@ -361,6 +360,12 @@
                     "text":"Excel",
                 },
             ];
+
+            @if ($type=="dosen")
+                load_dropdown('.nama', null, `{{ route('select2.Dosen.List') }}`, null, '-- Pilih Nama --');
+            @elseif($type=="tendik")
+                load_dropdown('.nama', null, `{{ route('select2.Pegawai.List') }}`, null, '-- Pilih Nama --');
+            @endif
             load_dropdown('.jenis_sppd', null, `{{ route('select2.JenisSPPD.List') }}`, null, '-- Pilih Jenis sppd --');
             load_dropdown('.status', status, null, null, '-- Pilih Status --');
             load_dropdown('.type_export', type_export, null, null, '-- Pilih --');
@@ -424,19 +429,16 @@
                 // var data = e.params.data;
                 cetak_type_export = $(this).val()
             });
-            $('.nidn').on('change', function(e) {
-                cetak_nidn = $(this).val()
-            });
-            $('.nip').on('change', function(e) {
-                cetak_nip = $(this).val()
+            $('.nama').on('change', function(e) {
+                cetak_nama = $(this).val()
             });
             $('.btn_cetak').click(function(e){
                 e.preventDefault();
 
                 const data = {
                     _token: '{{ csrf_token() }}',
-                    nidn : cetak_nidn,
-                    nip : cetak_nip,
+                    nama : cetak_nama,
+                    type : type,
                     jenis_sppd : cetak_jenis_sppd,
                     status : cetak_status,
                     tanggal_berangkat : cetak_tanggal_berangkat,

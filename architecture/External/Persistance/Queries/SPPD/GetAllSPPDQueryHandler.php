@@ -24,17 +24,24 @@ class GetAllSPPDQueryHandler extends Query
 
     public function handle(GetAllSPPDQuery $query)
     {
-        $datas = SPPDModel::with(['JenisSPPD','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai']);
-        if(!is_null($query->GetNIDN())){
-            $datas = $datas->where('nidn',$query->GetNIDN());
-        }
-        if(!is_null($query->GetNIP())){
-            $datas = $datas->where('nip',$query->GetNIP());
-        }
+        $datas = SPPDModel::with(['JenisSPPD','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','Anggota','Anggota.Dosen','Anggota.Dosen.Fakultas','Anggota.Dosen.Prodi','Anggota.Pegawai']);
+        // if(!is_null($query->GetNIDN())){
+        //     $datas = $datas->where('nidn',$query->GetNIDN());
+        // }
+        // if(!is_null($query->GetNIP())){
+        //     $datas = $datas->where('nip',$query->GetNIP());
+        // }
         if(!empty($query->GetTahun())){
             $datas = $datas->where(DB::raw('YEAR(tanggal_berangkat)'),'>=',$query->GetTahun())->where(DB::raw('YEAR(tanggal_kembali)'),'<=',$query->GetTahun());
         }
         $datas = $datas->orderBy('id', 'DESC')->get();
+        if(!is_null($query->GetNIDN())){
+            $datas = $datas->filter( fn($item)=>$item->nidn==$query->GetNIDN() || ($item->Anggota??collect([]))->filter(fn($itemAnggota)=>$itemAnggota?->Dosen?->NIDN==$query->GetNIDN())->count()>0 );
+        }
+        if(!is_null($query->GetNIP())){
+            $datas = $datas->filter( fn($item)=>$item->nip==$query->GetNIP() || ($item->Anggota??collect([]))->reject(fn($itemAnggota)=>$itemAnggota->Pegawai?->nip==$query->GetNIP())->count()>0 );
+        }
+        $datas = $datas->values();
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 
