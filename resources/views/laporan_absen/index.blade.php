@@ -93,7 +93,9 @@
                         name: 'pengguna',
                         render: function ( data, type, row, meta ) {
                             console.log(data)
-                            return data?.nama_dosen??data?.nama??"NA"
+                            const nama = data?.nama_dosen??data?.nama??"NA"
+                            const kode = data?.NIDN??data?.nip??"NA"
+                            return `${nama} - ${nip}`
                         }
                     },
                     @foreach ($list_tanggal as $tanggal)
