@@ -67,7 +67,7 @@ class GetAllLaporanAbsenQueryHandler extends Query
             $list_data[$kode][$tanggal] = $this->laporan->where('tanggal',$tanggal)->map(function($item){
                 $item->info = json_decode($item->info,true);
                 return $item;
-            })->toArray();
+            })->values()->toArray();
             return $this->gen_data_tbl($i_p_curr,$i_p_curr,$i_t+1,$list_data);
         } else if($i_p_curr<count($this->list_pengguna)){
             return $this->gen_data_tbl($i_p_curr,$i_p_curr+1,0,$list_data);
