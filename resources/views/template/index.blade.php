@@ -248,7 +248,11 @@
       @endif
 
       @if (Utility::hasSDM())
+        <li class="nav-heading">Data Master</li>
         <x-sidebar-item-menu title="Master Kalendar" icon="bi bi-menu-button-wide" link="{{route('master_kalendar.index')}}" :active="Utility::stateMenu(['master_kalendar'],request())" />
+
+        <li class="nav-heading">Laporan & Monitoring</li>
+        <x-sidebar-item-menu title="Monitoring" icon="bi bi-menu-button-wide" link="{{route('monitoring.index')}}" :active="Utility::stateMenu(['monitoring'],request())" />
         <x-sidebar-item-menu title="Laporan Absen" icon="bi bi-menu-button-wide" link="{{route('laporan_absen.index')}}" :active="Utility::stateMenu(['laporan_absen'],request())" />
       @endif
       

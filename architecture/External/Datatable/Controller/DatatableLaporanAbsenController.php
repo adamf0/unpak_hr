@@ -5,7 +5,8 @@ namespace Architecture\External\Datatable\Controller;
 use App\Http\Controllers\Controller;
 use Architecture\Application\Abstractions\Messaging\ICommandBus;
 use Architecture\Application\Abstractions\Messaging\IQueryBus;
-use Architecture\Application\JenisIzin\List\GetAllJenisIzinQuery;
+use Architecture\Application\LaporanAbsen\List\GetAllLaporanAbsenQuery;
+use Architecture\Shared\TypeData;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,35 +21,10 @@ class DatatableLaporanAbsenController extends Controller
     
     public function index(Request $request){
         ini_set('memory_limit', '-1');
-        ini_set('max_execution_time','-1');
-        
-        $start = Carbon::now()->setTimezone('Asia/Jakarta')->startOfMonth();
-        $end = Carbon::now()->setTimezone('Asia/Jakarta')->endOfMonth();
-        $list_tanggal = [];
-        $listtgl = [];
-        for ($date = Carbon::now()->setTimezone('Asia/Jakarta')->startOfMonth(); $date->lte($end); $date->addDay()) {
-            $list_tanggal[] = $date->copy()->format('Y-m-d');
-            $listtgl[] = $date->copy()->format('d');
-        }
-        $list_data = DB::table('laporan_merge_absen_izin_cuti')->whereBetween('tanggal',[$start->format('Y-m-d'),$end->format('Y-m-d')])->orderBy('tanggal')->get();
-        
-        $groupedData = collect($list_data)->groupBy(function ($item) {
-            return $item->tanggal . $item->nidn . $item->nip;
-        });
-        $list_data = $groupedData->map(function ($group) {
-            return $group->reduce(function ($carry, $item) {
-                $info = json_decode($item->info, true);
-                $carry['info'][] = $info;
-                return $carry;
-            }, [
-                'nidn' => $group->first()->nidn,
-                'nip' => $group->first()->nip,
-                'tanggal' => $group->first()->tanggal,
-                'info' => []
-            ]);
-        })->values();
+        ini_set('max_execution_time','-1');        
+        $laporan = $this->queryBus->ask(new GetAllLaporanAbsenQuery(null,null,null,null,TypeData::Default));
 
-        $table = DataTables::of($list_data)
+        $table = DataTables::of(isset($laporan["list_data"])? $laporan["list_data"]:[])
         ->addIndexColumn()
         ->make(true);
 

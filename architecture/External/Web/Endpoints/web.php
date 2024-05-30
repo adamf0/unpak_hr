@@ -10,6 +10,7 @@ use Architecture\External\Web\Controller\JenisSPPDController;
 use Architecture\External\Web\Controller\KlaimAbsenController;
 use Architecture\External\Web\Controller\LaporanAbsenController;
 use Architecture\External\Web\Controller\MasterKalendarController;
+use Architecture\External\Web\Controller\MonitoringController;
 use Architecture\External\Web\Controller\PenggunaController;
 use Architecture\External\Web\Controller\SPPDController;
 use Architecture\External\Web\Controller\VideoKegiatanController;
@@ -110,6 +111,8 @@ Route::middleware(['throwSession'])->group(function () {
     Route::get('jenis_sppd/edit/{id}', [JenisSPPDController::class,'edit'])->name('jenis_sppd.edit');
     Route::post('jenis_sppd/update', [JenisSPPDController::class,'update'])->name('jenis_sppd.update');
     Route::get('jenis_sppd/delete/{id}', [JenisSPPDController::class,'delete'])->name('jenis_sppd.delete');
+
+    Route::get('monitoring', [MonitoringController::class,'index'])->name('monitoring.index');
 
     Route::get('laporan_absen', [LaporanAbsenController::class,'index'])->name('laporan_absen.index');
     Route::get('laporan_absen/export', [LaporanAbsenController::class,'export'])->name('laporan_absen.export');

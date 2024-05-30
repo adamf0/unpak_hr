@@ -9,8 +9,8 @@ class Presensi extends BaseEntity{
     
     public function __construct(
         $id=null,
-        $nidn=null,
-        $nip=null,
+        ?Dosen $dosen=null,
+        ?Pegawai $pegawai=null,
         ?Date $tanggal=null,
         ?Date $absen_masuk=null,
         ?Date $absen_keluar=null,
@@ -19,8 +19,8 @@ class Presensi extends BaseEntity{
         $otomatis_keluar=null
     ){
         $this->id = $id;
-        $this->nidn = $nidn;
-        $this->nip = $nip;
+        $this->dosen = $dosen;
+        $this->pegawai = $pegawai;
         $this->tanggal = $tanggal;
         $this->absen_masuk = $absen_masuk;
         $this->absen_keluar = $absen_keluar;

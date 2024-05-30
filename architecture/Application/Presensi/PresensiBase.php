@@ -2,12 +2,14 @@
 
 namespace Architecture\Application\Presensi;
 
+use Architecture\Domain\Entity\Dosen;
+use Architecture\Domain\Entity\Pegawai;
 use Architecture\Domain\ValueObject\Date;
 
 trait PresensiBase 
 {
-    public $nidn=null;
-    public $nip=null;
+    public ?Dosen $dosen=null;
+    public ?Pegawai $pegawai=null;
     public ?Date $tanggal=null;
     public ?Date $absen_masuk=null;
     public ?Date $absen_keluar=null;
@@ -15,11 +17,11 @@ trait PresensiBase
     public $catatan_pulang=null;
     public $otomatis_keluar=null;
 
-    public function GetNIDN(){
-        return $this->nidn;
+    public function GetDosen(){
+        return $this->dosen;
     }
-    public function GetNIP(){
-        return $this->nip;
+    public function GetPegawai(){
+        return $this->pegawai;
     }
     public function GetTanggal(){
         return $this->tanggal;

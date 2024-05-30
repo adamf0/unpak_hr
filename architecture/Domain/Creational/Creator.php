@@ -141,8 +141,8 @@ class Creator{
     public static function buildPresensi(IPresensi $factory){
         return new Presensi(
             $factory->GetId(),
-            $factory->GetNIDN(),
-            $factory->GetNIP(),
+            $factory->GetDosen(),
+            $factory->GetPegawai(),
             $factory->GetTanggal(),
             $factory->GetAbsenMasuk(),
             $factory->GetAbsenKeluar(),

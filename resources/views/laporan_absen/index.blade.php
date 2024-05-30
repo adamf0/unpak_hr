@@ -59,7 +59,7 @@
                                         <th>NIDN</th>
                                         <th>NIP</th>
                                         @foreach ($list_tanggal as $tanggal)
-                                        <th>{{Carbon::parse($tanggal)->setTimezone('Asia/Jakarta')->format('d')}}</th>
+                                        <th>{{Carbon::parse($tanggal)->setTimezone('Asia/Jakarta')->format('d F')}}</th>
                                         @endforeach
                                     </tr>
                                 </thead>
@@ -94,7 +94,7 @@
                     @foreach ($list_tanggal as $tanggal)
                     { 
                         data: null, 
-                        name: `{{ Carbon::parse($tanggal)->setTimezone('Asia/Jakarta')->format('d') }}`,
+                        name: `{{ $tanggal }}`,
                         render: function ( data, type, row, meta ) {
                             var aturan_jam = "08:00 - 15:00";
                             var tgl = moment('{{$tanggal}}');

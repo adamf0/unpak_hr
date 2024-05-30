@@ -161,7 +161,6 @@ return [
         /*
          * Package Service Providers...
          */
-        Architecture\External\Config\Provider\VideoKegiatanServiceProvider::class,
         Architecture\External\Config\Provider\JenisCutiServiceProvider::class,
         Architecture\External\Config\Provider\CutiServiceProvider::class,
         Architecture\External\Config\Provider\JenisIzinServiceProvider::class,

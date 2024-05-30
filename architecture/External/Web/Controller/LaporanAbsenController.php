@@ -5,11 +5,12 @@ namespace Architecture\External\Web\Controller;
 use App\Http\Controllers\Controller;
 use Architecture\Application\Abstractions\Messaging\ICommandBus;
 use Architecture\Application\Abstractions\Messaging\IQueryBus;
+use Architecture\Application\LaporanAbsen\List\GetAllLaporanAbsenQuery;
 use Architecture\Domain\Entity\FolderX;
 use Architecture\Domain\Enum\TypeNotif;
-use Architecture\External\Persistance\ORM\Izin;
 use Architecture\External\Port\PdfX;
 use Architecture\Shared\Creational\FileManager;
+use Architecture\Shared\TypeData;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -25,43 +26,22 @@ class LaporanAbsenController extends Controller
     
     public function Index(){
         ini_set('memory_limit', '-1');
-        $start = Carbon::now()->setTimezone('Asia/Jakarta')->startOfMonth();
-        $end = Carbon::now()->setTimezone('Asia/Jakarta')->endOfMonth();
+        $start = Carbon::now()->startOfMonth();
+        $end = Carbon::now()->endOfMonth();
         $list_tanggal = [];
-        for ($date = Carbon::now()->setTimezone('Asia/Jakarta')->startOfMonth(); $date->lte($end); $date->addDay()) {
+        for ($date = Carbon::now()->startOfMonth(); $date->lte($end); $date->addDay()) {
             $list_tanggal[] = $date->copy()->format('Y-m-d');
         }
-        $list_data = DB::table('laporan_merge_absen_izin_cuti')->whereBetween('tanggal',[$start->format('Y-m-d'),$end->format('Y-m-d')])->orderBy('tanggal')->get();
-        
-        $groupedData = collect($list_data)->groupBy(function ($item) {
-            return $item->tanggal . $item->nidn . $item->nip;
-        });
-        $list_data = $groupedData->map(function ($group) {
-            return $group->reduce(function ($carry, $item) {
-                $info = json_decode($item->info, true);
-                $carry['info'][] = $info;
-                return $carry;
-            }, [
-                'nidn' => $group->first()->nidn,
-                'nip' => $group->first()->nip,
-                'tanggal' => $group->first()->tanggal,
-                'info' => []
-            ]);
-        })->values();
-
-        return view('laporan_absen.index',['list_data'=>$list_data,'list_tanggal'=>$list_tanggal,'start'=>$start->format('d F Y'),'end'=>$end->format('d F Y')]);
+        return view('laporan_absen.index',['list_tanggal'=>$list_tanggal,'start'=>$start->format('d F Y'),'end'=>$end->format('d F Y')]);
     }
 
 
     public function export(Request $request){
         try {
-            ini_set('memory_limit', '-1');
-            ini_set('max_execution_time','-1');
-            
             $nidn           = $request->has('nidn')? $request->query('nidn'):null;
             $nip            = $request->has('nip')? $request->query('nip'):null;
-            $tanggal_mulai  = $request->has('tanggal_mulai')? $request->query('tanggal_mulai'):Carbon::now()->setTimezone('Asia/Jakarta')->startOfMonth();
-            $tanggal_akhir  = $request->has('tanggal_akhir')? $request->query('tanggal_akhir'):Carbon::parse($tanggal_mulai)->endOfMonth()->format('Y-m-d');
+            $tanggal_mulai  = $request->has('tanggal_mulai')? $request->query('tanggal_mulai'):null;
+            $tanggal_akhir  = $request->has('tanggal_akhir')? $request->query('tanggal_akhir'):null;
             $type_export    = $request->has('type_export')? $request->query('type_export'):null;
 
             if(!is_null($nidn) && !is_null($nip)){
@@ -71,72 +51,26 @@ class LaporanAbsenController extends Controller
             }
 
             $file_name = "laporan_absen";
-            $laporan = DB::table('laporan_merge_absen_izin_cuti');
             if($nidn){
-                $laporan->where('nidn',$nidn);
                 $file_name = $file_name."_$nidn";
             }
             if($nip){
-                $laporan->where('nip',$nip);
                 $file_name = $file_name."_$nip";
             }
             if($tanggal_mulai && is_null($tanggal_akhir)){
-                $laporan->where('tanggal',$tanggal_mulai);
                 $file_name = $file_name."_$tanggal_mulai";
             }
             else if($tanggal_akhir && is_null($tanggal_mulai)){
-                $laporan->where('tanggal',$tanggal_akhir);
                 $file_name = $file_name."_$tanggal_akhir";
             } else if($tanggal_mulai && $tanggal_akhir){
-                $laporan->whereBetween('tanggal', [$tanggal_mulai, $tanggal_akhir]);
-
                 $file_name = $file_name."_$tanggal_mulai-$tanggal_akhir";
             }
-            $list_data = $laporan->limit(50)->get(); //masalah
-            
-            $start = is_null($tanggal_mulai)? Carbon::parse($tanggal_mulai)->setTimezone('Asia/Jakarta')->startOfMonth():Carbon::parse($tanggal_mulai)->setTimezone('Asia/Jakarta');
-            $end = is_null($tanggal_akhir)? Carbon::parse($tanggal_mulai)->setTimezone('Asia/Jakarta')->endOfMonth():Carbon::parse($tanggal_akhir)->setTimezone('Asia/Jakarta');
-            $list_tanggal = [];
-            for ($date = (is_null($tanggal_mulai)? Carbon::parse($tanggal_mulai)->setTimezone('Asia/Jakarta')->startOfMonth():Carbon::parse($tanggal_mulai)->setTimezone('Asia/Jakarta')); $date->lte($end); $date->addDay()) {
-                $list_tanggal[] = $date->copy()->format('Y-m-d');
-            }            
-            $groupedData = collect($list_data)->groupBy(function ($item) {
-                return $item->nidn . $item->nip;
-            });
-            
-            $list_data = $groupedData->map(function ($group) {
-                $data = collect([
-                    'nidn' => $group->first()->nidn,
-                    'nip' => $group->first()->nip,
-                    'list_tanggal' => collect()
-                ]);
-            
-                $tanggalGrouped = $group->groupBy('tanggal');
-            
-                $tanggalGrouped->each(function ($items, $tanggal) use ($data) {
-                    $infoArray = $items->map(function ($item) {
-                        return json_decode($item->info, true);
-                    });
-            
-                    $data['list_tanggal']->push([
-                        'tanggal' => $tanggal,
-                        'info' => $infoArray
-                    ]);
-                });
-            
-                return $data;
-            })->values();
-            // dd($list_data);
+            $laporan = $this->queryBus->ask(new GetAllLaporanAbsenQuery($nidn,$nip,$tanggal_mulai,$tanggal_akhir,TypeData::Default));
 
             if($type_export=="pdf"){
                 $file = PdfX::From(
                     "template.export_absen", 
-                    [
-                        'list_data'=>$list_data,
-                        'list_tanggal'=>$list_tanggal,
-                        'start'=>$start->format('d F Y'),
-                        'end'=>$end->format('d F Y')
-                    ], 
+                    $laporan, 
                     FolderX::FromPath(public_path('export/pdf')), 
                     "$file_name.pdf",
                     true

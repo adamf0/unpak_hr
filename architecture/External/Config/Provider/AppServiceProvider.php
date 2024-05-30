@@ -12,10 +12,12 @@ use Architecture\Application\Auth\LogOut\LogOutCommand;
 use Architecture\Application\Auth\LogOut\LogOutCommandHandler;
 use Architecture\Application\Dosen\GetAllDosenQuery;
 use Architecture\Application\Dosen\GetInfoDosenQuery;
+use Architecture\Application\LaporanAbsen\List\GetAllLaporanAbsenQuery;
 use Architecture\Application\Pegawai\FirstData\GetInfoPegawaiQuery;
 use Architecture\Application\Pegawai\List\GetAllPegawaiQuery;
 use Architecture\External\Persistance\Queries\Dosen\GetAllDosenQueryHandler;
 use Architecture\External\Persistance\Queries\Dosen\GetInfoDosenQueryHandler;
+use Architecture\External\Persistance\Queries\LaporanAbsen\GetAllLaporanAbsenQueryHandler;
 use Architecture\External\Persistance\Queries\Pegawai\GetAllPegawaiQueryHandler;
 use Architecture\External\Persistance\Queries\Pegawai\GetInfoPegawaiQueryHandler;
 use Illuminate\Support\ServiceProvider;
@@ -50,6 +52,8 @@ class AppServiceProvider extends ServiceProvider
             GetInfoDosenQuery::class => GetInfoDosenQueryHandler::class,
             GetInfoPegawaiQuery::class => GetInfoPegawaiQueryHandler::class,
             GetAllPegawaiQuery::class => GetAllPegawaiQueryHandler::class,
+
+            GetAllLaporanAbsenQuery::class => GetAllLaporanAbsenQueryHandler::class,
         ]);
 
         if(env('DEPLOY','dev')=='prod'){

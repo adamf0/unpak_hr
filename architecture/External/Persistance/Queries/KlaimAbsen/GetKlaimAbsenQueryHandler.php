@@ -19,35 +19,52 @@ class GetKlaimAbsenQueryHandler extends Query
 {
     public function __construct() {}
 
+    function getDosen($source){
+        return !is_null($source->Dosen)? Creator::buildDosen(DosenEntitas::make(
+            $source->Dosen?->NIDN,
+            $source->Dosen?->nama_dosen,
+            !is_null($source->Dosen->Fakultas)? Creator::buildFakultas(FakultasEntitas::make(
+                $source->Dosen?->Fakultas?->kode_fakultas,
+                $source->Dosen?->Fakultas?->nama_fakultas,
+            )):null,
+            !is_null($source->Prodi)? Creator::buildProdi(ProdiEntitas::make(
+                $source->Prodi?->kode_prodi,
+                $source->Prodi?->nama_prodi,
+            )):null,
+        )):null;
+    }
+    function getPegawai($source){
+        return !is_null($source->Pegawai)? Creator::buildPegawai(PegawaiEntitas::make(
+            $source->Pegawai?->nip,
+            $source->Pegawai?->nama,
+            $source->Pegawai?->unit,
+        )):null;
+    }
+
     public function handle(GetKlaimAbsenQuery $query)
     {
-        $data = KlaimAbsenModel::with(['Presensi','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai'])->where('id',$query->GetId())->first();
+        $data = KlaimAbsenModel::with([
+            'Presensi',
+            'Presensi.Dosen',
+            'Presensi.Dosen.Fakultas',
+            'Presensi.Dosen.Prodi',
+            'Presensi.Pegawai',
+            'Dosen',
+            'Dosen.Fakultas',
+            'Dosen.Prodi',
+            'Pegawai'
+        ])->where('id',$query->GetId())->first();
 
         if($query->getOption()==TypeData::Default) return $data;
 
         return Creator::buildKlaimAbsen(KlaimAbsenEntitas::make(
             $data->id,
-            !is_null($data->Dosen)? Creator::buildDosen(DosenEntitas::make(
-                $data->Dosen?->NIDN,
-                $data->Dosen?->nama_dosen,
-                !is_null($data->Dosen->Fakultas)? Creator::buildFakultas(FakultasEntitas::make(
-                    $data->Dosen?->Fakultas?->kode_fakultas,
-                    $data->Dosen?->Fakultas?->nama_fakultas,
-                )):null,
-                !is_null($data->Prodi)? Creator::buildProdi(ProdiEntitas::make(
-                    $data->Prodi?->kode_prodi,
-                    $data->Prodi?->nama_prodi,
-                )):null,
-            )):null,
-            !is_null($data->Pegawai)? Creator::buildPegawai(PegawaiEntitas::make(
-                $data->Pegawai?->nip,
-                $data->Pegawai?->nama,
-                $data->Pegawai?->unit,
-            )):null,
+            $this->getDosen($data),
+            $this->getPegawai($data),
             !is_null($data->Presensi)? Creator::buildPresensi(PresensiEntitas::make(
                 $data->Presensi?->id,
-                $data->Presensi?->nidn,
-                $data->Presensi?->nip,
+                $this->getDosen($data->Presensi),
+                $this->getPegawai($data->Presensi),
                 New Date($data->Presensi?->tanggal),
                 $data->Presensi?->absen_masuk==null? null:new Date($data->Presensi?->absen_masuk),
                 $data->Presensi?->absen_keluar==null? null:new Date($data->Presensi?->absen_keluar),
