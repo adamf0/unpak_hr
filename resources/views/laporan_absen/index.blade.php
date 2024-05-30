@@ -56,8 +56,7 @@
                             <table id="tb" class="table table-striped text-center">
                                 <thead>
                                     <tr>
-                                        <th>NIDN</th>
-                                        <th>NIP</th>
+                                        <th>Nama</th>
                                         @foreach ($list_tanggal as $tanggal)
                                         <th>{{Carbon::parse($tanggal)->setTimezone('Asia/Jakarta')->format('d F')}}</th>
                                         @endforeach
@@ -89,11 +88,17 @@
                 serverSide: true,
                 ajax: '{{ route("datatable.LaporanAbsen.index") }}',
                 columns: [
-                    { data: 'nidn', name: 'nidn' },
-                    { data: 'nip', name: 'nip' },
+                    { 
+                        data: 'pengguna', 
+                        name: 'pengguna',
+                        render: function ( data, type, row, meta ) {
+                            console.log(data)
+                            return data?.nama_dosen??data?.nama??"NA"
+                        }
+                    },
                     @foreach ($list_tanggal as $tanggal)
                     { 
-                        data: null, 
+                        data: `{{ $tanggal }}`, 
                         name: `{{ $tanggal }}`,
                         render: function ( data, type, row, meta ) {
                             var aturan_jam = "08:00 - 15:00";
@@ -105,28 +110,25 @@
                             }
 
                             var keterangan = "";
-                            if ('{{$tanggal}}' === row['tanggal']) {
-                                row['info'].forEach(function(info) {
-                                    info.keterangan = info.keterangan || {};
-                                    if (info.type === "absen") {
-                                        if (!info.keterangan.masuk && !info.keterangan.keluar) {
-                                            keterangan = "<span class='badge bg-danger'>Tidak Masuk</span>";
-                                        } else if (info.keterangan.masuk && !info.keterangan.keluar) {
-                                            var masuk = moment(info.keterangan.masuk);
-                                            keterangan = "<span class='badge bg-success'>" + masuk.format('HH:mm') + "</span> - <span class='badge bg-danger'>Masih Masuk</span>";
-                                        } else {
-                                            var masuk = moment(info.keterangan.masuk);
-                                            var keluar = moment(info.keterangan.keluar);
-                                            keterangan = "<span class='badge bg-success'>" + masuk.format('HH:mm') + "</span> - <span class='badge bg-danger'>" + keluar.format('HH:mm') + "</span>";
-                                        }
-                                    } else if (info.type === "izin") {
-                                        keterangan = "<span class='badge bg-primary'>Izin</span>";
-                                    } else if (info.type === "cuti") {
-                                        keterangan = "<span class='badge bg-warning text-black'>Cuti</span>";
+                            data.forEach(function(d) {
+                                if (d.info?.type === "absen") {
+                                    if (!d.info?.keterangan?.masuk && !d.info?.keterangan?.keluar) {
+                                        keterangan = "<span class='badge bg-danger'>Tidak Masuk</span>";
+                                    } else if (d.info?.keterangan?.masuk && !d.info?.keterangan?.keluar) {
+                                        var masuk = moment(d.info?.keterangan?.masuk);
+                                        keterangan = "<span class='badge bg-success'>" + masuk.format('HH:mm') + "</span> - <span class='badge bg-danger'>Masih Masuk</span>";
+                                    } else {
+                                        var masuk = moment(d.info?.keterangan?.masuk);
+                                        var keluar = moment(d.info?.keterangan?.keluar);
+                                        keterangan = "<span class='badge bg-success'>" + masuk.format('HH:mm') + "</span> - <span class='badge bg-danger'>" + keluar.format('HH:mm') + "</span>";
                                     }
-                                });
-                            }
-
+                                } else if (d.info.type === "izin") {
+                                    keterangan = "<span class='badge bg-primary'>Izin</span>";
+                                } else if (d.info.type === "cuti") {
+                                    keterangan = "<span class='badge bg-warning text-black'>Cuti</span>";
+                                }
+                            })
+ 
                             return '<table>' +
                                 '<tr>' +
                                     '<td class="column_min">' + aturan_jam + '</td>' +

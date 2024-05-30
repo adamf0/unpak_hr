@@ -20,8 +20,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>NIDN</th>
-                            <th>NIP</th>
+                            <th>Nama</th>
                             @foreach ($list_tanggal as $tanggal)
                                 <th>{{ Carbon::parse($tanggal)->setTimezone('Asia/Jakarta')->format('d') }}</th>
                             @endforeach
@@ -29,10 +28,13 @@
                     </thead>
                     <tbody>
                         @foreach ($list_data as $data)
+                            @php
+                                $nama = $data['type']=="pegawai"? $data['pengguna']['nama']:$data['pengguna']['nama_dosen']; 
+                                $kode = $data['type']=="pegawai"? $data['pengguna']['nip']:$data['pengguna']['NIDN']; 
+                            @endphp
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $data['nidn'] }}</td>
-                                <td>{{ $data['nip'] }}</td>
+                                <td>{{$nama}} - {{$kode}}</td>
                                 @foreach ($list_tanggal as $tanggal)
                                     <td>
                                         <table>
@@ -50,38 +52,36 @@
                                                     {{ $aturan_jam }}
                                                 </td>
                                             </tr>
-                                            @foreach ($data['list_tanggal']->where('tanggal', $tanggal) as $objek)
-                                                @foreach ($objek['info'] as $info)
-                                                    @php
-                                                        $info = (object) $info;
-                                                        $info->keterangan = (object) $info->keterangan;
-                                                        $keterangan = "";
-                                                        switch ($info->type) {
-                                                            case 'absen':
-                                                                if (empty($info->keterangan->masuk) && empty($info->keterangan->keluar)) {
-                                                                    $keterangan = "<span class='badge bg-danger'>Tidak Masuk</span>";
-                                                                } elseif (!empty($info->keterangan->masuk) && empty($info->keterangan->keluar)) {
-                                                                    $masuk = Carbon::parse($info->keterangan->masuk)->setTimezone('Asia/Jakarta')->format('H:i');
-                                                                    $keterangan = "<span class='badge bg-success'>{$masuk}</span> - <span class='badge bg-danger'>Masih Masuk</span>";
-                                                                } else {
-                                                                    $masuk = Carbon::parse($info->keterangan->masuk)->setTimezone('Asia/Jakarta')->format('H:i');
-                                                                    $keluar = Carbon::parse($info->keterangan->keluar)->setTimezone('Asia/Jakarta')->format('H:i');
-                                                                    $keterangan = "<span class='badge bg-success'>{$masuk}</span> - <span class='badge bg-danger'>{$keluar}</span>";
-                                                                }
-                                                                break;
-                                                            case 'izin':
-                                                                $keterangan = "<span class='badge bg-primary'>Izin</span>";
-                                                                break;
-                                                            case 'cuti':
-                                                                $keterangan = "<span class='badge bg-warning text-black'>Cuti</span>";
-                                                                break;
-                                                        }
-                                                    @endphp
-                                                    <tr>
-                                                        <td>{!! $keterangan !!}</td>
-                                                    </tr>
-                                                @endforeach
-                                            @endforeach
+                                            @php
+                                                $keterangan = "";
+                                                $dataDetail = $data[$tanggal];
+                                                foreach($dataDetail as $detail){
+                                                    $info = $detail->info;
+                                                    switch ($info->type) {
+                                                        case 'absen':
+                                                            if (empty($info?->keterangan?->masuk) && empty($info?->keterangan?->keluar)) {
+                                                                $keterangan = "<span class='badge bg-danger'>Tidak Masuk</span>";
+                                                            } elseif (!empty($info?->keterangan?->masuk) && empty($info?->keterangan?->keluar)) {
+                                                                $masuk = Carbon::parse($info?->keterangan?->masuk)->setTimezone('Asia/Jakarta')->format('H:i');
+                                                                $keterangan = "<span class='badge bg-success'>{$masuk}</span> - <span class='badge bg-danger'>Masih Masuk</span>";
+                                                            } else {
+                                                                $masuk = Carbon::parse($info?->keterangan?->masuk)->setTimezone('Asia/Jakarta')->format('H:i');
+                                                                $keluar = Carbon::parse($info?->keterangan?->keluar)->setTimezone('Asia/Jakarta')->format('H:i');
+                                                                $keterangan = "<span class='badge bg-success'>{$masuk}</span> - <span class='badge bg-danger'>{$keluar}</span>";
+                                                            }
+                                                            break;
+                                                        case 'izin':
+                                                            $keterangan = "<span class='badge bg-primary'>Izin</span>";
+                                                            break;
+                                                        case 'cuti':
+                                                            $keterangan = "<span class='badge bg-warning text-black'>Cuti</span>";
+                                                            break;
+                                                    }
+                                                }
+                                            @endphp
+                                            <tr>
+                                                <td>{!! $keterangan !!}</td>
+                                            </tr>
                                         </table>
                                     </td>
                                 @endforeach
