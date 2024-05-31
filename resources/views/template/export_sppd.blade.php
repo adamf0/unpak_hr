@@ -88,7 +88,7 @@
                     <tr>
                         <td></td>
                         <td></td>
-                        <td>{{ $i+1 }}. {{$sppd->Pegawai->nip}} - {{$sppd->Pegawai->nama}}</td>
+                        <td>{{ $key+1 }}. {{$sppd->Pegawai->nip}} - {{$sppd->Pegawai->nama}}</td>
                     </tr>
                     @endif
                 </td>
