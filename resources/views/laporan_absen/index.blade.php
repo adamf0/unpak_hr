@@ -94,13 +94,13 @@
                         render: function ( data, type, row, meta ) {
                             if(data.type=="dosen"){
                                 console.log("x1",data)
-                                const nama = data?.nama_dosen??"NA"
-                                const kode = data?.NIDN??"NA"
+                                const nama = data?.pengguna?.nama_dosen??"NA"
+                                const kode = data?.pengguna?.NIDN??"NA"
                                 return `${nama} - ${nip}`
                             } else if(data.type=="pegawai"){
                                 console.log("x2",data)
-                                const nama = data?.nama??"NA"
-                                const kode = data?.nip??"NA"
+                                const nama = data?.pengguna?.nama??"NA"
+                                const kode = data?.pengguna?.nip??"NA"
                                 return `${nama} - ${nip}`
                             } else{
                                 console.log("x2",data)
