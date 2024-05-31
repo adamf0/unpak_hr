@@ -13,6 +13,7 @@ use Architecture\Shared\Creational\FileManager;
 use Architecture\Shared\TypeData;
 use Carbon\Carbon;
 use Exception;
+use Fiber;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -144,26 +145,27 @@ class LaporanAbsenController extends Controller
             if (isset($data[$tanggal])) {
                 foreach ($data[$tanggal] as $detail) {
                     $info = $detail->info;
-                    switch ($info->type) {
-                        case 'absen':
-                            if (empty($info->keterangan['masuk']) && empty($info->keterangan['keluar'])) {
-                                $keterangan = "<span class='badge bg-danger'>Tidak Masuk</span>";
-                            } elseif (!empty($info->keterangan['masuk']) && empty($info->keterangan['keluar'])) {
-                                $masuk = Carbon::parse($info->keterangan['masuk'])->setTimezone('Asia/Jakarta')->format('H:i');
-                                $keterangan = "<span class='badge bg-success'>" . $masuk . "</span> - <span class='badge bg-danger'>Masih Masuk</span>";
-                            } else {
-                                $masuk = Carbon::parse($info->keterangan['masuk'])->setTimezone('Asia/Jakarta')->format('H:i');
-                                $keluar = Carbon::parse($info->keterangan['keluar'])->setTimezone('Asia/Jakarta')->format('H:i');
-                                $keterangan = "<span class='badge bg-success'>" . $masuk . "</span> - <span class='badge bg-danger'>" . $keluar . "</span>";
-                            }
-                            break;
-                        case 'izin':
-                            $keterangan = "<span class='badge bg-primary'>Izin</span>";
-                            break;
-                        case 'cuti':
-                            $keterangan = "<span class='badge bg-warning text-black'>Cuti</span>";
-                            break;
-                    }
+                    $keterangan = (new Fiber(function () use ($info) {
+                        switch ($info->type) {
+                            case 'absen':
+                                if (empty($info->keterangan['masuk']) && empty($info->keterangan['keluar'])) {
+                                    return "<span class='badge bg-danger'>Tidak Masuk</span>";
+                                } elseif (!empty($info->keterangan['masuk']) && empty($info->keterangan['keluar'])) {
+                                    $masuk = Carbon::parse($info->keterangan['masuk'])->setTimezone('Asia/Jakarta')->format('H:i');
+                                    return "<span class='badge bg-success'>" . $masuk . "</span> - <span class='badge bg-danger'>Masih Masuk</span>";
+                                } else {
+                                    $masuk = Carbon::parse($info->keterangan['masuk'])->setTimezone('Asia/Jakarta')->format('H:i');
+                                    $keluar = Carbon::parse($info->keterangan['keluar'])->setTimezone('Asia/Jakarta')->format('H:i');
+                                    return "<span class='badge bg-success'>" . $masuk . "</span> - <span class='badge bg-danger'>" . $keluar . "</span>";
+                                }
+                            case 'izin':
+                                return "<span class='badge bg-primary'>Izin</span>";
+                            case 'cuti':
+                                return "<span class='badge bg-warning text-black'>Cuti</span>";
+                        }
+                    }))->start();
+        
+                    echo $keterangan->resume(); // Resume Fiber untuk mendapatkan hasilnya
                 }
             }
             $html .= '          <tr>';
