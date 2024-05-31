@@ -82,14 +82,8 @@
                 <td>
                     @if (!empty($sppd->Dosen))
                         {{$sppd->Dosen->NIDN}} - {{$sppd->Dosen->nama_dosen}}
-                    @endif
-
-                    @if (!empty($sppd->Pegawai))
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td>{{ $key+1 }}. {{$sppd->Pegawai->nip}} - {{$sppd->Pegawai->nama}}</td>
-                    </tr>
+                    @elseif (!empty($sppd->Pegawai))
+                        {{$sppd->Pegawai->nip}} - {{$sppd->Pegawai->nama}}
                     @endif
                 </td>
             </tr>
