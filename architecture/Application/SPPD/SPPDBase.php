@@ -19,6 +19,7 @@ trait SPPDBase
     public $keterangan;
     public $status;
     public $catatan=null;
+    public $dokumen_anggaran=null;
     public ?Collection $list_anggota=null;
 
     public function GetDosen(){
@@ -47,6 +48,9 @@ trait SPPDBase
     }
     public function GetCatatan(){
         return $this->catatan;
+    }
+    public function GetDokumenAnggaran(){
+        return $this->dokumen_anggaran;
     }
     public function GetListAnggota(){
         return $this->list_anggota;

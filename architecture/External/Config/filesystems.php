@@ -65,6 +65,13 @@ return [
             'throw' => false,
         ],
 
+        'dokumen_anggaran' => [
+            'driver' => 'local',
+            'root'   => public_path('dokumen_anggaran'),
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
         'dokumen_klaim_absen' => [
             'driver' => 'local',
             'root'   => public_path('dokumen_klaim_absen'),

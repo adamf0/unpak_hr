@@ -71,6 +71,7 @@ class GetAllSPPDByNIPQueryHandler extends Query
                 $data->keterangan,
                 $data->status,
                 $data->catatan,
+                $data->dokumen_anggaran,
                 $list_anggota
             ));
 

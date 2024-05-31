@@ -171,16 +171,23 @@ class CutiController extends Controller
         }
     }
     public function approval($id,$type){
+        $cuti = $this->queryBus->ask(new GetCutiQuery($id));
+        $redirect = match(true){
+            !is_null($cuti->GetDosen())=>redirect()->route('cuti.index2',['type'=>'dosen']),
+            !is_null($cuti->GetPegawai())=>redirect()->route('cuti.index2',['type'=>'pegawai']),
+            default=>redirect()->route('cuti.index'),
+        };
+
         try {
             if(!in_array($type,["terima","tolak"])) throw new Exception("command invalid");
 
             $this->commandBus->dispatch(new ApprovalCutiCommand($id,$type,null,Session::get('id')));
             Session::flash(TypeNotif::Create->val(), "berhasil $type cuti");
 
-            return redirect()->route('cuti.index');
+            return $redirect;
         } catch (Exception $e) {
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
-            return redirect()->route('cuti.index');
+            return $redirect;
         }
     }
     public function export(Request $request){

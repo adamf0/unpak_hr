@@ -22,47 +22,55 @@ class DatatableCutiController extends Controller
         $nidn = $request->has('nidn')? $request->query('nidn'):null;
         $nip = $request->has('nip')? $request->query('nip'):null;
         $level = $request->has('level')? $request->query('level'):null;
+        $type = $request->has('type')? $request->query('type'):null;
         $q = new GetAllCutiQuery($nidn,$nip);
         // $q->SetOffset($request->get('start')??null)->SetLimit($request->get('length')??null);
         
         $listCuti = $this->queryBus->ask($q);
-        $listCuti = $listCuti->map(function ($item) use($level){
-            return match(true){
-                in_array($level, ["pegawai","dosen"])=>(object)[
-                    "id"=>$item->GetId(),
-                    "jenis_cuti"=>$item->GetJenisCuti()?->GetNama()??"-",
-                    "lama_cuti"=>$item->GetLamaCuti(),
-                    "tanggal_mulai"=>$item->GetTanggalMulai()->toFormat(FormatDate::LDFY),
-                    "tanggal_akhir"=>$item->GetTanggalAkhir()?->toFormat(FormatDate::LDFY),
-                    "tujuan"=>$item->GetTujuan(),
-                    "dokumen"=>empty($item->GetDokumen())? "":[
-                        "file"=>$item->GetDokumen(),
-                        "url"=>Utility::loadAsset('dokumen_cuti/'.$item->GetDokumen()),
-                    ],
-                    "status"=>$item->GetStatus(),
-                    "catatan"=>$item->GetCatatan(),
-                ],
-                default=>(object)[
-                    "id"=>$item->GetId(),
-                    "nama" => match(true){
-                        !is_null($item->GetDosen()) && is_null($item->GetPegawai())=>$item->GetDosen()->GetNama(),
-                        is_null($item->GetDosen()) && !is_null($item->GetPegawai())=>$item->GetPegawai()->GetNama(),
-                        default=>"NA",
-                    },
-                    "jenis_cuti"=>$item->GetJenisCuti()?->GetNama()??"-",
-                    "lama_cuti"=>$item->GetLamaCuti(),
-                    "tanggal_mulai"=>$item->GetTanggalMulai()->toFormat(FormatDate::LDFY),
-                    "tanggal_akhir"=>$item->GetTanggalAkhir()?->toFormat(FormatDate::LDFY),
-                    "tujuan"=>$item->GetTujuan(),
-                    "dokumen"=>empty($item->GetDokumen())? "":[
-                        "file"=>$item->GetDokumen(),
-                        "url"=>Utility::loadAsset('dokumen_cuti/'.$item->GetDokumen()),
-                    ],
-                    "status"=>$item->GetStatus(),
-                    "catatan"=>$item->GetCatatan(),
-                ]
-            };
-        });
+        $listCuti = $listCuti->filter(function($item) use($type){
+                        return match($type){
+                            "dosen"=>!is_null($item->GetDosen()),
+                            "tendik"=>!is_null($item->GetPegawai()),
+                            default=>$item
+                        };
+                    })
+                    ->map(function ($item) use($level){
+                        return match(true){
+                            in_array($level, ["pegawai","dosen"])=>(object)[
+                                "id"=>$item->GetId(),
+                                "jenis_cuti"=>$item->GetJenisCuti()?->GetNama()??"-",
+                                "lama_cuti"=>$item->GetLamaCuti(),
+                                "tanggal_mulai"=>$item->GetTanggalMulai()->toFormat(FormatDate::LDFY),
+                                "tanggal_akhir"=>$item->GetTanggalAkhir()?->toFormat(FormatDate::LDFY),
+                                "tujuan"=>$item->GetTujuan(),
+                                "dokumen"=>empty($item->GetDokumen())? "":[
+                                    "file"=>$item->GetDokumen(),
+                                    "url"=>Utility::loadAsset('dokumen_cuti/'.$item->GetDokumen()),
+                                ],
+                                "status"=>$item->GetStatus(),
+                                "catatan"=>$item->GetCatatan(),
+                            ],
+                            default=>(object)[
+                                "id"=>$item->GetId(),
+                                "nama" => match(true){
+                                    !is_null($item->GetDosen()) && is_null($item->GetPegawai())=>$item->GetDosen()->GetNama(),
+                                    is_null($item->GetDosen()) && !is_null($item->GetPegawai())=>$item->GetPegawai()->GetNama(),
+                                    default=>"NA",
+                                },
+                                "jenis_cuti"=>$item->GetJenisCuti()?->GetNama()??"-",
+                                "lama_cuti"=>$item->GetLamaCuti(),
+                                "tanggal_mulai"=>$item->GetTanggalMulai()->toFormat(FormatDate::LDFY),
+                                "tanggal_akhir"=>$item->GetTanggalAkhir()?->toFormat(FormatDate::LDFY),
+                                "tujuan"=>$item->GetTujuan(),
+                                "dokumen"=>empty($item->GetDokumen())? "":[
+                                    "file"=>$item->GetDokumen(),
+                                    "url"=>Utility::loadAsset('dokumen_cuti/'.$item->GetDokumen()),
+                                ],
+                                "status"=>$item->GetStatus(),
+                                "catatan"=>$item->GetCatatan(),
+                            ]
+                        };
+                    });
         
         return DataTables::of($listCuti)
         ->addIndexColumn()
@@ -89,9 +97,9 @@ class DatatableCutiController extends Controller
                     <a href="'.route('cuti.approval',['id'=>$row->id,'type'=>'terima']).'" class="btn btn-success"><i class="bi bi-check-lg"></i></a>
                     <a href="#" class="mx-2 btn btn-danger btn-reject"><i class="bi bi-x-lg"></i></a>
                 ';
-                if($row->status=="terima"){
-                $render .= '<a href="#" class="btn btn-info btn-download-pdf"><i class="bi bi-file-earmark-pdf"></i></a>';
-                }
+                // if($row->status=="terima"){
+                // $render .= '<a href="#" class="btn btn-info btn-download-pdf"><i class="bi bi-file-earmark-pdf"></i></a>';
+                // }
             }
             return $render;
         })

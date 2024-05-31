@@ -22,53 +22,62 @@ class DatatableSPPDController extends Controller
         $nidn = $request->has('nidn')? $request->query('nidn'):null;
         $nip = $request->has('nip')? $request->query('nip'):null;
         $level = $request->has('level')? $request->query('level'):null;
+        $type = $request->has('type')? $request->query('type'):null;
         $q = new GetAllSPPDQuery($nidn,$nip);
         // $q->SetOffset($request->get('start')??null)->SetLimit($request->get('length')??null);
         
         $listSPPD = $this->queryBus->ask($q);
-        $listSPPD = $listSPPD->filter(function($item) use($level){
-                        if($level=="sdm"){
-                            return in_array($item->GetStatus(), ['menunggu verifikasi sdm','tolak sdm']);
-                        } else if($level=="warek"){
-                            return in_array($item->GetStatus(), ['menunggu','tolak warek','menunggu verifikasi sdm','tolak sdm','terima sdm']);
-                        }
-                        return $item;
-                    })
-                    ->map(function($item) use($level){
-                        return match(true){
-                            in_array($level,["pegawai","dosen"])=>(object)[
-                                "id"=>$item->GetId(),
-                                "nidn"=>$item->GetDosen()?->GetNIDN(),
-                                "nip"=>$item->GetPegawai()?->GetNIP(),
-                                "jenis_sppd"=> $item->GetJenisSPPD()?->GetNama(),
-                                "tanggal_berangkat"=> $item->GetTanggalBerangkat()->toFormat(FormatDate::LDFY),
-                                "tanggal_kembali"=> $item->GetTanggalKembali()->toFormat(FormatDate::LDFY),
-                                "tujuan"=> $item->GetTujuan(),
-                                "keterangan"=> $item->GetKeterangan(),
-                                "anggota"=> $item->GetListAnggota()->toArray(),
-                                "catatan"=> $item->GetCatatan(),
-                                "status"=> $item->GetStatus(),
-                            ],
-                            default=>(object)[
-                                "id"=>$item->GetId(),
-                                "nidn"=>$item->GetDosen()?->GetNIDN(),
-                                "nip"=>$item->GetPegawai()?->GetNIP(),
-                                "jenis_sppd"=> $item->GetJenisSPPD()?->GetNama(),
-                                "nama" => match(true){
-                                    !is_null($item->GetDosen()) && is_null($item->GetPegawai())=>$item->GetDosen()->GetNama(),
-                                    is_null($item->GetDosen()) && !is_null($item->GetPegawai())=>$item->GetPegawai()->GetNama(),
-                                    default=>"NA",
-                                },
-                                "tanggal_berangkat"=> $item->GetTanggalBerangkat()->toFormat(FormatDate::LDFY),
-                                "tanggal_kembali"=> $item->GetTanggalKembali()->toFormat(FormatDate::LDFY),
-                                "tujuan"=> $item->GetTujuan(),
-                                "keterangan"=> $item->GetKeterangan(),
-                                "anggota"=> $item->GetListAnggota()->toArray(),
-                                "catatan"=> $item->GetCatatan(),
-                                "status"=> $item->GetStatus(),
-                            ],
-                        };
-                    });
+        $listSPPD = $listSPPD->filter(function($item) use($type){
+                            return match($type){
+                                "dosen"=>!is_null($item->GetDosen()),
+                                "tendik"=>!is_null($item->GetPegawai()),
+                                default=>$item
+                            };
+                        })
+                        ->filter(function($item) use($level){
+                            return match($level){
+                                "sdm"=>in_array($item->GetStatus(), ['menunggu verifikasi sdm','tolak sdm','terima sdm']),
+                                "warek"=>in_array($item->GetStatus(), ['menunggu','tolak warek','menunggu verifikasi sdm','tolak sdm','terima sdm']),
+                                default=>$item,
+                            };
+                        })
+                        ->map(function($item) use($level){
+                            return match(true){
+                                in_array($level,["pegawai","dosen"])=>(object)[
+                                    "id"=>$item->GetId(),
+                                    "nidn"=>$item->GetDosen()?->GetNIDN(),
+                                    "nip"=>$item->GetPegawai()?->GetNIP(),
+                                    "jenis_sppd"=> $item->GetJenisSPPD()?->GetNama(),
+                                    "tanggal_berangkat"=> $item->GetTanggalBerangkat()->toFormat(FormatDate::LDFY),
+                                    "tanggal_kembali"=> $item->GetTanggalKembali()->toFormat(FormatDate::LDFY),
+                                    "tujuan"=> $item->GetTujuan(),
+                                    "keterangan"=> $item->GetKeterangan(),
+                                    "anggota"=> $item->GetListAnggota()->toArray(),
+                                    "catatan"=> $item->GetCatatan(),
+                                    "dokumen_anggaran"=> empty($item->GetDokumenAnggaran())? null:Utility::loadAsset("dokumen_anggaran/".$item->GetDokumenAnggaran()),
+                                    "status"=> $item->GetStatus(),
+                                ],
+                                default=>(object)[
+                                    "id"=>$item->GetId(),
+                                    "nidn"=>$item->GetDosen()?->GetNIDN(),
+                                    "nip"=>$item->GetPegawai()?->GetNIP(),
+                                    "jenis_sppd"=> $item->GetJenisSPPD()?->GetNama(),
+                                    "nama" => match(true){
+                                        !is_null($item->GetDosen()) && is_null($item->GetPegawai())=>$item->GetDosen()->GetNama(),
+                                        is_null($item->GetDosen()) && !is_null($item->GetPegawai())=>$item->GetPegawai()->GetNama(),
+                                        default=>"NA",
+                                    },
+                                    "tanggal_berangkat"=> $item->GetTanggalBerangkat()->toFormat(FormatDate::LDFY),
+                                    "tanggal_kembali"=> $item->GetTanggalKembali()->toFormat(FormatDate::LDFY),
+                                    "tujuan"=> $item->GetTujuan(),
+                                    "keterangan"=> $item->GetKeterangan(),
+                                    "anggota"=> $item->GetListAnggota()->toArray(),
+                                    "catatan"=> $item->GetCatatan(),
+                                    "dokumen_anggaran"=> empty($item->GetDokumenAnggaran())? null:Utility::loadAsset("dokumen_anggaran/".$item->GetDokumenAnggaran()),
+                                    "status"=> $item->GetStatus(),
+                                ],
+                            };
+                        });
         
         return DataTables::of($listSPPD)
         ->addIndexColumn()
@@ -87,11 +96,11 @@ class DatatableSPPDController extends Controller
             }
             else if(in_array($level, ['sdm','warek'])){
                 $render = '
-                    <a href="'.route('sppd.approval',['id'=>$row->id,'level'=>$level??'-']).'" class="btn btn-success"><i class="bi bi-check-lg"></i></a>
-                    <a href="#" class="mx-2 btn btn-danger btn-reject"><i class="bi bi-x-lg"></i></a>
+                    <a href="#" class="btn btn-success btn-approve"><i class="bi bi-check-lg"></i></a>
+                    <a href="#" class="ml-2 btn btn-danger btn-reject"><i class="bi bi-x-lg"></i></a>
                 ';
                 if(in_array($row->status, ['terima sdm','menunggu verifikasi sdm'])=="terima"){
-                    $render .= '<a href="#" class="btn btn-secondary btn-download-keuangan-pdf"><i class="bi bi-wallet2"></i></a>';
+                    $render .= '<a href="#" class="ml-2 btn btn-secondary btn-download-anggaran"><i class="bi bi-wallet2"></i></a>';
                 }
                 if($row->status=="terima sdm"){
                     $render .= '<a href="#" class="btn btn-info btn-download-pengajuan-pdf"><i class="bi bi-file-earmark-pdf"></i></a>';

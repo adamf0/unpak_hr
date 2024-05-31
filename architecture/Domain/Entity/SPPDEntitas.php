@@ -16,6 +16,7 @@ class SPPDEntitas extends ISPPD{
         $keterangan=null,
         $status=null,
         $catatan=null,
+        $dokumen_anggaran=null,
         ?Collection $list_anggota=null,
     ){
         $instance = new self();
@@ -29,6 +30,7 @@ class SPPDEntitas extends ISPPD{
         $instance->keterangan = $keterangan;
         $instance->status = $status;
         $instance->catatan = $catatan;
+        $instance->dokumen_anggaran = $dokumen_anggaran;
         $instance->list_anggota = $list_anggota;
         return $instance;
     }

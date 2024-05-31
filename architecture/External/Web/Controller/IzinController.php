@@ -166,16 +166,22 @@ class IzinController extends Controller
         }
     }
     public function approval($id,$type){
+        $izin = $this->queryBus->ask(new GetIzinQuery($id));
+        $redirect = match(true){
+            !is_null($izin->GetDosen())=>redirect()->route('izin.index2',['type'=>'dosen']),
+            !is_null($izin->GetPegawai())=>redirect()->route('izin.index2',['type'=>'pegawai']),
+            default=>redirect()->route('izin.index'),
+        };
         try {
             if(!in_array($type,["terima","tolak"])) throw new Exception("command invalid");
 
             $this->commandBus->dispatch(new ApprovalIzinCommand($id,$type,null,Session::get('id')));
             Session::flash(TypeNotif::Create->val(), "berhasil $type izin");
 
-            return redirect()->route('izin.index');
+            return $redirect;
         } catch (Exception $e) {
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
-            return redirect()->route('izin.index');
+            return $redirect;
         }
     }
     public function export(Request $request){

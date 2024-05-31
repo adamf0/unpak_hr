@@ -33,6 +33,7 @@ Route::post('info_dosen_pegawai', [ApiInfoController::class,'index'])->name('api
 
 Route::post('cuti/approval/reject', [ApiCutiController::class,'reject'])->name('api.cuti.reject');
 Route::post('izin/approval/reject', [ApiIzinController::class,'reject'])->name('api.izin.reject');
+Route::post('sppd/approval/approval', [ApiSPPDController::class,'approval'])->name('api.sppd.approval');
 Route::post('sppd/approval/reject', [ApiSPPDController::class,'reject'])->name('api.sppd.reject');
 Route::post('klaim_absen/approval/reject', [ApiKlaimAbsenController::class,'reject'])->name('api.klaim_absen.reject');
 

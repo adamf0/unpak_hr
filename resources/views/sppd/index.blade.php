@@ -259,7 +259,7 @@
             ];
 
             let table = eTable({
-                url: `{{ route('datatable.SPPD.index') }}?level=${level}&nidn=${nidn}&nip=${nip}`,
+                url: `{{ route('datatable.SPPD.index') }}?level=${level}&nidn=${nidn}&nip=${nip}&type=${type}`,
             }, column);
 
             let modal = new bootstrap.Modal(document.getElementById('modal'));
@@ -282,18 +282,32 @@
                 </div>`);
                 modal.show();
             });
-            $('#tb tbody').on('click', '.btn-download-keuangan-pdf', function(e) {
+            $('#tb tbody').on('click', '.btn-approve', function(e) {
                 e.preventDefault();
                 const rowData = table.row($(this).closest('tr')).data();
-                
-                const data = {
-                    _token: '{{ csrf_token() }}',
-                    id : rowData?.id,
-                    type_export : "pdf"
-                };
-
-                console.log(data)
-                $.redirect(`{{url('sppd/export')}}`,data,"GET","_blank")
+                modalTitle.text("Informasi Terima SPPD");
+                modalBody.html(`
+                <div class="row">
+                    <input type="hidden" class="id_sppd" value="${rowData?.id}">
+                    <div class="col-12">
+                        <x-input-file title="Dokumen Anggaran Biaya" name="dokumen_anggaran_biaya" class="dokumen_anggaran_biaya" accept=".pdf,image/jpg,image/jpeg,image/png,,image/bmp"/>
+                        <small class="text-primary">* PDF dan Gambar yang boleh diupload</small><br>
+                        <small class="text-primary">* Maksimal 10Mb</small>
+                    </div>
+                    <div class="col-12">
+                        <input type="submit" class="btn btn-success btn-terima" value="Simpan">
+                    </div>
+                </div>`);
+                modal.show();
+            });
+            $('#tb tbody').on('click', '.btn-download-anggaran', function(e) {
+                e.preventDefault();
+                const rowData = table.row($(this).closest('tr')).data();
+                if(rowData.dokumen_anggaran!=null){
+                    $.redirect(rowData.dokumen_anggaran,{},"GET","_blank")
+                } else{
+                    alert('tidak ada dokumen');
+                }
             });
             $('#tb tbody').on('click', '.btn-download-pengajuan-pdf', function(e) {
                 e.preventDefault();
@@ -320,6 +334,36 @@
 
                 $.ajax({
                     url: "{{ route('api.sppd.reject') }}",
+                    method: 'POST',
+                    data: dataForm,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        console.log(response)
+                        modal.hide();
+                        alert(response.message);
+                        table.ajax.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        handleAjaxError(xhr, status, error)
+                        modal.hide();
+                        table.ajax.reload();
+                    }
+                });
+            });
+            $('#modal').on('click', '.btn-terima', function(e){
+                const id = $(".id_sppd").val();
+                let dokumen_anggaran_biaya = $('.dokumen_anggaran_biaya')[0].files[0];
+
+                let dataForm = new FormData()
+                dataForm.append("_token",'{{ csrf_token() }}')
+                dataForm.append("id",id)
+                dataForm.append("pic","{{Session::get('id')}}")
+                dataForm.append("level","{{Session::get('levelActive')}}")
+                dataForm.append("dokumen_anggaran_biaya", dokumen_anggaran_biaya, dokumen_anggaran_biaya.name);
+
+                $.ajax({
+                    url: "{{ route('api.sppd.approval') }}",
                     method: 'POST',
                     data: dataForm,
                     processData: false,
@@ -449,19 +493,23 @@
             $('.btn_cetak').click(function(e){
                 e.preventDefault();
 
-                const data = {
-                    _token: '{{ csrf_token() }}',
-                    nama : cetak_nama,
-                    type : type,
-                    jenis_sppd : cetak_jenis_sppd,
-                    status : cetak_status,
-                    tanggal_berangkat : cetak_tanggal_berangkat,
-                    tanggal_kembali : cetak_tanggal_kembali,
-                    type_export : cetak_type_export
-                };
+                if(cetak_type_export==null){
+                    alert('wajib pilih jenis cetak laporan')
+                } else{
+                    const data = {
+                        _token: '{{ csrf_token() }}',
+                        nama : cetak_nama,
+                        type : type,
+                        jenis_sppd : cetak_jenis_sppd,
+                        status : cetak_status,
+                        tanggal_berangkat : cetak_tanggal_berangkat,
+                        tanggal_kembali : cetak_tanggal_kembali,
+                        type_export : cetak_type_export
+                    };
 
-                console.log(data)
-                $.redirect(`{{url('sppd/export')}}`,data,"GET","_blank")
+                    console.log(data)
+                    $.redirect(`{{url('sppd/export')}}`,data,"GET","_blank")
+                }
             });
         });
     </script>

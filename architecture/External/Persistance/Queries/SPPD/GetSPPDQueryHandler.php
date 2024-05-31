@@ -15,6 +15,7 @@ use Architecture\Domain\Entity\SPPDEntitas;
 use Architecture\Domain\ValueObject\Date;
 use Architecture\External\Persistance\ORM\SPPD as SPPDModel;
 use Architecture\Shared\TypeData;
+use Exception;
 
 class GetSPPDQueryHandler extends Query
 {
@@ -23,7 +24,6 @@ class GetSPPDQueryHandler extends Query
     public function handle(GetSPPDQuery $query)
     {
         $data = SPPDModel::with(['JenisSPPD','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','Anggota','Anggota.Dosen','Anggota.Pegawai'])->where('id',$query->GetId())->first();
-
         if($query->getOption()==TypeData::Default) return $data;
 
         $list_anggota = collect([]);
@@ -69,6 +69,7 @@ class GetSPPDQueryHandler extends Query
             $data->keterangan,
             $data->status,
             $data->catatan,
+            $data->dokumen_anggaran,
             $list_anggota
         ));
     }

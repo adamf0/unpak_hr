@@ -11,6 +11,12 @@ class ApprovalSPPDCommandHandler extends CommandHandler
     {
         $SPPD = ModelSPPD::findOrFail($command->GetId());
         $SPPD->status = $command->GetStatus();
+        if(!str_contains($command->GetStatus(), "tolak")){
+            $SPPD->catatan = null;
+        }
+        if(!empty($command->GetFile())){
+            $SPPD->dokumen_anggaran = $command->GetFile();
+        }
         if(!empty($command->GetPIC())){
             $SPPD->id_user = $command->GetPIC();
         }

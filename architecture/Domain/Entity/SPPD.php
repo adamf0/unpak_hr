@@ -18,6 +18,7 @@ class SPPD extends BaseEntity{
         $keterangan,
         $status,
         $catatan=null,
+        $dokumen_anggaran=null,
         ?Collection $list_anggota=null,
     ){
         $this->id = $id;
@@ -30,6 +31,7 @@ class SPPD extends BaseEntity{
         $this->keterangan = $keterangan;
         $this->status = $status;
         $this->catatan = $catatan;
+        $this->dokumen_anggaran = $dokumen_anggaran;
         $this->list_anggota = $list_anggota;
     }
 }

@@ -101,7 +101,6 @@ Route::middleware(['throwSession'])->group(function () {
     Route::get('sppd/edit/{id}', [SPPDController::class,'edit'])->name('sppd.edit');
     Route::post('sppd/update', [SPPDController::class,'update'])->name('sppd.update');
     Route::get('sppd/delete/{id}', [SPPDController::class,'delete'])->name('sppd.delete');
-    Route::get('sppd/approval/{id}/{level}', [SPPDController::class,'approval'])->name('sppd.approval');
     Route::get('sppd/export', [SPPDController::class,'export'])->name('sppd.export');
     Route::get('sppd/{type}', [SPPDController::class,'index'])->name('sppd.index2');
 

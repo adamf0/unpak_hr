@@ -137,6 +137,7 @@ class Creator{
             $factory->GetKeterangan(),
             $factory->GetStatus(),
             $factory->GetCatatan(),
+            $factory->GetDokumenAnggaran(),
             $factory->GetListAnggota(),
         );
     }
