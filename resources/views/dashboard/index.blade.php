@@ -502,7 +502,7 @@
                 $(refAbsenLibur).hide()
 
                 console.log(getCurrentTime().day())
-                if(getCurrentTime().day()==5){
+                if(getCurrentTime().day()==6){
                     $(refAbsenForm).hide()
                     $(refAbsenDone).hide()
                     $(refAbsenLibur).show()
