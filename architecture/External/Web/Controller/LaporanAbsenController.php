@@ -113,16 +113,16 @@ class LaporanAbsenController extends Controller
             $html .= '<tbody>';
         }
 
-        if(!$initial && !is_null($i_data)){
-            $data = $source['list_data'][$i_data];
-            $nama = $data['type'] == "pegawai" ? $data['pengguna']['nama'] : $data['pengguna']['nama_dosen'];
-            $kode = $data['type'] == "pegawai" ? $data['pengguna']['nip'] : $data['pengguna']['NIDN'];
+        if(!$initial && !is_null($i_data) && !is_null($i_t)){
+            $data = array_key_exists($i_data, $source['list_data'])? $source['list_tanggal'][$i_t]:null;
+            $nama = !is_null($data) && $data['type'] == "pegawai" ? $data['pengguna']['nama'] : $data['pengguna']['nama_dosen'];
+            $kode = !is_null($data) && $data['type'] == "pegawai" ? $data['pengguna']['nip'] : $data['pengguna']['NIDN'];
 
             $html .= '<tr>';
             $html .= '  <td>' . ($index + 1) . '</td>';
             $html .= '  <td>' . $nama . ' - ' . $kode . '</td>';
 
-            $tanggal = $source['list_tanggal'][$i_t];
+            $tanggal = array_key_exists($i_t, $source['list_tanggal'])? $source['list_tanggal'][$i_t]:null;
 
             $html .= '  <td>';
             $html .= '      <table>';
@@ -130,7 +130,7 @@ class LaporanAbsenController extends Controller
             $html .= '              <td class="column_min">';
 
             $aturan_jam = "08:00 - 15:00";
-            $dayOfWeek = Carbon::parse($tanggal)->setTimezone('Asia/Jakarta')->dayOfWeek;
+            $dayOfWeek = isset($tanggal)? Carbon::parse($tanggal)->setTimezone('Asia/Jakarta')->dayOfWeek:null;
             if ($dayOfWeek == Carbon::FRIDAY) {
                 $aturan_jam = "08:00 - 14:00";
             } elseif ($dayOfWeek == Carbon::SATURDAY) {
