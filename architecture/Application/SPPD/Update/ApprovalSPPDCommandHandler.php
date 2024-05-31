@@ -10,7 +10,7 @@ class ApprovalSPPDCommandHandler extends CommandHandler
     public function handle(ApprovalSPPDCommand $command)
     {
         $SPPD = ModelSPPD::findOrFail($command->GetId());
-        $SPPD->status = 'terima';
+        $SPPD->status = $command->GetStatus();
         if(!empty($command->GetPIC())){
             $SPPD->id_user = $command->GetPIC();
         }

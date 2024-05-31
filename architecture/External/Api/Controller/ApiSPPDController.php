@@ -19,7 +19,14 @@ class ApiSPPDController extends Controller
     public function reject(Request $request){
         try {
             if(empty($request->id)) throw new Exception("invalid reject sppd");
-            $this->commandBus->dispatch(new RejectSPPDCommand($request->id,$request->catatan,$request->pic));
+            if(!in_array($request->level,['sdm','warek'])) throw new Exception("selain SDM dan Warek tidak dapat tolak sppd");
+
+            $status = match($request->level){
+                "warek"=>"tolak warek",
+                "sdm"=>"tolak sdm",
+                default=>null,
+            };
+            $this->commandBus->dispatch(new RejectSPPDCommand($request->id,$request->catatan,$request->pic,$status));
             
             return response()->json([
                 "status"=>"ok",

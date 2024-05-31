@@ -162,10 +162,17 @@ class SPPDController extends Controller
         }
     }
 
-    public function approval($id){
+    public function approval($id,$level){
         try {
             if(empty($id)) throw new Exception("invalid reject sppd");
-            $this->commandBus->dispatch(new ApprovalSPPDCommand($id,Session::get('id')));
+            if(!in_array($level,['sdm','warek'])) throw new Exception("selain SDM dan Warek tidak dapat approval sppd");
+
+            $status = match(Session::get('levelActive')){
+                "warek"=>"menunggu verifikasi sdm",
+                "sdm"=>"terima sdm",
+                default=>null,
+            };
+            $this->commandBus->dispatch(new ApprovalSPPDCommand($id,Session::get('id'),$status));
 
             Session::flash(TypeNotif::Create->val(), "berhasil terima SPPD");
             return redirect()->route('sppd.index');

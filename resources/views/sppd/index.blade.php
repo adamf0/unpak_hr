@@ -282,7 +282,20 @@
                 </div>`);
                 modal.show();
             });
-            $('#tb tbody').on('click', '.btn-download-pdf', function(e) {
+            $('#tb tbody').on('click', '.btn-download-keuangan-pdf', function(e) {
+                e.preventDefault();
+                const rowData = table.row($(this).closest('tr')).data();
+                
+                const data = {
+                    _token: '{{ csrf_token() }}',
+                    id : rowData?.id,
+                    type_export : "pdf"
+                };
+
+                console.log(data)
+                $.redirect(`{{url('sppd/export')}}`,data,"GET","_blank")
+            });
+            $('#tb tbody').on('click', '.btn-download-pengajuan-pdf', function(e) {
                 e.preventDefault();
                 const rowData = table.row($(this).closest('tr')).data();
                 
@@ -303,6 +316,7 @@
                 dataForm.append("id",id)
                 dataForm.append("catatan",catatan)
                 dataForm.append("pic","{{Session::get('id')}}")
+                dataForm.append("level","{{Session::get('levelActive')}}")
 
                 $.ajax({
                     url: "{{ route('api.sppd.reject') }}",
