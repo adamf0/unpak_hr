@@ -36,10 +36,16 @@ class GetAllSPPDQueryHandler extends Query
         }
         $datas = $datas->orderBy('id', 'DESC')->get();
         if(!is_null($query->GetNIDN())){
-            $datas = $datas->filter( fn($item)=>$item->nidn==$query->GetNIDN() || ($item->Anggota??collect([]))->filter(fn($itemAnggota)=>$itemAnggota?->Dosen?->NIDN==$query->GetNIDN())->count()>0 );
+            $datas = $datas->filter( function($item) use($query){
+                $asMember = ($item->Anggota??collect([]))->filter(fn($itemAnggota)=>$itemAnggota?->Dosen?->NIDN==$query->GetNIDN())->count()>0;  
+                return $item->nidn==$query->GetNIDN() || $asMember;
+            });
         }
         if(!is_null($query->GetNIP())){
-            $datas = $datas->filter( fn($item)=>$item->nip==$query->GetNIP() || ($item->Anggota??collect([]))->reject(fn($itemAnggota)=>$itemAnggota->Pegawai?->nip==$query->GetNIP())->count()>0 );
+            $datas = $datas->filter( function($item) use($query){
+                $asMember = ($item->Anggota??collect([]))->filter(fn($itemAnggota)=>$itemAnggota->Pegawai?->nip==$query->GetNIP())->count()>0;
+                return $item->nip==$query->GetNIP() || $asMember;
+            });
         }
         $datas = $datas->values();
 
