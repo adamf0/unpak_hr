@@ -5,7 +5,6 @@ namespace Architecture\External\Web\Controller;
 use App\Http\Controllers\Controller;
 use Architecture\Application\Abstractions\Messaging\ICommandBus;
 use Architecture\Application\Abstractions\Messaging\IQueryBus;
-use Architecture\Application\Abstractions\Pattern\OptionFileDefault;
 use Architecture\Application\SPPD\Create\CreateAnggotaSPPDCommand;
 use Architecture\Application\SPPD\Create\CreateSPPDCommand;
 use Architecture\Application\SPPD\Delete\DeleteAllAnggotaSPPDCommand;
@@ -24,7 +23,6 @@ use Architecture\Domain\Structural\AnggotaAdapter;
 use Architecture\Domain\Structural\ListContext;
 use Architecture\Domain\ValueObject\Date;
 use Architecture\External\Persistance\ORM\SPPD;
-use Architecture\External\Port\FileSystem;
 use Architecture\External\Port\PdfX;
 use Architecture\Shared\Creational\FileManager;
 use Exception;
@@ -161,6 +159,33 @@ class SPPDController extends Controller
         } catch (Exception $e) {
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
             return redirect()->route('sppd.index');
+        }
+    }
+
+    public function approval($id,$level){
+        $sppd = $this->queryBus->ask(new GetSPPDQuery($id));
+        $redirect = match(true){
+            !is_null($sppd->GetDosen())=>redirect()->route('sppd.index2',['type'=>'dosen']),
+            !is_null($sppd->GetPegawai())=>redirect()->route('sppd.index2',['type'=>'pegawai']),
+            default=>redirect()->route('sppd.index'),
+        };
+
+        try {
+            if(empty($id)) throw new Exception("invalid reject sppd");
+            if(!in_array($level,['sdm','warek'])) throw new Exception("selain SDM dan Warek tidak dapat approval sppd");
+
+            $status = match(Session::get('levelActive')){
+                "warek"=>"menunggu verifikasi sdm",
+                "sdm"=>"terima sdm",
+                default=>null,
+            };
+            $this->commandBus->dispatch(new ApprovalSPPDCommand($id,Session::get('id'),$status,null));
+
+            Session::flash(TypeNotif::Create->val(), "berhasil terima SPPD");
+            return $redirect;
+        } catch (Exception $e) {
+            Session::flash(TypeNotif::Error->val(), $e->getMessage());
+            return $redirect;
         }
     }
 
