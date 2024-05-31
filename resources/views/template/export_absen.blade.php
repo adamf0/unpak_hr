@@ -64,11 +64,11 @@
                                                                 $keterangan = "<span class='badge bg-danger'>Tidak Masuk</span>";
                                                             } elseif (!empty($info?->keterangan['masuk']) && empty($info?->keterangan['keluar'])) {
                                                                 $masuk = Carbon::parse($info?->keterangan['masuk'])->setTimezone('Asia/Jakarta')->format('H:i');
-                                                                $keterangan = "<span class='badge bg-success'>{$masuk}</span> - <span class='badge bg-danger'>Masih Masuk</span>";
+                                                                $keterangan = "<span class='badge bg-success'>".$masuk."</span> - <span class='badge bg-danger'>Masih Masuk</span>";
                                                             } else {
                                                                 $masuk = Carbon::parse($info?->keterangan['masuk'])->setTimezone('Asia/Jakarta')->format('H:i');
                                                                 $keluar = Carbon::parse($info?->keterangan['keluar'])->setTimezone('Asia/Jakarta')->format('H:i');
-                                                                $keterangan = "<span class='badge bg-success'>{$masuk}</span> - <span class='badge bg-danger'>{$keluar}</span>";
+                                                                $keterangan = "<span class='badge bg-success'>".$masuk."</span> - <span class='badge bg-danger'>".$keluar."</span>";
                                                             }
                                                             break;
                                                         case 'izin':
