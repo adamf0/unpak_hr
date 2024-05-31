@@ -143,6 +143,7 @@ class LaporanAbsenController extends Controller
             $keterangan = "";
             if (isset($data[$tanggal])) {
                 foreach ($data[$tanggal] as $detail) {
+                    dd($detail);
                     $info = $detail['info'];
                     switch ($info->type) {
                         case 'absen':
