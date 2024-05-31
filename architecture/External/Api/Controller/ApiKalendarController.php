@@ -162,8 +162,8 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                     };
                     $title = match(true){
                         empty($item->absen_masuk) && Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta')->lessThan(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d')) => "tidak masuk", //tidak masuk
-                        !empty($item->absen_masuk) && !$this->isLate($item->absen_masuk, $item->tanggal) => Carbon::parse($item->absen_masuk)->setTimezone('Asia/Jakarta')->format("H:m:s").(empty($item->absen_keluar)? "":" - ".Carbon::parse($item->absen_keluar)->setTimezone('Asia/Jakarta')->format("H:m:s")), //masuk
-                        default => empty($item->absen_masuk)? null:Carbon::parse($item->absen_masuk)->setTimezone('Asia/Jakarta')->format("H:m:s")
+                        !empty($item->absen_masuk) && !$this->isLate($item->absen_masuk, $item->tanggal) => Carbon::parse($item->absen_masuk)->setTimezone('Asia/Jakarta')->format("H:i:s").(empty($item->absen_keluar)? "":" - ".Carbon::parse($item->absen_keluar)->setTimezone('Asia/Jakarta')->format("H:i:s")), //masuk
+                        default => empty($item->absen_masuk)? null:Carbon::parse($item->absen_masuk)->setTimezone('Asia/Jakarta')->format("H:i:s")
                     };
                     if(!empty($title)){
                         $carry[] = [
