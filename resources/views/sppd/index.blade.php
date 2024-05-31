@@ -19,7 +19,7 @@
                 {{ Utility::showNotif() }}
             </div>
             <div class="col-12">
-                @dump(Utility::hasUser() && !empty(Session::get('structural')))
+                @dump(Utility::hasUser(), !empty(Session::get('structural')))
                 @if (Utility::hasUser() && !empty(Session::get('structural')))
                     <a href="{{ route('sppd.create') }}" class="btn btn-primary">Tambah</a>
                 @else
