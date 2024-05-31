@@ -147,16 +147,22 @@ class KlaimAbsenController extends Controller
         }
     }
     public function approval($id,$type){
+        $klaim_absen = $this->queryBus->ask(new GetKlaimAbsenQuery($id));
+        $redirect = match(true){
+            !is_null($klaim_absen->GetDosen())=>redirect()->route('klaim_absen.index2',['type'=>'dosen']),
+            !is_null($klaim_absen->GetPegawai())=>redirect()->route('klaim_absen.index2',['type'=>'pegawai']),
+            default=>redirect()->route('klaim_absen.index'),
+        };
         try {
             if(!in_array($type,["terima","tolak"])) throw new Exception("command invalid");
 
             $this->commandBus->dispatch(new ApprovalKlaimAbsenCommand($id,$type,null,Session::get('id')));
             Session::flash(TypeNotif::Create->val(), "berhasil $type klaim absen");
 
-            return redirect()->route('klaim_absen.index');
+            return $redirect;
         } catch (Exception $e) {
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
-            return redirect()->route('klaim_absen.index');
+            return $redirect;
         }
     }
     public function export(Request $request){

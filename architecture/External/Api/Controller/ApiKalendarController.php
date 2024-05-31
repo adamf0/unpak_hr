@@ -167,7 +167,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                     };
                     
                     $title = match(true){
-                        empty($item->absen_masuk) && Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta')->lessThan(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d')) => "tidak masuk", //tidak masuk
+                        is_null($klaim) && empty($item->absen_masuk) && Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta')->lessThan(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d')) => "tidak masuk", //tidak masuk
                         !is_null($klaim)=> sprintf("%s - %s %s",
                             (Carbon::parse(empty($item->absen_masuk)? $klaim->jam_masuk:$item->absen_masuk)->setTimezone('Asia/Jakarta')->format("H:i:s")),
                             (Carbon::parse(empty($item->absen_keluar)? $klaim->jam_keluar:$item->absen_keluar)->setTimezone('Asia/Jakarta')->format("H:i:s")),
