@@ -115,7 +115,12 @@ class LaporanAbsenController extends Controller
         } else if(!$initial && !is_null($i_data) && !is_null($i_t)){
             $data = array_key_exists($i_data, $source['list_data'])? $source['list_data'][$i_t]:null;
             if(is_null($data)){
-                dump($data, $i_t, $i_data, $data);
+                if($i_t<count($source['list_tanggal'])){
+                    $html .= $this->generateHtml(false, $index, $i_t+1, $i_data, $source);
+                }
+                if($i_data<count($source['list_data'])){
+                    $html .= $this->generateHtml(false, $index, $i_t, $i_data+1, $source);
+                }
                 return $html;
             }
             $nama = $data['type'] == "pegawai" ? $data['pengguna']['nama'] : $data['pengguna']['nama_dosen'];
