@@ -67,7 +67,7 @@ class LaporanAbsenController extends Controller
             }
             $laporan = $this->queryBus->ask(new GetAllLaporanAbsenQuery($nidn,$nip,$tanggal_mulai,$tanggal_akhir,TypeData::Default));
 
-            dd($this->generateHtml(true, 0, null, null, $laporan));
+            return $this->generateHtml(true, 0, null, null, $laporan);
             if($type_export=="pdf"){
                 $file = PdfX::From(
                     "template.export_absen", 
