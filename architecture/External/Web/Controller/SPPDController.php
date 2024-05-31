@@ -273,7 +273,7 @@ class SPPDController extends Controller
             return FileManager::StreamFile($file);
 
         } catch (Exception $e) {
-            // throw $e;
+            throw $e;
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
             return empty($type)? redirect()->route('sppd.index'):redirect()->route('sppd.index2',['type'=>$type]);
         }
