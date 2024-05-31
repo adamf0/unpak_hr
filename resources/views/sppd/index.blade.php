@@ -493,8 +493,8 @@
             $('.btn_cetak').click(function(e){
                 e.preventDefault();
 
-                if(cetak_type_export==null){
-                    alert('wajib pilih jenis cetak laporan')
+                if(cetak_type_export==null || cetak_type_export == undefined){
+                    alert("wajib pilih jenis file yg akan di simpan")
                 } else{
                     const data = {
                         _token: '{{ csrf_token() }}',

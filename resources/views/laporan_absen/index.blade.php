@@ -253,17 +253,21 @@
             $('.btn_cetak').click(function(e){
                 e.preventDefault();
 
-                const data = {
-                    _token: '{{ csrf_token() }}',
-                    nidn : cetak_nidn,
-                    nip : cetak_nip,
-                    tanggal_mulai : cetak_tanggal_mulai,
-                    tanggal_akhir : cetak_tanggal_akhir,
-                    type_export : cetak_type_export
-                };
+                if(cetak_type_export==null || cetak_type_export == undefined){
+                    alert("wajib pilih jenis file yg akan di simpan")
+                } else{
+                    const data = {
+                        _token: '{{ csrf_token() }}',
+                        nidn : cetak_nidn,
+                        nip : cetak_nip,
+                        tanggal_mulai : cetak_tanggal_mulai,
+                        tanggal_akhir : cetak_tanggal_akhir,
+                        type_export : cetak_type_export
+                    };
 
-                console.log(data)
-                $.redirect(`{{url('laporan_absen/export')}}`,data,"GET","_blank")
+                    console.log(data)
+                    $.redirect(`{{url('laporan_absen/export')}}`,data,"GET","_blank")
+                }
             });
         });
     </script>
