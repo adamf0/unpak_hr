@@ -57,17 +57,17 @@
                                                 $dataDetail = $data[$tanggal];
                                                 foreach($dataDetail as $detail){
                                                     $info = $detail->info;
-                                                    dd($info?->keterangan?['masuk']);
+                                                    dd($info?->keterangan['masuk']);
                                                     switch ($info->type) {
                                                         case 'absen':
-                                                            if (empty($info?->keterangan?->masuk) && empty($info?->keterangan?->keluar)) {
+                                                            if (empty($info?->keterangan['masuk']) && empty($info?->keterangan['keluar'])) {
                                                                 $keterangan = "<span class='badge bg-danger'>Tidak Masuk</span>";
-                                                            } elseif (!empty($info?->keterangan?->masuk) && empty($info?->keterangan?->keluar)) {
-                                                                $masuk = Carbon::parse($info?->keterangan?->masuk)->setTimezone('Asia/Jakarta')->format('H:i');
+                                                            } elseif (!empty($info?->keterangan['masuk']) && empty($info?->keterangan['keluar'])) {
+                                                                $masuk = Carbon::parse($info?->keterangan['masuk'])->setTimezone('Asia/Jakarta')->format('H:i');
                                                                 $keterangan = "<span class='badge bg-success'>{$masuk}</span> - <span class='badge bg-danger'>Masih Masuk</span>";
                                                             } else {
-                                                                $masuk = Carbon::parse($info?->keterangan?->masuk)->setTimezone('Asia/Jakarta')->format('H:i');
-                                                                $keluar = Carbon::parse($info?->keterangan?->keluar)->setTimezone('Asia/Jakarta')->format('H:i');
+                                                                $masuk = Carbon::parse($info?->keterangan['masuk'])->setTimezone('Asia/Jakarta')->format('H:i');
+                                                                $keluar = Carbon::parse($info?->keterangan['keluar'])->setTimezone('Asia/Jakarta')->format('H:i');
                                                                 $keterangan = "<span class='badge bg-success'>{$masuk}</span> - <span class='badge bg-danger'>{$keluar}</span>";
                                                             }
                                                             break;
