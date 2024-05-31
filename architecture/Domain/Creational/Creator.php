@@ -70,6 +70,8 @@ class Creator{
             $factory->GetProgramStudy(),
             $factory->GetPosition(),
             $factory->GetLevel(),
+            $factory->GetStructural(),
+            $factory->GetUnit(),
             $factory->GetActive(),
         );
     }

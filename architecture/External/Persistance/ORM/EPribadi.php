@@ -22,4 +22,10 @@ class EPribadi extends Model
    {
       return $this->hasOne(Jafung::class, 'nip','nip');
    }
+   function Pengangkatan(){
+      return $this->hasOne(Pengangkatan::class, 'nip', 'nip');
+   }
+   function PayrollPegawai(){
+      return $this->hasOne(PayrollPegawai::class, 'nip', 'nip');
+   }
 }

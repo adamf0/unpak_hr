@@ -14,6 +14,8 @@ abstract class IPengguna extends BaseEntity{
     public $programStudy=null;
     public $position=null;
     public $level=null;
+    public $structural=null;
+    public $unit=null;
     public $active=true;
 
     public function GetNIDN(){
@@ -39,6 +41,12 @@ abstract class IPengguna extends BaseEntity{
     }
     public function GetLevel(){
         return $this->level;
+    }
+    public function GetStructural(){
+        return $this->structural;
+    }
+    public function GetUnit(){
+        return $this->unit;
     }
     public function GetActive(){
         return $this->active;

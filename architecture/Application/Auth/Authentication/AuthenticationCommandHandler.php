@@ -31,5 +31,7 @@ class AuthenticationCommandHandler extends CommandHandler
         Session::put('kodeFakultas', $dataPengguna->GetFaculty());
         Session::put('kodeProdi', $dataPengguna->GetProgramStudy());    
         Session::put('jafung', $dataPengguna->GetPosition());
+        Session::put('struktural', $dataPengguna->GetStructural());
+        Session::put('unit_kerja', $dataPengguna->GetUnit());
     }
 }

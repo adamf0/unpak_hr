@@ -16,6 +16,8 @@ class AuthenticationSimak implements IAuthentication {
         $listPengguna       = UserSimak::with([
                                     'Dosen'=>fn($query)=>$query->select('NIDN','kode_fak','kode_prodi'),
                                     'Dosen.EPribadi',
+                                    'Dosen.EPribadi.Pengangkatan',
+                                    'Dosen.EPribadi.PayrollPegawai',
                                     'Dosen.EPribadi.Jafung'=>fn($query)=>$query->select('nip','jafung','status_berlaku_jafung')->where('status_berlaku_jafung','BERLAKU'),
                                 ])
                                 ->where('username',$pengguna->GetUsername())
@@ -32,6 +34,8 @@ class AuthenticationSimak implements IAuthentication {
                                         $row->Dosen?->kode_prodi,
                                         $row->Dosen?->EPribadi?->Jafung?->jafung,
                                         strtolower($row->level),
+                                        $row->Dosen?->EPribadi?->PayrollPegawai?->struktural,
+                                        $row->Dosen?->EPribadi?->Pengangkatan?->unit_kerja,
                                         $row->aktif=="Y"
                                     ));
                                 })

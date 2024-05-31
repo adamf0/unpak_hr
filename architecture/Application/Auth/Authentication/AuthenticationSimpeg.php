@@ -13,7 +13,7 @@ class AuthenticationSimpeg implements IAuthentication {
     public function __construct() {}
 
     public function Authentication(Pengguna $pengguna) {
-        $listPengguna       = ModelPengguna::with(['NPribadi'=>fn($query)=>$query->select('id_n_pribadi','nip','nama','status_pegawai')])->where('username',$pengguna->GetUsername())
+        $listPengguna       = ModelPengguna::with(['Pengangkatan','PayrollPegawai','NPribadi'=>fn($query)=>$query->select('id_n_pribadi','nip','nama','status_pegawai')])->where('username',$pengguna->GetUsername())
                                 ->get()
                                 ->transform(function($row){
                                     return Creator::buildPengguna(PenggunaEntitas::make(
@@ -27,6 +27,8 @@ class AuthenticationSimpeg implements IAuthentication {
                                         null,
                                         null,
                                         strtolower($row->level),
+                                        $row->PayrollPegawai?->struktural,
+                                        $row->Pengangkatan?->unit_kerja,
                                         true
                                     ));
                                 })

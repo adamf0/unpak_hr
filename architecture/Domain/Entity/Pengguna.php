@@ -4,7 +4,7 @@ namespace Architecture\Domain\Entity;
 use Illuminate\Support\Facades\Hash;
 
 class Pengguna{
-    public function __construct(public $id=null, public $nidn=null, public $nip=null, public $username, public $password=null, public $name=null, public $faculty=null, public $programStudy=null, public $position=null, public $level=null, public $active=true){}
+    public function __construct(public $id=null, public $nidn=null, public $nip=null, public $username, public $password=null, public $name=null, public $faculty=null, public $programStudy=null, public $position=null, public $level=null, public $structural=null, public $unit=null, public $active=true){}
 
     public function GetId(){
         return $this->id;
@@ -35,6 +35,12 @@ class Pengguna{
     }
     public function GetPosition(){
         return $this->position;
+    }
+    public function GetStructural(){
+        return $this->structural;
+    }
+    public function GetUnit(){
+        return $this->unit;
     }
     public function IsActive(){
         return $this->active;

@@ -15,4 +15,10 @@ class Pengguna extends Model
    function NPribadi(){
       return $this->hasOne(NPribadi::class, 'nip', 'username');
    }
+   function Pengangkatan(){
+      return $this->hasOne(Pengangkatan::class, 'nip', 'nip');
+   }
+   function PayrollPegawai(){
+      return $this->hasOne(PayrollPegawai::class, 'nip', 'nip');
+   }
 }
