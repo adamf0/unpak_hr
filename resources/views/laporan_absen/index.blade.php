@@ -89,13 +89,25 @@
                 ajax: '{{ route("datatable.LaporanAbsen.index") }}',
                 columns: [
                     { 
-                        data: 'pengguna', 
+                        data: null, 
                         name: 'pengguna',
                         render: function ( data, type, row, meta ) {
-                            console.log(data)
-                            const nama = data?.nama_dosen??data?.nama??"NA"
-                            const kode = data?.NIDN??data?.nip??"NA"
-                            return `${nama} - ${nip}`
+                            if(data.type=="dosen"){
+                                console.log("x1",data)
+                                const nama = data?.nama_dosen??"NA"
+                                const kode = data?.NIDN??"NA"
+                                return `${nama} - ${nip}`
+                            } else if(data.type=="pegawai"){
+                                console.log("x2",data)
+                                const nama = data?.nama??"NA"
+                                const kode = data?.nip??"NA"
+                                return `${nama} - ${nip}`
+                            } else{
+                                console.log("x2",data)
+                                const nama = "NA"
+                                const kode = "NA"
+                                return `${nama} - ${nip}`
+                            }
                         }
                     },
                     @foreach ($list_tanggal as $tanggal)
