@@ -231,7 +231,7 @@
                     name: 'anggota',
                     render: function ( data, type, row, meta ) {
                         let list_anggota = '<ol>';
-                        (data?.anggota ?? []).forEach(d => {
+                        data?.anggota?.forEach(d => {
                             list_anggota += `<li>${d.nama ?? "NA"} - ${d.nidn ?? d.nip ?? "NA"}</li>`;
                         });
                         list_anggota += '</ol>';
