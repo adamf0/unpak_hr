@@ -7,6 +7,7 @@ use Architecture\Application\Abstractions\Messaging\ICommandBus;
 use Architecture\Application\Abstractions\Messaging\IQueryBus;
 use Architecture\Application\Cuti\List\GetAllCutiQuery;
 use Architecture\Application\Izin\List\GetAllIzinQuery;
+use Architecture\Application\KlaimAbsen\List\GetAllKlaimAbsenQuery;
 use Architecture\Application\MasterKalendar\List\GetAllMasterKalendarQuery;
 use Architecture\Application\Presensi\List\GetAllPresensiQuery;
 use Architecture\Application\SPPD\List\GetAllSPPDQuery;
@@ -60,6 +61,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
             $list_izin = in_array($level, ["dosen","pegawai"])? $this->queryBus->ask(new GetAllIzinQuery($nidn,$nip,$tahun,TypeData::Default)) : collect([]);
             $list_sppd = in_array($level, ["dosen","pegawai"])? $this->queryBus->ask(new GetAllSPPDQuery($nidn,$nip,$tahun,TypeData::Default)) : collect([]);
             $list_absen = in_array($level, ["dosen","pegawai"])? $this->queryBus->ask(new GetAllPresensiQuery($nidn,$nip,$tahun,TypeData::Default)) : collect([]);
+            $list_klaim_absen = in_array($level, ["dosen","pegawai"])? $this->queryBus->ask(new GetAllKlaimAbsenQuery($nidn,$nip,$tahun,TypeData::Default)) : collect([]);
             $master_kalendar = $this->queryBus->ask(new GetAllMasterKalendarQuery(1,1,$tahun,TypeData::Default));
             // dd($list_cuti, $list_izin, $list_sppd, $master_kalendar);
             
@@ -153,15 +155,25 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                 return $carry;
             }, []);
 
-            $listAbsen = $list_absen->reduce(function ($carry, $item) use ($format) {
+            $listAbsen = $list_absen->reduce(function ($carry, $item) use ($format,$list_klaim_absen) {
                 if($format=="full-calendar"){
+                    $klaim = $list_klaim_absen->where('status','terima')->where('Presensi.tanggal',$item->tanggal);
+                    $klaim = $klaim->count()==1? $klaim[0]:null;
+
                     $background = match(true){
-                        empty($item->absen_masuk) && Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta')->lessThan(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d')) => "#dc3545", //tidak masuk
-                        !empty($item->absen_masuk) && !$this->isLate($item->absen_masuk, $item->tanggal) => "#198754", //masuk
+                        is_null($klaim) && empty($item->absen_masuk) && Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta')->lessThan(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d')) => "#dc3545", //tidak masuk
+                        !is_null($klaim) || (!empty($item->absen_masuk) && !$this->isLate($item->absen_masuk, $item->tanggal)) => "#198754", //masuk
                         default => "#000"
                     };
+                    
                     $title = match(true){
                         empty($item->absen_masuk) && Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta')->lessThan(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d')) => "tidak masuk", //tidak masuk
+                        !is_null($klaim)=> sprintf("%s - %s %s",
+                            (Carbon::parse(empty($item->absen_masuk)? $klaim->jam_masuk:$item->absen_masuk)->setTimezone('Asia/Jakarta')->format("H:i:s")),
+                            (Carbon::parse(empty($item->absen_keluar)? $klaim->jam_keluar:$item->absen_keluar)->setTimezone('Asia/Jakarta')->format("H:i:s")),
+                            ((!empty($klaim->jam_masuk) || !empty($klaim->jam_keluar))? "(klaim)":"")
+                        ), //klaim
+                        
                         !empty($item->absen_masuk) && !$this->isLate($item->absen_masuk, $item->tanggal) => Carbon::parse($item->absen_masuk)->setTimezone('Asia/Jakarta')->format("H:i:s").(empty($item->absen_keluar)? "":" - ".Carbon::parse($item->absen_keluar)->setTimezone('Asia/Jakarta')->format("H:i:s")), //masuk
                         default => empty($item->absen_masuk)? null:Carbon::parse($item->absen_masuk)->setTimezone('Asia/Jakarta')->format("H:i:s")
                     };
