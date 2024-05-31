@@ -111,9 +111,8 @@ class LaporanAbsenController extends Controller
             $html .= '</tr>';
             $html .= '</thead>';
             $html .= '<tbody>';
-        }
-
-        if(!$initial && !is_null($i_data) && !is_null($i_t)){
+            $html .= $this->generateHtml(false, 0, 0, 0, $source);
+        } else if(!$initial && !is_null($i_data) && !is_null($i_t)){
             $data = array_key_exists($i_data, $source['list_data'])? $source['list_tanggal'][$i_t]:null;
             $nama = !is_null($data) && $data['type'] == "pegawai" ? $data['pengguna']['nama'] : $data['pengguna']['nama_dosen'];
             $kode = !is_null($data) && $data['type'] == "pegawai" ? $data['pengguna']['nip'] : $data['pengguna']['NIDN'];
@@ -174,13 +173,12 @@ class LaporanAbsenController extends Controller
             $html .= '  </td>';
             $html .= '</tr>';
 
-            if($i_t<count($source['list_data'])){
+            if($i_t<count($source['list_tanggal'])){
                 $html .= $this->generateHtml(false, $index, $i_t+1, $i_data, $source);
             }
-        }
-
-        if($i_data<count($source['list_tanggal'])){
-            $html .= $this->generateHtml(false, $index, $i_t, $i_data+1, $source);
+            if($i_data<count($source['list_data'])){
+                $html .= $this->generateHtml(false, $index, $i_t, $i_data+1, $source);
+            }
         }
 
         // foreach ($source['list_data'] as $index => $data) {
