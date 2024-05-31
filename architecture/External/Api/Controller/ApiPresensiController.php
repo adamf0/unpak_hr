@@ -7,6 +7,9 @@ use Architecture\Application\Abstractions\Messaging\ICommandBus;
 use Architecture\Application\Abstractions\Messaging\IQueryBus;
 use Architecture\Application\Presensi\Create\CreatePresensiKeluarCommand;
 use Architecture\Application\Presensi\Create\CreatePresensiMasukCommand;
+use Architecture\Domain\Creational\Creator;
+use Architecture\Domain\Entity\DosenReferensi;
+use Architecture\Domain\Entity\PegawaiReferensi;
 use Architecture\Domain\RuleValidationRequest\Presensi\CreatePresensiRuleReq;
 use Architecture\Domain\ValueObject\Date;
 use Exception;
@@ -37,8 +40,8 @@ class ApiPresensiController extends Controller
 
             if($request->type=="absen_masuk"){
                 $this->commandBus->dispatch(new CreatePresensiMasukCommand(
-                    $nidn,
-                    $nip,
+                    Creator::buildDosen(DosenReferensi::make($nidn)),
+                    Creator::buildPegawai(PegawaiReferensi::make($nip)),
                     new Date($request->tanggal),
                     new Date($request->absen_masuk),
                     $request->catatan_telat,
@@ -51,8 +54,8 @@ class ApiPresensiController extends Controller
                 ]);
             } else if($request->type=="absen_keluar"){
                 $this->commandBus->dispatch(new CreatePresensiKeluarCommand(
-                    $nidn,
-                    $nip,
+                    Creator::buildDosen(DosenReferensi::make($nidn)),
+                    Creator::buildPegawai(PegawaiReferensi::make($nip)),
                     new Date($request->tanggal),
                     new Date($request->absen_keluar),
                     $request->catatan_pulang,
