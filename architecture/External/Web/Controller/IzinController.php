@@ -241,7 +241,7 @@ class IzinController extends Controller
                     "$file_name.pdf"
                 );
             } else{
-                throw new Exception("export type '$type_export' not implementation");
+                throw new Exception("simpan file '$type_export' belum diimplementasikan");
             }
     
             return FileManager::StreamFile($file);
