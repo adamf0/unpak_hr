@@ -26,9 +26,9 @@ class AuthenticationSimpeg implements IAuthentication {
                                         null,
                                         null,
                                         null,
-                                        strtolower($row->level),
                                         $row->PayrollPegawai?->struktural,
                                         $row->Pengangkatan?->unit_kerja,
+                                        strtolower($row->level),
                                         true
                                     ));
                                 })

@@ -33,9 +33,9 @@ class AuthenticationSimak implements IAuthentication {
                                         $row->Dosen?->kode_fak,
                                         $row->Dosen?->kode_prodi,
                                         $row->Dosen?->EPribadi?->Jafung?->jafung,
-                                        strtolower($row->level),
                                         $row->Dosen?->EPribadi?->PayrollPegawai?->struktural,
                                         $row->Dosen?->EPribadi?->Pengangkatan?->unit_kerja,
+                                        strtolower($row->level),
                                         $row->aktif=="Y"
                                     ));
                                 })
