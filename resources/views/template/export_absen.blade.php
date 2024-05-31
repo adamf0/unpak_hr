@@ -57,7 +57,7 @@
                                                 $dataDetail = $data[$tanggal];
                                                 foreach($dataDetail as $detail){
                                                     $info = $detail->info;
-                                                    dd($info?->keterangan?->masuk);
+                                                    dd($info?->keterangan?['masuk']);
                                                     switch ($info->type) {
                                                         case 'absen':
                                                             if (empty($info?->keterangan?->masuk) && empty($info?->keterangan?->keluar)) {
