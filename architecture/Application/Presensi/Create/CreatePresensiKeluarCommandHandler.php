@@ -14,10 +14,10 @@ class CreatePresensiKeluarCommandHandler extends CommandHandler
         $absen_keluar = $command->GetAbsenKeluar()->toFormat(FormatDate::YMDHIS);
 
         $Absensi = Absensi::where('tanggal', $tanggal);
-        if($command->GetNIDN()!=null){
-            $Absensi->where('nidn',$command->GetNIDN());    
-        } else if($command->GetNIP()!=null){
-            $Absensi->where('nip',$command->GetNIP());
+        if($command->GetDosen()?->GetNIDN()!=null){
+            $Absensi->where('nidn',$command->GetDosen()?->GetNIDN());    
+        } else if($command->GetPegawai()?->GetNIP()!=null){
+            $Absensi->where('nip',$command->GetPegawai()?->GetNIP());
         }
         $Absensi = $Absensi->firstOrFail();
         $Absensi->absen_keluar = $absen_keluar;
