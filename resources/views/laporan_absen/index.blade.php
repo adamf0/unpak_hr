@@ -96,17 +96,17 @@
                                 console.log("x1",data)
                                 const nama = data?.pengguna?.nama_dosen??"NA"
                                 const kode = data?.pengguna?.NIDN??"NA"
-                                return `${nama} - ${nip}`
+                                return `${nama} - ${kode}`
                             } else if(data.type=="pegawai"){
                                 console.log("x2",data)
                                 const nama = data?.pengguna?.nama??"NA"
                                 const kode = data?.pengguna?.nip??"NA"
-                                return `${nama} - ${nip}`
+                                return `${nama} - ${kode}`
                             } else{
                                 console.log("x2",data)
                                 const nama = "NA"
                                 const kode = "NA"
-                                return `${nama} - ${nip}`
+                                return `${nama} - ${kode}`
                             }
                         }
                     },
