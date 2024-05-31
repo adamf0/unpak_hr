@@ -143,8 +143,7 @@ class LaporanAbsenController extends Controller
             $keterangan = "";
             if (isset($data[$tanggal])) {
                 foreach ($data[$tanggal] as $detail) {
-                    dd($detail);
-                    $info = $detail['info'];
+                    $info = $detail->info;
                     switch ($info->type) {
                         case 'absen':
                             if (empty($info->keterangan['masuk']) && empty($info->keterangan['keluar'])) {
