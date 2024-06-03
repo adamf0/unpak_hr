@@ -102,7 +102,7 @@ class LaporanAbsenController extends Controller
                                     if (empty($masuk) && empty($keluar)) {
                                         $carry[] = "tidak masuk";
                                     } else {
-                                        dd($masuk, $keluar);
+                                        dd($masuk, empty($masuk)? "":Carbon::parse($masuk)->setTimezone('Asia/Jakarta')->format("H:i:s"), $keluar);
                                         $carry[] = (empty($masuk)? "":Carbon::parse($masuk)->setTimezone('Asia/Jakarta')->format("H:i:s"))." - ".empty($keluar)? "":Carbon::parse($keluar)->setTimezone('Asia/Jakarta')->format("H:i:s");
                                     }
                                 } elseif ($type == "izin" || $type == "cuti") {
