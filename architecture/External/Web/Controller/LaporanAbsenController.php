@@ -67,8 +67,8 @@ class LaporanAbsenController extends Controller
             }
             $laporan = $this->queryBus->ask(new GetAllLaporanAbsenQuery($nidn,$nip,$tanggal_mulai,$tanggal_akhir,TypeData::Default));
 
-            return $this->generateHtml(true, 0, null, null, $laporan);
             if($type_export=="pdf"){
+                return $this->generateHtml(true, 0, null, null, $laporan);
                 $file = PdfX::From(
                     "template.export_absen", 
                     $laporan, 
@@ -76,12 +76,11 @@ class LaporanAbsenController extends Controller
                     "$file_name.pdf",
                     true
                 );
+                return FileManager::StreamFile($file);
             } else{
-                throw new Exception("simpan file '$type_export' belum diimplementasikan");
+                dd($laporan);
+                // throw new Exception("simpan file '$type_export' belum diimplementasikan");
             }
-    
-            return FileManager::StreamFile($file);
-
         } catch (Exception $e) {
             throw $e;
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
