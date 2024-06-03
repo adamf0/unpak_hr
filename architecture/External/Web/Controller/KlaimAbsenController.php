@@ -21,13 +21,16 @@ use Architecture\Domain\RuleValidationRequest\KlaimAbsen\CreateKlaimAbsenRuleReq
 use Architecture\Domain\RuleValidationRequest\KlaimAbsen\DeleteKlaimAbsenRuleReq;
 use Architecture\Domain\RuleValidationRequest\KlaimAbsen\UpdateKlaimAbsenRuleReq;
 use Architecture\External\Persistance\ORM\KlaimAbsen;
+use Architecture\External\Port\ExportKlaimAbsenXls;
 use Architecture\External\Port\FileSystem;
 use Architecture\External\Port\PdfX;
 use Architecture\Shared\Creational\FileManager;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class KlaimAbsenController extends Controller
 {
@@ -221,12 +224,25 @@ class KlaimAbsenController extends Controller
                     FolderX::FromPath(public_path('export/pdf')), 
                     "$file_name.pdf"
                 );
+                return FileManager::StreamFile($file);
             } else{
-                throw new Exception("simpan file '$type_export' belum diimplementasikan");
-            }
-    
-            return FileManager::StreamFile($file);
+                $list_klaim_absen = $list_klaim_absen->reduce(function($carry,$item){
+                    $carry[] = [
+                        'nama'=>match(true){
+                            !is_null($item->Dosen) && is_null($item->Pegawai)=>$item->Dosen->nama_dosen,
+                            is_null($item->Dosen) && !is_null($item->Pegawai)=>$item->Pegawai->nama,
+                            default=>"NA"
+                        },
+                        'tanggal'=>$item->Presensi?->tanggal,
+                        'jam_masuk' =>(empty($item->jam_masuk)? "":date('H:i:s',strtotime($item->jam_masuk))),
+                        'jam_keluar' =>(empty($item->jam_keluar)? "":date('H:i:s',strtotime($item->jam_keluar))),
+                        'tujuan' =>$item->tujuan,
+                    ];
 
+                    return $carry;
+                });
+                return Excel::download(new ExportKlaimAbsenXls(collect($list_klaim_absen), ['nama','tanggal','jam masuk','jam keluar','tujuan']), "$file_name.xlsx");
+            }
         } catch (Exception $e) {
             throw $e;
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
