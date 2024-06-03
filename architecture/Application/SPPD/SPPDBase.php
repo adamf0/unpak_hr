@@ -13,7 +13,7 @@ trait SPPDBase
     public ?Dosen $dosen=null;
     public ?Pegawai $pegawai=null;
     public ?JenisSPPD $jenis_sppd=null;
-    public Date $tanggal_berangkat;
+    public ?Date $tanggal_berangkat=null;
     public ?Date $tanggal_kembali=null;
     public $tujuan;
     public $keterangan;

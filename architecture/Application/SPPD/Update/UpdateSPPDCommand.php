@@ -19,7 +19,7 @@ class UpdateSPPDCommand extends Command
         ?Dosen $dosen=null,
         ?Pegawai $pegawai=null,
         ?JenisSPPD $jenis_sppd=null,
-        Date $tanggal_berangkat,
+        ?Date $tanggal_berangkat=null,
         ?Date $tanggal_kembali=null,
         $tujuan,
         $keterangan,
