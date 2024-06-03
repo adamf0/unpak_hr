@@ -8,6 +8,7 @@ use Architecture\Application\Abstractions\Messaging\IQueryBus;
 use Architecture\Application\LaporanAbsen\List\GetAllLaporanAbsenQuery;
 use Architecture\Domain\Entity\FolderX;
 use Architecture\Domain\Enum\TypeNotif;
+use Architecture\External\Port\ExportAbsenXls;
 use Architecture\External\Port\PdfX;
 use Architecture\Shared\Creational\FileManager;
 use Architecture\Shared\TypeData;
@@ -16,6 +17,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LaporanAbsenController extends Controller
 {
@@ -78,7 +80,24 @@ class LaporanAbsenController extends Controller
                 );
                 return FileManager::StreamFile($file);
             } else{
-                dd($laporan);
+                $listData = collect($laporan['list_data'])->map(function($item){
+                    $item->nama = match($item->type){
+                        "dosen"=>$item->pengguna?->nama_dosen,
+                        "pegawai"=>$item->pengguna?->nama,
+                    };
+                    unset($item->pengguna);
+                    unset($item->type);
+                    
+                    return $item;
+                });
+                $listTanggalFormat = collect($laporan['list_tanggal'])->reduce(function($carry,$item){
+                    $carry[] = Carbon::parse($item)->setTimezone('Asia/Jakarta')->format("d F Y");
+                    return $carry;
+                },[]);
+
+                dd($listData, $listTanggalFormat);
+
+                // return Excel::download(new ExportAbsenXls(collect($laporan['list_data']), array_merge(["nama"],$laporan['list_tanggal'])), "$file_name.xlsx");
                 // throw new Exception("simpan file '$type_export' belum diimplementasikan");
             }
         } catch (Exception $e) {
