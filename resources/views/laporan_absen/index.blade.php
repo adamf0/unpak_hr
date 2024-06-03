@@ -82,11 +82,12 @@
             const nidn = `{{Session::get('nidn')}}`
             const nip = `{{Session::get('nip')}}`
             const level = `{{Session::get('levelActive')}}`
+            const type = `{{$type}}`
             
             $('#tb').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route("datatable.LaporanAbsen.index") }}',
+                ajax: `{{ route("datatable.LaporanAbsen.index") }}?level=${level}&nidn=${nidn}&nip=${nip}&type=${type}`,
                 columns: [
                     { 
                         data: null, 

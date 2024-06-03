@@ -253,7 +253,12 @@
 
         <li class="nav-heading">Laporan & Monitoring</li>
         <x-sidebar-item-menu title="Monitoring" icon="bi bi-menu-button-wide" link="{{route('monitoring.index')}}" :active="Utility::stateMenu(['monitoring'],request())" />
-        <x-sidebar-item-menu title="Laporan Absen" icon="bi bi-menu-button-wide" link="{{route('laporan_absen.index')}}" :active="Utility::stateMenu(['laporan_absen'],request())" />
+        <x-sidebar-item-menu-dropdown title="Laporan Absen" parent="sidebar-nav" target="laporan_absen" icon="bi bi-menu-button-wide" :active="Utility::stateMenu([
+          'laporan_absen',
+          ],request())">
+          <x-sidebar-item-menu-dropdown-child title="Dosen" icon="bi bi-menu-button-wide" link="{{ route('laporan_absen.index',['type'=>'dosen']) }}" :active="Utility::stateMenu(['laporan_absen'],request(),1)" />
+          <x-sidebar-item-menu-dropdown-child title="Tendik" icon="bi bi-menu-button-wide" link="{{ route('laporan_absen.index',['type'=>'tendik']) }}" :active="Utility::stateMenu(['laporan_absen'],request(),1)" />
+        </x-sidebar-item-menu-dropdown>
       @endif
       
 

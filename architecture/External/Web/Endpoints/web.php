@@ -114,6 +114,6 @@ Route::middleware(['throwSession'])->group(function () {
 
     Route::get('monitoring', [MonitoringController::class,'index'])->name('monitoring.index');
 
-    Route::get('laporan_absen', [LaporanAbsenController::class,'index'])->name('laporan_absen.index');
+    Route::get('laporan_absen/{type}', [LaporanAbsenController::class,'index'])->name('laporan_absen.index');
     Route::get('laporan_absen/export', [LaporanAbsenController::class,'export'])->name('laporan_absen.export');
 });

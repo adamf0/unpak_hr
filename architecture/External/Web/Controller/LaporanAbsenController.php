@@ -26,7 +26,7 @@ class LaporanAbsenController extends Controller
         protected IQueryBus $queryBus
     ) {}
     
-    public function Index(){
+    public function Index($type=null){
         ini_set('memory_limit', '-1');
         $start = Carbon::now()->startOfMonth();
         $end = Carbon::now()->endOfMonth();
@@ -34,7 +34,7 @@ class LaporanAbsenController extends Controller
         for ($date = Carbon::now()->startOfMonth(); $date->lte($end); $date->addDay()) {
             $list_tanggal[] = $date->copy()->format('Y-m-d');
         }
-        return view('laporan_absen.index',['list_tanggal'=>$list_tanggal,'start'=>$start->format('d F Y'),'end'=>$end->format('d F Y')]);
+        return view('laporan_absen.index',['type'=>$type, 'list_tanggal'=>$list_tanggal,'start'=>$start->format('d F Y'),'end'=>$end->format('d F Y')]);
     }
 
 
