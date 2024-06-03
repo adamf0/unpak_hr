@@ -517,7 +517,7 @@
                     $(refAbsenDone).hide()
                     $(refAbsenMessage).html("Masih belum terlambat, ayo presensi masuk!")
 
-                    $(refAbsenMessage).show()
+                    $(refAbsenMessage).hide()
                     $(refAbsenKeterangan).show()
                     changeClass($(refAbsenSubmit), "btn-warning", "btn-success")
                     $(refAbsenSubmit).html("Presensi Masuk")
