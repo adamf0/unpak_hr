@@ -24,13 +24,16 @@ use Architecture\Domain\RuleValidationRequest\Izin\DeleteIzinRuleReq;
 use Architecture\Domain\RuleValidationRequest\Izin\UpdateIzinRuleReq;
 use Architecture\Domain\ValueObject\Date;
 use Architecture\External\Persistance\ORM\Izin;
+use Architecture\External\Port\ExportIzinXls;
 use Architecture\External\Port\FileSystem;
 use Architecture\External\Port\PdfX;
 use Architecture\Shared\Creational\FileManager;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class IzinController extends Controller
 {
@@ -245,12 +248,25 @@ class IzinController extends Controller
                     FolderX::FromPath(public_path('export/pdf')), 
                     "$file_name.pdf"
                 );
+                return FileManager::StreamFile($file);
             } else{
-                throw new Exception("simpan file '$type_export' belum diimplementasikan");
-            }
-    
-            return FileManager::StreamFile($file);
+                $list_izin = $list_izin->reduce(function($carry,$item){
+                    $carry[] = [
+                        'nama'=>match(true){
+                            !is_null($item->Dosen) && is_null($item->Pegawai)=>$item->Dosen->nama_dosen,
+                            is_null($item->Dosen) && !is_null($item->Pegawai)=>$item->Pegawai->nama,
+                            default=>"NA"
+                        },
+                        'tanggal_izin' =>Carbon::parse($item->tanggal_pengajuan)->setTimezone('Asia/Jakarta')->format("d F Y"),
+                        'jenis_izin' =>$item->JenisIzin?->nama,
+                        'tujuan'=>$item->tujuan,
+                        'catatan'=>$item->catatan,
+                    ];
 
+                    return $carry;
+                });
+                return Excel::download(new ExportIzinXls(collect($list_izin), ['nama','tanggal izin','Jenis Izin','Tujuan','Catatan']), "$file_name.xlsx");
+            }
         } catch (Exception $e) {
             // throw $e;
             Session::flash(TypeNotif::Error->val(), $e->getMessage());

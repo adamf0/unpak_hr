@@ -23,6 +23,7 @@ use Architecture\Domain\Structural\AnggotaAdapter;
 use Architecture\Domain\Structural\ListContext;
 use Architecture\Domain\ValueObject\Date;
 use Architecture\External\Persistance\ORM\SPPD;
+use Architecture\External\Port\ExportSPPDXls;
 use Architecture\External\Port\PdfX;
 use Architecture\Shared\Creational\FileManager;
 use Exception;
@@ -30,6 +31,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SPPDController extends Controller
 {
@@ -285,12 +287,32 @@ class SPPDController extends Controller
                     FolderX::FromPath(public_path('export/pdf')), 
                     "$file_name.pdf"
                 );
+                return FileManager::StreamFile($file);
             } else{
-                throw new Exception("simpan file '$type_export' belum diimplementasikan");
-            }
-    
-            return FileManager::StreamFile($file);
+                $list_sppd = $list_sppd->reduce(function($carry,$item){
+                    $list_anggota = array_unique(array_reduce($item->AnggotaFlat,function($carry, $it){
+                            $carry[] = $it->nama.'-'.$it->kodePengenal;
+                            return $carry;
+                    },[]));
+                    
+                    $carry[] = [
+                        'nama'=>match(true){
+                            !is_null($item->Dosen) && is_null($item->Pegawai)=>$item->Dosen->nama_dosen,
+                            is_null($item->Dosen) && !is_null($item->Pegawai)=>$item->Pegawai->nama,
+                            default=>"NA"
+                        },
+                        'tujuan'=>$item->tujuan,
+                        'jenis_sppd' =>$item->JenisSPPD?->nama,
+                        'tanggal_berangkat' =>Carbon::parse($item->tanggal_berangkat)->setTimezone('Asia/Jakarta')->format("d F Y"),
+                        'tanggal_kembali' =>Carbon::parse($item->tanggal_kembali)->setTimezone('Asia/Jakarta')->format("d F Y"),
+                        'keterangan'=>$item->keterangan,
+                        'anggota'=>implode("\n",$list_anggota)
+                    ];
 
+                    return $carry;
+                });
+                return Excel::download(new ExportSPPDXls(collect($list_sppd), ['nama','tujuan','jenis sppd','tanggal berangkat','tanggal kembali','keterangan','anggota']), "$file_name.xlsx");
+            }
         } catch (Exception $e) {
             throw $e;
             Session::flash(TypeNotif::Error->val(), $e->getMessage());

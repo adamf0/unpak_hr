@@ -24,13 +24,16 @@ use Architecture\Domain\RuleValidationRequest\Cuti\DeleteCutiRuleReq;
 use Architecture\Domain\RuleValidationRequest\Cuti\UpdateCutiRuleReq;
 use Architecture\Domain\ValueObject\Date;
 use Architecture\External\Persistance\ORM\Cuti;
+use Architecture\External\Port\ExportCutiXls;
 use Architecture\External\Port\FileSystem;
 use Architecture\External\Port\PdfX;
 use Architecture\Shared\Creational\FileManager;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CutiController extends Controller
 {
@@ -252,12 +255,25 @@ class CutiController extends Controller
                     FolderX::FromPath(public_path('export/pdf')), 
                     "$file_name.pdf"
                 );
+                return FileManager::StreamFile($file);
             } else{
-                throw new Exception("simpan file '$type_export' belum diimplementasikan");
-            }
-    
-            return FileManager::StreamFile($file);
+                $list_cuti = $list_cuti->reduce(function($carry,$item){
+                    $carry[] = [
+                        'nama'=>match(true){
+                            !is_null($item->Dosen) && is_null($item->Pegawai)=>$item->Dosen->nama_dosen,
+                            is_null($item->Dosen) && !is_null($item->Pegawai)=>$item->Pegawai->nama,
+                            default=>"NA"
+                        },
+                        'tanggal_cuti' =>(empty($item->tanggal_mulai)? "":Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta')->format("d F Y"))." - ".(empty($item->tanggal_akhir)? "":Carbon::parse($item->tanggal_akhir)->setTimezone('Asia/Jakarta')->format("d F Y")),
+                        'lama_cuti' =>$item->lama_cuti,
+                        'jenis_cuti'=>$item->JenisCuti?->nama,
+                        'tujuan'=>$item->tujuan
+                    ];
 
+                    return $carry;
+                });
+                return Excel::download(new ExportCutiXls(collect($list_cuti), ['nama','tanggal cuti','lama cuti (hari)','jenis cuti','tujuan']), "$file_name.xlsx");
+            }
         } catch (Exception $e) {
             // throw $e;
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
