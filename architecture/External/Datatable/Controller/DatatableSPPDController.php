@@ -63,8 +63,8 @@ class DatatableSPPDController extends Controller
                                     "nip"=>$item->GetPegawai()?->GetNIP(),
                                     "jenis_sppd"=> $item->GetJenisSPPD()?->GetNama(),
                                     "nama" => match(true){
-                                        !is_null($item->GetDosen()) && is_null($item->GetPegawai())=>$item->GetDosen()->GetNama(),
-                                        is_null($item->GetDosen()) && !is_null($item->GetPegawai())=>$item->GetPegawai()->GetNama(),
+                                        !is_null($item->GetDosen()) && is_null($item->GetPegawai())=>$item->GetDosen()->GetNama()." - ".$item->GetDosen()->GetNIDN(),
+                                        is_null($item->GetDosen()) && !is_null($item->GetPegawai())=>$item->GetPegawai()->GetNama()." - ".$item->GetDosen()->GetNIP(),
                                         default=>"NA",
                                     },
                                     "tanggal_berangkat"=> $item->GetTanggalBerangkat()->toFormat(FormatDate::LDFY),

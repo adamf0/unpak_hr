@@ -55,8 +55,8 @@ class DatatableKlaimAbsenController extends Controller
                                     default=>(object)[
                                         "id"=>$item->GetId(),
                                         "nama" => match(true){
-                                            !is_null($item->GetDosen()) && is_null($item->GetPegawai())=>$item->GetDosen()->GetNama(),
-                                            is_null($item->GetDosen()) && !is_null($item->GetPegawai())=>$item->GetPegawai()->GetNama(),
+                                            !is_null($item->GetDosen()) && is_null($item->GetPegawai())=>$item->GetDosen()->GetNama()." - ".$item->GetDosen()->GetNIDN(),
+                                            is_null($item->GetDosen()) && !is_null($item->GetPegawai())=>$item->GetPegawai()->GetNama()." - ".$item->GetDosen()->GetNIP(),
                                             default=>"NA",
                                         },
                                         "tanggal"=>$item->GetPresensi()?->GetTanggal()?->toFormat(FormatDate::LDFY),
