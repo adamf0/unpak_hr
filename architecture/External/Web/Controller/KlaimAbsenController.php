@@ -181,13 +181,18 @@ class KlaimAbsenController extends Controller
                 throw new Exception("belum pilih cetak sebagai apa");
             }
 
-            if($type=="dosen"){
+            if($type=="dosen" && !is_null($nama)){
                 $klaim_absen->where('nidn',$nama);
                 $file_name = $file_name."_$nama";
-            }
-            if($type=="tendik"){
+            } else if($type=="dosen" && is_null($nama)){
+                $klaim_absen->whereNotNull('nidn');
+                $file_name = $file_name."_semua-nama";
+            } else if($type=="tendik" && !is_null($nama)){
                 $klaim_absen->where('nip',$nama);
                 $file_name = $file_name."_$nama";
+            } else if($type=="tendik" && is_null($nama)){
+                $klaim_absen->whereNotNull('nidn');
+                $file_name = $file_name."_semua-nama";
             }
             if($status){
                 $klaim_absen->where('status',$status);

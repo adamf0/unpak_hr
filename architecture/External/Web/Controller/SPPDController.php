@@ -210,13 +210,18 @@ class SPPDController extends Controller
             if($id){
                 $sppd->where('id',$id);
             }
-            if($type=="dosen"){
+            if($type=="dosen" && !is_null($nama)){
                 $sppd->where('nidn',$nama);
                 $file_name = $file_name."_$nama";
-            }
-            if($type=="tendik"){
+            } else if($type=="dosen" && is_null($nama)){
+                $sppd->whereNotNull('nidn');
+                $file_name = $file_name."_semua-nama";
+            } else if($type=="tendik" && !is_null($nama)){
                 $sppd->where('nip',$nama);
                 $file_name = $file_name."_$nama";
+            } else if($type=="tendik" && is_null($nama)){
+                $sppd->whereNotNull('nidn');
+                $file_name = $file_name."_semua-nama";
             }
             if($jenis_sppd){
                 $sppd->where('id_jenis_sppd',$jenis_sppd);

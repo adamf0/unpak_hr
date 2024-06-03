@@ -102,7 +102,7 @@ class DatatableSPPDController extends Controller
                 $render .= '
                     <a href="#" class="ml-2 btn btn-danger btn-reject"><i class="bi bi-x-lg"></i></a>
                 ';
-                if(in_array($row->status, ['terima sdm','menunggu verifikasi sdm'])=="terima"){
+                if(in_array($row->status, ['terima sdm','menunggu verifikasi sdm'])){
                     $render .= '<a href="#" class="ml-2 btn btn-secondary btn-download-anggaran"><i class="bi bi-wallet2"></i></a>';
                 }
                 if($row->status=="terima sdm"){
