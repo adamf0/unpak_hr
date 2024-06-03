@@ -80,16 +80,18 @@ class LaporanAbsenController extends Controller
                 );
                 return FileManager::StreamFile($file);
             } else{
-                $listData = collect($laporan['list_data'])->mapWithKeys(function($item,$key){
+                $listData = collect($laporan['list_data'])->map(function($item){
                     $item = (object) $item;
-
+                    
                     $item->nama = match($item->type){
                         "dosen"=>$item->pengguna?->nama_dosen,
                         "pegawai"=>$item->pengguna?->nama,
                     };
                     unset($item->pengguna);
                     unset($item->type);
-                    dd($item, $key);
+                    $remainingKeys = array_keys((array)$item);
+                    dd($remainingKeys);
+                    //cek nama key
 
                     return $item;
                 });
