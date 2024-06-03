@@ -17,6 +17,7 @@ use Architecture\Domain\Entity\DosenReferensi;
 use Architecture\Domain\Entity\FolderX;
 use Architecture\Domain\Entity\JenisSPPDReferensi;
 use Architecture\Domain\Entity\PegawaiReferensi;
+use Architecture\Domain\Entity\SPPDReferensi;
 use Architecture\Domain\Enum\TypeNotif;
 use Architecture\Domain\RuleValidationRequest\SPPD\CreateSPPDRuleReq;
 use Architecture\Domain\RuleValidationRequest\SPPD\DeleteSPPDRuleReq;
@@ -74,9 +75,9 @@ class SPPDController extends Controller
             foreach($request->get('anggota') as $anggota){
                 $anggota = (object) $anggota;
                 $this->commandBus->dispatch(new CreateAnggotaSPPDCommand(
-                    $sppd->id,
-                    $anggota->nidn,
-                    $anggota->nip,
+                    Creator::buildSPPD(SPPDReferensi::make($sppd->id)),
+                    Creator::buildDosen(DosenReferensi::make($anggota->nidn)),
+                    Creator::buildPegawai(PegawaiReferensi::make($anggota->nip)),
                 ));
             }
             DB::commit();
@@ -132,9 +133,9 @@ class SPPDController extends Controller
             foreach($request->get('anggota') as $anggota){
                 $anggota = (object) $anggota;
                 $this->commandBus->dispatch(new CreateAnggotaSPPDCommand(
-                    $sppd->id,
-                    $anggota->nidn,
-                    $anggota->nip,
+                    Creator::buildSPPD(SPPDReferensi::make($sppd->id)),
+                    Creator::buildDosen(DosenReferensi::make($anggota->nidn)),
+                    Creator::buildPegawai(PegawaiReferensi::make($anggota->nip)),
                 ));
             }
             DB::commit();
