@@ -94,10 +94,11 @@ class LaporanAbsenController extends Controller
                         if ($key !== 'nama') {
                             $listInfo = $item->{$key};
                             $info = array_reduce($listInfo, function($carry, $info) {
-                                $type = $info->info['type'];
+                                dd($info);
+                                $type = $info['info']['type'];
                                 if ($type == "absen") {
-                                    $masuk = $info->info['keterangan']['masuk'];
-                                    $keluar = $info->info['keterangan']['keluar'];
+                                    $masuk = $info['info']['keterangan']['masuk'];
+                                    $keluar = $info['info']['keterangan']['keluar'];
 
                                     if (empty($masuk) && empty($keluar)) {
                                         $carry[] = "tidak masuk";
