@@ -55,7 +55,7 @@ class ExportAbsenXls implements FromCollection, WithHeadings, WithColumnWidths, 
 
     public function styles(Worksheet $sheet)
     {
-        $sheet->getStyle("A1:".($this->getNameFromNumber($this->datas->count())."1"))->getFont()->setBold(true);
+        $sheet->getStyle("A1:".($this->getNameFromNumber($this->datas->count()-1)."1"))->getFont()->setBold(true);
 
         // Get the highest row and column numbers referenced in the worksheet
         $highestRow = $sheet->getHighestRow();

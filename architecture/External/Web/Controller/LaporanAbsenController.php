@@ -88,12 +88,11 @@ class LaporanAbsenController extends Controller
                     unset($item['pengguna']);
                     unset($item['type']);
                     $item = array_merge(['nama'=>$nama],(array) $item);
-                    dd($item);
 
                     $keys = array_keys((array)$item);
                     foreach ($keys as $key) {
                         if ($key !== 'nama') {
-                            $listInfo = $item->{$key};
+                            $listInfo = $item[$key];
                             $info = array_reduce($listInfo, function($carry, $info) {
                                 $type = $info->info->type;
                                 if ($type == "absen") {
@@ -103,14 +102,14 @@ class LaporanAbsenController extends Controller
                                     if (empty($masuk) && empty($keluar)) {
                                         $carry[] = "tidak masuk";
                                     } else {
-                                        $carry[] = "$masuk - $keluar";
+                                        $carry[] = (empty($masuk)? "":Carbon::parse($masuk)->setTimezone('Asia/Jakarta')->format("H:i:s"))." - ".empty($keluar)? "":Carbon::parse($keluar)->setTimezone('Asia/Jakarta')->format("H:i:s");
                                     }
                                 } elseif ($type == "izin" || $type == "cuti") {
                                     $carry[] = $info->info->keterangan['tujuan'];
                                 }
                                 return $carry;
                             }, []);
-                            $item->{$key} = count($info)>0? end($info):"-";
+                            $item[$key] = count($info)>0? end($info):"tidak ada data";
                         }
                     }
                     return $item;
