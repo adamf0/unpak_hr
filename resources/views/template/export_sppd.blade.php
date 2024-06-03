@@ -6,18 +6,6 @@
     <title>Document</title>
 </head>
 <style>
-    .header{
-        display: flex;
-        width: 100%;
-        min-width: 100%;
-        margin-bottom: 1rem;
-
-        & .header__title{
-            text-align: center;
-            flex-grow: 1;
-            text-align: center;
-        }
-    }
     .styled-table {
         border-collapse: collapse;
         margin: 25px 0;
@@ -72,9 +60,24 @@
 <body>
     @foreach($list_sppd as $key => $sppd)
         <div class="page-break">
-        <div class="header">
-            <h3 class="header__title">Surat Pengajuan Perjalan Dinas</h3>
-        </div>
+        <table style="width: 85%">
+            <tr>
+                <td>
+                    <img src="https://www.unpak.ac.id/images/logo-unpak_menu_web.webp" alt="logo" style="width: 100px !important; height:100px !important;">
+                </td>
+                <td>
+                    <center>
+                        <h3>
+                            YAYASAN PAKUAN SILIWANGI<br>
+                            UNIVERSITAS PAKUAN<br>
+                        </h3>
+                        SURAT PENGAJUAN PERJALAN DINAS
+                    </center>
+                </td>
+            </tr>
+        </table>
+        <hr>
+        <br>
         <table class="styled-table">
             <tr>
                 <td>1</td>

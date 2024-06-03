@@ -1,11 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
+    <table style="width: 85%">
+        <tr>
+            <td>
+                <img src="https://www.unpak.ac.id/images/logo-unpak_menu_web.webp" alt="logo" style="width: 100px !important; height:100px !important;">
+            </td>
+            <td>
+                <center>
+                    <h3>
+                        YAYASAN PAKUAN SILIWANGI<br>
+                        UNIVERSITAS PAKUAN<br>
+                    </h3>
+                </center>
+            </td>
+        </tr>
+    </table>
+    <hr>
+    <center>
+        <h3>LAPORAN CUTI</h3>
+    </center>
     <table border="1" align="center" width="100%" style="text-align: center">
         <tr style="background: black; color: white;">
             <td>#</td>
@@ -17,22 +38,22 @@
         </tr>
         @foreach($list_cuti as $key=> $cuti)
         @php
-            $nama = match(true){
-                !empty($cuti->Dosen) && empty($cuti->Pegawai) => $cuti->Dosen?->nama_dosen."<br>".$cuti->nidn,
-                empty($cuti->Dosen) && !empty($cuti->Pegawai) => $cuti->Pegawai?->nama."<br>".$cuti->nip,
-                default=>"NA"
-            };
-            $tanggal_mulai = empty($cuti->tanggal_mulai)? 'NA':Carbon::parse($cuti->tanggal_mulai)->setTimezone('Asia/Jakarta')->format("d F Y");
-            $tanggal_akhir = empty($cuti->tanggal_akhir)? 'NA':Carbon::parse($cuti->tanggal_akhir)->setTimezone('Asia/Jakarta')->format("d F Y"); 
+        $nama = match(true){
+        !empty($cuti->Dosen) && empty($cuti->Pegawai) => $cuti->Dosen?->nama_dosen."<br>".$cuti->nidn,
+        empty($cuti->Dosen) && !empty($cuti->Pegawai) => $cuti->Pegawai?->nama."<br>".$cuti->nip,
+        default=>"NA"
+        };
+        $tanggal_mulai = empty($cuti->tanggal_mulai)? 'NA':Carbon::parse($cuti->tanggal_mulai)->setTimezone('Asia/Jakarta')->format("d F Y");
+        $tanggal_akhir = empty($cuti->tanggal_akhir)? 'NA':Carbon::parse($cuti->tanggal_akhir)->setTimezone('Asia/Jakarta')->format("d F Y");
         @endphp
         <tr>
             <td>{{$key+1}}</td>
             <td>{!! $nama !!}</td>
             <td>
                 @if ($tanggal_mulai==$tanggal_akhir)
-                    {{$tanggal_mulai}}
+                {{$tanggal_mulai}}
                 @else
-                    {{$tanggal_mulai}} - {{$tanggal_akhir}}
+                {{$tanggal_mulai}} - {{$tanggal_akhir}}
                 @endif
             </td>
             <td>{{$cuti->lama_cuti}} hari</td>
@@ -42,4 +63,5 @@
         @endforeach
     </table>
 </body>
+
 </html>
