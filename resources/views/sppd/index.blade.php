@@ -52,6 +52,11 @@
                 @endif
             </div>
             <div class="col-12">
+                <div class="alert alert-info" role="alert">
+                    SPPD hanya dapat dibuat atau diajukan oleh Pejabat Struktural
+                </div>
+            </div>
+            <div class="col-12">
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
