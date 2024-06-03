@@ -60,7 +60,7 @@
     <script type="text/javascript" src="{{ Utility::loadAsset('my.js') }}"></script>
     <script>
         $(document).ready(function () {
-            load_dropdown('.tanggal_absen', null, `{{ route('select2.Presensi.List') }}`, "{{ old('tanggal_absen',$KlaimAbsen?->GetPresensi()?->GetId()) }}", '-- Pilih Tanggal Absen --');
+            load_dropdown('.tanggal_absen', null, `{{ route('select2.Presensi.List') }}?nidn={{Session::get('nidn')}}&nip={{Session::get('nip')}}`, "{{ old('tanggal_absen',$KlaimAbsen?->GetPresensi()?->GetId()) }}", '-- Pilih Tanggal Absen --');
         });
     </script>
 @endpush
