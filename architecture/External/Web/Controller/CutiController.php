@@ -217,7 +217,7 @@ class CutiController extends Controller
                 $cuti->where('nip',$nama);
                 $file_name = $file_name."_$nama";
             } else if($type=="tendik" && is_null($nama)){
-                $cuti->whereNotNull('nidn');
+                $cuti->whereNotNull('nip');
                 $file_name = $file_name."_semua-nama";
             }
             if($jenis_cuti){

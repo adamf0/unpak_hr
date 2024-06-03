@@ -191,7 +191,7 @@ class KlaimAbsenController extends Controller
                 $klaim_absen->where('nip',$nama);
                 $file_name = $file_name."_$nama";
             } else if($type=="tendik" && is_null($nama)){
-                $klaim_absen->whereNotNull('nidn');
+                $klaim_absen->whereNotNull('nip');
                 $file_name = $file_name."_semua-nama";
             }
             if($status){

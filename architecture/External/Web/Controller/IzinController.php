@@ -211,7 +211,7 @@ class IzinController extends Controller
                 $izin->where('nip',$nama);
                 $file_name = $file_name."_$nama";
             } else if($type=="tendik" && is_null($nama)){
-                $izin->whereNotNull('nidn');
+                $izin->whereNotNull('nip');
                 $file_name = $file_name."_semua-nama";
             }
             if($jenis_izin){
