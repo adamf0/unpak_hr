@@ -109,10 +109,9 @@ class LaporanAbsenController extends Controller
                                 }
                                 return $carry;
                             }, []);
-                            $item->{$key} = $info;
+                            $item->{$key} = count($info)>0? end($info):"-";
                         }
                     }
-                    dd($item);
                     return $item;
                 });
                 $listTanggalFormat = collect($laporan['list_tanggal'])->reduce(function($carry,$item){
@@ -120,10 +119,7 @@ class LaporanAbsenController extends Controller
                     return $carry;
                 },[]);
 
-                dd($listData, $listTanggalFormat);
-
-                // return Excel::download(new ExportAbsenXls(collect($laporan['list_data']), array_merge(["nama"],$laporan['list_tanggal'])), "$file_name.xlsx");
-                // throw new Exception("simpan file '$type_export' belum diimplementasikan");
+                return Excel::download(new ExportAbsenXls(collect($listData), array_merge(["nama"],$listTanggalFormat)), "$file_name.xlsx");
             }
         } catch (Exception $e) {
             throw $e;
