@@ -13,8 +13,10 @@ use Architecture\Application\SPPD\FirstData\GetSPPDQuery;
 use Architecture\Application\SPPD\Update\ApprovalSPPDCommand;
 use Architecture\Application\SPPD\Update\UpdateSPPDCommand;
 use Architecture\Domain\Creational\Creator;
+use Architecture\Domain\Entity\DosenReferensi;
 use Architecture\Domain\Entity\FolderX;
 use Architecture\Domain\Entity\JenisSPPDReferensi;
+use Architecture\Domain\Entity\PegawaiReferensi;
 use Architecture\Domain\Enum\TypeNotif;
 use Architecture\Domain\RuleValidationRequest\SPPD\CreateSPPDRuleReq;
 use Architecture\Domain\RuleValidationRequest\SPPD\DeleteSPPDRuleReq;
@@ -57,8 +59,8 @@ class SPPDController extends Controller
             
             DB::beginTransaction();
             $sppd = $this->commandBus->dispatch(new CreateSPPDCommand(
-                Session::get('nidn'),
-                Session::get('nip'),
+                Creator::buildDosen(DosenReferensi::make(Session::get('nidn'))),
+                Creator::buildPegawai(PegawaiReferensi::make(Session::get('nip'))),
                 Creator::buildJenisSPPD(JenisSppdReferensi::make(
                     $request->get('jenis_sppd')
                 )),
@@ -113,8 +115,8 @@ class SPPDController extends Controller
             $sppd = $this->queryBus->ask(new GetSPPDQuery($request->get("id")));            
             $sppd = $this->commandBus->dispatch(new UpdateSPPDCommand(
                 $request->get('id'), 
-                Session::get('nidn'),
-                Session::get('nip'),
+                Creator::buildDosen(DosenReferensi::make(Session::get('nidn'))),
+                Creator::buildPegawai(PegawaiReferensi::make(Session::get('nip'))),
                 Creator::buildJenisSPPD(JenisSPPDReferensi::make(
                     $request->get('jenis_sppd')
                 )),
