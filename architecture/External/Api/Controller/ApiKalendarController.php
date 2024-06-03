@@ -169,13 +169,16 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                     $title = match(true){
                         is_null($klaim) && empty($item->absen_masuk) && Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta')->lessThan(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d')) => "tidak masuk", //tidak masuk
                         !is_null($klaim)=> sprintf("%s - %s %s",
-                            (Carbon::parse(empty($item->absen_masuk)? $klaim->jam_masuk:$item->absen_masuk)->setTimezone('Asia/Jakarta')->format("H:i:s")),
-                            (Carbon::parse(empty($item->absen_keluar)? $klaim->jam_keluar:$item->absen_keluar)->setTimezone('Asia/Jakarta')->format("H:i:s")),
+                            (date('H:i:s',strtotime(empty($item->absen_masuk)? $klaim->jam_masuk:$item->absen_masuk))),
+                            (date('H:i:s', strtotime(empty($item->absen_keluar)? $klaim->jam_keluar:$item->absen_keluar))),
                             ((!empty($klaim->jam_masuk) || !empty($klaim->jam_keluar))? "(klaim)":"")
                         ), //klaim
                         
-                        !empty($item->absen_masuk) && !$this->isLate($item->absen_masuk, $item->tanggal) => Carbon::parse($item->absen_masuk)->setTimezone('Asia/Jakarta')->format("H:i:s").(empty($item->absen_keluar)? "":" - ".Carbon::parse($item->absen_keluar)->setTimezone('Asia/Jakarta')->format("H:i:s")), //masuk
-                        default => empty($item->absen_masuk)? null:Carbon::parse($item->absen_masuk)->setTimezone('Asia/Jakarta')->format("H:i:s")
+                        !empty($item->absen_masuk) && !$this->isLate($item->absen_masuk, $item->tanggal) => sprintf("%s - %s", date('H:i:s', strtotime($item->absen_masuk)), (empty($item->absen_keluar)? "":date('H:i:s', strtotime($item->absen_keluar)))), //masuk
+                        default => sprintf("%s - %s",
+                            empty($item->absen_masuk)? "-":date('H:i:s',strtotime($item->absen_masuk)),
+                            empty($item->absen_keluar)? "-":date('H:i:s',strtotime($item->absen_keluar))
+                        )
                     };
                     if(!empty($title)){
                         $carry[] = [
@@ -190,7 +193,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                 } else{
                     $carry[] = [
                         "id"=>$item->id,
-                        "tanggal"=>Carbon::parse($item->tanggal_pengajuan)->setTimezone('Asia/Jakarta')->format('Y-m-d'),
+                        "tanggal"=>date('Y-m-d', strtotime($item->tanggal_pengajuan)),
                         "keterangan"=>$item->keterangan??"NA",
                     ];
                 }
