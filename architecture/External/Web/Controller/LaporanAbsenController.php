@@ -81,13 +81,14 @@ class LaporanAbsenController extends Controller
                 return FileManager::StreamFile($file);
             } else{
                 $listData = collect($laporan['list_data'])->map(function($item){
+                    dd($item);
                     $item->nama = match($item->type){
                         "dosen"=>$item->pengguna?->nama_dosen,
                         "pegawai"=>$item->pengguna?->nama,
                     };
                     unset($item->pengguna);
                     unset($item->type);
-                    
+
                     return $item;
                 });
                 $listTanggalFormat = collect($laporan['list_tanggal'])->reduce(function($carry,$item){
