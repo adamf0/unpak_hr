@@ -20,7 +20,7 @@
             </div>
             <div class="col-12">
                 @if (Utility::hasUser())
-                    <a href="{{ route('izin.create') }}" class="btn btn-primary">Tambah</a>
+                    <a href="{{ route('klaim_absen.create') }}" class="btn btn-primary">Tambah</a>
                 @else
                     <div class="card">
                         <div class="card-body row">
@@ -285,7 +285,6 @@
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             let cetak_nama = null;
-            let cetak_jenis_izin = null;
             let cetak_status = null;
             let cetak_tanggal_mulai = null;
             let cetak_tanggal_akhir = null;
@@ -325,7 +324,6 @@
             @elseif($type=="tendik")
                 load_dropdown('.nama', null, `{{ route('select2.Pegawai.List') }}`, null, '-- Pilih Nama --');
             @endif
-            load_dropdown('.jenis_izin', null, `{{ route('select2.JenisIzin.List') }}`, null, '-- Pilih Jenis izin --');
             load_dropdown('.status', status, null, null, '-- Pilih Status --');
             load_dropdown('.type_export', type_export, null, null, '-- Pilih --');
 
@@ -375,10 +373,6 @@
             $('.tanggal_akhir').change(function(e) {
                 const min = $(this).val()
                 cetak_tanggal_akhir = min
-            });
-            $('.jenis_izin').on('select2:select', function(e) {
-                // var data = e.params.data;
-                cetak_jenis_izin = $(this).val()
             });
             $('.status').on('select2:select', function(e) {
                 // var data = e.params.data;
