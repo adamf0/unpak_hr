@@ -63,7 +63,7 @@ class DatatableSPPDController extends Controller
                                     "nip"=>$item->GetPegawai()?->GetNIP(),
                                     "jenis_sppd"=> $item->GetJenisSPPD()?->GetNama(),
                                     "nama" => match(true){
-                                        !is_null($item->GetDosen()) && is_null($item->GetPegawai())=>$item->GetDosen()->GetNIP()." - ".$item->GetDosen()->GetNama(),
+                                        !is_null($item->GetDosen()) && is_null($item->GetPegawai())=>$item->GetDosen()->GetNIDN()." - ".$item->GetDosen()->GetNama(),
                                         is_null($item->GetDosen()) && !is_null($item->GetPegawai())=>$item->GetPegawai()->GetNIP()." - ".$item->GetPegawai()->GetNama(),
                                         default=>"NA",
                                     },
