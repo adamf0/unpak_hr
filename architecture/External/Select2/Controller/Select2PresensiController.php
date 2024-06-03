@@ -33,7 +33,7 @@ class Select2PresensiController extends Controller
             $list[] = $item->GetTanggalPengajuan()?->toFormat(FormatDate::Default);
 
             return $list;
-        });
+        },[]);
 
         $list_cuti = $this->queryBus->ask(new GetAllCutiQuery($nidn,$nip,date('Y-m-d')));
         $listCuti = $list_cuti->reduce(function ($list, $item){
@@ -49,7 +49,7 @@ class Select2PresensiController extends Controller
             $list[] = $listDate;
 
             return $list;
-        });
+        },[]);
 
         $list_libur = $this->queryBus->ask(new GetAllMasterKalendarQuery(0,0,date('Y-m-d')));
         $listLibur = $list_libur->reduce(function ($list, $item){
@@ -67,7 +67,7 @@ class Select2PresensiController extends Controller
             }
 
             return $list;
-        });
+        },[]);
 
         $listTanggal = array_merge(Arr::flatten($listCuti), Arr::flatten($listLibur), $listIzin);
         $listTanggal = array_values(array_unique($listTanggal));
