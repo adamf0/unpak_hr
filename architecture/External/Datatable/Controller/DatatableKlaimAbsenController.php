@@ -22,50 +22,58 @@ class DatatableKlaimAbsenController extends Controller
         $nidn = $request->has('nidn')? $request->query('nidn'):null;
         $nip = $request->has('nip')? $request->query('nip'):null;
         $level = $request->has('level')? $request->query('level'):null;
+        $type = $request->has('type')? $request->query('type'):null;
         
         $q = new GetAllKlaimAbsenQuery($nidn,$nip);
         // $q->SetOffset($request->get('start')??null)->SetLimit($request->get('length')??null);
         
         $listKlaimAbsen = $this->queryBus->ask($q);
-        $listKlaimAbsen = $listKlaimAbsen->map(function($item) use($level){
-            return match(true){
-                in_array($level, ["pegawai","dosen"])=>(object)[
-                    "id"=>$item->GetId(),
-                    "tanggal"=>$item->GetPresensi()?->GetTanggal()?->toFormat(FormatDate::LDFY),
-                    "jam_masuk"=>$item->GetPresensi()?->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
-                    "jam_keluar"=>$item->GetPresensi()?->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
-                    "jam_masuk_klaim"=>$item->GetJamMasuk(),
-                    "jam_keluar_klaim"=>$item->GetJamKeluar(),
-                    "tujuan"=>$item->GetTujuan(),
-                    "dokumen"=>empty($item->GetDokumen())? "":[
-                        "file"=>$item->GetDokumen(),
-                        "url"=>Utility::loadAsset('dokumen_klaim_absen/'.$item->GetDokumen()),
-                    ],
-                    "status"=>$item->GetStatus(),
-                    "catatan"=>$item->GetCatatan(),
-                ],
-                default=>(object)[
-                    "id"=>$item->GetId(),
-                    "nama" => match(true){
-                        !is_null($item->GetDosen()) && is_null($item->GetPegawai())=>$item->GetDosen()->GetNama(),
-                        is_null($item->GetDosen()) && !is_null($item->GetPegawai())=>$item->GetPegawai()->GetNama(),
-                        default=>"NA",
-                    },
-                    "tanggal"=>$item->GetPresensi()?->GetTanggal()?->toFormat(FormatDate::LDFY),
-                    "jam_masuk"=>$item->GetPresensi()?->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
-                    "jam_keluar"=>$item->GetPresensi()?->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
-                    "jam_masuk_klaim"=>$item->GetJamMasuk(),
-                    "jam_keluar_klaim"=>$item->GetJamKeluar(),
-                    "tujuan"=>$item->GetTujuan(),
-                    "dokumen"=>empty($item->GetDokumen())? "":[
-                        "file"=>$item->GetDokumen(),
-                        "url"=>Utility::loadAsset('dokumen_klaim_absen/'.$item->GetDokumen()),
-                    ],
-                    "status"=>$item->GetStatus(),
-                    "catatan"=>$item->GetCatatan(),
-                ]
-            };
-        });
+        $listKlaimAbsen = $listKlaimAbsen->filter(function($item) use($type){
+                                return match($type){
+                                    "dosen"=>!is_null($item->GetDosen()),
+                                    "tendik"=>!is_null($item->GetPegawai()),
+                                    default=>$item
+                                };
+                            })
+                            ->map(function($item) use($level){
+                                return match(true){
+                                    in_array($level, ["pegawai","dosen"])=>(object)[
+                                        "id"=>$item->GetId(),
+                                        "tanggal"=>$item->GetPresensi()?->GetTanggal()?->toFormat(FormatDate::LDFY),
+                                        "jam_masuk"=>$item->GetPresensi()?->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
+                                        "jam_keluar"=>$item->GetPresensi()?->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
+                                        "jam_masuk_klaim"=>$item->GetJamMasuk(),
+                                        "jam_keluar_klaim"=>$item->GetJamKeluar(),
+                                        "tujuan"=>$item->GetTujuan(),
+                                        "dokumen"=>empty($item->GetDokumen())? "":[
+                                            "file"=>$item->GetDokumen(),
+                                            "url"=>Utility::loadAsset('dokumen_klaim_absen/'.$item->GetDokumen()),
+                                        ],
+                                        "status"=>$item->GetStatus(),
+                                        "catatan"=>$item->GetCatatan(),
+                                    ],
+                                    default=>(object)[
+                                        "id"=>$item->GetId(),
+                                        "nama" => match(true){
+                                            !is_null($item->GetDosen()) && is_null($item->GetPegawai())=>$item->GetDosen()->GetNama(),
+                                            is_null($item->GetDosen()) && !is_null($item->GetPegawai())=>$item->GetPegawai()->GetNama(),
+                                            default=>"NA",
+                                        },
+                                        "tanggal"=>$item->GetPresensi()?->GetTanggal()?->toFormat(FormatDate::LDFY),
+                                        "jam_masuk"=>$item->GetPresensi()?->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
+                                        "jam_keluar"=>$item->GetPresensi()?->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
+                                        "jam_masuk_klaim"=>$item->GetJamMasuk(),
+                                        "jam_keluar_klaim"=>$item->GetJamKeluar(),
+                                        "tujuan"=>$item->GetTujuan(),
+                                        "dokumen"=>empty($item->GetDokumen())? "":[
+                                            "file"=>$item->GetDokumen(),
+                                            "url"=>Utility::loadAsset('dokumen_klaim_absen/'.$item->GetDokumen()),
+                                        ],
+                                        "status"=>$item->GetStatus(),
+                                        "catatan"=>$item->GetCatatan(),
+                                    ]
+                                };
+                            });
         
         return DataTables::of($listKlaimAbsen)
         ->addIndexColumn()
