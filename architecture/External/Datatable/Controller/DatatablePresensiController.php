@@ -7,6 +7,7 @@ use Architecture\Application\Abstractions\Messaging\ICommandBus;
 use Architecture\Application\Abstractions\Messaging\IQueryBus;
 use Architecture\Application\Presensi\List\GetAllPresensiQuery;
 use Architecture\Domain\Enum\FormatDate;
+use Architecture\Domain\ValueObject\Date;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables as DataTables;
 
@@ -30,33 +31,36 @@ class DatatablePresensiController extends Controller
             $datas = $datas->filter(fn($item)=>!is_null($item->GetPegawai()));
         }
 
-        $datas = $datas->map(function ($item) use($filter){
-            return match(true){
-                $filter=="dosen"=>[
-                    "nama"=>$item->GetDosen()?->GetNama()." - ".$item->GetDosen()?->GetNIDN(),
-                    "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
-                    "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
-                    "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
-                    "catatan_telat"=>$item->GetCatatanTelat(),
-                    "catatan_pulang"=>$item->GetCatatanPulang(),
-                ],
-                $filter=="pegawai"=>[
-                    "nama"=>$item->GetPegawai()?->GetNama()." - ".$item->GetPegawai()?->GetNIP(),
-                    "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
-                    "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
-                    "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
-                    "catatan_telat"=>$item->GetCatatanTelat(),
-                    "catatan_pulang"=>$item->GetCatatanPulang(),
-                ],
-                default=>[
-                    "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
-                    "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
-                    "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
-                    "catatan_telat"=>$item->GetCatatanTelat(),
-                    "catatan_pulang"=>$item->GetCatatanPulang(),
-                ],
-            };
-        });
+        $datas = $datas->filter(function($item){
+                        return $item->getTanggal()->isEqual(new Date(date('Y-m-d')));
+                    })
+                    ->map(function ($item) use($filter){
+                        return match(true){
+                            $filter=="dosen"=>[
+                                "nama"=>$item->GetDosen()?->GetNama()." - ".$item->GetDosen()?->GetNIDN(),
+                                "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
+                                "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
+                                "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
+                                "catatan_telat"=>$item->GetCatatanTelat(),
+                                "catatan_pulang"=>$item->GetCatatanPulang(),
+                            ],
+                            $filter=="pegawai"=>[
+                                "nama"=>$item->GetPegawai()?->GetNama()." - ".$item->GetPegawai()?->GetNIP(),
+                                "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
+                                "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
+                                "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
+                                "catatan_telat"=>$item->GetCatatanTelat(),
+                                "catatan_pulang"=>$item->GetCatatanPulang(),
+                            ],
+                            default=>[
+                                "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
+                                "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
+                                "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
+                                "catatan_telat"=>$item->GetCatatanTelat(),
+                                "catatan_pulang"=>$item->GetCatatanPulang(),
+                            ],
+                        };
+                    });
 
         $table = DataTables::of($datas)
         ->addIndexColumn()
