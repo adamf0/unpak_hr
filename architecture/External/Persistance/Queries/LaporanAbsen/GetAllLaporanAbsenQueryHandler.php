@@ -82,8 +82,10 @@ class GetAllLaporanAbsenQueryHandler extends Query
 
         ini_set('memory_limit', '-1');
         ini_set('max_execution_time','-1');
-        $start = empty($query->GetTanggalMulai())? Carbon::now()->setTimezone('Asia/Jakarta')->startOfMonth():Carbon::parse($query->GetTanggalMulai())->setTimezone('Asia/Jakarta');
-        $end = empty($query->GetTanggalAkhir())? $start->endOfMonth():Carbon::parse($query->GetTanggalAkhir())->setTimezone('Asia/Jakarta');
+        date_default_timezone_set('Asia/Jakarta');
+
+        $start = empty($query->GetTanggalMulai())? date('Y-m-01'):date('Y-m-d',strtotime($query->GetTanggalMulai()));
+        $end = empty($query->GetTanggalAkhir())? date('Y-m-t'):date('Y-m-d',strtotime($query->GetTanggalAkhir()));
         
         $this->list_pengguna = DB::table('laporan_merge_absen_izin_cuti')->select('nidn','nip')->distinct();
         if(!empty($query->GetNIDN())){
@@ -99,8 +101,8 @@ class GetAllLaporanAbsenQueryHandler extends Query
         return [
             "list_tanggal"=>$this->list_tanggal,
             "list_data"=>array_values($this->gen_data_tbl(null,0,0,[])),
-            "start"=>$start->format('d F Y'),
-            "end"=>$end->format('d F Y'),
+            "start"=>date('d F Y', strtotime($start)),
+            "end"=>date('d F Y', strtotime($end)),
         ];
     }
 }

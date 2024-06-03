@@ -99,11 +99,12 @@ class LaporanAbsenController extends Controller
                                     $masuk = $info->info->keterangan['masuk'];
                                     $keluar = $info->info->keterangan['keluar'];
 
-                                    if (empty($masuk) && empty($keluar)) {
-                                        $carry[] = "tidak masuk";
-                                    } else {
-                                        $carry[] = (empty($masuk)? "tidak absen masuk":Carbon::parse($masuk)->setTimezone('Asia/Jakarta')->format("H:i:s"))." - ".empty($keluar)? "tidak absen keluar":Carbon::parse($keluar)->setTimezone('Asia/Jakarta')->format("H:i:s");
-                                    }
+                                    $carry[] = match(true){
+                                        !empty($masuk) && !empty($keluar) => date("h:i:s", strtotime($masuk))." - ".date("h:i:s", strtotime($keluar)),
+                                        !empty($masuk) && empty($keluar) => date("h:i:s", strtotime($masuk))." - tidak ada absen keluar",
+                                        empty($masuk) && !empty($keluar) => "tidak ada absen masuk - ".date("h:i:s", strtotime($keluar)),
+                                        default => "tidak masuk"
+                                    };
                                 } elseif ($type == "izin" || $type == "cuti") {
                                     $carry[] = $info->info->keterangan['tujuan'];
                                 }
@@ -119,7 +120,7 @@ class LaporanAbsenController extends Controller
                     return $item;
                 });
                 $listTanggalFormat = collect($laporan['list_tanggal'])->reduce(function($carry,$item){
-                    $carry[] = Carbon::parse($item)->setTimezone('Asia/Jakarta')->format("d F Y");
+                    $carry[] = date('d F Y', strtotime($item));
                     return $carry;
                 },[]);
 
