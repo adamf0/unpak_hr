@@ -89,7 +89,7 @@ class LaporanAbsenController extends Controller
                     };
                     unset($item->pengguna);
                     unset($item->type);
-                    dd($ite, $key);
+                    dd($item, $key);
 
                     return $item;
                 });
