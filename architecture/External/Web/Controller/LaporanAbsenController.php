@@ -89,10 +89,30 @@ class LaporanAbsenController extends Controller
                     };
                     unset($item->pengguna);
                     unset($item->type);
-                    $remainingKeys = array_keys((array)$item);
-                    dd($remainingKeys);
-                    //cek nama key
+                    $keys = array_keys((array)$item);
+                    foreach ($keys as $key) {
+                        if ($key !== 'nama') {
+                            $listInfo = $item->{$key};
+                            $info = array_reduce($listInfo, function($carry, $info) {
+                                $type = $info['info']['type'];
+                                if ($type == "absen") {
+                                    $masuk = $info['info']['keterangan']['masuk'];
+                                    $keluar = $info['info']['keterangan']['keluar'];
 
+                                    if (empty($masuk) && empty($keluar)) {
+                                        $carry[] = "tidak masuk";
+                                    } else {
+                                        $carry[] = "$masuk - $keluar";
+                                    }
+                                } elseif ($type == "izin" || $type == "cuti") {
+                                    $carry[] = $info['info']['keterangan']['tujuan'];
+                                }
+                                return $carry;
+                            }, []);
+                            $item->{$key} = $info;
+                        }
+                    }
+                    dd($item);
                     return $item;
                 });
                 $listTanggalFormat = collect($laporan['list_tanggal'])->reduce(function($carry,$item){
