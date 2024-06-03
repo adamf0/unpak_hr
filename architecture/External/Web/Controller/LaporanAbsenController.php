@@ -102,15 +102,18 @@ class LaporanAbsenController extends Controller
                                     if (empty($masuk) && empty($keluar)) {
                                         $carry[] = "tidak masuk";
                                     } else {
-                                        dd($masuk, empty($masuk)? "":Carbon::parse($masuk)->setTimezone('Asia/Jakarta')->format("H:i:s"), $keluar);
-                                        $carry[] = (empty($masuk)? "":Carbon::parse($masuk)->setTimezone('Asia/Jakarta')->format("H:i:s"))." - ".empty($keluar)? "":Carbon::parse($keluar)->setTimezone('Asia/Jakarta')->format("H:i:s");
+                                        $carry[] = (empty($masuk)? "tidak absen masuk":Carbon::parse($masuk)->setTimezone('Asia/Jakarta')->format("H:i:s"))." - ".empty($keluar)? "tidak absen keluar":Carbon::parse($keluar)->setTimezone('Asia/Jakarta')->format("H:i:s");
                                     }
                                 } elseif ($type == "izin" || $type == "cuti") {
                                     $carry[] = $info->info->keterangan['tujuan'];
                                 }
                                 return $carry;
                             }, []);
-                            $item[$key] = count($info)>0? end($info):"tidak ada data";
+                            $item[$key] = match(true){
+                                count($info)==1 => $info[0],
+                                count($info)>1 => end($info),
+                                default => "tidak ada data"
+                            };
                         }
                     }
                     return $item;
