@@ -2,6 +2,7 @@
 namespace Architecture\Domain\Entity;
 
 use Architecture\Domain\Contract\ISPPD;
+use Architecture\Domain\ValueObject\Date;
 use Illuminate\Support\Collection;
 
 class SPPDEntitas extends ISPPD{
@@ -9,9 +10,9 @@ class SPPDEntitas extends ISPPD{
         $id=null,
         ?Dosen $dosen=null,
         ?Pegawai $pegawai=null,
-        $jenis_sppd=null,
-        $tanggal_berangkat=null,
-        $tanggal_kembali=null,
+        ?JenisSPPD $jenis_sppd=null,
+        ?Date $tanggal_berangkat=null,
+        ?Date $tanggal_kembali=null,
         $tujuan=null,
         $keterangan=null,
         $status=null,
