@@ -10,8 +10,8 @@ use Illuminate\Support\Collection;
 
 trait SPPDBase 
 {
-    public ?Dosen $dosen;
-    public ?Pegawai $pegawai;
+    public ?Dosen $dosen=null;
+    public ?Pegawai $pegawai=null;
     public ?JenisSPPD $jenis_sppd=null;
     public Date $tanggal_berangkat;
     public ?Date $tanggal_kembali=null;
