@@ -96,13 +96,13 @@ class LaporanAbsenController extends Controller
                             $info = array_reduce($listInfo, function($carry, $info) {
                                 $type = $info->info->type;
                                 if ($type == "absen") {
-                                    dd($info, $info->info);
                                     $masuk = $info->info->keterangan['masuk'];
                                     $keluar = $info->info->keterangan['keluar'];
 
                                     if (empty($masuk) && empty($keluar)) {
                                         $carry[] = "tidak masuk";
                                     } else {
+                                        dd($masuk, $keluar);
                                         $carry[] = (empty($masuk)? "":Carbon::parse($masuk)->setTimezone('Asia/Jakarta')->format("H:i:s"))." - ".empty($keluar)? "":Carbon::parse($keluar)->setTimezone('Asia/Jakarta')->format("H:i:s");
                                     }
                                 } elseif ($type == "izin" || $type == "cuti") {
