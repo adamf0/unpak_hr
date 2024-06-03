@@ -96,6 +96,7 @@ class LaporanAbsenController extends Controller
                             $info = array_reduce($listInfo, function($carry, $info) {
                                 $type = $info->info->type;
                                 if ($type == "absen") {
+                                    dd($info, $info->info);
                                     $masuk = $info->info->keterangan['masuk'];
                                     $keluar = $info->info->keterangan['keluar'];
 
