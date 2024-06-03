@@ -233,7 +233,7 @@ class KlaimAbsenController extends Controller
                             is_null($item->Dosen) && !is_null($item->Pegawai)=>$item->Pegawai->nama,
                             default=>"NA"
                         },
-                        'tanggal'=>$item->Presensi?->tanggal,
+                        'tanggal'=>empty($item->Presensi?->tanggal)? "":date('d F Y', strtotime($item->Presensi?->tanggal)),
                         'jam_masuk' =>(empty($item->jam_masuk)? "":date('H:i:s',strtotime($item->jam_masuk))),
                         'jam_keluar' =>(empty($item->jam_keluar)? "":date('H:i:s',strtotime($item->jam_keluar))),
                         'tujuan' =>$item->tujuan,
