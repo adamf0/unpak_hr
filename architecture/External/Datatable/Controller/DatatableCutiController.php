@@ -53,8 +53,8 @@ class DatatableCutiController extends Controller
                             default=>(object)[
                                 "id"=>$item->GetId(),
                                 "nama" => match(true){
-                                    !is_null($item->GetDosen()) && is_null($item->GetPegawai())=>$item->GetDosen()->GetNama()." - ".$item->GetDosen()->GetNIDN(),
-                                    is_null($item->GetDosen()) && !is_null($item->GetPegawai())=>$item->GetPegawai()->GetNama()." - ".$item->GetDosen()->GetNIP(),
+                                    !is_null($item->GetDosen()) && is_null($item->GetPegawai())=>$item->Dosen()->GetNIP()." - ".$item->GetDosen()->GetNama(),
+                                    is_null($item->GetDosen()) && !is_null($item->GetPegawai())=>$item->Pegawai()->GetNIP()." - ".$item->GetPegawai()->GetNama(),
                                     default=>"NA",
                                 },
                                 "jenis_cuti"=>$item->GetJenisCuti()?->GetNama()??"-",
