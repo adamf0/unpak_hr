@@ -231,7 +231,7 @@
             ];
 
             let table = eTable({
-                url: `{{ route('datatable.KlaimAbsen.index') }}?level=${level}&nidn=${nidn}&nip=${nip}`,
+                url: `{{ route('datatable.KlaimAbsen.index') }}?level=${level}&nidn=${nidn}&nip=${nip}&type=${type}`,
             }, column);
 
             let modal = new bootstrap.Modal(document.getElementById('modal'));
