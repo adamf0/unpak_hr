@@ -94,7 +94,7 @@ class LaporanAbsenController extends Controller
                         if ($key !== 'nama') {
                             $listInfo = $item[$key];
                             $info = array_reduce($listInfo, function($carry, $info) {
-                                $type = $info->info->type;
+                                $type = strtolower($info->info->type);
                                 if ($type == "absen") {
                                     $masuk = $info->info->keterangan['masuk'];
                                     $keluar = $info->info->keterangan['keluar'];
@@ -106,7 +106,7 @@ class LaporanAbsenController extends Controller
                                         default => "tidak masuk"
                                     };
                                 } elseif ($type == "izin" || $type == "cuti") {
-                                    $carry[] = $info->info->keterangan['tujuan'];
+                                    $carry[] = $type; //$info->info->keterangan['tujuan'];
                                 }
                                 return $carry;
                             }, []);
