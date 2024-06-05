@@ -100,9 +100,9 @@ class LaporanAbsenController extends Controller
                                     $keluar = $info->info->keterangan['keluar'];
 
                                     $carry[] = match(true){
-                                        !empty($masuk) && !empty($keluar) => date("h:i:s", strtotime($masuk))." - ".date("h:i:s", strtotime($keluar)),
-                                        !empty($masuk) && empty($keluar) => date("h:i:s", strtotime($masuk))." - tidak ada absen keluar",
-                                        empty($masuk) && !empty($keluar) => "tidak ada absen masuk - ".date("h:i:s", strtotime($keluar)),
+                                        !empty($masuk) && !empty($keluar) => date("H:i:s", strtotime($masuk))." - ".date("H:i:s", strtotime($keluar)),
+                                        !empty($masuk) && empty($keluar) => date("H:i:s", strtotime($masuk))." - tidak ada absen keluar",
+                                        empty($masuk) && !empty($keluar) => "tidak ada absen masuk - ".date("H:i:s", strtotime($keluar)),
                                         default => "tidak masuk"
                                     };
                                 } elseif ($type == "izin" || $type == "cuti") {
