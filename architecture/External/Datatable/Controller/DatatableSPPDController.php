@@ -99,16 +99,14 @@ class DatatableSPPDController extends Controller
             }
             else if($verifikasi){
                 if($row->status=='menunggu'){
-                    $render = '<a href="#" class="btn btn-success btn-approve"><i class="bi bi-check-lg"></i></a>';
-                    $render .= '
-                        <a href="#" class="ml-2 btn btn-danger btn-reject"><i class="bi bi-x-lg"></i></a>
-                    ';
+                    $render = '
+                    <a href="#" class="btn btn-success btn-approve"><i class="bi bi-check-lg"></i></a>
+                    <a href="#" class="ml-2 btn btn-danger btn-reject"><i class="bi bi-x-lg"></i></a>';
                 }
                 else if($row->status=='menunggu verifikasi sdm'){
-                    $render = $level=='<a href="'.route('sppd.approval',['id'=>$row->id,'level'=>($level=="dosen" && $verifikasi? 'warek':$level??'-')]).'" class="btn btn-success"><i class="bi bi-check-lg"></i></a>';
-                    $render .= '
-                        <a href="#" class="ml-2 btn btn-danger btn-reject"><i class="bi bi-x-lg"></i></a>
-                    ';
+                    $render = $level=='
+                    <a href="'.route('sppd.approval',['id'=>$row->id,'level'=>($level=="dosen" && $verifikasi? 'warek':$level??'-')]).'" class="btn btn-success"><i class="bi bi-check-lg"></i></a>
+                    <a href="#" class="ml-2 btn btn-danger btn-reject"><i class="bi bi-x-lg"></i></a>';
                 }
                 else if(in_array($row->status, ['menunggu verifikasi sdm'])){
                     $render = '<a href="#" class="ml-2 btn btn-secondary btn-download-anggaran"><i class="bi bi-wallet2"></i></a>';
