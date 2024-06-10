@@ -20,7 +20,7 @@ class ApiCutiController extends Controller
         try {
             if(empty($request->id)) throw new Exception("invalid reject cuti");
 
-            $this->commandBus->dispatch(new ApprovalCutiCommand($request->id,"tolak",$request->catatan,$request->pic));
+            $this->commandBus->dispatch(new ApprovalCutiCommand($request->id,$request->level=="sdm"? "tolak sdm":"tolak atasan",$request->catatan));
             
             return response()->json([
                 "status"=>"ok",

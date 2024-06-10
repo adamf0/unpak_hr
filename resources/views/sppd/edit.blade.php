@@ -51,8 +51,7 @@
                                         <table id="tbAnggota" class="table table-striped">
                                             <thead>
                                                 <tr>
-                                                    <th>NIDN</th>
-                                                    <th>NIP</th>
+                                                    <th>NIDN/NIP</th>
                                                     <th>Nama</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -61,8 +60,11 @@
                                                 @if ( !is_null(old('anggota',$listAnggota)) && is_array(old('anggota',$listAnggota)) )
                                                     @foreach (old('anggota',$listAnggota) as $key => $value)
                                                     <tr data-id="{{$key}}">
-                                                        <td><input type="hidden" class="pe-none" name="anggota[{{ $loop->index }}][nidn]" value="{{ $value['nidn'] }}"/> {{ $value['nidn'] }}</td>
-                                                        <td><input type="hidden" class="pe-none" name="anggota[{{ $loop->index }}][nip]" value="{{ $value['nip'] }}"/> {{ $value['nip'] }}</td>
+                                                        <td>
+                                                            <input type="hidden" class="pe-none" name="anggota[{{ $loop->index }}][nidn]" value="{{ $value['nidn'] }}"/>
+                                                            <input type="hidden" class="pe-none" name="anggota[{{ $loop->index }}][nip]" value="{{ $value['nip'] }}"/>
+                                                            {{ $value['nidn']??$value['nip'] }}
+                                                        </td>
                                                         <td><input type="hidden" class="pe-none" name="anggota[{{ $loop->index }}][nama]" value="{{ $value['nama'] }}"/> {{ $value['nama'] }}</td>
                                                         <td><a href="#" class="btn btn-danger btnHapusAnggota">Hapus</a></td>
                                                     </tr>  
@@ -92,10 +94,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-12">
-                            <x-input-text title="NIDN" name="nidn" class="nidnAddAnggota" />
-                        </div>
-                        <div class="col-12">
-                            <x-input-text title="NIP" name="nip" class="nipAddAnggota" />
+                            <x-input-text title="Nama" name="nidn_nip" class="nidnnipAddAnggota" />
                         </div>
                     </div>
                 </div>
@@ -113,6 +112,7 @@
         $(document).ready(function () {
             var CSRF_TOKEN      = $('meta[name="csrf-token"]').attr('content');
             load_dropdown('.jenis_sppd', null, `{{ route('select2.JenisSPPD.List') }}`, "{{ old('jenis_sppd',$SPPD->GetJenisSPPD()?->GetId()) }}", '-- Pilih Jenis SPPD --');
+            load_dropdown('.nidnnipAddAnggota', null, `{{ route('select2.DosenPegawai.List') }}`, "{{ old('nidn_nip') }}", '-- Pilih Nama --','#modalAddAnggota');
 
             $('.tanggal_berangkat').datepicker({
                 format: 'yyyy-mm-dd',
@@ -159,21 +159,18 @@
             });
 
             let modalAddAnggota        = new bootstrap.Modal(document.getElementById('modalAddAnggota'));
-            let nidnAddAnggota         = $('.nidnAddAnggota');
-            let nipAddAnggota          = $('.nipAddAnggota');
+            let nidnnipAddAnggota      = $('.nidnnipAddAnggota');
             let btnAddAnggota          = $('.btnAddAnggota');
             let btnModalAddAnggota     = $('.btnModalAddAnggota');
             let tbAnggota              = document.getElementById('tbAnggota');
 
-            preventEnterKey(nidnAddAnggota);
+            preventEnterKey(nidnnipAddAnggota);
 
             $(document).on('shown.bs.modal', '#modalAddAnggota', function() {
-                nidnAddAnggota.focus().val("");
-                nipAddAnggota.focus().val("");
+                nidnnipAddAnggota.focus().val("");
             });
             $(document).on('hidden.bs.modal', '#modalAddAnggota', function() {
-                nidnAddAnggota.blur().val("");
-                nipAddAnggota.blur().val("");
+                nidnnipAddAnggota.blur().val("");
             });
             String.prototype.isEmpty = function() {
                 return (this.length === 0 || !this.trim());
@@ -199,14 +196,21 @@
                 anggota: function(row,length,response,btnClassName) {
                     let nidn = response?.data?.dosen?.nidn??"";
                     let nip = response?.data?.pegawai?.nip??"";
+                    let reff = null;
+                    if(response?.data?.dosen!=null){
+                        reff = nidn
+                    } else if(response?.data?.pegawai!=null){
+                        reff=nip
+                    }
                     let nama_lengkap = response?.data?.dosen?.nama_dosen ?? response?.data?.pegawai?.nama;
                     console.log()
 
                     row.setAttribute('data-id', length);
-                    row.insertCell(0).innerHTML = `<input type="hidden" class="pe-none" name="anggota[${length}][nidn]" value="${nidn}"/> ${nidn}`;
-                    row.insertCell(1).innerHTML = `<input type="hidden" class="pe-none" name="anggota[${length}][nip]" value="${nip}"/> ${nip}`;
-                    row.insertCell(2).innerHTML = `<input type="hidden" class="pe-none" name="anggota[${length}][nama]" value="${nama_lengkap}"/> ${nama_lengkap}`;
-                    row.insertCell(3).innerHTML = `<a href="#" class="btn btn-danger ${btnClassName}">Hapus</a>`;
+                    row.insertCell(0).innerHTML = ` <input type="hidden" class="pe-none" name="anggota[${length}][nidn]" value="${nidn}"/>
+                                                    <input type="hidden" class="pe-none" name="anggota[${length}][nip]" value="${nip}"/> ${reff}`;
+                    // row.insertCell(1).innerHTML = ` ${nip}`;
+                    row.insertCell(1).innerHTML = `<input type="hidden" class="pe-none" name="anggota[${length}][nama]" value="${nama_lengkap}"/> ${nama_lengkap}`;
+                    row.insertCell(2).innerHTML = `<a href="#" class="btn btn-danger ${btnClassName}">Hapus</a>`;
                     return row;
                 }
             };
@@ -259,49 +263,61 @@
 
             btnAddAnggota.on('click', function(e) {
                 e.preventDefault();
-                let nidn = nidnAddAnggota.val();
-                let nip = nipAddAnggota.val();
-
-                let dataForm = new FormData();
-                dataForm.append("X-CSRF-TOKEN",CSRF_TOKEN);
-                dataForm.append("nidn",nidn);
-                dataForm.append("nip",nip);
-                console.log({'X-CSRF-TOKEN': CSRF_TOKEN, 'nidn':nidn, 'nip':nip});
-
-                if(isDuplicatValueDynamicInput("anggota","nidn",nidn)){
-                    alert(`nidn ${nidn} sudah dimasukkan sebelumnya`);
-                } else if(isDuplicatValueDynamicInput("anggota","nip",nip)){
-                    alert(`nip ${nip} sudah dimasukkan sebelumnya`);
-                } else if(!nidn.isEmpty() && !nip.isEmpty()){
-                    alert(`nidn dan nip tidak boleh diinput bersamaan`);
-                } else if(nidn.isEmpty() && nip.isEmpty()){
-                    alert(`salah satu antara nidn dan nip yg harus diisi`);
+                if(nidnnipAddAnggota.select2('data')==0){
+                    alert("wajib pilih anggota")
+                } else if(nidnnipAddAnggota.select2('data')>1){
+                    alert("ada masalah pada aplikasi")
                 } else{
-                    $('.btnAddAnggota').attr('disabled', true);
+                    const detail = nidnnipAddAnggota.select2('data')[0];
+                    const id    = detail['id'];
+                    const type  = detail['type'];
+                    let nidn    = type=="dosen"? id:null;
+                    let nip     = type=="pegawai"? id:null;
+                    let nama    = detail.text;
 
-                    $.ajax({
-                        url: "{{ route('api.Info.InfoDosenPegawai') }}",
-                        method: 'POST',
-                        data: dataForm,
-                        processData: false,
-                        contentType: false,
-                        success: function(response) {
-                            console.log(response)
-                            $('.btnAddAnggota').removeAttr("disabled");
-                            modalAddAnggota.hide();
-                            if (response.status == "ok") {
-                                const tbody = tbAnggota.getElementsByTagName('tbody')[0];
-                                createTableRow(tbody, 'anggota', response, 'btnHapusAnggota');
-                            } else {
-                                // alert(response.message);
+                    let dataForm = new FormData();
+                    dataForm.append("X-CSRF-TOKEN",CSRF_TOKEN);
+                    dataForm.append("nidn",nidn);
+                    dataForm.append("nip",nip);
+                    console.log({'X-CSRF-TOKEN': CSRF_TOKEN, 'nidn':nidn, 'nip':nip});
+
+                    if(isDuplicatValueDynamicInput("anggota","nidn",nidn)){
+                        alert(`${nama} sudah dimasukkan sebelumnya`);
+                    } else if(isDuplicatValueDynamicInput("anggota","nip",nip)){
+                        alert(`${nama} sudah dimasukkan sebelumnya`);
+                    } 
+                    // else if(nidn != null && nip != null){
+                    //     alert(`nidn dan nip tidak boleh diinput bersamaan`);
+                    // } 
+                    else if(nidn == null && nip == null){
+                        alert(`nama yg harus diisi`);
+                    } else{
+                        $('.btnAddAnggota').attr('disabled', true);
+
+                        $.ajax({
+                            url: "{{ route('api.Info.InfoDosenPegawai') }}",
+                            method: 'POST',
+                            data: dataForm,
+                            processData: false,
+                            contentType: false,
+                            success: function(response) {
+                                console.log(response)
+                                $('.btnAddAnggota').removeAttr("disabled");
+                                modalAddAnggota.hide();
+                                if (response.status == "ok") {
+                                    const tbody = tbAnggota.getElementsByTagName('tbody')[0];
+                                    createTableRow(tbody, 'anggota', response, 'btnHapusAnggota');
+                                } else {
+                                    // alert(response.message);
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                handleAjaxError(xhr, status, error)
+                                $('.btnAddAnggota').removeAttr("disabled");
+                                modalAddAnggota.hide();
                             }
-                        },
-                        error: function(xhr, status, error) {
-                            handleAjaxError(xhr, status, error)
-                            $('.btnAddAnggota').removeAttr("disabled");
-                            modalAddAnggota.hide();
-                        }
-                    });
+                        });
+                    }
                 }
             });
         });

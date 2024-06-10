@@ -17,9 +17,9 @@ trait CutiBase
     public ?Date $tanggal_akhir=null;
     public $tujuan;
     public $dokumen;
+    public ?Pegawai $verifikasi;
     public $status;
     public $catatan;
-    public $pic;
 
     public function GetDosen(){
         return $this->dosen;
@@ -45,13 +45,13 @@ trait CutiBase
     public function GetDokumen(){
         return $this->dokumen;
     }
+    public function GetVerifikasi(){
+        return $this->verifikasi;
+    }
     public function GetStatus(){
         return $this->status;
     }
     public function GetCatatan(){
         return $this->catatan;
-    }
-    public function GetPIC(){
-        return $this->pic;
     }
 }

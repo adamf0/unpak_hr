@@ -20,7 +20,7 @@ class ApiKlaimAbsenController extends Controller
         try {
             if(empty($request->id)) throw new Exception("invalid reject klaim absen");
 
-            $this->commandBus->dispatch(new ApprovalKlaimAbsenCommand($request->id,"tolak",$request->catatan,$request->pic));
+            $this->commandBus->dispatch(new ApprovalKlaimAbsenCommand($request->id,"tolak",$request->catatan));
             
             return response()->json([
                 "status"=>"ok",

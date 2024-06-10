@@ -50,6 +50,9 @@
                                         <small class="text-primary">* PDF dan Gambar yang boleh diupload</small><br>
                                         <small class="text-primary">* Maksimal 10Mb</small>
                                     </div>
+                                    <div class="col-12">
+                                        <x-input-select title="Verifikasi Atasan" name="verifikasi" class="verifikasi"></x-input-select>
+                                    </div>
                                 </div>
                                 <input type="submit" name="submit" class="btn btn-primary mt-3" value="submit">
                             </form>
@@ -67,8 +70,8 @@
         $(document).ready(function () {
             var CSRF_TOKEN      = $('meta[name="csrf-token"]').attr('content');
 
-            //load calendar
             load_dropdown('.jenis_cuti', null, `{{ route('select2.JenisCuti.List') }}`, "{{ old('jenis_cuti',$Cuti->GetJenisCuti()?->GetId()) }}", '-- Pilih Jenis Cuti --');
+            load_dropdown('.verifikasi', null, `{{ route('select2.PegawaiV2.List') }}`, "{{ old('verifikasi',$Cuti->GetVerifikasi()?->GetNip()) }}", '-- Pilih Nama Atasan --');
 
             $('.tanggal_mulai').datepicker({
                 format: 'yyyy-mm-dd',

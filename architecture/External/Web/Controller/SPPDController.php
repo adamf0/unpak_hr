@@ -43,8 +43,11 @@ class SPPDController extends Controller
         protected IQueryBus $queryBus
     ) {}
     
-    public function Index($type=null){
-        return view('sppd.index',['type'=>$type]);
+    public function index($type=null){
+        return view('sppd.index',['type'=>$type,'verifikasi'=>Session::get('levelActive')=="sdm"]);
+    }
+    public function verifikasi(){
+        return view('sppd.index',['type'=>null,'verifikasi'=>true]);
     }
 
     public function create(){
@@ -170,8 +173,9 @@ class SPPDController extends Controller
     public function approval($id,$level){
         $sppd = $this->queryBus->ask(new GetSPPDQuery($id));
         $redirect = match(true){
-            !is_null($sppd->GetDosen())=>redirect()->route('sppd.index2',['type'=>'dosen']),
-            !is_null($sppd->GetPegawai())=>redirect()->route('sppd.index2',['type'=>'pegawai']),
+            $level=="sdm" && !is_null($sppd->GetDosen())=>redirect()->route('sppd.index2',['type'=>'dosen']),
+            $level=="sdm" && !is_null($sppd->GetPegawai())=>redirect()->route('sppd.index2',['type'=>'tendik']),
+            $level=="warek" => redirect()->route('sppd.index2',['type'=>'verifikasi']),
             default=>redirect()->route('sppd.index'),
         };
 
@@ -179,12 +183,12 @@ class SPPDController extends Controller
             if(empty($id)) throw new Exception("invalid reject sppd");
             if(!in_array($level,['sdm','warek'])) throw new Exception("selain SDM dan Warek tidak dapat approval sppd");
 
-            $status = match(Session::get('levelActive')){
+            $status = match($level){
                 "warek"=>"menunggu verifikasi sdm",
                 "sdm"=>"terima sdm",
                 default=>null,
             };
-            $this->commandBus->dispatch(new ApprovalSPPDCommand($id,Session::get('id'),$status,null));
+            $this->commandBus->dispatch(new ApprovalSPPDCommand($id,$status));
 
             Session::flash(TypeNotif::Create->val(), "berhasil terima SPPD");
             return $redirect;

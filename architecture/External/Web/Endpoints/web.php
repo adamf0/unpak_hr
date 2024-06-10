@@ -52,6 +52,7 @@ Route::middleware(['throwSession'])->group(function () {
     Route::get('master_kalendar/delete/{id}', [MasterKalendarController::class,'delete'])->name('master_kalendar.delete');
 
     Route::get('cuti', [CutiController::class,'index'])->name('cuti.index');
+    Route::get('cuti/verifikasi', [CutiController::class,'verifikasi'])->name('cuti.verifikasi');
     Route::get('cuti/create', [CutiController::class,'create'])->name('cuti.create');
     Route::post('cuti/store', [CutiController::class,'store'])->name('cuti.store');
     Route::get('cuti/edit/{id}', [CutiController::class,'edit'])->name('cuti.edit');
@@ -69,6 +70,7 @@ Route::middleware(['throwSession'])->group(function () {
     Route::get('jenis_cuti/delete/{id}', [JenisCutiController::class,'delete'])->name('jenis_cuti.delete');
 
     Route::get('izin', [IzinController::class,'index'])->name('izin.index');
+    Route::get('izin/verifikasi', [IzinController::class,'verifikasi'])->name('izin.verifikasi');
     Route::get('izin/create', [IzinController::class,'create'])->name('izin.create');
     Route::post('izin/store', [IzinController::class,'store'])->name('izin.store');
     Route::get('izin/edit/{id}', [IzinController::class,'edit'])->name('izin.edit');
@@ -96,6 +98,7 @@ Route::middleware(['throwSession'])->group(function () {
     Route::get('jenis_izin/delete/{id}', [JenisIzinController::class,'delete'])->name('jenis_izin.delete');
 
     Route::get('sppd', [SPPDController::class,'index'])->name('sppd.index');
+    Route::get('sppd/verifikasi', [SPPDController::class,'verifikasi'])->name('sppd.verifikasi');
     Route::get('sppd/create', [SPPDController::class,'create'])->name('sppd.create');
     Route::post('sppd/store', [SPPDController::class,'store'])->name('sppd.store');
     Route::get('sppd/edit/{id}', [SPPDController::class,'edit'])->name('sppd.edit');

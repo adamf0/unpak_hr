@@ -22,6 +22,7 @@ class UpdateIzinCommand extends Command
         $tujuan,
         ?JenisIzin $jenis_izin=null,
         $dokumen,
+        ?Pegawai $verifikasi=null,
         $status, 
         public TypeData $option = TypeData::Entity
     ) {
@@ -32,6 +33,7 @@ class UpdateIzinCommand extends Command
         $this->tujuan = $tujuan;
         $this->jenis_izin = $jenis_izin;
         $this->dokumen = $dokumen;
+        $this->verifikasi = $verifikasi;
         $this->status = $status;
     }
 }

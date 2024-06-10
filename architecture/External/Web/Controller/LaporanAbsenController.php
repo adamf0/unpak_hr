@@ -105,9 +105,9 @@ class LaporanAbsenController extends Controller
                                         empty($masuk) && !empty($keluar) => "tidak ada absen masuk - ".date("H:i:s", strtotime($keluar)),
                                         default => "tidak masuk"
                                     };
-                                } elseif ($type == "izin" || $type == "cuti") {
+                                } elseif ($type == "izin" || $type == "cuti" || $type == "sppd") {
                                     $carry[] = $type; //$info->info->keterangan['tujuan'];
-                                }
+                                } 
                                 return $carry;
                             }, []);
                             $item[$key] = match(true){

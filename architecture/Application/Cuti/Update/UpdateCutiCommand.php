@@ -14,7 +14,19 @@ use Architecture\Shared\TypeData;
 class UpdateCutiCommand extends Command
 {
     use IdentityCommand,CutiBase;
-    public function __construct($id,?Dosen $dosen=null,?Pegawai $pegawai=null,?JenisCuti $jenis_cuti=null,$lama_cuti,Date $tanggal_mulai,?Date $tanggal_akhir=null,$tujuan,$dokumen,$status, public TypeData $option = TypeData::Entity) {
+    public function __construct(
+        $id,
+        ?Dosen $dosen=null,
+        ?Pegawai $pegawai=null,
+        ?JenisCuti $jenis_cuti=null,
+        $lama_cuti,
+        Date $tanggal_mulai,
+        ?Date $tanggal_akhir=null,
+        $tujuan,$dokumen,
+        ?Pegawai $verifikasi=null,
+        $status, 
+        public TypeData $option = TypeData::Entity
+    ) {
         $this->id = $id;
         $this->dosen = $dosen;
         $this->pegawai = $pegawai;
@@ -24,6 +36,7 @@ class UpdateCutiCommand extends Command
         $this->tanggal_akhir = $tanggal_akhir;
         $this->tujuan = $tujuan;
         $this->dokumen = $dokumen;
+        $this->verifikasi = $verifikasi;
         $this->status = $status;
     }
 }

@@ -9,6 +9,7 @@ use Architecture\Application\Cuti\List\GetAllCutiQuery;
 use Architecture\Application\Izin\List\GetAllIzinQuery;
 use Architecture\Application\MasterKalendar\List\GetAllMasterKalendarQuery;
 use Architecture\Application\Presensi\List\GetAllPresensiQuery;
+use Architecture\Application\SPPD\List\GetAllSPPDQuery;
 use Architecture\Domain\Enum\FormatDate;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -53,6 +54,22 @@ class Select2PresensiController extends Controller
             return $list;
         }, []);
 
+        $list_sppd = $this->queryBus->ask(new GetAllSPPDQuery($nidn, $nip, date('Y')));
+        $listSppd = $list_sppd->reduce(function ($list, $item) {
+            $start  = $item->GetTanggalBerangkat()->val();
+            $end    = $item->GetTanggalKembali()->val();
+            $days   = $end->diffInDays($start);
+
+            $listDate = array_reduce(range(0, $days + 1), function ($carry, $i) use ($item) {
+                $carry[] = $item->GetTanggalBerangkat()->val()->addDays($i)->format('Y-m-d');
+                return $carry;
+            }, []);
+
+            $list[] = $listDate;
+
+            return $list;
+        }, []);
+
         $list_libur = $this->queryBus->ask(new GetAllMasterKalendarQuery(0, 0, date('Y-m-d')));
         $listLibur = $list_libur->reduce(function ($list, $item) {
             if (!empty($item->GetTanggalMulai())) {
@@ -71,11 +88,16 @@ class Select2PresensiController extends Controller
             return $list;
         }, []);
 
-        $listTanggal = array_merge(Arr::flatten($listCuti), Arr::flatten($listLibur), $listIzin);
+        $listTanggal = array_merge(Arr::flatten($listCuti), Arr::flatten($listSppd), Arr::flatten($listLibur), $listIzin);
         $listTanggal = array_values(array_unique($listTanggal));
 
-        $list = $listPresensi->filter(function ($item) use ($listTanggal) {
-            return !in_array($item->GetTanggal(), $listTanggal);
+        $rangeTanggal = array_reduce(range(0, 1), function ($carry, $i){
+            $carry[] = Carbon::now()->subDays($i)->format('Y-m-d');
+            return $carry;
+        }, []);
+
+        $list = $listPresensi->filter(function ($item) use ($listTanggal, $rangeTanggal) {
+            return !in_array($item->GetTanggal(), $listTanggal) && !is_null($item->GetAbsenMasuk()) && in_array($item->GetTanggal(),$rangeTanggal);
         })
         ->values()
         ->sortBy('tanggal', SORT_REGULAR, true)
@@ -92,8 +114,8 @@ class Select2PresensiController extends Controller
                 "text" => $text,
             ];
             return $list;
-        });
+        },[]);
 
-        return response()->json($list);
+        return response()->json(count($list)>=2? array_slice($list,0,2):$list);
     }
 }

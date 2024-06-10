@@ -15,7 +15,9 @@ use Architecture\Application\Dosen\GetInfoDosenQuery;
 use Architecture\Application\LaporanAbsen\List\GetAllLaporanAbsenQuery;
 use Architecture\Application\Pegawai\FirstData\GetInfoPegawaiQuery;
 use Architecture\Application\Pegawai\List\GetAllPegawaiQuery;
+use Architecture\Application\Pegawai\List\GetAllPegawaiV2Query;
 use Architecture\External\Persistance\Queries\Dosen\GetAllDosenQueryHandler;
+use Architecture\External\Persistance\Queries\Pegawai\GetAllPegawaiV2QueryHandler;
 use Architecture\External\Persistance\Queries\Dosen\GetInfoDosenQueryHandler;
 use Architecture\External\Persistance\Queries\LaporanAbsen\GetAllLaporanAbsenQueryHandler;
 use Architecture\External\Persistance\Queries\Pegawai\GetAllPegawaiQueryHandler;
@@ -52,6 +54,7 @@ class AppServiceProvider extends ServiceProvider
             GetInfoDosenQuery::class => GetInfoDosenQueryHandler::class,
             GetInfoPegawaiQuery::class => GetInfoPegawaiQueryHandler::class,
             GetAllPegawaiQuery::class => GetAllPegawaiQueryHandler::class,
+            GetAllPegawaiV2Query::class => GetAllPegawaiV2QueryHandler::class,
 
             GetAllLaporanAbsenQuery::class => GetAllLaporanAbsenQueryHandler::class,
         ]);

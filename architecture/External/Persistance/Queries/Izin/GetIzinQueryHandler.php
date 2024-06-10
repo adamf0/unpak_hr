@@ -21,7 +21,7 @@ class GetIzinQueryHandler extends Query
 
     public function handle(GetIzinQuery $query)
     {
-        $data = IzinModel::with(['JenisIzin','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai'])->where('id',$query->GetId())->first();
+        $data = IzinModel::with(['JenisIzin','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','PayrollPegawai'])->where('id',$query->GetId())->first();
 
         if($query->getOption()==TypeData::Default) return $data;
 
@@ -40,6 +40,7 @@ class GetIzinQueryHandler extends Query
                 )):null,
             )):null,
             !is_null($data->Pegawai)? Creator::buildPegawai(PegawaiEntitas::make(
+                null,
                 $data->Pegawai?->nip,
                 $data->Pegawai?->nama,
                 $data->Pegawai?->unit,
@@ -51,6 +52,12 @@ class GetIzinQueryHandler extends Query
                 $data->JenisIzin?->nama,
             )),
             $data->dokumen,
+            !is_null($data->PayrollPegawai)? Creator::buildPegawai(PegawaiEntitas::make(
+                $data->EPribadiRemote?->nidn,
+                $data->PayrollPegawai?->nip,
+                $data->PayrollPegawai?->nama,
+                $data->PayrollPegawai?->unit,
+            )):null,
             $data->catatan,
             $data->status,
         ));

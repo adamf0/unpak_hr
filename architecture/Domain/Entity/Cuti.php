@@ -6,7 +6,20 @@ use Architecture\Domain\ValueObject\Date;
 
 class Cuti extends BaseEntity{
     use CutiBase;
-    public function __construct($id,?Dosen $dosen=null,?Pegawai $pegawai=null,?JenisCuti $jenis_cuti=null,$lama_cuti,Date $tanggal_mulai,?Date $tanggal_akhir=null,$tujuan,$dokumen,$catatan,$status) {
+    public function __construct(
+        $id,
+        ?Dosen $dosen=null,
+        ?Pegawai $pegawai=null,
+        ?JenisCuti $jenis_cuti=null,
+        $lama_cuti,
+        Date $tanggal_mulai,
+        ?Date $tanggal_akhir=null,
+        $tujuan,
+        $dokumen,
+        ?Pegawai $verifikasi=null,
+        $catatan,
+        $status
+    ) {
         $this->id = $id;
         $this->dosen = $dosen;
         $this->pegawai = $pegawai;
@@ -16,6 +29,7 @@ class Cuti extends BaseEntity{
         $this->tanggal_akhir = $tanggal_akhir;
         $this->tujuan = $tujuan;
         $this->dokumen = $dokumen;
+        $this->verifikasi = $verifikasi;
         $this->status = $status;
         $this->catatan = $catatan;
     }

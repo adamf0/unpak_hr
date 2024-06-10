@@ -17,9 +17,6 @@ class ApprovalSPPDCommandHandler extends CommandHandler
         if(!empty($command->GetFile())){
             $SPPD->dokumen_anggaran = $command->GetFile();
         }
-        if(!empty($command->GetPIC())){
-            $SPPD->id_user = $command->GetPIC();
-        }
         if($SPPD->isDirty()) $SPPD->saveOrFail();
     }
 }

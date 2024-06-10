@@ -15,6 +15,7 @@ class CreateIzinRuleReq{
             "jenis_izin"        => "required",
             "dokumen"           => "nullable|file|mimes:pdf,jpg,jpeg,png|max:10000",
             // "catatan"           => "required",
+            "verifikasi"        => "required",
         ]; 
     }
 }

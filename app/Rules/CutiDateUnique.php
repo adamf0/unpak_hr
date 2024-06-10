@@ -30,7 +30,7 @@ class CutiDateUnique implements ValidationRule
         if (!is_null($this->nip)) {
             $intersectionDateIzin->where('nip', $this->nip);
         }
-        $intersectionDateIzin->whereIn('status', ["menunggu","terima"]);
+        $intersectionDateIzin->where('status', "terima");
         $intersectionDateIzin = $intersectionDateIzin->count();
 
         if ($intersectionDateIzin) {
@@ -40,15 +40,15 @@ class CutiDateUnique implements ValidationRule
     function intersectionCuti($listDate = [], Closure $fail)
     {
 
-        $intersectionDateCuti = ModelCuti::whereIn('status', ["menunggu","terima"]);
+        $intersectionDateCuti = ModelCuti::where('status', "terima");
         if(count($listDate)>1){
             $start  = reset($listDate);
             $end    = end($listDate);
-            $intersectionDateCuti = $intersectionDateCuti->whereBetween('tanggal_mulai', [$start,$end])->orWhereBetween('tanggal_akhir', [$start,$end]);
+            $intersectionDateCuti = $intersectionDateCuti->where(fn($query)=>$query->whereBetween('tanggal_mulai', [$start,$end])->orWhereBetween('tanggal_akhir', [$start,$end]));
         } else if(count($listDate)==1){
             $start  = $listDate[0];
             $end    = $listDate[0];
-            $intersectionDateCuti = $intersectionDateCuti->whereBetween('tanggal_mulai', [$start,$end])->orWhereBetween('tanggal_akhir', [$start,$end]);
+            $intersectionDateCuti = $intersectionDateCuti->where(fn($query)=>$query->whereBetween('tanggal_mulai', [$start,$end])->orWhereBetween('tanggal_akhir', [$start,$end]));
         }
         if (!is_null($this->nidn)) {
             $intersectionDateCuti->where('nidn', $this->nidn);

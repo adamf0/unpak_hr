@@ -12,9 +12,6 @@ class ApprovalKlaimAbsenCommandHandler extends CommandHandler
         $KlaimAbsen = ModelKlaimAbsen::findOrFail($command->GetId());
         $KlaimAbsen->status = $command->GetStatus();
         $KlaimAbsen->catatan = $command->GetCatatan();
-        if(!empty($command->GetPIC())){
-            $KlaimAbsen->id_user = $command->GetPIC();
-        }
         if($KlaimAbsen->isDirty()) $KlaimAbsen->saveOrFail();
     }
 }

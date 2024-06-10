@@ -19,6 +19,7 @@ class UpdateCutiCommandHandler extends CommandHandler
         $Cuti->tanggal_akhir = $command->GetTanggalAkhir()?->toFormat(FormatDate::Default);
         $Cuti->tujuan = $command->GetTujuan();
         $Cuti->dokumen = $command->GetDokumen();
+        $Cuti->verifikasi = $command->GetVerifikasi()?->GetNip();
         $Cuti->status = $command->GetStatus();
         if($Cuti->isDirty()) $Cuti->saveOrFail();
     }

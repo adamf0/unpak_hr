@@ -153,7 +153,7 @@ class KlaimAbsenController extends Controller
         $klaim_absen = $this->queryBus->ask(new GetKlaimAbsenQuery($id));
         $redirect = match(true){
             !is_null($klaim_absen->GetDosen())=>redirect()->route('klaim_absen.index2',['type'=>'dosen']),
-            !is_null($klaim_absen->GetPegawai())=>redirect()->route('klaim_absen.index2',['type'=>'pegawai']),
+            !is_null($klaim_absen->GetPegawai())=>redirect()->route('klaim_absen.index2',['type'=>'tendik']),
             default=>redirect()->route('klaim_absen.index'),
         };
         try {

@@ -20,4 +20,10 @@ class Izin extends Model
    public function Pegawai(){
       return $this->hasOne(NPribadi::class, 'nip' ,'nip');
    }
+   public function PayrollPegawai(){
+      return $this->hasOne(PayrollPegawai::class, 'nip' ,'verifikasi');
+   }
+   public function EPribadiRemote(){
+      return $this->hasOne(EPribadiRemote::class, 'nip' ,'verifikasi');
+   }
 }

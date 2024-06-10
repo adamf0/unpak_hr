@@ -14,9 +14,6 @@ class RejectSPPDCommandHandler extends CommandHandler
         if(!empty($command->GetCatatan())){
             $SPPD->catatan = $command->GetCatatan();
         }
-        if(!empty($command->GetPIC())){
-            $SPPD->id_user = $command->GetPIC();
-        }
         if($SPPD->isDirty()) $SPPD->saveOrFail();
     }
 }

@@ -15,9 +15,9 @@ trait IzinBase
     public $tujuan;
     public ?JenisIzin $jenis_izin=null;
     public $dokumen;
+    public ?Pegawai $verifikasi;
     public $status;
     public $catatan;
-    public $pic;
 
     public function GetDosen(){
         return $this->dosen;
@@ -37,13 +37,13 @@ trait IzinBase
     public function GetDokumen(){
         return $this->dokumen;
     }
+    public function GetVerifikasi(){
+        return $this->verifikasi;
+    }
     public function GetCatatan(){
         return $this->catatan;
     }
     public function GetStatus(){
         return $this->status;
-    }
-    public function GetPIC(){
-        return $this->pic;
     }
 }

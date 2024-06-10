@@ -19,7 +19,7 @@
                 {{ Utility::showNotif() }}
             </div>
             <div class="col-12">
-                @if (Utility::hasUser())
+                @if (Utility::hasUser() && in_array($type,['dosen','tendik']))
                     <a href="{{ route('cuti.create') }}" class="btn btn-primary">Tambah</a>
                 @else
                     <div class="card">
@@ -104,6 +104,7 @@
             const nip = `{{Session::get('nip')}}`
             const level = `{{Session::get('levelActive')}}`
             const type = `{{$type}}`
+            const verifikasi = `{{ (int) $verifikasi }}`
             const column = level == "pegawai" || level=="dosen"? 
             [
                 {
@@ -234,7 +235,7 @@
             ];
 
             let table = eTable({
-                url: `{{ route('datatable.Cuti.index') }}?level=${level}&nidn=${nidn}&nip=${nip}&type=${type}`,
+                url: `{{ route('datatable.Cuti.index') }}?level=${level}&nidn=${nidn}&nip=${nip}&type=${type}&verifikasi=${verifikasi}`,
             }, column);
 
             let modal = new bootstrap.Modal(document.getElementById('modal'));
@@ -249,7 +250,7 @@
                 <div class="row">
                     <input type="hidden" class="id_cuti" value="${rowData?.id}">
                     <div class="col-12">
-                        <x-text title="Catatan" name="catatan" class="catatan" default="${rowData?.catatan}"/>
+                        <x-text title="Catatan" name="catatan" class="catatan"/>
                     </div>
                     <div class="col-12">
                         <input type="submit" class="btn btn-success btn-tolak" value="Simpan">
@@ -264,6 +265,7 @@
                 let dataForm = new FormData()
                 dataForm.append("id",id)
                 dataForm.append("catatan",catatan)
+                dataForm.append("level",level)
                 dataForm.append("pic","{{Session::get('id')}}")
 
                 $.ajax({

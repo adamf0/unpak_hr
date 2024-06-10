@@ -21,6 +21,7 @@ class UpdateCutiRuleReq{
             ],
             "tujuan"        => "required",
             // "dokumen"       => "nullable|file|mimes:pdf,jpg,jpeg,png|max:10000",
+            "verifikasi"    => "required",
         ]; 
     }
 }

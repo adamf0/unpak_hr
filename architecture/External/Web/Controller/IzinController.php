@@ -43,8 +43,11 @@ class IzinController extends Controller
         protected IQueryBus $queryBus
     ) {}
     
-    public function Index($type=null){
-        return view('izin.index',['type'=>$type]);
+    public function index($type=null){
+        return view('izin.index',['type'=>$type,'verifikasi'=>Session::get('levelActive')=="sdm"]);
+    }
+    public function verifikasi(){
+        return view('izin.index',['type'=>null,'verifikasi'=>true]);
     }
 
     public function create(){
@@ -87,11 +90,12 @@ class IzinController extends Controller
                 $request->get("tujuan"),
                 Creator::buildJenisIzin(JenisIzinReferensi::make($request->get("jenis_izin"))),
                 $file,
+                $request->has("verifikasi")? Creator::buildPegawai(PegawaiReferensi::make($request->get("verifikasi"))):null,
                 "menunggu",
             ));
             Session::flash(TypeNotif::Create->val(), "berhasil tambah data");
 
-            return redirect()->route('izin.index');
+            return redirect()->route('izin.index2',['type'=>Session::get('levelActive')=="pegawai"? "tendik":"dosen"]);
         } catch (Exception $e) {
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
             return redirect()->route('izin.create')->withInput();
@@ -140,11 +144,12 @@ class IzinController extends Controller
                 $request->get("tujuan"),
                 Creator::buildJenisIzin(JenisIzinReferensi::make($request->get("jenis_izin"))),
                 $file,
+                $request->has("verifikasi")? Creator::buildPegawai(PegawaiReferensi::make($request->get("verifikasi"))):null,
                 $izin->GetStatus(),
             ));
             Session::flash(TypeNotif::Update->val(), "berhasil ubah data");
 
-            return redirect()->route('izin.index');
+            return redirect()->route('izin.index2',['type'=>Session::get('levelActive')=="pegawai"? "tendik":"dosen"]);
         } catch (Exception $e) {
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
             return redirect()->route('izin.edit',["id"=>$request->get('id')])->withInput();
@@ -171,14 +176,16 @@ class IzinController extends Controller
     public function approval($id,$type){
         $izin = $this->queryBus->ask(new GetIzinQuery($id));
         $redirect = match(true){
-            !is_null($izin->GetDosen())=>redirect()->route('izin.index2',['type'=>'dosen']),
-            !is_null($izin->GetPegawai())=>redirect()->route('izin.index2',['type'=>'pegawai']),
+            Session::get('levelActive')=="sdm" && !is_null($izin->GetDosen()) => redirect()->route('izin.index2',['type'=>'dosen']),
+            Session::get('levelActive')=="sdm" && !is_null($izin->GetPegawai()) => redirect()->route('izin.index2',['type'=>'tendik']),
+            in_array(Session::get('levelActive'), ["dosen","pegawai"]) => redirect()->route('izin.index2',['type'=>'verifikasi']),
             default=>redirect()->route('izin.index'),
         };
-        try {
-            if(!in_array($type,["terima","tolak"])) throw new Exception("command invalid");
 
-            $this->commandBus->dispatch(new ApprovalIzinCommand($id,$type,null,Session::get('id')));
+        try {
+            // if(!in_array($type,["terima","tolak"])) throw new Exception("command invalid");
+
+            $this->commandBus->dispatch(new ApprovalIzinCommand($id,$type,null));
             Session::flash(TypeNotif::Create->val(), "berhasil $type izin");
 
             return $redirect;

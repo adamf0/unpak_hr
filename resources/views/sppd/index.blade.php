@@ -56,6 +56,14 @@
                     SPPD hanya dapat dibuat atau diajukan oleh Pejabat Struktural
                 </div>
             </div>
+            @php
+                $input = strtolower(Session::get('struktural'));
+                $level = match(true){
+                    strpos($input, 'wakil rektor bid sdm dan keuangan') !== false || 
+                    strpos($input, 'wakil dekan 2') !== false => "warek",
+                    default => Session::get('levelActive')
+                };
+            @endphp
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
@@ -64,7 +72,7 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        @if (!in_array(Session::get('levelActive'),["pegawai","dosen"]))
+                                        @if (($level=="sdm" || $level=="warek") && $verifikasi)
                                         <th>Nama</th>
                                         @endif
                                         <th>Jenis SPPD</th>
@@ -108,9 +116,10 @@
             
             const nidn = `{{Session::get('nidn')}}`
             const nip = `{{Session::get('nip')}}`
-            const level = `{{Session::get('levelActive')}}`
+            const level = `{{$level}}`
             const type = `{{$type}}`
-            const column = level=="pegawai" || level=="dosen"? 
+            const verifikasi = `{{ (int) $verifikasi }}`
+            const column = (`{{Session::get('levelActive')}}`=="pegawai" || `{{Session::get('levelActive')}}`=="dosen") && verifikasi==0? 
             [
                 {
                     data: 'DT_RowIndex', 
@@ -236,7 +245,7 @@
                     name: 'anggota',
                     render: function ( data, type, row, meta ) {
                         let list_anggota = '<ol>';
-                        data?.anggota?.forEach(d => {
+                        data?.forEach(d => {
                             list_anggota += `<li>${d.nama ?? "NA"} - ${d.nidn ?? d.nip ?? "NA"}</li>`;
                         });
                         list_anggota += '</ol>';
@@ -264,7 +273,7 @@
             ];
 
             let table = eTable({
-                url: `{{ route('datatable.SPPD.index') }}?level=${level}&nidn=${nidn}&nip=${nip}&type=${type}`,
+                url: `{{ route('datatable.SPPD.index') }}?level={{Session::get('levelActive')}}&nidn=${nidn}&nip=${nip}&type=${type}&verifikasi=${verifikasi}`,
             }, column);
 
             let modal = new bootstrap.Modal(document.getElementById('modal'));
@@ -274,12 +283,14 @@
             $('#tb tbody').on('click', '.btn-reject', function(e) {
                 e.preventDefault();
                 const rowData = table.row($(this).closest('tr')).data();
+                const catatan = rowData?.catatan??'';
+                
                 modalTitle.text("Informasi Penolakan");
                 modalBody.html(`
                 <div class="row">
                     <input type="hidden" class="id_sppd" value="${rowData?.id}">
                     <div class="col-12">
-                        <x-text title="Catatan" name="catatan" class="catatan" default="${rowData?.catatan}"/>
+                        <x-text title="Catatan" name="catatan" class="catatan" default="${catatan}"/>
                     </div>
                     <div class="col-12">
                         <input type="submit" class="btn btn-success btn-tolak" value="Simpan">
@@ -335,7 +346,7 @@
                 dataForm.append("id",id)
                 dataForm.append("catatan",catatan)
                 dataForm.append("pic","{{Session::get('id')}}")
-                dataForm.append("level","{{Session::get('levelActive')}}")
+                dataForm.append("level",level)
 
                 $.ajax({
                     url: "{{ route('api.sppd.reject') }}",
@@ -364,7 +375,7 @@
                 dataForm.append("_token",'{{ csrf_token() }}')
                 dataForm.append("id",id)
                 dataForm.append("pic","{{Session::get('id')}}")
-                dataForm.append("level","{{Session::get('levelActive')}}")
+                dataForm.append("level",level)
                 dataForm.append("dokumen_anggaran_biaya", dokumen_anggaran_biaya, dokumen_anggaran_biaya.name);
 
                 $.ajax({

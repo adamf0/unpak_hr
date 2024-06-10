@@ -22,7 +22,7 @@ class GetAllIzinByNIPQueryHandler extends Query
 
     public function handle(GetAllIzinByNIPQuery $query)
     {
-        $datas = IzinModel::with(['JenisIzin','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai'])->where('nip',$query->GetNIP())->get();
+        $datas = IzinModel::with(['JenisIzin','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','PayrollPegawai','EPribadiRemote'])->where('nip',$query->GetNIP())->get();
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 
@@ -41,6 +41,7 @@ class GetAllIzinByNIPQueryHandler extends Query
                 )):null,
             )):null,
             !is_null($data->Pegawai)? Creator::buildPegawai(PegawaiEntitas::make(
+                null,
                 $data->Pegawai?->nip,
                 $data->Pegawai?->nama,
                 $data->Pegawai?->unit,
@@ -52,6 +53,12 @@ class GetAllIzinByNIPQueryHandler extends Query
                 $data->JenisIzin?->nama,
             )),
             $data->dokumen,
+            !is_null($data->PayrollPegawai)? Creator::buildPegawai(PegawaiEntitas::make(
+                $data->EPribadiRemote?->nidn,
+                $data->PayrollPegawai?->nip,
+                $data->PayrollPegawai?->nama,
+                $data->PayrollPegawai?->unit,
+            )):null,
             $data->catatan,
             $data->status,
         )) );

@@ -22,7 +22,7 @@ class GetAllCutiByNIPQueryHandler extends Query
 
     public function handle(GetAllCutiByNIPQuery $query)
     {
-        $datas = CutiModel::with(['JenisCuti','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai'])->where('nip',$query->GetNIP())->get();
+        $datas = CutiModel::with(['JenisCuti','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','PayrollPegawai','EPribadiRemote'])->where('nip',$query->GetNIP())->get();
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 
@@ -41,6 +41,7 @@ class GetAllCutiByNIPQueryHandler extends Query
                 )):null,
             )):null,
             !is_null($data->Pegawai)? Creator::buildPegawai(PegawaiEntitas::make(
+                null,
                 $data->Pegawai?->nip,
                 $data->Pegawai?->nama,
                 $data->Pegawai?->unit,
@@ -58,6 +59,12 @@ class GetAllCutiByNIPQueryHandler extends Query
             $data->tanggal_akhir!=null? New Date($data->tanggal_akhir):null,
             $data->tujuan,
             $data->dokumen,
+            !is_null($data->PayrollPegawai)? Creator::buildPegawai(PegawaiEntitas::make(
+                $data->EPribadiRemote?->nidn,
+                $data->PayrollPegawai?->nip,
+                $data->PayrollPegawai?->nama,
+                $data->PayrollPegawai?->unit,
+            )):null,
             $data->catatan,
             $data->status,
         )) );

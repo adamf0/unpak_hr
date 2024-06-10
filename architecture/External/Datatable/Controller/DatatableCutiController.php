@@ -23,16 +23,23 @@ class DatatableCutiController extends Controller
         $nip = $request->has('nip')? $request->query('nip'):null;
         $level = $request->has('level')? $request->query('level'):null;
         $type = $request->has('type')? $request->query('type'):null;
+        $verifikasi = $request->has('verifikasi')? (int) $request->query('verifikasi'):0;
         $q = new GetAllCutiQuery($nidn,$nip);
         // $q->SetOffset($request->get('start')??null)->SetLimit($request->get('length')??null);
         
         $listCuti = $this->queryBus->ask($q);
-        $listCuti = $listCuti->filter(function($item) use($type){
-                        return match($type){
-                            "dosen"=>!is_null($item->GetDosen()),
-                            "tendik"=>!is_null($item->GetPegawai()),
-                            default=>$item
-                        };
+        $listCuti = $listCuti->filter(function($item) use($level,$type,$verifikasi,$nidn,$nip){
+                        $rule1 = (
+                            (!is_null($item->GetVerifikasi()?->GetNidn()) && $item->GetVerifikasi()?->GetNidn()==$nidn) ||
+                            (!is_null($item->GetVerifikasi()?->GetNip()) && $item->GetVerifikasi()?->GetNip()==$nip)
+                        );
+                        if($verifikasi && in_array($level, ["dosen","pegawai"])){
+                            return $rule1;
+                        } else if(in_array($level, ["dosen","pegawai"])){
+                            return ($type=="dosen" && !is_null($item->GetDosen())) || ($type=="tendik" && !is_null($item->GetPegawai()));
+                        } else {
+                            return (($type=="dosen" && !is_null($item->GetDosen())) || ($type=="tendik" && !is_null($item->GetPegawai()))) && in_array($item->GetStatus(), ["menunggu verifikasi sdm","terima sdm","tolak sdm"]);
+                        }
                     })
                     ->map(function ($item) use($level){
                         return match(true){
@@ -47,6 +54,8 @@ class DatatableCutiController extends Controller
                                     "file"=>$item->GetDokumen(),
                                     "url"=>Utility::loadAsset('dokumen_cuti/'.$item->GetDokumen()),
                                 ],
+                                "verifikator_nidn"=>$item->GetVerifikasi()?->GetNidn(),
+                                "verifikator_nip"=>$item->GetVerifikasi()?->GetNip(),
                                 "status"=>$item->GetStatus(),
                                 "catatan"=>$item->GetCatatan(),
                             ],
@@ -66,6 +75,8 @@ class DatatableCutiController extends Controller
                                     "file"=>$item->GetDokumen(),
                                     "url"=>Utility::loadAsset('dokumen_cuti/'.$item->GetDokumen()),
                                 ],
+                                "verifikator_nidn"=>$item->GetVerifikasi()?->GetNidn(),
+                                "verifikator_nip"=>$item->GetVerifikasi()?->GetNip(),
                                 "status"=>$item->GetStatus(),
                                 "catatan"=>$item->GetCatatan(),
                             ]
@@ -78,10 +89,10 @@ class DatatableCutiController extends Controller
             $render = $row->tanggal_akhir==null || $row->tanggal_akhir==$row->tanggal_mulai? $row->tanggal_mulai : "{$row->tanggal_mulai} - {$row->tanggal_akhir}";
             return $render;
         })
-        ->addColumn('action', function ($row) use($level){
+        ->addColumn('action', function ($row) use($nidn, $nip, $level, $verifikasi){
             $render = '';
-            if(in_array($level,['dosen','pegawai'])){
-                if(in_array($row->status, ['menunggu','tolak'])){
+            if(in_array($level,['dosen','pegawai']) && !$verifikasi){
+                if(empty($row->status) || in_array($row->status, ['menunggu','tolak atasan','tolak sdm'])){
                     $render = '<div class="row">
                     <a href="'.route('cuti.edit',['id'=>$row->id]).'" class="col-6 btn btn-warning"><i class="bi bi-pencil-square"></i></a>
                     <a href="'.route('cuti.delete',['id'=>$row->id]).'" class="mx-2 col-6 btn btn-danger"><i class="bi bi-trash"></i></a>
@@ -91,10 +102,14 @@ class DatatableCutiController extends Controller
                 // else {
                 //     $render = '<a href="#" class="btn btn-info btn-download-pdf"><i class="bi bi-file-earmark-pdf"></i></a>';
                 // }
-            }
-            else if($level=="sdm"){
+            }else if( 
+                (
+                    (!is_null($row->verifikator_nidn) && $row->verifikator_nidn==$nidn) ||
+                    (!is_null($row->verifikator_nip) && $row->verifikator_nip==$nip)
+                ) || 
+                in_array($row->status, ["menunggu","menunggu verifikasi sdm"])){
                 $render = '
-                    <a href="'.route('cuti.approval',['id'=>$row->id,'type'=>'terima']).'" class="btn btn-success"><i class="bi bi-check-lg"></i></a>
+                    <a href="'.route('cuti.approval',['id'=>$row->id,'type'=>($level=="sdm"? 'terima sdm':'menunggu verifikasi sdm')]).'" class="btn btn-success"><i class="bi bi-check-lg"></i></a>
                     <a href="#" class="mx-2 btn btn-danger btn-reject"><i class="bi bi-x-lg"></i></a>
                 ';
                 // if($row->status=="terima"){

@@ -25,7 +25,7 @@ class GetAllSPPDQueryHandler extends Query
     public function handle(GetAllSPPDQuery $query)
     {
         $datas = SPPDModel::with(['JenisSPPD','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','Anggota','Anggota.Dosen','Anggota.Dosen.Fakultas','Anggota.Dosen.Prodi','Anggota.Pegawai']);
-        // if(!is_null($query->GetNIDN())){
+        // if(!empty($query->GetNIDN())){
         //     $datas = $datas->where('nidn',$query->GetNIDN());
         // }
         // if(!is_null($query->GetNIP())){
@@ -81,6 +81,7 @@ class GetAllSPPDQueryHandler extends Query
                     )):null,
                 )):null,
                 !is_null($data->Pegawai)? Creator::buildPegawai(PegawaiEntitas::make(
+                    null,
                     $data->Pegawai?->nip,
                     $data->Pegawai?->nama,
                     $data->Pegawai?->unit,

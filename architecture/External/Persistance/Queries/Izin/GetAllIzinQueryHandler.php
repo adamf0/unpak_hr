@@ -23,9 +23,9 @@ class GetAllIzinQueryHandler extends Query
 
     public function handle(GetAllIzinQuery $query)
     {
-        $datas = IzinModel::with(['JenisIzin','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai']);
+        $datas = IzinModel::with(['JenisIzin','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','PayrollPegawai','EPribadiRemote']);
         if(!empty($query->GetNIDN())){
-            $datas = $datas->where('nidn',$query->GetNIDN());
+            $datas = $datas->where('nidn',$query->GetNIDN())->orWhereHas('EPribadiRemote', fn($subQuery) => $subQuery->where('nidn', $query->GetNIDN()) );
         }
         if(!empty($query->GetNIP())){
             $datas = $datas->where('nip',$query->GetNIP());
@@ -52,6 +52,7 @@ class GetAllIzinQueryHandler extends Query
                 )):null,
             )):null,
             !is_null($data->Pegawai)? Creator::buildPegawai(PegawaiEntitas::make(
+                null,
                 $data->Pegawai?->nip,
                 $data->Pegawai?->nama,
                 $data->Pegawai?->unit,
@@ -63,6 +64,12 @@ class GetAllIzinQueryHandler extends Query
                 $data->JenisIzin?->nama,
             )),
             $data->dokumen,
+            !is_null($data->PayrollPegawai)? Creator::buildPegawai(PegawaiEntitas::make(
+                $data->EPribadiRemote?->nidn,
+                $data->PayrollPegawai?->nip,
+                $data->PayrollPegawai?->nama,
+                $data->PayrollPegawai?->unit,
+            )):null,
             $data->catatan,
             $data->status,
         )) );

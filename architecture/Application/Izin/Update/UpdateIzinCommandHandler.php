@@ -18,6 +18,7 @@ class UpdateIzinCommandHandler extends CommandHandler
         $Izin->tujuan = $command->GetTujuan();
         $Izin->id_jenis_izin = $command->GetJenisIzin()?->GetId();
         $Izin->dokumen = $command->GetDokumen();
+        $Izin->verifikasi = $command->GetVerifikasi()?->GetNip();
         $Izin->status = $command->GetStatus();
         if($Izin->isDirty()) $Izin->saveOrFail();
     }

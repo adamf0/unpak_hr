@@ -21,7 +21,7 @@ class GetCutiQueryHandler extends Query
 
     public function handle(GetCutiQuery $query)
     {
-        $data = CutiModel::with(['JenisCuti','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai'])->where('id',$query->GetId())->first();
+        $data = CutiModel::with(['JenisCuti','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','PayrollPegawai','EPribadiRemote'])->where('id',$query->GetId())->first();
 
         if($query->getOption()==TypeData::Default) return $data;
 
@@ -40,6 +40,7 @@ class GetCutiQueryHandler extends Query
                 )):null,
             )):null,
             !is_null($data->Pegawai)? Creator::buildPegawai(PegawaiEntitas::make(
+                null,
                 $data->Pegawai?->nip,
                 $data->Pegawai?->nama,
                 $data->Pegawai?->unit,
@@ -57,6 +58,12 @@ class GetCutiQueryHandler extends Query
             $data->tanggal_akhir!=null? New Date($data->tanggal_akhir):null,
             $data->tujuan,
             $data->dokumen,
+            !is_null($data->PayrollPegawai)? Creator::buildPegawai(PegawaiEntitas::make(
+                $data->EPribadiRemote?->nidn,
+                $data->PayrollPegawai?->nip,
+                $data->PayrollPegawai?->nama,
+                $data->PayrollPegawai?->unit,
+            )):null,
             $data->catatan,
             $data->status,
         ));

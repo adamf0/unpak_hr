@@ -13,6 +13,7 @@ class IzinEntitas extends IIzin{
         $tujuan=null,
         ?JenisIzin $jenis_izin=null,
         $dokumen=null,
+        ?Pegawai $verifikasi=null,
         $catatan=null,
         $status=null,
     ){
@@ -24,6 +25,7 @@ class IzinEntitas extends IIzin{
         $instance->tujuan = $tujuan;
         $instance->jenis_izin = $jenis_izin;
         $instance->dokumen = $dokumen;
+        $instance->verifikasi = $verifikasi;
         $instance->catatan = $catatan;
         $instance->status = $status;
         

@@ -208,8 +208,20 @@
       @endif
 
       @if (Utility::hasUser())
-        <x-sidebar-item-menu title="Cuti" icon="bi bi-menu-button-wide" link="{{route('cuti.index')}}" :active="Utility::stateMenu(['cuti'],request())" />
-        <x-sidebar-item-menu title="Izin" icon="bi bi-menu-button-wide" link="{{route('izin.index')}}" :active="Utility::stateMenu(['izin'],request())" />
+        <x-sidebar-item-menu-dropdown title="Cuti" parent="sidebar-nav" target="cuti" icon="bi bi-menu-button-wide" :active="Utility::stateMenu([
+          'cuti',
+          ],request())">
+          <x-sidebar-item-menu-dropdown-child title="Pengajuan" icon="bi bi-menu-button-wide" link="{{ route('cuti.index2',['type'=>Session::get('levelActive')=='dosen'? 'dosen':'tendik']) }}" :active="Utility::stateMenu(['cuti'],request(),1)" />
+          <x-sidebar-item-menu-dropdown-child title="Verifikasi" icon="bi bi-menu-button-wide" link="{{ route('cuti.verifikasi') }}" :active="Utility::stateMenu(['verifikasi'],request())" />
+        </x-sidebar-item-menu-dropdown>
+
+        <x-sidebar-item-menu-dropdown title="Izin" parent="sidebar-nav" target="izin" icon="bi bi-menu-button-wide" :active="Utility::stateMenu([
+          'izin',
+          ],request())">
+          <x-sidebar-item-menu-dropdown-child title="Pengajuan" icon="bi bi-menu-button-wide" link="{{ route('izin.index2',['type'=>Session::get('levelActive')=='dosen'? 'dosen':'tendik']) }}" :active="Utility::stateMenu(['izin'],request(),1)" />
+          <x-sidebar-item-menu-dropdown-child title="Verifikasi" icon="bi bi-menu-button-wide" link="{{ route('izin.verifikasi') }}" :active="Utility::stateMenu(['verifikasi'],request())" />
+        </x-sidebar-item-menu-dropdown>
+
         <x-sidebar-item-menu title="Klaim Absen" icon="bi bi-menu-button-wide" link="{{route('klaim_absen.index')}}" :active="Utility::stateMenu(['klaim_absen'],request())" />
       @endif
 
@@ -228,13 +240,6 @@
         <x-sidebar-item-menu-dropdown-child title="Tendik" icon="bi bi-menu-button-wide" link="{{ route('izin.index2',['type'=>'tendik']) }}" :active="Utility::stateMenu(['izin'],request(),1)" />
       </x-sidebar-item-menu-dropdown>
 
-      <x-sidebar-item-menu-dropdown title="SPPD" parent="sidebar-nav" target="sppd" icon="bi bi-menu-button-wide" :active="Utility::stateMenu([
-        'sppd',
-        ],request())">
-        <x-sidebar-item-menu-dropdown-child title="Dosen" icon="bi bi-menu-button-wide" link="{{ route('sppd.index2',['type'=>'dosen']) }}" :active="Utility::stateMenu(['sppd'],request(),1)" />
-        <x-sidebar-item-menu-dropdown-child title="Tendik" icon="bi bi-menu-button-wide" link="{{ route('sppd.index2',['type'=>'tendik']) }}" :active="Utility::stateMenu(['sppd'],request(),1)" />
-      </x-sidebar-item-menu-dropdown>
-
       <x-sidebar-item-menu-dropdown title="Klaim Absen" parent="sidebar-nav" target="klaim_absen" icon="bi bi-menu-button-wide" :active="Utility::stateMenu([
         'klaim_absen',
         ],request())">
@@ -243,7 +248,25 @@
       </x-sidebar-item-menu-dropdown>
       @endif
 
-      @if (Utility::hasWarek() || Utility::hasUser())
+      @php
+        $input = strtolower(Session::get('struktural'));
+        $isWarek = match(true){
+            strpos($input, 'wakil rektor bid sdm dan keuangan') !== false || 
+            strpos($input, 'wakil dekan 2') !== false => "warek",
+            default => false
+        };
+      @endphp
+
+      @if (Utility::hasSDM())
+        <x-sidebar-item-menu title="SPPD" icon="bi bi-menu-button-wide" link="{{route('sppd.index2',['type'=>'dosen'])}}" :active="Utility::stateMenu(['sppd'],request(),1)" />
+      @elseif($isWarek)
+        <x-sidebar-item-menu-dropdown title="SPPD" parent="sidebar-nav" target="sppd" icon="bi bi-menu-button-wide" :active="Utility::stateMenu([
+            'sppd',
+            ],request())">
+            <x-sidebar-item-menu-dropdown-child title="Pengajuan" icon="bi bi-menu-button-wide" link="{{ route('sppd.index2',['type'=>Session::get('levelActive')=='dosen'? 'dosen':'tendik']) }}" :active="Utility::stateMenu(['sppd'],request(),1)" />
+            <x-sidebar-item-menu-dropdown-child title="Verifikasi" icon="bi bi-menu-button-wide" link="{{ route('sppd.verifikasi') }}" :active="Utility::stateMenu(['verifikasi'],request())" />
+          </x-sidebar-item-menu-dropdown>
+      @else
         <x-sidebar-item-menu title="SPPD" icon="bi bi-menu-button-wide" link="{{route('sppd.index')}}" :active="Utility::stateMenu(['sppd'],request())" />
       @endif
 

@@ -57,6 +57,7 @@ class GetAllSPPDByNIDNQueryHandler extends Query
                     )):null,
                 )):null,
                 !is_null($data->Pegawai)? Creator::buildPegawai(PegawaiEntitas::make(
+                    null,
                     $data->Pegawai?->nip,
                     $data->Pegawai?->nama,
                     $data->Pegawai?->unit,

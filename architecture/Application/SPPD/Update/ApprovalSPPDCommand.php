@@ -9,16 +9,12 @@ use Architecture\Shared\TypeData;
 class ApprovalSPPDCommand extends Command
 {
     use IdentityCommand;
-    public function __construct($id,public $pic=null, public $status=null, public $file=null, public TypeData $option = TypeData::Entity) {
+    public function __construct($id,public $status=null, public $file=null, public TypeData $option = TypeData::Entity) {
         $this->id = $id;
-        $this->pic = $pic;
         $this->status = $status;
         $this->file = $file;
     }
 
-    public function GetPIC(){
-        return $this->pic;
-    }
     public function GetStatus(){
         return $this->status;
     }

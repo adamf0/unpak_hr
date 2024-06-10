@@ -23,9 +23,9 @@ class GetAllCutiQueryHandler extends Query
 
     public function handle(GetAllCutiQuery $query)
     {
-        $datas = CutiModel::with(['JenisCuti','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai']);
+        $datas = CutiModel::with(['JenisCuti','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','PayrollPegawai','EPribadiRemote']);
         if(!empty($query->GetNIDN())){
-            $datas = $datas->where('nidn',$query->GetNIDN());
+            $datas = $datas->where('nidn',$query->GetNIDN())->orWhereHas('EPribadiRemote', fn($subQuery) => $subQuery->where('nidn', $query->GetNIDN()) );
         }
         if(!empty($query->GetNIP())){
             $datas = $datas->where('nip',$query->GetNIP());
@@ -52,6 +52,7 @@ class GetAllCutiQueryHandler extends Query
                 )):null,
             )):null,
             !is_null($data->Pegawai)? Creator::buildPegawai(PegawaiEntitas::make(
+                null,
                 $data->Pegawai?->nip,
                 $data->Pegawai?->nama,
                 $data->Pegawai?->unit,
@@ -69,6 +70,12 @@ class GetAllCutiQueryHandler extends Query
             $data->tanggal_akhir!=null? New Date($data->tanggal_akhir):null,
             $data->tujuan,
             $data->dokumen,
+            !is_null($data->PayrollPegawai)? Creator::buildPegawai(PegawaiEntitas::make(
+                $data->EPribadiRemote?->nidn,
+                $data->PayrollPegawai?->nip,
+                $data->PayrollPegawai?->nama,
+                $data->PayrollPegawai?->unit,
+            )):null,
             $data->catatan,
             $data->status,
         )) );

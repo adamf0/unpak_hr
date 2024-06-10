@@ -19,6 +19,7 @@ class CreateCutiCommandHandler extends CommandHandler
         $CutiBaru->tanggal_akhir = $command->GetTanggalAkhir()?->toFormat(FormatDate::Default);
         $CutiBaru->tujuan = $command->GetTujuan();
         $CutiBaru->dokumen = $command->GetDokumen();
+        $CutiBaru->verifikasi = $command->GetVerifikasi()?->GetNip();
         $CutiBaru->status = $command->GetStatus();
         $CutiBaru->saveOrFail();
     }

@@ -20,6 +20,7 @@ class GetAllPegawaiQueryHandler extends Query
         if($query->getOption()==TypeData::Default) return $datas;
 
         return $datas->transform(fn($data)=> Creator::buildPegawai(PegawaiEntitas::make(
+            null,
             $data->nip,
             $data->nama,
             "unit",

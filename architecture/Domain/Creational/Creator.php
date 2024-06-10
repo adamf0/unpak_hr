@@ -53,9 +53,11 @@ class Creator{
     }
     public static function buildPegawai(IPegawai $factory){
         return new Pegawai(
+            $factory->GetNidn(),
             $factory->GetNip(),
             $factory->GetNama(),
             $factory->GetUnit(),
+            $factory->GetStruktural(),
         );
     }
     public static function buildPengguna(IPengguna $factory){
@@ -108,6 +110,7 @@ class Creator{
             $factory->GetTanggalAkhir(),
             $factory->GetTujuan(),
             $factory->GetDokumen(),
+            $factory->GetVerifikasi(),
             $factory->GetCatatan(),
             $factory->GetStatus(),
         );
@@ -121,6 +124,7 @@ class Creator{
             $factory->GetTujuan(),
             $factory->GetJenisIzin(),
             $factory->GetDokumen(),
+            $factory->GetVerifikasi(),
             $factory->GetCatatan(),
             $factory->GetStatus(),
         );

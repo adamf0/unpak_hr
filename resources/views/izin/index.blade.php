@@ -19,7 +19,7 @@
                 {{ Utility::showNotif() }}
             </div>
             <div class="col-12">
-                @if (Utility::hasUser())
+                @if (Utility::hasUser() && in_array($type,['dosen','tendik']))
                     <a href="{{ route('izin.create') }}" class="btn btn-primary">Tambah</a>
                 @else
                     <div class="card">
@@ -103,6 +103,7 @@
             const nip = `{{Session::get('nip')}}`
             const level = `{{Session::get('levelActive')}}`
             const type = `{{$type}}`
+            const verifikasi = `{{ (int) $verifikasi }}`
             const column = level=="pegawai" || level=="dosen"?
             [
                 {
@@ -219,7 +220,7 @@
             ];
 
             let table = eTable({
-                url: `{{ route('datatable.Izin.index') }}?level=${level}&nidn=${nidn}&nip=${nip}&type=${type}`,
+                url: `{{ route('datatable.Izin.index') }}?level=${level}&nidn=${nidn}&nip=${nip}&type=${type}&verifikasi=${verifikasi}`,
             }, column);
 
             let modal = new bootstrap.Modal(document.getElementById('modal'));

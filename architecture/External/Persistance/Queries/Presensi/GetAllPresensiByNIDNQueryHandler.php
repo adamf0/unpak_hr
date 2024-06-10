@@ -35,6 +35,7 @@ class GetAllPresensiByNIDNQueryHandler extends Query
     }
     function getPegawai($source){
         return !is_null($source->Pegawai)? Creator::buildPegawai(PegawaiEntitas::make(
+            null,
             $source->Pegawai?->nip,
             $source->Pegawai?->nama,
             $source->Pegawai?->unit,

@@ -43,8 +43,11 @@ class CutiController extends Controller
         protected IQueryBus $queryBus
     ) {}
     
-    public function Index($type=null){
-        return view('cuti.index',['type'=>$type]);
+    public function index($type=null){
+        return view('cuti.index',['type'=>$type,'verifikasi'=>Session::get('levelActive')=="sdm"]);
+    }
+    public function verifikasi(){
+        return view('cuti.index',['type'=>null,'verifikasi'=>true]);
     }
 
     public function create(){
@@ -91,11 +94,12 @@ class CutiController extends Controller
                 $request->get("tanggal_akhir")!=""? new Date($request->get("tanggal_akhir")):null,
                 $request->get("tujuan"),
                 $file,
+                $request->has("verifikasi")? Creator::buildPegawai(PegawaiReferensi::make($request->get("verifikasi"))):null,
                 "menunggu",
             ));
             Session::flash(TypeNotif::Create->val(), "berhasil tambah data");
 
-            return redirect()->route('cuti.index');
+            return redirect()->route('cuti.index2',['type'=>Session::get('levelActive')=="pegawai"? "tendik":"dosen"]);
         } catch (Exception $e) {
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
             return redirect()->route('cuti.create')->withInput();
@@ -145,11 +149,12 @@ class CutiController extends Controller
                 $request->get("tanggal_akhir")!=""? new Date($request->get("tanggal_akhir")):null,
                 $request->get("tujuan"),
                 $file,
+                $request->has("verifikasi")? Creator::buildPegawai(PegawaiReferensi::make($request->get("verifikasi"))):null,
                 "menunggu",
             ));
             Session::flash(TypeNotif::Update->val(), "berhasil ubah data");
 
-            return redirect()->route('cuti.index');
+            return redirect()->route('cuti.index2',['type'=>Session::get('levelActive')=="pegawai"? "tendik":"dosen"]);
         } catch (Exception $e) {
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
             return redirect()->route('cuti.edit',["id"=>$request->get('id')])->withInput();
@@ -176,15 +181,16 @@ class CutiController extends Controller
     public function approval($id,$type){
         $cuti = $this->queryBus->ask(new GetCutiQuery($id));
         $redirect = match(true){
-            !is_null($cuti->GetDosen())=>redirect()->route('cuti.index2',['type'=>'dosen']),
-            !is_null($cuti->GetPegawai())=>redirect()->route('cuti.index2',['type'=>'pegawai']),
+            Session::get('levelActive')=="sdm" && !is_null($cuti->GetDosen()) => redirect()->route('cuti.index2',['type'=>'dosen']),
+            Session::get('levelActive')=="sdm" && !is_null($cuti->GetPegawai()) => redirect()->route('cuti.index2',['type'=>'tendik']),
+            in_array(Session::get('levelActive'), ["dosen","pegawai"]) => redirect()->route('cuti.index2',['type'=>'verifikasi']),
             default=>redirect()->route('cuti.index'),
         };
 
         try {
-            if(!in_array($type,["terima","tolak"])) throw new Exception("command invalid");
+            // if(!in_array($type,["terima","tolak"])) throw new Exception("command invalid");
 
-            $this->commandBus->dispatch(new ApprovalCutiCommand($id,$type,null,Session::get('id')));
+            $this->commandBus->dispatch(new ApprovalCutiCommand($id,$type,null));
             Session::flash(TypeNotif::Create->val(), "berhasil $type cuti");
 
             return $redirect;

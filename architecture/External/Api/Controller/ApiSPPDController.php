@@ -24,10 +24,11 @@ class ApiSPPDController extends Controller
         $sppd = $this->queryBus->ask(new GetSPPDQuery($request->id));
         $redirect = match(true){
             !is_null($sppd->GetDosen())=>redirect()->route('sppd.index2',['type'=>'dosen']),
-            !is_null($sppd->GetPegawai())=>redirect()->route('sppd.index2',['type'=>'pegawai']),
+            !is_null($sppd->GetPegawai())=>redirect()->route('sppd.index2',['type'=>'tendik']),
             default=>redirect()->route('sppd.index'),
         };
 
+        dd($request->all());
         try {
             if(empty($request->id)) throw new Exception("invalid reject sppd");
             if(!in_array($request->level,['sdm','warek'])) throw new Exception("selain SDM dan Warek tidak dapat approval sppd");
@@ -40,7 +41,7 @@ class ApiSPPDController extends Controller
                 "sdm"=>"terima sdm",
                 default=>null,
             };
-            $this->commandBus->dispatch(new ApprovalSPPDCommand($request->id,$request->pic,$status,$file));
+            $this->commandBus->dispatch(new ApprovalSPPDCommand($request->id,$status,$file));
             return response()->json([
                 "status"=>"ok",
                 "message"=>"berhasil terima SPPD",
@@ -67,7 +68,7 @@ class ApiSPPDController extends Controller
                 "sdm"=>"tolak sdm",
                 default=>null,
             };
-            $this->commandBus->dispatch(new RejectSPPDCommand($request->id,$request->catatan,$request->pic,$status));
+            $this->commandBus->dispatch(new RejectSPPDCommand($request->id,$request->catatan,$status));
             
             return response()->json([
                 "status"=>"ok",

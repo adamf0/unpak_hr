@@ -14,6 +14,7 @@ class Izin extends BaseEntity{
         $tujuan,
         ?JenisIzin $jenis_izin=null,
         $dokumen,
+        ?Pegawai $verifikasi=null,
         $catatan,
         $status,
     ){
@@ -24,6 +25,7 @@ class Izin extends BaseEntity{
         $this->tujuan = $tujuan;
         $this->jenis_izin = $jenis_izin;
         $this->dokumen = $dokumen;
+        $this->verifikasi = $verifikasi;
         $this->catatan = $catatan;
         $this->status = $status;
     }

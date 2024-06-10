@@ -17,6 +17,7 @@ class CreateIzinCommandHandler extends CommandHandler
         $IzinBaru->tujuan = $command->GetTujuan();
         $IzinBaru->id_jenis_izin = $command->GetJenisIzin()?->GetId();
         $IzinBaru->dokumen = $command->GetDokumen();
+        $IzinBaru->verifikasi = $command->GetVerifikasi()?->GetNip();
         $IzinBaru->status = $command->GetStatus();
         $IzinBaru->saveOrFail();
     }

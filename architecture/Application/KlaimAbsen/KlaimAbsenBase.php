@@ -17,7 +17,6 @@ trait KlaimAbsenBase
     public $dokumen=null;
     public $status;
     public $catatan;
-    public $pic;
     
     public function GetDosen(){
         return $this->dosen;
@@ -45,8 +44,5 @@ trait KlaimAbsenBase
     }
     public function GetCatatan(){
         return $this->catatan;
-    }
-    public function GetPIC(){
-        return $this->pic;
     }
 }
