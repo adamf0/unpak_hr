@@ -82,17 +82,19 @@ class DatatableSPPDController extends Controller
             $render = '';
             if(in_array($level,['dosen','pegawai']) && !$verifikasi){
                 if(in_array($row->status, ['menunggu','tolak warek','tolak sdm']) && (($row->nidn==$nidn && !empty($nidn)) || ($row->nip==$nip && !empty($nip))) ){
-                    $render .= '<div class="row">
+                    $render = '<div class="row">
                     <a href="'.route('sppd.edit',['id'=>$row->id]).'" class="col-6 btn btn-warning"><i class="bi bi-pencil-square"></i></a>
                     <a href="'.route('sppd.delete',['id'=>$row->id]).'" class="mx-2 col-6 btn btn-danger"><i class="bi bi-trash"></i></a>
                     </div>
                     ';
                 } 
-                if(in_array($row->status, ['terima sdm','tolak sdm','menunggu verifikasi sdm'])){
-                    $render .= '<a href="#" class="ml-2 btn btn-secondary btn-download-anggaran"><i class="bi bi-wallet2"></i></a>';
+                if(in_array($row->status, ['tolak sdm','menunggu verifikasi sdm'])){
+                    $render = '<a href="#" class="ml-2 btn btn-secondary btn-download-anggaran"><i class="bi bi-wallet2"></i></a>';
                 }
                 if($row->status=="terima sdm"){
-                    $render .= '<a href="#" class="btn btn-info btn-download-pengajuan-pdf"><i class="bi bi-file-earmark-pdf"></i></a>';
+                    $render = '
+                        <a href="#" class="ml-2 btn btn-secondary btn-download-anggaran"><i class="bi bi-wallet2"></i></a>
+                        <a href="#" class="btn btn-info btn-download-pengajuan-pdf"><i class="bi bi-file-earmark-pdf"></i></a>';
                 }
             }
             else if($verifikasi){
@@ -104,10 +106,10 @@ class DatatableSPPDController extends Controller
                     <a href="#" class="ml-2 btn btn-danger btn-reject"><i class="bi bi-x-lg"></i></a>
                 ';
                 if(in_array($row->status, ['menunggu verifikasi sdm'])){
-                    $render .= '<a href="#" class="ml-2 btn btn-secondary btn-download-anggaran"><i class="bi bi-wallet2"></i></a>';
+                    $render = '<a href="#" class="ml-2 btn btn-secondary btn-download-anggaran"><i class="bi bi-wallet2"></i></a>';
                 }
                 if($row->status=="terima sdm"){
-                    $render .= '
+                    $render = '
                         <a href="#" class="ml-2 btn btn-secondary btn-download-anggaran"><i class="bi bi-wallet2"></i></a>
                         <a href="#" class="btn btn-info btn-download-pengajuan-pdf"><i class="bi bi-file-earmark-pdf"></i></a>';
                 }
