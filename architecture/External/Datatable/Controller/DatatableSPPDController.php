@@ -98,12 +98,12 @@ class DatatableSPPDController extends Controller
                 }
             }
             else if($verifikasi){
-                if($row->status=='menunggu'){
+                if($row->status=='menunggu' && $level=="warek"){
                     $render = '
                     <a href="#" class="btn btn-success btn-approve"><i class="bi bi-check-lg"></i></a>
                     <a href="#" class="ml-2 btn btn-danger btn-reject"><i class="bi bi-x-lg"></i></a>';
                 }
-                else if($row->status=='menunggu verifikasi sdm'){
+                else if($row->status=='menunggu verifikasi sdm' && $level=="sdm"){
                     $render = '
                     <a href="'.route('sppd.approval',['id'=>$row->id,'level'=>($level=="dosen" && $verifikasi? 'warek':$level??'-')]).'" class="btn btn-success"><i class="bi bi-check-lg"></i></a>
                     <a href="#" class="ml-2 btn btn-danger btn-reject"><i class="bi bi-x-lg"></i></a>';
