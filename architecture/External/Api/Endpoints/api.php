@@ -37,7 +37,8 @@ Route::post('sppd/approval/approval', [ApiSPPDController::class,'approval'])->na
 Route::post('sppd/approval/reject', [ApiSPPDController::class,'reject'])->name('api.sppd.reject');
 Route::post('klaim_absen/approval/reject', [ApiKlaimAbsenController::class,'reject'])->name('api.klaim_absen.reject');
 
-Route::get('tes', function(){
+Route::get('source-absen', function(){
+    return response()->json(DB::table('laporan_merge_absen_izin_cuti')->get());
     // try {
     //     DB::beginTransaction();
     //     $list_pegawai = NPribadi::select('nip')->get();
