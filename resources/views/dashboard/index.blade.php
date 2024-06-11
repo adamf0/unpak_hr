@@ -628,7 +628,7 @@
                 return checkLate;
             }
 
-            $(refAbsenSubmit).click(function(e){
+            $(refAbsenSubmit).click(async function(e){
                 e.preventDefault();
 
                 const exec = getCurrentTime().format('YYYY-MM-DD HH:mm:ss')
@@ -653,33 +653,41 @@
                 }
                 data.append("tanggal",moment().format('YYYY-MM-DD'))
 
-                $.ajax({
-                    url: "{{ route('api.presensi.index') }}",
-                    method: 'POST',
-                    data: data,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        console.log(response)
+                let response = await fetch('https://api.ipify.org?format=json');
+                response = await response.json();
+                const ipAddress = response.ip
 
-                        if(response.status=="ok"){
-                            if(type=="masuk"){
-                                absenMasuk = exec
-                                catatanTelat = keterangan
-                            } else if(type=="keluar"){
-                                absenKeluar = exec
-                                catatanPulang = keterangan
+                if(!(ipAddress.match(/103\.169/)!==null || ipAddress.match(/2001:df0:3140/)!=null)){
+                    alert(`berada diluar jaringan universitas pakuan`);
+                } else{
+                    $.ajax({
+                        url: "{{ route('api.presensi.index') }}",
+                        method: 'POST',
+                        data: data,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            console.log(response)
+
+                            if(response.status=="ok"){
+                                if(type=="masuk"){
+                                    absenMasuk = exec
+                                    catatanTelat = keterangan
+                                } else if(type=="keluar"){
+                                    absenKeluar = exec
+                                    catatanPulang = keterangan
+                                }
+                                $(refAbsenKeterangan).val('')
+                                loadInfo()
+                                calendar.refetchEvents()
                             }
-                            $(refAbsenKeterangan).val('')
-                            loadInfo()
-                            calendar.refetchEvents()
+                            alert(response.message);
+                        },
+                        error: function(xhr, status, error) {
+                            handleAjaxError(xhr, status, error)
                         }
-                        alert(response.message);
-                    },
-                    error: function(xhr, status, error) {
-                        handleAjaxError(xhr, status, error)
-                    }
-                });
+                    });
+                }
             })
             setInterval(function(){
                 console.log({
