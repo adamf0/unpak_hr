@@ -59,7 +59,7 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        @if (!in_array(Session::get('levelActive'),["pegawai","dosen"]))
+                                        @if (!in_array(Session::get('levelActive'),["pegawai","dosen"]) || $verifikasi)
                                         <th>Nama</th>
                                         @endif
                                         <th>Jenis Izin</th>
@@ -104,7 +104,7 @@
             const level = `{{Session::get('levelActive')}}`
             const type = `{{$type}}`
             const verifikasi = `{{ (int) $verifikasi }}`
-            const column = level=="pegawai" || level=="dosen"?
+            const column = (level=="pegawai" || level=="dosen") && verifikasi==0?
             [
                 {
                     data: 'DT_RowIndex', 

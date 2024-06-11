@@ -41,9 +41,9 @@ class DatatableCutiController extends Controller
                             return (($type=="dosen" && !is_null($item->GetDosen())) || ($type=="tendik" && !is_null($item->GetPegawai()))) && in_array($item->GetStatus(), ["menunggu verifikasi sdm","terima sdm","tolak sdm"]);
                         }
                     })
-                    ->map(function ($item) use($level){
+                    ->map(function ($item) use($level,$verifikasi){
                         return match(true){
-                            in_array($level, ["pegawai","dosen"])=>(object)[
+                            in_array($level, ["pegawai","dosen"]) && !$verifikasi=>(object)[
                                 "id"=>$item->GetId(),
                                 "jenis_cuti"=>$item->GetJenisCuti()?->GetNama()??"-",
                                 "lama_cuti"=>$item->GetLamaCuti(),

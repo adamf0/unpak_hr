@@ -110,7 +110,7 @@ class IzinController extends Controller
             ]);
         } catch (Exception $e) {
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
-            return redirect()->route('izin.index');
+            return redirect()->route('izin.index2',['type'=>Session::get('levelActive')=="pegawai"? "tendik":"dosen"]);
         }
     }
     public function update(Request $request){
@@ -167,10 +167,10 @@ class IzinController extends Controller
             $this->commandBus->dispatch(new DeleteIzinCommand($id));
             Session::flash(TypeNotif::Create->val(), "berhasil hapus data");
 
-            return redirect()->route('izin.index');
+            return redirect()->route('izin.index2',['type'=>Session::get('levelActive')=="pegawai"? "tendik":"dosen"]);
         } catch (Exception $e) {
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
-            return redirect()->route('izin.index');
+            return redirect()->route('izin.index2',['type'=>Session::get('levelActive')=="pegawai"? "tendik":"dosen"]);
         }
     }
     public function approval($id,$type){

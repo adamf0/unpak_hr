@@ -65,9 +65,16 @@ return [
             'throw' => false,
         ],
 
-        'dokumen_anggaran' => [
+        'dokumen_sppd' => [
             'driver' => 'local',
-            'root'   => public_path('dokumen_anggaran'),
+            'root'   => public_path('dokumen_sppd'),
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
+        'dokumen_laporan_sppd' => [
+            'driver' => 'local',
+            'root'   => public_path('dokumen_laporan_sppd'),
             'visibility' => 'public',
             'throw' => false,
         ],

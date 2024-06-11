@@ -94,7 +94,8 @@ class DatatableSPPDController extends Controller
                 else if($row->status=="terima sdm"){
                     $render = '
                         <a href="#" class="ml-2 btn btn-secondary btn-download-anggaran"><i class="bi bi-wallet2"></i></a>
-                        <a href="#" class="btn btn-info btn-download-pengajuan-pdf"><i class="bi bi-file-earmark-pdf"></i></a>';
+                        <a href="#" class="btn btn-info btn-download-pengajuan-pdf"><i class="bi bi-file-earmark-pdf"></i></a>
+                        <a href="'.route('sppd.laporan',['id'=>$row->id]).'" class="btn btn-success"><i class="bi bi-file-earmark-plus-fill"></i></a>';
                 }
             }
             else if($verifikasi){

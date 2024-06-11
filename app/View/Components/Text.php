@@ -16,7 +16,8 @@ class Text extends Component
     public $name;
     public $default=false;
     public $class='';
-    public function __construct($title=false,$name,$default=false,$class='')
+    public $disable=false;
+    public function __construct($title=false,$name,$default=false,$disable=false,$class='')
     {
         // if($title==null) throw new Exception('title in component indicator cannot be null'); 
         if($name==null) throw new Exception('name in component indicator cannot be null'); 
@@ -25,6 +26,7 @@ class Text extends Component
         $this->name = $name;
         $this->default = $default;
         $this->class = $class;
+        $this->disable = $disable;
     }
 
     /**
@@ -37,6 +39,7 @@ class Text extends Component
             'name'=>$this->name,
             'default'=>$this->default,
             'class'=>$this->class,
+            'disable'=>$this->disable,
         ]);
     }
 }

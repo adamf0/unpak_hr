@@ -19,6 +19,12 @@ class SPPDEntitas extends ISPPD{
         $catatan=null,
         $dokumen_anggaran=null,
         ?Collection $list_anggota=null,
+        $intisari=null,
+        $kontribusi=null,
+        $rencana_tindak_lanjut=null,
+        $rencana_waktu_tindak_lanjut=null,
+        ?Collection $foto_kegiatan=null,
+        ?Collection $undangan=null,
     ){
         $instance = new self();
         $instance->id = $id;
@@ -33,6 +39,12 @@ class SPPDEntitas extends ISPPD{
         $instance->catatan = $catatan;
         $instance->dokumen_anggaran = $dokumen_anggaran;
         $instance->list_anggota = $list_anggota;
+        $instance->intisari = $intisari;
+        $instance->kontribusi = $kontribusi;
+        $instance->rencana_tindak_lanjut = $rencana_tindak_lanjut;
+        $instance->rencana_waktu_tindak_lanjut = $rencana_waktu_tindak_lanjut;
+        $instance->foto_kegiatan = $foto_kegiatan;
+        $instance->undangan = $undangan;
         return $instance;
     }
 }

@@ -114,7 +114,7 @@ class CutiController extends Controller
             ]);
         } catch (Exception $e) {
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
-            return redirect()->route('cuti.index');
+            return redirect()->route('cuti.index2',['type'=>Session::get('levelActive')=="pegawai"? "tendik":"dosen"]);
         }
     }
     public function update(Request $request){
@@ -172,10 +172,10 @@ class CutiController extends Controller
             $this->commandBus->dispatch(new DeleteCutiCommand($id));
             Session::flash(TypeNotif::Create->val(), "berhasil hapus data");
 
-            return redirect()->route('cuti.index');
+            return redirect()->route('cuti.index2',['type'=>Session::get('levelActive')=="pegawai"? "tendik":"dosen"]);
         } catch (Exception $e) {
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
-            return redirect()->route('cuti.index');
+            return redirect()->route('cuti.index2',['type'=>Session::get('levelActive')=="pegawai"? "tendik":"dosen"]);
         }
     }
     public function approval($id,$type){

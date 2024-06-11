@@ -143,6 +143,12 @@ class Creator{
             $factory->GetCatatan(),
             $factory->GetDokumenAnggaran(),
             $factory->GetListAnggota(),
+            $factory->GetIntisari(),
+            $factory->GetKontribusi(),
+            $factory->GetRencanaTindakLanjut(),
+            $factory->GetRencanaWaktuTindakLanjut(),
+            $factory->GetFotoKegiatan(),
+            $factory->GetUndangan(),
         );
     }
     public static function buildPresensi(IPresensi $factory){

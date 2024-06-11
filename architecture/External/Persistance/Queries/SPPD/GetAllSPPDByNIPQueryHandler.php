@@ -13,6 +13,7 @@ use Architecture\Domain\Entity\PegawaiEntitas;
 use Architecture\Domain\Entity\ProdiEntitas;
 use Architecture\Domain\Entity\SPPDEntitas;
 use Architecture\Domain\ValueObject\Date;
+use Architecture\Domain\ValueObject\File;
 use Architecture\External\Persistance\ORM\SPPD as SPPDModel;
 use Architecture\Shared\TypeData;
 use Illuminate\Database\Eloquent\Collection;
@@ -23,7 +24,7 @@ class GetAllSPPDByNIPQueryHandler extends Query
 
     public function handle(GetAllSPPDByNIPQuery $query)
     {
-        $datas = SPPDModel::with(['JenisSPPD','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai'])->where('nip',$query->GetNIP())->get();
+        $datas = SPPDModel::with(['JenisSPPD','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','FileLaporan'])->where('nip',$query->GetNIP())->get();
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 
@@ -41,6 +42,10 @@ class GetAllSPPDByNIPQueryHandler extends Query
                     return $carry;
                 },[]));
             }
+
+            $files = $data->FileLaporan ?? collect([]);
+            $foto_kegiatan = $files->filter(fn($item) => $item->type === "foto_kegiatan")->values()->transform(fn($item)=>new File($item->file,"dokumen_laporan_sppd"));
+            $undangan = $files->filter(fn($item) => $item->type === "undangan")->values()->transform(fn($item)=>new File($item->file,"dokumen_laporan_sppd"));
 
             $item = Creator::buildSPPD(SPPDEntitas::make(
                 $data->id,
@@ -73,7 +78,13 @@ class GetAllSPPDByNIPQueryHandler extends Query
                 $data->status,
                 $data->catatan,
                 $data->dokumen_anggaran,
-                $list_anggota
+                $list_anggota,
+                $data->intisari,
+                $data->kontribusi,
+                $data->rencana_tindak_lanjut,
+                $data->rencana_waktu_tindak_lanjut,
+                $foto_kegiatan,
+                $undangan
             ));
 
             return $item;

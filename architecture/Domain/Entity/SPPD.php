@@ -20,6 +20,12 @@ class SPPD extends BaseEntity{
         $catatan=null,
         $dokumen_anggaran=null,
         ?Collection $list_anggota=null,
+        $intisari=null,
+        $kontribusi=null,
+        $rencana_tindak_lanjut=null,
+        $rencana_waktu_tindak_lanjut=null,
+        ?Collection $foto_kegiatan=null,
+        ?Collection $undangan=null,
     ){
         $this->id = $id;
         $this->dosen = $dosen;
@@ -33,5 +39,11 @@ class SPPD extends BaseEntity{
         $this->catatan = $catatan;
         $this->dokumen_anggaran = $dokumen_anggaran;
         $this->list_anggota = $list_anggota;
+        $this->intisari = $intisari;
+        $this->kontribusi = $kontribusi;
+        $this->rencana_tindak_lanjut = $rencana_tindak_lanjut;
+        $this->rencana_waktu_tindak_lanjut = $rencana_waktu_tindak_lanjut;
+        $this->foto_kegiatan = $foto_kegiatan;
+        $this->undangan = $undangan;
     }
 }

@@ -30,4 +30,7 @@ class SPPD extends Model
    public function SDM(){
       return $this->hasOne(User::class, 'id' ,'id_user');
    }
+   public function FileLaporan(){
+      return $this->hasMany(FileLaporanSPPD::class, 'id_sppd' ,'id');
+   }
 }

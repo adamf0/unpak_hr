@@ -21,7 +21,31 @@ trait SPPDBase
     public $catatan=null;
     public $dokumen_anggaran=null;
     public ?Collection $list_anggota=null;
+    public $intisari=null;
+    public $kontribusi=null;
+    public $rencana_tindak_lanjut=null;
+    public $rencana_waktu_tindak_lanjut=null;
+    public ?Collection $foto_kegiatan=null;
+    public ?Collection $undangan=null;
 
+    public function GetIntisari(){
+        return $this->intisari;
+    }
+    public function GetKontribusi(){
+        return $this->kontribusi;
+    }
+    public function GetRencanaTindakLanjut(){
+        return $this->rencana_tindak_lanjut;
+    }
+    public function GetRencanaWaktuTindakLanjut(){
+        return $this->rencana_waktu_tindak_lanjut;
+    }
+    public function GetFotoKegiatan(){
+        return $this->foto_kegiatan;
+    }
+    public function GetUndangan(){
+        return $this->undangan;
+    }
     public function GetDosen(){
         return $this->dosen;
     }
