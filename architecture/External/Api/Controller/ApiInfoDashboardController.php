@@ -9,11 +9,14 @@ use Architecture\Application\Cuti\List\GetAllCutiByNIDNQuery;
 use Architecture\Application\Cuti\List\GetAllCutiByNIPQuery;
 use Architecture\Application\Izin\List\GetAllIzinByNIDNQuery;
 use Architecture\Application\Izin\List\GetAllIzinByNIPQuery;
+use Architecture\Application\KlaimAbsen\List\GetAllKlaimAbsenQuery;
 use Architecture\Application\Presensi\List\GetAllPresensiByNIDNQuery;
 use Architecture\Application\Presensi\List\GetAllPresensiByNIPQuery;
+use Architecture\Application\Presensi\List\GetAllPresensiQuery;
 use Architecture\Application\SPPD\List\GetAllSPPDByNIDNQuery;
 use Architecture\Application\SPPD\List\GetAllSPPDByNIPQuery;
 use Architecture\Domain\ValueObject\Date;
+use Architecture\Shared\TypeData;
 use Carbon\Carbon;
 use Exception;
 
@@ -26,21 +29,29 @@ class ApiInfoDashboardController extends Controller
         protected IQueryBus $queryBus
     ) {}
     
-    public function isLate($p){
-        return $p->GetAbsenMasuk()->isGreater(new Date($p->GetTanggal()->val()->setTimeFromTimeString("08:01:00")));
+    public function isLate($tanggal_jam_masuk=null,$tanggal=null){
+        $masuk = new Date($tanggal_jam_masuk);
+        $keluar = new Date($tanggal." 08:01:00");
+        return $masuk->isGreater($keluar);
     }
-    public function is8Hour($p){
-        if(!$this->isLate($p)){
+    public function is8Hour($tanggal_jam_masuk=null,$tanggal_jam_keluar=null){
+        $masuk = new Date($tanggal_jam_masuk);
+        $keluar = new Date($tanggal_jam_keluar);
+
+        if(!empty($keluar) && !$this->isLate($masuk,$keluar)){
             $jam_pulang = "14:59:00";
             if (Carbon::now()->setTimezone('Asia/Jakarta')->dayOfWeek == Carbon::FRIDAY) {
                 $jam_pulang = "13:59:00";
             } elseif (Carbon::now()->setTimezone('Asia/Jakarta')->dayOfWeek == Carbon::SATURDAY) {
                 $jam_pulang = "11:59:00";
             }
-            return $p->GetAbsenKeluar()==null? false:$p->GetAbsenKeluar()->isGreater(new Date($p->GetTanggal()->val()->setTimeFromTimeString($jam_pulang)));
+            $keluar = new Date($tanggal_jam_keluar." $jam_pulang");
+            return $keluar->isGreater($keluar);
+        } 
+        else if(!empty($keluar) && $this->isLate($masuk,$keluar)){
+            $keluar = new Date(Carbon::parse($tanggal_jam_keluar)->setTimezone('Asia/Jakarta')->addHour(8)->toISOString());
+            return $keluar->isGreater($keluar);
         }
-        else if($this->isLate($p))
-            return $p->GetAbsenKeluar()==null? false:$p->GetAbsenKeluar()->isGreater(new Date($p->GetAbsenMasuk()->val()->addHour(8)));
         else 
             return false;
     }
@@ -50,21 +61,6 @@ class ApiInfoDashboardController extends Controller
             $presensi = $this->queryBus->ask(
                 $type=="nidn"? new GetAllPresensiByNIDNQuery($id):new GetAllPresensiByNIPQuery($id)
             );
-            $list_presensi = $presensi->reduce(function ($carry, $item){
-                if($item->GetAbsenMasuk() instanceof Date){
-                    $carry[] = $item;   
-                }
-
-                return $carry;
-            });
-            $list_tidak_masuk = $presensi->filter(function($item){
-                                            return isEmpty($item->GetAbsenMasuk()) && $item->GetTanggal()->isLess(new Date(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d')));
-                                        });
-
-            $list_belum_absen = $presensi->filter(function($item){
-                                            return isEmpty($item->GetAbsenMasuk()) && $item->GetTanggal()->isEqual(new Date(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d')));
-                                        });
-
             $cuti = $this->queryBus->ask(
                 $type=="nidn"? new GetAllCutiByNIDNQuery($id):new GetAllCutiByNIPQuery($id)
             );
@@ -75,18 +71,57 @@ class ApiInfoDashboardController extends Controller
                 $type=="nidn"? new GetAllSPPDByNIDNQuery($id):new GetAllSPPDByNIPQuery($id)
             );
 
+            $list_klaim_absen   = $this->queryBus->ask(new GetAllKlaimAbsenQuery($type=="nidn"? $id:null,$type!="nidn"? $id:null,date('Y'),TypeData::Default));
+
+            $tepat      =0;
+            $telat      =0;
+            $l8         =0;
+            $r8         =0;
+            $tidak_masuk=0;
+            $belum_absen=0;
+            $presensi->each(function ($item) use($list_klaim_absen,$tepat,$telat,$l8,$r8,$tidak_masuk,$belum_absen){
+                $klaim = $list_klaim_absen->where('status','terima')->where('Presensi.tanggal',$item->tanggal);
+                $klaim = $klaim->count()==1? $klaim[0]:null;
+
+                $rule_masuk = !is_null($klaim) || !empty($item->absen_masuk);
+                $rule_belum_absen = is_null($klaim) && empty($item->absen_masuk) && Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta')->equalTo(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d'));
+                $rule_tidak_masuk = is_null($klaim) && empty($item->absen_masuk) && Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta')->lessThan(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d'));
+                
+                if($rule_belum_absen){
+                    $belum_absen++;
+                }
+                if($rule_tidak_masuk){
+                    $tidak_masuk++;
+                }
+                if($rule_masuk){
+                    if(!$this->isLate($item->absen_masuk, $item->tanggal)){
+                        $tepat++;
+                    } else{
+                        $telat++;
+                    }
+
+                    if(!empty($item->absen_keluar)){
+                        if(!$this->is8Hour($item->absen_masuk, $item->tanggal)){
+                            $l8++;
+                        } else{
+                            $r8++;
+                        }   
+                    }
+                }
+            });
+
             return response()->json([
                 "status"=>"ok",
                 "message"=>"",
                 "data"=>(object)[
                     "presensi"=>[
                         "total"=>($presensi??collect([]))->count(),
-                        "tepat"=>collect($list_presensi)->filter(fn($p)=>!$this->isLate($p))->count(),
-                        "telat"=>collect($list_presensi)->filter(fn($p)=>$this->isLate($p))->count(),
-                        "l8"=>collect($list_presensi)->filter(fn($p)=>!$this->is8Hour($p))->count(),
-                        "r8"=>collect($list_presensi)->filter(fn($p)=>$this->is8Hour($p))->count(),
-                        "tidak_masuk"=>$list_tidak_masuk->count(),
-                        "belum_absen"=>$list_belum_absen->count(),
+                        "tepat"=>$tepat,
+                        "telat"=>$telat,
+                        "l8"=>$l8,
+                        "r8"=>$r8,
+                        "tidak_masuk"=>$tidak_masuk,
+                        "belum_absen"=>$belum_absen,
                     ],
                     "cuti"=>[
                         "total"=>$cuti->count(),
