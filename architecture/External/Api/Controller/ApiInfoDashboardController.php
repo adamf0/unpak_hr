@@ -34,21 +34,19 @@ class ApiInfoDashboardController extends Controller
         $keluar = new Date($tanggal." 08:01:00");
         return $masuk->isGreater($keluar);
     }
-    public function is8Hour($tanggal_jam_masuk=null,$tanggal_jam_keluar=null){
-        $masuk = new Date($tanggal_jam_masuk);
-        $keluar = new Date($tanggal_jam_keluar);
-
-        if(!empty($keluar) && !$this->isLate($masuk,$keluar)){
+    public function is8Hour($tanggal=null,$tanggal_jam_masuk=null,$tanggal_jam_keluar=null){
+        if(!empty($keluar) && !$this->isLate($tanggal_jam_masuk,$tanggal)){
             $jam_pulang = "14:59:00";
             if (Carbon::now()->setTimezone('Asia/Jakarta')->dayOfWeek == Carbon::FRIDAY) {
                 $jam_pulang = "13:59:00";
             } elseif (Carbon::now()->setTimezone('Asia/Jakarta')->dayOfWeek == Carbon::SATURDAY) {
                 $jam_pulang = "11:59:00";
             }
-            $keluar = new Date($tanggal_jam_keluar." $jam_pulang");
-            return $keluar->isGreater($keluar);
+            $aturanKeluar = new Date($tanggal." $jam_pulang");
+            $keluar = new Date($tanggal_jam_keluar);
+            return $keluar->isGreater($aturanKeluar);
         } 
-        else if(!empty($keluar) && $this->isLate($masuk,$keluar)){
+        else if(!empty($keluar) && $this->isLate($tanggal_jam_masuk,$tanggal)){
             $keluar = new Date(Carbon::parse($tanggal_jam_keluar)->setTimezone('Asia/Jakarta')->addHour(8)->toISOString());
             return $keluar->isGreater($keluar);
         }
@@ -101,7 +99,7 @@ class ApiInfoDashboardController extends Controller
                     }
 
                     if(!empty($item->absen_keluar)){
-                        if(!$this->is8Hour($item->absen_masuk, $item->tanggal)){
+                        if(!$this->is8Hour($item->tanggal, $item->absen_masuk, $item->absen_keluar)){
                             $l8++;
                         } else{
                             $r8++;
