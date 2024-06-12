@@ -49,7 +49,10 @@ class GetAllPresensiByNIDNQueryHandler extends Query
             'Dosen.Fakultas',
             'Dosen.Prodi',
             'Pegawai'
-        ])->where('nidn',$query->GetNIDN())->get();
+        ])
+        ->where('tanggal','like',"%".$query->GetTahunBulan()."%")
+        ->where('nidn',$query->GetNIDN())
+        ->get();
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 

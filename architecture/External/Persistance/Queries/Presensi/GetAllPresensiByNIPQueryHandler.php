@@ -49,7 +49,10 @@ class GetAllPresensiByNIPQueryHandler extends Query
             'Dosen.Fakultas',
             'Dosen.Prodi',
             'Pegawai'
-        ])->where('nip',$query->GetNIP())->get();
+        ])
+        ->where('tanggal','like',"%".$query->GetTahunBulan()."%")
+        ->where('nip',$query->GetNIP())
+        ->get();
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 

@@ -57,7 +57,9 @@ class ApiInfoDashboardController extends Controller
 
     public function index($type,$id){
         try {
-            $presensi = $this->queryBus->ask(new GetAllPresensiQuery($type=="nidn"? $id:null,$type!="nidn"? $id:null,date('Y'),TypeData::Default));
+            $presensi = $this->queryBus->ask(
+                $type=="nidn"? new GetAllPresensiByNIDNQuery($id,TypeData::Default):new GetAllPresensiByNIPQuery($id,TypeData::Default)
+            );
             $cuti = $this->queryBus->ask(
                 $type=="nidn"? new GetAllCutiByNIDNQuery($id):new GetAllCutiByNIPQuery($id)
             );
@@ -81,7 +83,7 @@ class ApiInfoDashboardController extends Controller
                 $klaim = $klaim->count()==1? $klaim[0]:null;
 
                 $rule_belum_absen = is_null($klaim) && empty($item->absen_masuk) && Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta')->equalTo(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d'));
-                $rule_tidak_masuk = is_null($klaim) && empty($item->absen_masuk) && Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta')->lessThan(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d'));
+                $rule_tidak_masuk = is_null($klaim) && empty($item->absen_masuk) && Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta')->lessThan(Carbon::now()->setTimezone('Asia/Jakarta')->subDay()->format('Y-m-d'));
                 
                 if($rule_belum_absen){
                     $belum_absen += 1;

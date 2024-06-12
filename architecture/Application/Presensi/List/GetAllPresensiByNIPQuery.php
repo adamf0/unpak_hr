@@ -11,6 +11,7 @@ class GetAllPresensiByNIPQuery extends Query
     use PagingQuery;
     public function __construct(
         public $nip,
+        public $tahun_bulan,
         public TypeData $option = TypeData::Entity
     ) {
         return $this;
@@ -18,5 +19,8 @@ class GetAllPresensiByNIPQuery extends Query
 
     public function GetNIP(){
         return $this->nip;
+    }
+    public function GetTahunBulan(){
+        return $this->tahun_bulan;
     }
 }
