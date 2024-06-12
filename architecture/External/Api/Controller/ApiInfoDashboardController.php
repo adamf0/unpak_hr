@@ -80,7 +80,6 @@ class ApiInfoDashboardController extends Controller
                 $klaim = $list_klaim_absen->where('status','terima')->where('Presensi.tanggal',$item->tanggal);
                 $klaim = $klaim->count()==1? $klaim[0]:null;
 
-                dump(sprintf("%s - %s", $item->absen_masuk, $item->absen_keluar));
                 $rule_belum_absen = is_null($klaim) && empty($item->absen_masuk) && Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta')->equalTo(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d'));
                 $rule_tidak_masuk = is_null($klaim) && empty($item->absen_masuk) && Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta')->lessThan(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d'));
                 
