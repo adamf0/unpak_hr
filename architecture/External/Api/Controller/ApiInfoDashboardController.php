@@ -59,7 +59,7 @@ class ApiInfoDashboardController extends Controller
     public function index($type,$id){
         try {
             $presensi = $this->queryBus->ask(
-                $type=="nidn"? new GetAllPresensiByNIDNQuery($id):new GetAllPresensiByNIPQuery($id)
+                $type=="nidn"? new GetAllPresensiByNIDNQuery($id,TypeData::Default):new GetAllPresensiByNIPQuery($id,TypeData::Default)
             );
             $cuti = $this->queryBus->ask(
                 $type=="nidn"? new GetAllCutiByNIDNQuery($id):new GetAllCutiByNIPQuery($id)
