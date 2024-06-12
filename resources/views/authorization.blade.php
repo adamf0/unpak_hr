@@ -41,7 +41,7 @@
                                   <img src="{{ Utility::loadAsset('assets/img/logo.webp') }}" alt="logo" width="100" height="100">
                                 </a>
                               </div>
-                              <h4 class="text-center">Selamat Datang Di HR Portal</h4>
+                              <!-- <h4 class="text-center">Selamat Datang Di HR Portal</h4> -->
                             </div>
                           </div>
                         </div>
