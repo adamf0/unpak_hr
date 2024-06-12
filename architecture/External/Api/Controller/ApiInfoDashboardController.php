@@ -77,7 +77,7 @@ class ApiInfoDashboardController extends Controller
             $r8         =0;
             $tidak_masuk=0;
             $belum_absen=0;
-            $presensi->each(function ($item) use($list_klaim_absen,$tepat,$telat,$l8,$r8,$tidak_masuk,$belum_absen){
+            $presensi->each(function ($item) use($list_klaim_absen,&$tepat,&$telat,&$l8,&$r8,&$tidak_masuk,&$belum_absen){
                 $klaim = $list_klaim_absen->where('status','terima')->where('Presensi.tanggal',$item->tanggal);
                 $klaim = $klaim->count()==1? $klaim[0]:null;
 
