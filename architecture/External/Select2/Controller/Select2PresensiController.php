@@ -96,7 +96,7 @@ class Select2PresensiController extends Controller
             return $carry;
         }, []);
 
-        dd($rangeTanggal, $listTanggal);
+        dd($rangeTanggal, $listTanggal, $listPresensi);
 
         $list = $listPresensi->filter(function ($item) use ($listTanggal, $rangeTanggal) {
             return !in_array($item->GetTanggal(), $listTanggal) && !is_null($item->GetAbsenMasuk()) && in_array($item->GetTanggal(),$rangeTanggal);
