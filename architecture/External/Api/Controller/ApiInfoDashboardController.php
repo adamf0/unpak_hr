@@ -84,23 +84,23 @@ class ApiInfoDashboardController extends Controller
                 $rule_tidak_masuk = is_null($klaim) && empty($item->absen_masuk) && Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta')->lessThan(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d'));
                 
                 if($rule_belum_absen){
-                    $belum_absen++;
+                    $belum_absen += 1;
                 }
                 if($rule_tidak_masuk){
-                    $tidak_masuk++;
+                    $tidak_masuk += 1;
                 }
                 if($rule_masuk){
                     if(!$this->isLate($item->absen_masuk, $item->tanggal)){
-                        $tepat++;
+                        $tepat += 1;
                     } else{
-                        $telat++;
+                        $telat += 1;
                     }
 
                     if(!empty($item->absen_keluar)){
                         if(!$this->is8Hour($item->tanggal, $item->absen_masuk, $item->absen_keluar)){
-                            $l8++;
+                            $l8 += 1;
                         } else{
-                            $r8++;
+                            $r8 += 1;
                         }   
                     }
                 }
