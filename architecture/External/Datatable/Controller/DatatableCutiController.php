@@ -30,15 +30,15 @@ class DatatableCutiController extends Controller
         $listCuti = $this->queryBus->ask($q);
         $listCuti = $listCuti->filter(function($item) use($level,$type,$verifikasi,$nidn,$nip){
                         $rule1 = (
-                            (!is_null($item->GetVerifikasi()?->GetNidn()) && $item->GetVerifikasi()?->GetNidn()==$nidn) ||
-                            (!is_null($item->GetVerifikasi()?->GetNip()) && $item->GetVerifikasi()?->GetNip()==$nip)
+                            (!empty($item->GetVerifikasi()?->GetNidn()) && $item->GetVerifikasi()?->GetNidn()==$nidn) ||
+                            (!empty($item->GetVerifikasi()?->GetNip()) && $item->GetVerifikasi()?->GetNip()==$nip)
                         );
                         if($verifikasi && in_array($level, ["dosen","pegawai"])){
                             return $rule1;
                         } else if(in_array($level, ["dosen","pegawai"])){
-                            return ($type=="dosen" && !is_null($item->GetDosen())) || ($type=="tendik" && !is_null($item->GetPegawai()));
+                            return ($type=="dosen" && !empty($item->GetDosen()) && $item->GetDosen()?->GetNidn()==$nidn) || ($type=="tendik" && !empty($item->GetPegawai()) && $item->GetPegawai()?->GetNip()==$nip);
                         } else {
-                            return (($type=="dosen" && !is_null($item->GetDosen())) || ($type=="tendik" && !is_null($item->GetPegawai()))) && in_array($item->GetStatus(), ["menunggu verifikasi sdm","terima sdm","tolak sdm"]);
+                            return (($type=="dosen" && !empty($item->GetDosen())) || ($type=="tendik" && !empty($item->GetPegawai()))) && in_array($item->GetStatus(), ["menunggu verifikasi sdm","terima sdm","tolak sdm"]);
                         }
                     })
                     ->map(function ($item) use($level,$verifikasi){
