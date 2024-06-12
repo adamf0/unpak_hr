@@ -92,14 +92,15 @@ class Select2PresensiController extends Controller
         $listTanggal = array_merge(Arr::flatten($listCuti), Arr::flatten($listSppd), Arr::flatten($listLibur), $listIzin);
         $listTanggal = array_values(array_unique($listTanggal));
 
-        $rangeTanggal = array_reduce(range(0, 1), function ($carry, $i){
+        $rangeTanggal = array_reduce(range(1, 2), function ($carry, $i){
             $carry[] = Carbon::now()->subDays($i)->format('Y-m-d');
             return $carry;
         }, []);
 
         $list = $listPresensi->filter(function ($item) use ($listTanggal, $rangeTanggal) {
-            // dd($item->GetTanggal(), $listTanggal, $item->GetAbsenMasuk() instanceof Date, $item->GetTanggal(),$rangeTanggal);
-            return !in_array($item->GetTanggal()->toFormat(FormatDate::Default), $listTanggal) && $item->GetAbsenMasuk() instanceof Date && in_array($item->GetTanggal()->toFormat(FormatDate::Default),$rangeTanggal);
+            return !in_array($item->GetTanggal()->toFormat(FormatDate::Default), $listTanggal) && 
+                    $item->GetAbsenMasuk() instanceof Date && 
+                    in_array($item->GetTanggal()->toFormat(FormatDate::Default),$rangeTanggal);
         })
         ->values()
         ->sortBy('tanggal', SORT_REGULAR, true)
