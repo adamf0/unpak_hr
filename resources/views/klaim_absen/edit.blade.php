@@ -1,11 +1,11 @@
 @extends('template.index')
  
 @section('page-title')
-    <x-page-title title="Klaim Absen">
+    <x-page-title title="Klaim Presensi">
         <nav>
             <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('klaim_absen.index') }}">Klaim Absen</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('klaim_absen.index') }}">Klaim Presensi</a></li>
             <li class="breadcrumb-item active">Ubah</li>
             </ol>
         </nav>
@@ -28,6 +28,8 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <x-input-select title="Tanggal Absen" name="tanggal_absen" class="tanggal_absen"></x-input-select>
+                                        <small class="text-primary">* h-2 presensi</small><br>
+                                        <small class="text-primary">* jika presensi berada di range sppd/izin/cuti maka presensi tidak akan ada disini</small>
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label">Jam Masuk</label>

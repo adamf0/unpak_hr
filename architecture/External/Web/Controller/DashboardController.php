@@ -8,7 +8,6 @@ use Architecture\Application\Abstractions\Messaging\IQueryBus;
 use Architecture\Application\Presensi\FirstData\GetPresensiByNIDNQuery;
 use Architecture\Application\Presensi\FirstData\GetPresensiByNIPQuery;
 use Architecture\Domain\Enum\TypeNotif;
-use Architecture\External\Persistance\ORM\Absensi;
 use Exception;
 use Illuminate\Support\Facades\Session;
 

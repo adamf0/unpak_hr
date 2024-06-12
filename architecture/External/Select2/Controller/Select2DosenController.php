@@ -20,7 +20,7 @@ class Select2DosenController extends Controller
         $listDosen = $list_dosen->reduce(function ($carry, $item){
             $carry[] = [
                 "id"=>$item->GetNidn(),
-                "text"=>$item->GetNama()." - ".(!empty($item->GetFakultas())? $item->GetFakultas()?->GetNamaFakultas():null),
+                "text"=>sprintf("%s - %s (%s)",$item->GetNama(),$item->GetNidn(),(!empty($item->GetFakultas())? $item->GetFakultas()?->GetNamaFakultas():null)),
                 // "fakultas_unit"=>,
             ];
             return $carry;

@@ -160,7 +160,7 @@ class KlaimAbsenController extends Controller
             if(!in_array($type,["terima","tolak"])) throw new Exception("command invalid");
 
             $this->commandBus->dispatch(new ApprovalKlaimAbsenCommand($id,$type,null,Session::get('id')));
-            Session::flash(TypeNotif::Create->val(), "berhasil $type klaim absen");
+            Session::flash(TypeNotif::Create->val(), "berhasil $type klaim presensi");
 
             return $redirect;
         } catch (Exception $e) {

@@ -222,7 +222,7 @@
           <x-sidebar-item-menu-dropdown-child title="Verifikasi" icon="bi bi-menu-button-wide" link="{{ route('izin.verifikasi') }}" :active="Utility::stateMenu(['verifikasi'],request())" />
         </x-sidebar-item-menu-dropdown>
 
-        <x-sidebar-item-menu title="Klaim Absen" icon="bi bi-menu-button-wide" link="{{route('klaim_absen.index')}}" :active="Utility::stateMenu(['klaim_absen'],request())" />
+        <x-sidebar-item-menu title="Klaim Presensi" icon="bi bi-menu-button-wide" link="{{route('klaim_absen.index')}}" :active="Utility::stateMenu(['klaim_absen'],request())" />
       @endif
 
       @if (Utility::hasSDM())
@@ -240,7 +240,7 @@
         <x-sidebar-item-menu-dropdown-child title="Tendik" icon="bi bi-menu-button-wide" link="{{ route('izin.index2',['type'=>'tendik']) }}" :active="Utility::stateMenu(['izin'],request(),1)" />
       </x-sidebar-item-menu-dropdown>
 
-      <x-sidebar-item-menu-dropdown title="Klaim Absen" parent="sidebar-nav" target="klaim_absen" icon="bi bi-menu-button-wide" :active="Utility::stateMenu([
+      <x-sidebar-item-menu-dropdown title="Klaim Presensi" parent="sidebar-nav" target="klaim_absen" icon="bi bi-menu-button-wide" :active="Utility::stateMenu([
         'klaim_absen',
         ],request())">
         <x-sidebar-item-menu-dropdown-child title="Dosen" icon="bi bi-menu-button-wide" link="{{ route('klaim_absen.index2',['type'=>'dosen']) }}" :active="Utility::stateMenu(['klaim_absen'],request(),1)" />

@@ -25,7 +25,7 @@
     </table>
     <hr>
     <center>
-        <h3>LAPORAN KLAIM ABSEN</h3>
+        <h3>LAPORAN KLAIM Presensi</h3>
     </center>
     <table border="1" align="center" width="100%" style="text-align: center">
         <tr style="background: black; color: white;">

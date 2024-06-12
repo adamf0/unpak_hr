@@ -18,13 +18,13 @@ class ApiKlaimAbsenController extends Controller
     
     public function reject(Request $request){
         try {
-            if(empty($request->id)) throw new Exception("invalid reject klaim absen");
+            if(empty($request->id)) throw new Exception("invalid reject klaim presensi");
 
             $this->commandBus->dispatch(new ApprovalKlaimAbsenCommand($request->id,"tolak",$request->catatan));
             
             return response()->json([
                 "status"=>"ok",
-                "message"=>"berhasil tolak klaim absen",
+                "message"=>"berhasil tolak klaim presensi",
                 "data"=>null,
             ]);
         } catch (Exception $e) {
