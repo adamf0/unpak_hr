@@ -242,11 +242,11 @@
                     </div>
                 </div>
                 <div class="absen_done" style="display: none;">
-                    <img src="{{ Utility::loadAsset('assets/img/delivery_man_5_with_dog.png') }}" alt="sudah pulang">
+                    <img src="{{ Utility::loadAsset('assets/img/pulang_hrportal.jpg') }}" alt="sudah pulang">
                     <h4>Anda udah Pulang</h4>
                 </div>
                 <div class="absen_libur" style="display: none;">
-                    <img src="{{ Utility::loadAsset('assets/img/set-of-travel-on-holiday-icon-free-vector.jpg') }}" style="width:100%" alt="libur">
+                    <img src="{{ Utility::loadAsset('assets/img/libur_hrportal.jpg') }}" style="width:100%" alt="libur">
                     <h4 class="text-center">Tidak ada absen untuk hari libur</h4>
                 </div>
             </div>

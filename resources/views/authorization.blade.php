@@ -28,7 +28,7 @@
               <div class="card border-light-subtle shadow-sm">
                 <div class="row g-0">
                   <div class="col-12 col-md-6">
-                    <img class="img-fluid rounded-start w-100 h-100 object-fit-cover" loading="lazy" src="https://bootstrapbrain.com/demo/components/logins/login-4/assets/img/logo-img-1.webp" alt="background">
+                    <img class="img-fluid rounded-start w-100 h-100 object-fit-cover" loading="lazy" src="{{ Utility::loadAsset('assets/img/logo-img-1.jpg') }}" alt="background">
                   </div>
                   <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
                     <div class="col-12 col-lg-11 col-xl-10">
