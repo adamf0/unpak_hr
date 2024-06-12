@@ -243,11 +243,11 @@
                 </div>
                 <div class="absen_done" style="display: none;">
                     <img src="{{ Utility::loadAsset('assets/img/pulang_hrportal.jpg') }}" alt="sudah pulang">
-                    <h4>Anda udah Pulang</h4>
+                    <!-- <h4>Anda udah Pulang</h4> -->
                 </div>
                 <div class="absen_libur" style="display: none;">
                     <img src="{{ Utility::loadAsset('assets/img/libur_hrportal.jpg') }}" style="width:100%" alt="libur">
-                    <h4 class="text-center">Tidak ada absen untuk hari libur</h4>
+                    <!-- <h4 class="text-center">Tidak ada absen untuk hari libur</h4> -->
                 </div>
             </div>
         </div>
