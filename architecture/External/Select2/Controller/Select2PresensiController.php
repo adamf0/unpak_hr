@@ -11,6 +11,7 @@ use Architecture\Application\MasterKalendar\List\GetAllMasterKalendarQuery;
 use Architecture\Application\Presensi\List\GetAllPresensiQuery;
 use Architecture\Application\SPPD\List\GetAllSPPDQuery;
 use Architecture\Domain\Enum\FormatDate;
+use Architecture\Domain\ValueObject\Date;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -96,10 +97,8 @@ class Select2PresensiController extends Controller
             return $carry;
         }, []);
 
-        dd($rangeTanggal, $listTanggal, $listPresensi);
-
         $list = $listPresensi->filter(function ($item) use ($listTanggal, $rangeTanggal) {
-            return !in_array($item->GetTanggal(), $listTanggal) && !is_null($item->GetAbsenMasuk()) && in_array($item->GetTanggal(),$rangeTanggal);
+            return !in_array($item->GetTanggal(), $listTanggal) && $item->GetAbsenMasuk() instanceof Date && in_array($item->GetTanggal(),$rangeTanggal);
         })
         ->values()
         ->sortBy('tanggal', SORT_REGULAR, true)
