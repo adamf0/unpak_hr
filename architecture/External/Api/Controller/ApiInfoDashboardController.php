@@ -35,7 +35,7 @@ class ApiInfoDashboardController extends Controller
         return $masuk->isGreater($keluar);
     }
     public function is8Hour($tanggal=null,$tanggal_jam_masuk=null,$tanggal_jam_keluar=null){
-        if(!empty($keluar) && !$this->isLate($tanggal_jam_masuk,$tanggal)){
+        if(!empty($tanggal_jam_keluar) && !$this->isLate($tanggal_jam_masuk,$tanggal)){
             $jam_pulang = "14:59:00";
             if (Carbon::now()->setTimezone('Asia/Jakarta')->dayOfWeek == Carbon::FRIDAY) {
                 $jam_pulang = "13:59:00";
@@ -46,9 +46,10 @@ class ApiInfoDashboardController extends Controller
             $keluar = new Date($tanggal_jam_keluar);
             return $keluar->isGreater($aturanKeluar);
         } 
-        else if(!empty($keluar) && $this->isLate($tanggal_jam_masuk,$tanggal)){
-            $keluar = new Date(Carbon::parse($tanggal_jam_keluar)->setTimezone('Asia/Jakarta')->addHour(8)->toISOString());
-            return $keluar->isGreater($keluar);
+        else if(!empty($tanggal_jam_keluar) && $this->isLate($tanggal_jam_masuk,$tanggal)){
+            $aturanKeluar = new Date(Carbon::parse($tanggal_jam_keluar)->setTimezone('Asia/Jakarta')->addHour(8)->toISOString());
+            $keluar = new Date($tanggal_jam_keluar);
+            return $keluar->isGreater($aturanKeluar);
         }
         else 
             return false;
@@ -80,7 +81,6 @@ class ApiInfoDashboardController extends Controller
                 $klaim = $klaim->count()==1? $klaim[0]:null;
 
                 dump(sprintf("%s - %s", $item->absen_masuk, $item->absen_keluar));
-                $rule_masuk = !empty($item->absen_masuk);
                 $rule_belum_absen = is_null($klaim) && empty($item->absen_masuk) && Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta')->equalTo(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d'));
                 $rule_tidak_masuk = is_null($klaim) && empty($item->absen_masuk) && Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta')->lessThan(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d'));
                 
@@ -90,20 +90,19 @@ class ApiInfoDashboardController extends Controller
                 if($rule_tidak_masuk){
                     $tidak_masuk += 1;
                 }
-                if($rule_masuk){
+                if(!empty($item->absen_masuk)){
                     if(!$this->isLate($item->absen_masuk, $item->tanggal) && is_null($klaim)){
                         $tepat += 1;
                     } else if ($this->isLate($item->absen_masuk, $item->tanggal) && is_null($klaim)){
                         $telat += 1;
                     }
-
-                    if(!empty($item->absen_keluar)){
-                        if(!$this->is8Hour($item->tanggal, $item->absen_masuk, $item->absen_keluar)){
-                            $l8 += 1;
-                        } else{
-                            $r8 += 1;
-                        }   
-                    }
+                }
+                if(!empty($item->absen_masuk) && !empty($item->absen_keluar)){
+                    if(!$this->is8Hour($item->tanggal, $item->absen_masuk, $item->absen_keluar)){
+                        $l8 += 1;
+                    } else{
+                        $r8 += 1;
+                    }   
                 }
             });
 
