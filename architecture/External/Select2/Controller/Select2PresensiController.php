@@ -88,7 +88,6 @@ class Select2PresensiController extends Controller
             return $list;
         }, []);
 
-        dd($listPresensi, Arr::flatten($listCuti), Arr::flatten($listSppd), Arr::flatten($listLibur), $listIzin);
         $listTanggal = array_merge(Arr::flatten($listCuti), Arr::flatten($listSppd), Arr::flatten($listLibur), $listIzin);
         $listTanggal = array_values(array_unique($listTanggal));
 
@@ -96,6 +95,8 @@ class Select2PresensiController extends Controller
             $carry[] = Carbon::now()->subDays($i)->format('Y-m-d');
             return $carry;
         }, []);
+
+        dd($rangeTanggal, $listTanggal);
 
         $list = $listPresensi->filter(function ($item) use ($listTanggal, $rangeTanggal) {
             return !in_array($item->GetTanggal(), $listTanggal) && !is_null($item->GetAbsenMasuk()) && in_array($item->GetTanggal(),$rangeTanggal);
