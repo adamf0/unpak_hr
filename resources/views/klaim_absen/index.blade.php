@@ -59,7 +59,7 @@
                                         @if (!in_array(Session::get('levelActive'),["pegawai","dosen"]))
                                         <th>Nama</th>
                                         @endif
-                                        <th>Tanggal Absen</th>
+                                        <th>Tanggal Presensi</th>
                                         <th>Jam Masuk</th>
                                         <th>Jam Keluar</th>
                                         <th>Tujuan</th>

@@ -27,7 +27,7 @@
                                 <input type="hidden" name="id" class="@error('id') is-invalid @enderror" value="{{ old('id',$KlaimAbsen->GetId()) }}">
                                 <div class="row">
                                     <div class="col-6">
-                                        <x-input-select title="Tanggal Absen" name="tanggal_absen" class="tanggal_absen"></x-input-select>
+                                        <x-input-select title="Tanggal Presensi" name="tanggal_absen" class="tanggal_absen"></x-input-select>
                                         <small class="text-primary">* h-2 presensi</small><br>
                                         <small class="text-primary">* jika presensi berada di range sppd/izin/cuti maka presensi tidak akan ada disini</small>
                                     </div>
@@ -62,7 +62,7 @@
     <script type="text/javascript" src="{{ Utility::loadAsset('my.js') }}"></script>
     <script>
         $(document).ready(function () {
-            load_dropdown('.tanggal_absen', null, `{{ route('select2.Presensi.List') }}?nidn={{Session::get('nidn')}}&nip={{Session::get('nip')}}`, "{{ old('tanggal_absen',$KlaimAbsen?->GetPresensi()?->GetId()) }}", '-- Pilih Tanggal Absen --');
+            load_dropdown('.tanggal_absen', null, `{{ route('select2.Presensi.List') }}?nidn={{Session::get('nidn')}}&nip={{Session::get('nip')}}`, "{{ old('tanggal_absen',$KlaimAbsen?->GetPresensi()?->GetId()) }}", '-- Pilih Tanggal Presensi --');
         });
     </script>
 @endpush

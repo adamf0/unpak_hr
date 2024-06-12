@@ -31,7 +31,7 @@
         <tr style="background: black; color: white;">
             <td>#</td>
             <td>Nama</td>
-            <td>Tanggal Absen</td>
+            <td>Tanggal Presensi</td>
             <td>Jam Masuk</td>
             <td>Jam Keluar</td>
             <td>Tujuan</td>

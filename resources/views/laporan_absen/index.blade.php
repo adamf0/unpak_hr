@@ -1,11 +1,11 @@
 @extends('template.index')
  
 @section('page-title')
-    <x-page-title title="Laporan Absen">
+    <x-page-title title="Laporan Presensi">
         <nav>
             <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Laporan Absen</li>
+            <li class="breadcrumb-item active">Laporan Presensi</li>
             </ol>
         </nav>
     </x-page-title>
