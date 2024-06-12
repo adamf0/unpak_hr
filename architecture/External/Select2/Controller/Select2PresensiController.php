@@ -88,7 +88,7 @@ class Select2PresensiController extends Controller
             return $list;
         }, []);
 
-        dd(Arr::flatten($listCuti), Arr::flatten($listSppd), Arr::flatten($listLibur), $listIzin);
+        dd($listPresensi, Arr::flatten($listCuti), Arr::flatten($listSppd), Arr::flatten($listLibur), $listIzin);
         $listTanggal = array_merge(Arr::flatten($listCuti), Arr::flatten($listSppd), Arr::flatten($listLibur), $listIzin);
         $listTanggal = array_values(array_unique($listTanggal));
 
