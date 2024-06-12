@@ -25,30 +25,31 @@ class GetAllSPPDQueryHandler extends Query
 
     public function handle(GetAllSPPDQuery $query)
     {
-        $datas = SPPDModel::with(['JenisSPPD','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','Anggota','Anggota.Dosen','Anggota.Dosen.Fakultas','Anggota.Dosen.Prodi','Anggota.Pegawai','FileLaporan']);
-        // if(!empty($query->GetNIDN())){
-        //     $datas = $datas->where('nidn',$query->GetNIDN());
-        // }
-        // if(!is_null($query->GetNIP())){
-        //     $datas = $datas->where('nip',$query->GetNIP());
-        // }
+        $datas = SPPDModel::with(['JenisSPPD','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','Anggota','Anggota.Dosen','Anggota.Dosen.Fakultas','Anggota.Dosen.Prodi','Anggota.Pegawai','FileLaporan','PayrollPegawai','EPribadiRemote']);
+        if(!empty($query->GetNIDN())){
+            $datas = $datas->where('nidn',$query->GetNIDN())
+                            ->orWhereHas('EPribadiRemote', fn($subQuery) => $subQuery->where('nidn', $query->GetNIDN()) );
+        }
+        if(!empty($query->GetNIP())){
+            $datas = $datas->where('nip',$query->GetNIP());
+        }
         if(!empty($query->GetTahun())){
             $datas = $datas->where(DB::raw('YEAR(tanggal_berangkat)'),'>=',$query->GetTahun())->where(DB::raw('YEAR(tanggal_kembali)'),'<=',$query->GetTahun());
         }
         $datas = $datas->orderBy('id', 'DESC')->get();
-        if(!is_null($query->GetNIDN())){
-            $datas = $datas->filter( function($item) use($query){
-                $asMember = ($item->Anggota??collect([]))->filter(fn($itemAnggota)=>$itemAnggota?->Dosen?->NIDN==$query->GetNIDN())->count()>0;  
-                return $item->nidn==$query->GetNIDN() || $asMember;
-            });
-        }
-        if(!is_null($query->GetNIP())){
-            $datas = $datas->filter( function($item) use($query){
-                $asMember = ($item->Anggota??collect([]))->filter(fn($itemAnggota)=>$itemAnggota->Pegawai?->nip==$query->GetNIP())->count()>0;
-                return $item->nip==$query->GetNIP() || $asMember;
-            });
-        }
-        $datas = $datas->values();
+        // if(!is_null($query->GetNIDN())){
+        //     $datas = $datas->filter( function($item) use($query){
+        //         $asMember = ($item->Anggota??collect([]))->filter(fn($itemAnggota)=>$itemAnggota?->Dosen?->NIDN==$query->GetNIDN())->count()>0;  
+        //         return $item->nidn==$query->GetNIDN() || $asMember;
+        //     });
+        // }
+        // if(!is_null($query->GetNIP())){
+        //     $datas = $datas->filter( function($item) use($query){
+        //         $asMember = ($item->Anggota??collect([]))->filter(fn($itemAnggota)=>$itemAnggota->Pegawai?->nip==$query->GetNIP())->count()>0;
+        //         return $item->nip==$query->GetNIP() || $asMember;
+        //     });
+        // }
+        // $datas = $datas->values();
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 
@@ -99,6 +100,12 @@ class GetAllSPPDQueryHandler extends Query
                 new Date($data->tanggal_kembali),
                 $data->tujuan,
                 $data->keterangan,
+                !is_null($data->PayrollPegawai)? Creator::buildPegawai(PegawaiEntitas::make(
+                    $data->EPribadiRemote?->nidn,
+                    $data->PayrollPegawai?->nip,
+                    $data->PayrollPegawai?->nama,
+                    $data->PayrollPegawai?->unit,
+                )):null,
                 $data->status,
                 $data->catatan,
                 $data->dokumen_anggaran,

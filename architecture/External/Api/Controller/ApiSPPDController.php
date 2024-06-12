@@ -28,7 +28,6 @@ class ApiSPPDController extends Controller
             default=>redirect()->route('sppd.index'),
         };
 
-        dd($request->all());
         try {
             if(empty($request->id)) throw new Exception("invalid reject sppd");
             if(!in_array($request->level,['sdm','warek'])) throw new Exception("selain SDM dan Warek tidak dapat approval sppd");
@@ -36,12 +35,7 @@ class ApiSPPDController extends Controller
             $fileSystem = new FileSystem(new OptionFileDefault($request->file("dokumen_anggaran_biaya"),"dokumen_anggaran"));
             $file = $fileSystem->storeFileWithReplaceFileAndReturnFileLocation();
 
-            $status = match($request->level){
-                "warek"=>"menunggu verifikasi sdm",
-                "sdm"=>"terima sdm",
-                default=>null,
-            };
-            $this->commandBus->dispatch(new ApprovalSPPDCommand($request->id,$status,$file));
+            $this->commandBus->dispatch(new ApprovalSPPDCommand($request->id,$request->level=="warek"? "menunggu verifikasi sdm":"terima sdm",$file));
             return response()->json([
                 "status"=>"ok",
                 "message"=>"berhasil terima SPPD",
@@ -63,12 +57,7 @@ class ApiSPPDController extends Controller
             if(empty($request->id)) throw new Exception("invalid reject sppd");
             if(!in_array($request->level,['sdm','warek'])) throw new Exception("selain SDM dan Warek tidak dapat tolak sppd");
 
-            $status = match($request->level){
-                "warek"=>"tolak warek",
-                "sdm"=>"tolak sdm",
-                default=>null,
-            };
-            $this->commandBus->dispatch(new RejectSPPDCommand($request->id,$request->catatan,$status));
+            $this->commandBus->dispatch(new RejectSPPDCommand($request->id,$request->catatan,$request->level=="warek"? "tolak warek":"tolak sdm"));
             
             return response()->json([
                 "status"=>"ok",

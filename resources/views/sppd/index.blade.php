@@ -72,7 +72,7 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        @if (($level=="sdm" || $level=="warek") && $verifikasi)
+                                        @if (!in_array(Session::get('levelActive'),["pegawai","dosen"]) || $verifikasi)
                                         <th>Nama</th>
                                         @endif
                                         <th>Jenis SPPD</th>
@@ -116,10 +116,10 @@
             
             const nidn = `{{Session::get('nidn')}}`
             const nip = `{{Session::get('nip')}}`
-            const level = `{{$level}}`
+            const level = `{{Session::get('levelActive')}}`
             const type = `{{$type}}`
             const verifikasi = `{{ (int) $verifikasi }}`
-            const column = (`{{Session::get('levelActive')}}`=="pegawai" || `{{Session::get('levelActive')}}`=="dosen") && verifikasi==0? 
+            const column = (level == "pegawai" || level=="dosen") && verifikasi==0?
             [
                 {
                     data: 'DT_RowIndex', 
@@ -375,7 +375,7 @@
                 dataForm.append("_token",'{{ csrf_token() }}')
                 dataForm.append("id",id)
                 dataForm.append("pic","{{Session::get('id')}}")
-                dataForm.append("level",level)
+                dataForm.append("level",`{{$level}}`)
                 dataForm.append("dokumen_anggaran_biaya", dokumen_anggaran_biaya, dokumen_anggaran_biaya.name);
 
                 $.ajax({

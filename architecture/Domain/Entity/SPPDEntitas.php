@@ -15,6 +15,7 @@ class SPPDEntitas extends ISPPD{
         ?Date $tanggal_kembali=null,
         $tujuan=null,
         $keterangan=null,
+        ?Pegawai $verifikasi=null,
         $status=null,
         $catatan=null,
         $dokumen_anggaran=null,
@@ -35,6 +36,7 @@ class SPPDEntitas extends ISPPD{
         $instance->tanggal_kembali = $tanggal_kembali;
         $instance->tujuan = $tujuan;
         $instance->keterangan = $keterangan;
+        $instance->verifikasi = $verifikasi;
         $instance->status = $status;
         $instance->catatan = $catatan;
         $instance->dokumen_anggaran = $dokumen_anggaran;

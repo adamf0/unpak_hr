@@ -24,7 +24,7 @@ class GetAllSPPDByNIPQueryHandler extends Query
 
     public function handle(GetAllSPPDByNIPQuery $query)
     {
-        $datas = SPPDModel::with(['JenisSPPD','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','FileLaporan'])->where('nip',$query->GetNIP())->get();
+        $datas = SPPDModel::with(['JenisSPPD','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','FileLaporan','PayrollPegawai','EPribadiRemote'])->where('nip',$query->GetNIP())->get();
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 
@@ -75,6 +75,12 @@ class GetAllSPPDByNIPQueryHandler extends Query
                 new Date($data->tanggal_kembali),
                 $data->tujuan,
                 $data->keterangan,
+                !is_null($data->PayrollPegawai)? Creator::buildPegawai(PegawaiEntitas::make(
+                    $data->EPribadiRemote?->nidn,
+                    $data->PayrollPegawai?->nip,
+                    $data->PayrollPegawai?->nama,
+                    $data->PayrollPegawai?->unit,
+                )):null,
                 $data->status,
                 $data->catatan,
                 $data->dokumen_anggaran,

@@ -58,9 +58,9 @@ return [
             'throw' => false,
         ],
 
-        'dokumen_sppd' => [
+        'dokumen_anggaran' => [
             'driver' => 'local',
-            'root'   => public_path('dokumen_sppd'),
+            'root'   => public_path('dokumen_anggaran'),
             'visibility' => 'public',
             'throw' => false,
         ],

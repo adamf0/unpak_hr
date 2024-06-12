@@ -259,15 +259,13 @@
 
       @if (Utility::hasSDM())
         <x-sidebar-item-menu title="SPPD" icon="bi bi-menu-button-wide" link="{{route('sppd.index2',['type'=>'dosen'])}}" :active="Utility::stateMenu(['sppd'],request(),1)" />
-      @elseif($isWarek)
+      @else
         <x-sidebar-item-menu-dropdown title="SPPD" parent="sidebar-nav" target="sppd" icon="bi bi-menu-button-wide" :active="Utility::stateMenu([
             'sppd',
             ],request())">
             <x-sidebar-item-menu-dropdown-child title="Pengajuan" icon="bi bi-menu-button-wide" link="{{ route('sppd.index2',['type'=>Session::get('levelActive')=='dosen'? 'dosen':'tendik']) }}" :active="Utility::stateMenu(['sppd'],request(),1)" />
             <x-sidebar-item-menu-dropdown-child title="Verifikasi" icon="bi bi-menu-button-wide" link="{{ route('sppd.verifikasi') }}" :active="Utility::stateMenu(['verifikasi'],request())" />
           </x-sidebar-item-menu-dropdown>
-      @else
-        <x-sidebar-item-menu title="SPPD" icon="bi bi-menu-button-wide" link="{{route('sppd.index')}}" :active="Utility::stateMenu(['sppd'],request())" />
       @endif
 
       @if (Utility::hasSDM())

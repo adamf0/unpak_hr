@@ -84,6 +84,7 @@ class SPPDController extends Controller
                 new Date($request->get('tanggal_kembali')),
                 $request->get('tujuan'),
                 $request->get('keterangan'),
+                $request->has("verifikasi")? Creator::buildPegawai(PegawaiReferensi::make($request->get("verifikasi"))):null,
                 "menunggu"
             ));
 
@@ -98,7 +99,7 @@ class SPPDController extends Controller
             DB::commit();
             Session::flash(TypeNotif::Create->val(), "berhasil tambah data");
 
-            return redirect()->route('sppd.index');
+            return redirect()->route('sppd.index2',['type'=>Session::get('levelActive')=="pegawai"? "tendik":"dosen"]);
         } catch (Exception $e) {
             DB::rollBack();
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
@@ -117,7 +118,7 @@ class SPPDController extends Controller
             ]);
         } catch (Exception $e) {
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
-            return redirect()->route('sppd.index');
+            return redirect()->route('sppd.index2',['type'=>Session::get('levelActive')=="pegawai"? "tendik":"dosen"]);
         }
     }
     public function update(Request $request)
@@ -142,6 +143,7 @@ class SPPDController extends Controller
                 new Date($request->get('tanggal_kembali')),
                 $request->get('tujuan'),
                 $request->get('keterangan'),
+                $request->has("verifikasi")? Creator::buildPegawai(PegawaiReferensi::make($request->get("verifikasi"))):null,
                 $sppd->GetStatus()
             ));
 
@@ -158,7 +160,7 @@ class SPPDController extends Controller
             DB::commit();
             Session::flash(TypeNotif::Update->val(), "berhasil ubah data");
 
-            return redirect()->route('sppd.index');
+            return redirect()->route('sppd.index2',['type'=>Session::get('levelActive')=="pegawai"? "tendik":"dosen"]);
         } catch (Exception $e) {
             DB::rollBack();
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
@@ -178,33 +180,28 @@ class SPPDController extends Controller
             $this->commandBus->dispatch(new DeleteSPPDCommand($id));
             Session::flash(TypeNotif::Create->val(), "berhasil hapus data");
 
-            return redirect()->route('sppd.index');
+            return redirect()->route('sppd.index2',['type'=>Session::get('levelActive')=="pegawai"? "tendik":"dosen"]);
         } catch (Exception $e) {
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
-            return redirect()->route('sppd.index');
+            return redirect()->route('sppd.index2',['type'=>Session::get('levelActive')=="pegawai"? "tendik":"dosen"]);
         }
     }
 
-    public function approval($id, $level)
+    public function approval($id,$type)
     {
         $sppd = $this->queryBus->ask(new GetSPPDQuery($id));
-        $redirect = match (true) {
-            $level == "sdm" && !is_null($sppd->GetDosen()) => redirect()->route('sppd.index2', ['type' => 'dosen']),
-            $level == "sdm" && !is_null($sppd->GetPegawai()) => redirect()->route('sppd.index2', ['type' => 'tendik']),
-            $level == "warek" => redirect()->route('sppd.index2', ['type' => 'verifikasi']),
-            default => redirect()->route('sppd.index'),
+        $redirect = match(true){
+            Session::get('levelActive')=="sdm" && !is_null($sppd->GetDosen()) => redirect()->route('sppd.index2',['type'=>'dosen']),
+            Session::get('levelActive')=="sdm" && !is_null($sppd->GetPegawai()) => redirect()->route('sppd.index2',['type'=>'tendik']),
+            in_array(Session::get('levelActive'), ["dosen","pegawai"]) => redirect()->route('sppd.index2',['type'=>'verifikasi']),
+            default=>redirect()->route('sppd.index'),
         };
 
         try {
             if (empty($id)) throw new Exception("invalid reject sppd");
-            if (!in_array($level, ['sdm', 'warek'])) throw new Exception("selain SDM dan Warek tidak dapat approval sppd");
+            // if (!in_array($level, ['sdm', 'warek'])) throw new Exception("selain SDM dan Warek tidak dapat approval sppd");
 
-            $status = match ($level) {
-                "warek" => "menunggu verifikasi sdm",
-                "sdm" => "terima sdm",
-                default => null,
-            };
-            $this->commandBus->dispatch(new ApprovalSPPDCommand($id, $status));
+            $this->commandBus->dispatch(new ApprovalSPPDCommand($id, $type=="warek"? "menunggu verifikasi sdm":"terima sdm"));
 
             Session::flash(TypeNotif::Create->val(), "berhasil terima SPPD");
             return $redirect;

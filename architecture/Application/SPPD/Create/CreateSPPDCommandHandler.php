@@ -18,6 +18,7 @@ class CreateSPPDCommandHandler extends CommandHandler
         $SPPDBaru->tanggal_kembali = $command->GetTanggalKembali()?->toFormat(FormatDate::Default);
         $SPPDBaru->tujuan = $command->GetTujuan();
         $SPPDBaru->keterangan = $command->GetKeterangan();
+        $SPPDBaru->verifikasi = $command->GetVerifikasi()?->GetNip();
         $SPPDBaru->status = $command->GetStatus();
         $SPPDBaru->saveOrFail();
         

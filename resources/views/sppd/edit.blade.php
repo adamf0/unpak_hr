@@ -73,6 +73,9 @@
                                             </tbody>
                                         </table>
                                     </div>
+                                    <div class="col-12">
+                                        <x-input-select title="Verifikasi Atasan" name="verifikasi" class="verifikasi"></x-input-select>
+                                    </div>
                                 </div>
                                 
                                 <input type="submit" name="submit" class="btn btn-primary" value="submit">
@@ -113,6 +116,7 @@
             var CSRF_TOKEN      = $('meta[name="csrf-token"]').attr('content');
             load_dropdown('.jenis_sppd', null, `{{ route('select2.JenisSPPD.List') }}`, "{{ old('jenis_sppd',$SPPD->GetJenisSPPD()?->GetId()) }}", '-- Pilih Jenis SPPD --');
             load_dropdown('.nidnnipAddAnggota', null, `{{ route('select2.DosenPegawai.List') }}`, "{{ old('nidn_nip') }}", '-- Pilih Nama --','#modalAddAnggota');
+            load_dropdown('.verifikasi', null, `{{ route('select2.PegawaiV2.List') }}`, "{{ old('verifikasi',$SPPD->GetVerifikasi()?->GetNip()) }}", '-- Pilih Nama Atasan --');
 
             $('.tanggal_berangkat').datepicker({
                 format: 'yyyy-mm-dd',

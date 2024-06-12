@@ -17,6 +17,7 @@ trait SPPDBase
     public ?Date $tanggal_kembali=null;
     public $tujuan;
     public $keterangan;
+    public ?Pegawai $verifikasi=null;
     public $status;
     public $catatan=null;
     public $dokumen_anggaran=null;
@@ -78,5 +79,8 @@ trait SPPDBase
     }
     public function GetListAnggota(){
         return $this->list_anggota;
+    }
+    public function GetVerifikasi(){
+        return $this->verifikasi;
     }
 }

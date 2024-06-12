@@ -23,6 +23,7 @@ class UpdateSPPDCommand extends Command
         ?Date $tanggal_kembali=null,
         $tujuan,
         $keterangan,
+        ?Pegawai $verifikasi=null,
         $status,
         public TypeData $option = TypeData::Entity
     ) {
@@ -34,6 +35,7 @@ class UpdateSPPDCommand extends Command
         $this->tanggal_kembali = $tanggal_kembali;
         $this->tujuan = $tujuan;
         $this->keterangan = $keterangan;
+        $this->verifikasi = $verifikasi;
         $this->status = $status;
     }
 }
