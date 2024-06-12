@@ -26,7 +26,7 @@
                                 @csrf
                                 <div class="row">
                                     <div class="col-6">
-                                        <x-input-select title="Tanggal Absen" name="tanggal_absen" class="tanggal_absen"></x-input-select>
+                                        <x-input-select title="Tanggal Presensi" name="tanggal_absen" class="tanggal_absen"></x-input-select>
                                         <small class="text-primary">* h-2 presensi</small><br>
                                         <small class="text-primary">* jika presensi berada di range sppd/izin/cuti maka presensi tidak akan ada disini</small>
                                     </div>
