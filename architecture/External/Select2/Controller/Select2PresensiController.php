@@ -98,8 +98,8 @@ class Select2PresensiController extends Controller
         }, []);
 
         $list = $listPresensi->filter(function ($item) use ($listTanggal, $rangeTanggal) {
-            dd($item->GetTanggal(), $listTanggal, $item->GetAbsenMasuk() instanceof Date, $item->GetTanggal(),$rangeTanggal);
-            return !in_array($item->GetTanggal(), $listTanggal) && $item->GetAbsenMasuk() instanceof Date && in_array($item->GetTanggal(),$rangeTanggal);
+            // dd($item->GetTanggal(), $listTanggal, $item->GetAbsenMasuk() instanceof Date, $item->GetTanggal(),$rangeTanggal);
+            return !in_array($item->GetTanggal()->toFormat(FormatDate::Default), $listTanggal) && $item->GetAbsenMasuk() instanceof Date && in_array($item->GetTanggal()->toFormat(FormatDate::Default),$rangeTanggal);
         })
         ->values()
         ->sortBy('tanggal', SORT_REGULAR, true)
