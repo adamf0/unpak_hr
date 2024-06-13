@@ -139,6 +139,7 @@ class Creator{
             $factory->GetTanggalKembali(),
             $factory->GetTujuan(),
             $factory->GetKeterangan(),
+            $factory->GetSaranaTransportasi(),
             $factory->GetVerifikasi(),
             $factory->GetStatus(),
             $factory->GetCatatan(),

@@ -14,10 +14,11 @@ class SPPD extends BaseEntity{
         ?JenisSPPD $jenis_sppd=null,
         ?Date $tanggal_berangkat=null,
         ?Date $tanggal_kembali=null,
-        $tujuan,
-        $keterangan,
+        $tujuan=null,
+        $keterangan=null,
+        $sarana_transportasi=null,
         ?Pegawai $verifikasi=null,
-        $status,
+        $status=null,
         $catatan=null,
         $dokumen_anggaran=null,
         ?Collection $list_anggota=null,
@@ -36,6 +37,7 @@ class SPPD extends BaseEntity{
         $this->tanggal_kembali = $tanggal_kembali;
         $this->tujuan = $tujuan;
         $this->keterangan = $keterangan;
+        $this->sarana_transportasi = $sarana_transportasi;
         $this->verifikasi = $verifikasi;
         $this->status = $status;
         $this->catatan = $catatan;

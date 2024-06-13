@@ -19,6 +19,7 @@ class UpdateSPPDCommandHandler extends CommandHandler
         $SPPD->tanggal_kembali = $command->GetTanggalKembali()?->toFormat(FormatDate::Default);
         $SPPD->tujuan = $command->GetTujuan();
         $SPPD->keterangan = $command->GetKeterangan();
+        $SPPD->sarana_transportasi = $command->GetSaranaTransportasi();
         $SPPD->verifikasi = $command->GetVerifikasi()?->GetNip();
         $SPPD->status = $command->GetStatus();
         if($SPPD->isDirty()) $SPPD->saveOrFail();

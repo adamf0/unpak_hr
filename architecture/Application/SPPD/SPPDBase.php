@@ -15,10 +15,11 @@ trait SPPDBase
     public ?JenisSPPD $jenis_sppd=null;
     public ?Date $tanggal_berangkat=null;
     public ?Date $tanggal_kembali=null;
-    public $tujuan;
-    public $keterangan;
+    public $tujuan=null;
+    public $keterangan=null;
+    public $sarana_transportasi=null;
     public ?Pegawai $verifikasi=null;
-    public $status;
+    public $status=null;
     public $catatan=null;
     public $dokumen_anggaran=null;
     public ?Collection $list_anggota=null;
@@ -67,6 +68,9 @@ trait SPPDBase
     }
     public function GetKeterangan(){
         return $this->keterangan;
+    }
+    public function GetSaranaTransportasi(){
+        return $this->sarana_transportasi;
     }
     public function GetStatus(){
         return $this->status;

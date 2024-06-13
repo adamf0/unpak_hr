@@ -102,8 +102,8 @@
             </tr>
             <tr>
                 <td>4</td>
-                <td>Alat angkutan yang digunakan</td>
-                <td>Bis Unpak</td>
+                <td>Sarana Transportasi</td>
+                <td>{{$sppd->sarana_transportasi}}</td>
             </tr>
             <tr>
                 <td></td>

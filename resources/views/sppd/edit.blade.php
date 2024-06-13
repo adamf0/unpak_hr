@@ -42,6 +42,9 @@
                                         <x-text title="Keterangan" name="keterangan" class="keterangan" default="{{ old('keterangan',$SPPD->GetKeterangan()) }}"/>
                                     </div>
                                     <div class="col-12">
+                                        <x-input-select title="Sarana Transportasi" name="sarana_transportasi" class="sarana_transportasi"></x-input-select>
+                                    </div>
+                                    <div class="col-12 mt-4">
                                         <a href="#" class="btn btn-primary btnModalAddAnggota">Tambah</a>
                                     </div>
                                     <div class="col-12">
@@ -114,6 +117,22 @@
     <script>
         $(document).ready(function () {
             var CSRF_TOKEN      = $('meta[name="csrf-token"]').attr('content');
+
+            const transport = [
+                {
+                    id:"Operasional Unpak",
+                    text:"Operasional Unpak",
+                },
+                {
+                    id:"Kendaraan Pribadi",
+                    text:"Kendaraan Pribadi",
+                },
+                {
+                    id:"Transportasi Umum",
+                    text:"Transportasi Umum",
+                },
+            ];
+            load_dropdown('.sarana_transportasi', transport, null, "{{ old('sarana_transportasi',$SPPD->GetSaranaTransportasi()) }}", '-- Pilih Sarana Transportasi --');
             load_dropdown('.jenis_sppd', null, `{{ route('select2.JenisSPPD.List') }}`, "{{ old('jenis_sppd',$SPPD->GetJenisSPPD()?->GetId()) }}", '-- Pilih Jenis SPPD --');
             load_dropdown('.nidnnipAddAnggota', null, `{{ route('select2.DosenPegawai.List') }}`, "{{ old('nidn_nip') }}", '-- Pilih Nama --','#modalAddAnggota');
             load_dropdown('.verifikasi', null, `{{ route('select2.PegawaiV2.List') }}`, "{{ old('verifikasi',$SPPD->GetVerifikasi()?->GetNip()) }}", '-- Pilih Nama Atasan --');

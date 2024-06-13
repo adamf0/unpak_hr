@@ -84,6 +84,7 @@ class SPPDController extends Controller
                 new Date($request->get('tanggal_kembali')),
                 $request->get('tujuan'),
                 $request->get('keterangan'),
+                $request->get('sarana_transportasi'),
                 $request->has("verifikasi")? Creator::buildPegawai(PegawaiReferensi::make($request->get("verifikasi"))):null,
                 "menunggu"
             ));
@@ -143,6 +144,7 @@ class SPPDController extends Controller
                 new Date($request->get('tanggal_kembali')),
                 $request->get('tujuan'),
                 $request->get('keterangan'),
+                $request->get('sarana_transportasi'),
                 $request->has("verifikasi")? Creator::buildPegawai(PegawaiReferensi::make($request->get("verifikasi"))):null,
                 $sppd->GetStatus()
             ));

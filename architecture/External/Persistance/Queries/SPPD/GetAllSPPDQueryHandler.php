@@ -100,6 +100,7 @@ class GetAllSPPDQueryHandler extends Query
                 new Date($data->tanggal_kembali),
                 $data->tujuan,
                 $data->keterangan,
+                $data->sarana_transportasi,
                 !is_null($data->PayrollPegawai)? Creator::buildPegawai(PegawaiEntitas::make(
                     $data->EPribadiRemote?->nidn,
                     $data->PayrollPegawai?->nip,
