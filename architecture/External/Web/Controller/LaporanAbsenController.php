@@ -123,6 +123,7 @@ class LaporanAbsenController extends Controller
                     $carry[] = date('d F Y', strtotime($item));
                     return $carry;
                 },[]);
+                dd($listData['list_data']);
 
                 return Excel::download(new ExportAbsenXls(collect($listData), array_merge(["nama"],$listTanggalFormat)), "$file_name.xlsx");
             }
