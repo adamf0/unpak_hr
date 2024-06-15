@@ -93,7 +93,7 @@ class GetAllLaporanAbsenQueryHandler extends Query
         } else if(!empty($query->GetNIP())){
             $this->list_pengguna = $this->list_pengguna->where('nip',$query->GetNIP());
         }
-        $this->list_pengguna = $this->list_pengguna->limit(10)->get();
+        $this->list_pengguna = $this->list_pengguna->get();
 
         for ($date = Carbon::now()->setTimezone('Asia/Jakarta')->startOfMonth(); $date->lte($end); $date->addDay()) {
             $this->list_tanggal[] = $date->copy()->format('Y-m-d');
