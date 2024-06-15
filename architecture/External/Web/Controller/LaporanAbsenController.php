@@ -70,6 +70,7 @@ class LaporanAbsenController extends Controller
             $laporan = $this->queryBus->ask(new GetAllLaporanAbsenQuery($nidn,$nip,$tanggal_mulai,$tanggal_akhir,TypeData::Default));
 
             if($type_export=="pdf"){
+                dd($laporan);
                 return $this->generateHtml(true, 0, null, null, $laporan);
                 $file = PdfX::From(
                     "template.export_absen", 
@@ -123,7 +124,6 @@ class LaporanAbsenController extends Controller
                     $carry[] = date('d F Y', strtotime($item));
                     return $carry;
                 },[]);
-                dd($listData);
 
                 return Excel::download(new ExportAbsenXls(collect($listData), array_merge(["nama"],$listTanggalFormat)), "$file_name.xlsx");
             }
