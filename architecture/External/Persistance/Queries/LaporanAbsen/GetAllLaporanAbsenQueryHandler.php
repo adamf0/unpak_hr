@@ -87,7 +87,7 @@ class GetAllLaporanAbsenQueryHandler extends Query
         $start = empty($query->GetTanggalMulai())? date('Y-m-01'):date('Y-m-d',strtotime($query->GetTanggalMulai()));
         $end = empty($query->GetTanggalAkhir())? date('Y-m-t'):date('Y-m-d',strtotime($query->GetTanggalAkhir()));
         
-        $start = microtime();
+        $start = microtime(true);
         $this->list_pengguna = DB::table('laporan_merge_absen_izin_cuti')->select('nidn','nip')->distinct();
         if(!empty($query->GetNIDN())){
             $this->list_pengguna = $this->list_pengguna->where('nidn',$query->GetNIDN());
@@ -95,8 +95,8 @@ class GetAllLaporanAbsenQueryHandler extends Query
             $this->list_pengguna = $this->list_pengguna->where('nip',$query->GetNIP());
         }
         $this->list_pengguna = $this->list_pengguna->get();
-        $end = microtime();
-        dd($start,$end, $this->list_pengguna);
+        $end = microtime(true);
+        dd($end-$start, $this->list_pengguna);
 
         for ($date = Carbon::now()->setTimezone('Asia/Jakarta')->startOfMonth(); $date->lte($end); $date->addDay()) {
             $this->list_tanggal[] = $date->copy()->format('Y-m-d');
