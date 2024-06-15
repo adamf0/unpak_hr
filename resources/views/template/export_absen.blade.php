@@ -49,7 +49,6 @@
                                                             $aturan_jam = "08:00 - 12:00";
                                                         }
                                                     @endphp
-                                                    {{ $aturan_jam }}
                                                 </td>
                                             </tr>
                                             @php
