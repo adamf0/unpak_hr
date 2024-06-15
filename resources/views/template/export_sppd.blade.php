@@ -60,7 +60,22 @@
 <body>
     @foreach($list_sppd as $key => $sppd)
         <div class="page-break">
-        <img src="{{ Utility::loadAsset('assets/img/KOP UNPAK.jpg') }}" alt="logo" style="width: 100px !important;">
+        <table style="width: 85%">
+            <tr>
+                <td>
+                    <img src="{{ Utility::loadAsset('assets/img/KOP UNPAK.jpg') }}" alt="logo" style="width: 100% !important;">
+                </td>
+                <!-- <td>
+                    <center>
+                        <h3>
+                            YAYASAN PAKUAN SILIWANGI<br>
+                            UNIVERSITAS PAKUAN<br>
+                        </h3>
+                        SURAT PENGAJUAN PERJALAN DINAS
+                    </center>
+                </td> -->
+            </tr>
+        </table>
         <hr>
         <br>
         <table class="styled-table">
