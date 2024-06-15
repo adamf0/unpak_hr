@@ -63,9 +63,9 @@
         <table style="width: 85%">
             <tr>
                 <td>
-                    <img src="https://www.unpak.ac.id/images/logo-unpak_menu_web.webp" alt="logo" style="width: 100px !important; height:100px !important;">
+                    <img src="{{ Utility::loadAsset('assets/img/KOP UNPAK.jpg') }}" alt="logo" style="width: 100px !important;">
                 </td>
-                <td>
+                <!-- <td>
                     <center>
                         <h3>
                             YAYASAN PAKUAN SILIWANGI<br>
@@ -73,7 +73,7 @@
                         </h3>
                         SURAT PENGAJUAN PERJALAN DINAS
                     </center>
-                </td>
+                </td> -->
             </tr>
         </table>
         <hr>
