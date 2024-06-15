@@ -109,7 +109,7 @@ class GetAllLaporanAbsenQueryHandler extends Query
         }
         $this->list_pengguna = $this->list_pengguna->get();
         $end = microtime(true);
-        dump(($end-$start)*100);
+        // dump(($end-$start)*100);
 
         for ($date = Carbon::now()->setTimezone('Asia/Jakarta')->startOfMonth(); $date->lte($end); $date->addDay()) {
             $this->list_tanggal[] = $date->copy()->format('Y-m-d');
