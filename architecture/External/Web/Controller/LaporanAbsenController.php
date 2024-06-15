@@ -67,10 +67,12 @@ class LaporanAbsenController extends Controller
             } else if($tanggal_mulai && $tanggal_akhir){
                 $file_name = $file_name."_$tanggal_mulai-$tanggal_akhir";
             }
+            $start = microtime(true);
             $laporan = $this->queryBus->ask(new GetAllLaporanAbsenQuery($nidn,$nip,$tanggal_mulai,$tanggal_akhir,TypeData::Default));
+            $end = microtime(true);
 
             if($type_export=="pdf"){
-                dd($laporan);
+                dd(($end-$start)*100);
                 return $this->generateHtml(true, 0, null, null, $laporan);
                 $file = PdfX::From(
                     "template.export_absen", 
