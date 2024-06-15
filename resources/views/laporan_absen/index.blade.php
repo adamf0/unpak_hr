@@ -90,25 +90,26 @@
                 ajax: `{{ route("datatable.LaporanAbsen.index") }}?level=${level}&nidn=${nidn}&nip=${nip}&type=${type}`,
                 columns: [
                     { 
-                        data: null, 
-                        name: 'pengguna',
+                        data: 'nama', 
+                        name: 'nama',
                         render: function ( data, type, row, meta ) {
-                            if(data.type=="dosen"){
-                                console.log("x1",data)
-                                const nama = data?.pengguna?.nama_dosen??"NA"
-                                const kode = data?.pengguna?.NIDN??"NA"
-                                return `${nama} - ${kode}`
-                            } else if(data.type=="pegawai"){
-                                console.log("x2",data)
-                                const nama = data?.pengguna?.nama??"NA"
-                                const kode = data?.pengguna?.nip??"NA"
-                                return `${nama} - ${kode}`
-                            } else{
-                                console.log("x2",data)
-                                const nama = "NA"
-                                const kode = "NA"
-                                return `${nama} - ${kode}`
-                            }
+                            // if(data.type=="dosen"){
+                            //     console.log("x1",data)
+                            //     const nama = data?.pengguna?.nama_dosen??"NA"
+                            //     const kode = data?.pengguna?.NIDN??"NA"
+                            //     return `${nama} - ${kode}`
+                            // } else if(data.type=="pegawai"){
+                            //     console.log("x2",data)
+                            //     const nama = data?.pengguna?.nama??"NA"
+                            //     const kode = data?.pengguna?.nip??"NA"
+                            //     return `${nama} - ${kode}`
+                            // } else{
+                            //     console.log("x2",data)
+                            //     const nama = "NA"
+                            //     const kode = "NA"
+                            //     return `${nama} - ${kode}`
+                            // }
+                            return data;
                         }
                     },
                     @foreach ($list_tanggal as $tanggal)

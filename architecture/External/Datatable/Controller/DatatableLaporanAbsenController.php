@@ -37,6 +37,22 @@ class DatatableLaporanAbsenController extends Controller
 
         $table = DataTables::of($list_data)
         ->addIndexColumn()
+        ->addColumn('nama', function ($row) {
+            if($row->type=="dosen"){
+                $nama = $row->pengguna->nama_dosen??"NA";
+                $kode = $row->pengguna->NIDN??"NA";
+                return "{$nama} - {$kode}";
+            } else if($row->type=="pegawai"){
+                $nama = $row->pengguna->nama??"NA";
+                $kode = $row->pengguna->nip??"NA";
+                return "{$nama} - {$kode}";
+            } else{
+                $nama = "NA";
+                $kode = "NA";
+                return "{$nama} - {$kode}";
+            }
+        })
+        ->rawColumns(['nama'])
         ->make(true);
 
         return $table;
