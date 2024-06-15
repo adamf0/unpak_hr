@@ -134,7 +134,7 @@
             load_dropdown('.sarana_transportasi', transport, null, "{{ old('sarana_transportasi') }}", '-- Pilih Sarana Transportasi --');
             load_dropdown('.jenis_sppd', null, `{{ route('select2.JenisSPPD.List') }}`, "{{ old('jenis_sppd') }}", '-- Pilih Jenis SPPD --');
             load_dropdown('.nidnnipAddAnggota', null, `{{ route('select2.DosenPegawai.List') }}`, "{{ old('nidn_nip') }}", '-- Pilih Nama --','#modalAddAnggota');
-            load_dropdown('.verifikasi', null, `{{ route('select2.PegawaiV2.List') }}`, "{{ old('verifikasi') }}", '-- Pilih Nama Atasan --');
+            load_dropdown('.verifikasi', null, `{{ route('select2.PegawaiV2.List') }}?struktural=verifikator`, "{{ old('verifikasi') }}", '-- Pilih Nama Atasan --');
             
             $('.tanggal_berangkat').datepicker({
                 format: 'yyyy-mm-dd',
