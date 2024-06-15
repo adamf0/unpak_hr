@@ -114,10 +114,6 @@
 @push('scripts')
     <script type="text/javascript" src="{{ Utility::loadAsset('my.js') }}"></script>
     <script>
-        nidn = null;
-        nip = null;
-        nama=null;
-        
         $(document).ready(function () {
             var CSRF_TOKEN      = $('meta[name="csrf-token"]').attr('content');
 
@@ -285,9 +281,12 @@
                 modalAddAnggota.show();
             });
 
-            nidnnipAddAnggota.on('select', function(e) {
+            let nidn = null;
+            let nip = null;
+            let nama=null;
+            $('.nidnnipAddAnggota').on('select', function(e) {
                 var data = e.params.data;
-
+                console.log(data)
                 const id    = data.id;
                 const type  = data.type;
                 nidn    = type=="dosen"? id:null;
@@ -319,7 +318,11 @@
                         alert(`${nama} sudah dimasukkan sebelumnya`);
                     } else if(isDuplicatValueDynamicInput("anggota","nip",nip)){
                         alert(`${nama} sudah dimasukkan sebelumnya`);
-                    } else if(nidn == null && nip == null){
+                    } 
+                    // else if(nidn != null && nip != null){
+                    //     alert(`nidn dan nip tidak boleh diinput bersamaan`);
+                    // } 
+                    else if(nidn == null && nip == null){
                         alert(`nama yg harus diisi`);
                     } else{
                         $('.btnAddAnggota').attr('disabled', true);
@@ -348,9 +351,6 @@
                             }
                         });
                     }
-                    nidn    = null;
-                    nip     = null;
-                    nama    = null;
                 }
             });
         });
