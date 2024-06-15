@@ -225,7 +225,7 @@ class SPPDController extends Controller
             ]);
         } catch (Exception $e) {
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
-            return redirect()->route('sppd.index');
+            return redirect()->route('sppd.index2',['type'=>Session::get('levelActive')=="pegawai"? "tendik":"dosen"]);
         }
     }
 
@@ -259,11 +259,10 @@ class SPPDController extends Controller
             DB::commit();
             Session::flash(TypeNotif::Update->val(), "berhasil update laporan");
 
-            return redirect()->route('sppd.index');
+            return redirect()->route('sppd.index2',['type'=>Session::get('levelActive')=="pegawai"? "tendik":"dosen"]);
         } catch (Exception $e) {
             DB::rollBack();
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
-            dd($e);
             return redirect()->route('sppd.laporan', ["id" => $request->get('id')])->withInput();
         }
     }
