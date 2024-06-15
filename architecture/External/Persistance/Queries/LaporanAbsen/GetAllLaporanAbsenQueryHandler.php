@@ -76,19 +76,6 @@ class GetAllLaporanAbsenQueryHandler extends Query
         return $list_data;
     }
 
-    function formatPeriod($endtime, $starttime)
-{
-
-  $duration = $endtime - $starttime;
-
-  $hours = (int) ($duration / 60 / 60);
-
-  $minutes = (int) ($duration / 60) - $hours * 60;
-
-  $seconds = (int) $duration - $hours * 60 * 60 - $minutes * 60;
-
-  return ($hours == 0 ? "00":$hours) . ":" . ($minutes == 0 ? "00":($minutes < 10? "0".$minutes:$minutes)) . ":" . ($seconds == 0 ? "00":($seconds < 10? "0".$seconds:$seconds));
-}
     public function handle(GetAllLaporanAbsenQuery $query)
     {
         if($query->getOption()==TypeData::Entity) throw new Exception("no implementation GetAllLaporanAbsenQuery to Entity");
@@ -100,7 +87,6 @@ class GetAllLaporanAbsenQueryHandler extends Query
         $start = empty($query->GetTanggalMulai())? date('Y-m-01'):date('Y-m-d',strtotime($query->GetTanggalMulai()));
         $end = empty($query->GetTanggalAkhir())? date('Y-m-t'):date('Y-m-d',strtotime($query->GetTanggalAkhir()));
         
-        $start = microtime(true);
         $this->list_pengguna = DB::table('laporan_merge_absen_izin_cuti')->select('nidn','nip')->distinct();
         if(!empty($query->GetNIDN())){
             $this->list_pengguna = $this->list_pengguna->where('nidn',$query->GetNIDN());
@@ -108,8 +94,6 @@ class GetAllLaporanAbsenQueryHandler extends Query
             $this->list_pengguna = $this->list_pengguna->where('nip',$query->GetNIP());
         }
         $this->list_pengguna = $this->list_pengguna->get();
-        $end = microtime(true);
-        // dump(($end-$start)*100);
 
         for ($date = Carbon::now()->setTimezone('Asia/Jakarta')->startOfMonth(); $date->lte($end); $date->addDay()) {
             $this->list_tanggal[] = $date->copy()->format('Y-m-d');
