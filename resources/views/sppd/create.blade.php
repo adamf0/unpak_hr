@@ -114,6 +114,10 @@
 @push('scripts')
     <script type="text/javascript" src="{{ Utility::loadAsset('my.js') }}"></script>
     <script>
+        nidn = null;
+        nip = null;
+        nama=null;
+        
         $(document).ready(function () {
             var CSRF_TOKEN      = $('meta[name="csrf-token"]').attr('content');
 
@@ -281,9 +285,6 @@
                 modalAddAnggota.show();
             });
 
-            let nidn = null;
-            let nip = null;
-            let nama=null;
             nidnnipAddAnggota.on('select', function(e) {
                 var data = e.params.data;
 
