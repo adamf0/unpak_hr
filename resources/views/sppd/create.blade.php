@@ -99,7 +99,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-12">
-                            <x-input-text title="Nama" name="nidn_nip" class="nidnnipAddAnggota" />
+                            <x-input-select title="Nama" name="nidn_nip" class="nidnnipAddAnggota" />
                         </div>
                     </div>
                 </div>
