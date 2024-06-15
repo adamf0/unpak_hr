@@ -8,22 +8,7 @@
 </head>
 
 <body>
-    <table style="width: 85%">
-        <tr>
-            <td>
-                <img src="https://www.unpak.ac.id/images/logo-unpak_menu_web.webp" alt="logo" style="width: 100px !important; height:100px !important;">
-            </td>
-            <td>
-                <center>
-                    <h3>
-                        YAYASAN PAKUAN SILIWANGI<br>
-                        UNIVERSITAS PAKUAN<br>
-                    </h3>
-                </center>
-            </td>
-        </tr>
-    </table>
-    <hr>
+    <img src="{{ Utility::loadAsset('assets/img/KOP UNPAK.jpg') }}" alt="logo" style="width: 100% !important;">
     <center>
         <h3>LAPORAN KLAIM Presensi</h3>
     </center>
