@@ -281,6 +281,19 @@
                 modalAddAnggota.show();
             });
 
+            let nidn = null;
+            let nip = null;
+            let nama=null;
+            nidnnipAddAnggota.on('select', function(e) {
+                var data = e.params.data;
+
+                const id    = data.id;
+                const type  = data.type;
+                nidn    = type=="dosen"? id:null;
+                nip     = type=="pegawai"? id:null;
+                nama    = data.text;
+            });
+
             btnAddAnggota.on('click', function(e) {
                 e.preventDefault();
                 if(nidnnipAddAnggota.select2('data')==0){
@@ -288,12 +301,12 @@
                 } else if(nidnnipAddAnggota.select2('data')>1){
                     alert("ada masalah pada aplikasi")
                 } else{
-                    const detail = nidnnipAddAnggota.select2('data')[0];
-                    const id    = detail['id'];
-                    const type  = detail['type'];
-                    let nidn    = type=="dosen"? id:null;
-                    let nip     = type=="pegawai"? id:null;
-                    let nama    = detail.text;
+                    // const detail = nidnnipAddAnggota.select2('data')[0];
+                    // const id    = detail['id'];
+                    // const type  = detail['type'];
+                    // let nidn    = type=="dosen"? id:null;
+                    // let nip     = type=="pegawai"? id:null;
+                    // let nama    = detail.text;
 
                     let dataForm = new FormData();
                     dataForm.append("X-CSRF-TOKEN",CSRF_TOKEN);
@@ -305,11 +318,7 @@
                         alert(`${nama} sudah dimasukkan sebelumnya`);
                     } else if(isDuplicatValueDynamicInput("anggota","nip",nip)){
                         alert(`${nama} sudah dimasukkan sebelumnya`);
-                    } 
-                    // else if(nidn != null && nip != null){
-                    //     alert(`nidn dan nip tidak boleh diinput bersamaan`);
-                    // } 
-                    else if(nidn == null && nip == null){
+                    } else if(nidn == null && nip == null){
                         alert(`nama yg harus diisi`);
                     } else{
                         $('.btnAddAnggota').attr('disabled', true);
@@ -338,6 +347,9 @@
                             }
                         });
                     }
+                    nidn    = null;
+                    nip     = null;
+                    nama    = null;
                 }
             });
         });

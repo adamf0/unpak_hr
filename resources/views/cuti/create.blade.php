@@ -112,7 +112,7 @@
                 const min = $(this).val()
                 $('.tanggal_akhir').datepicker('setStartDate', min);
             });
-            $('.jenis_cuti').on('select2:select', function(e) {
+            $('.jenis_cuti').on('select', function(e) {
                 var data = e.params.data;
                 $('.lama_cuti').prop("min",data.min).prop("max",data.max)
                 console.log(data?.kondisi?.hitung_libur)
