@@ -76,6 +76,19 @@ class GetAllLaporanAbsenQueryHandler extends Query
         return $list_data;
     }
 
+    function formatPeriod($endtime, $starttime)
+{
+
+  $duration = $endtime - $starttime;
+
+  $hours = (int) ($duration / 60 / 60);
+
+  $minutes = (int) ($duration / 60) - $hours * 60;
+
+  $seconds = (int) $duration - $hours * 60 * 60 - $minutes * 60;
+
+  return ($hours == 0 ? "00":$hours) . ":" . ($minutes == 0 ? "00":($minutes < 10? "0".$minutes:$minutes)) . ":" . ($seconds == 0 ? "00":($seconds < 10? "0".$seconds:$seconds));
+}
     public function handle(GetAllLaporanAbsenQuery $query)
     {
         if($query->getOption()==TypeData::Entity) throw new Exception("no implementation GetAllLaporanAbsenQuery to Entity");
@@ -96,7 +109,7 @@ class GetAllLaporanAbsenQueryHandler extends Query
         }
         $this->list_pengguna = $this->list_pengguna->get();
         $end = microtime(true);
-        dd($end-$start, $this->list_pengguna);
+        dd($this->formatPeriod($end,$start), $this->list_pengguna);
 
         for ($date = Carbon::now()->setTimezone('Asia/Jakarta')->startOfMonth(); $date->lte($end); $date->addDay()) {
             $this->list_tanggal[] = $date->copy()->format('Y-m-d');
