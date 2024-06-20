@@ -76,7 +76,7 @@
                                         <th>Nama</th>
                                         @endif
                                         <th>Jenis SPPD</th>
-                                        <th>Tanggal Berangakat</th>
+                                        <th>Tanggal Berangkat</th>
                                         <th>Tanggal Kembali</th>
                                         <th>Tujuan</th>
                                         <th>Keterangan</th>
