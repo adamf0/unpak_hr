@@ -518,7 +518,7 @@
                     $(refAbsenMessage).html("Masih belum terlambat, ayo presensi masuk!")
 
                     $(refAbsenMessage).hide()
-                    $(refAbsenKeterangan).show()
+                    $(refAbsenKeterangan).hide()
                     changeClass($(refAbsenSubmit), "btn-warning", "btn-success")
                     $(refAbsenSubmit).html("Presensi Masuk")
                 } else if(state=="initial but late"){
