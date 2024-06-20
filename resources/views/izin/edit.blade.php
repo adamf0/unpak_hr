@@ -60,7 +60,7 @@
     <script>
         $(document).ready(function () {
             load_dropdown('.jenis_izin', null, `{{ route('select2.JenisIzin.List') }}`, "{{ old('jenis_izin',$Izin->GetJenisIzin()?->GetId()) }}", '-- Pilih Jenis Izin --');
-            load_dropdown('.verifikasi', null, `{{ route('select2.PegawaiV2.List') }}`, "{{ old('jenis_izin',$Izin->GetVerifikasi()?->GetNIP()) }}", '-- Pilih Nama Atasan --');
+            load_dropdown('.verifikasi', null, `{{ route('select2.PegawaiV2.List') }}?struktural=struktural_only`, "{{ old('jenis_izin',$Izin->GetVerifikasi()?->GetNIP()) }}", '-- Pilih Nama Atasan --');
 
             $('.tanggal_pengajuan').datepicker({
                 format: 'yyyy-mm-dd',

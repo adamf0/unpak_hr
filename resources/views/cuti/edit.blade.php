@@ -71,7 +71,7 @@
             var CSRF_TOKEN      = $('meta[name="csrf-token"]').attr('content');
 
             load_dropdown('.jenis_cuti', null, `{{ route('select2.JenisCuti.List') }}`, "{{ old('jenis_cuti',$Cuti->GetJenisCuti()?->GetId()) }}", '-- Pilih Jenis Cuti --');
-            load_dropdown('.verifikasi', null, `{{ route('select2.PegawaiV2.List') }}`, "{{ old('verifikasi',$Cuti->GetVerifikasi()?->GetNip()) }}", '-- Pilih Nama Atasan --');
+            load_dropdown('.verifikasi', null, `{{ route('select2.PegawaiV2.List') }}?struktural=struktural_only`, "{{ old('verifikasi',$Cuti->GetVerifikasi()?->GetNip()) }}", '-- Pilih Nama Atasan --');
 
             $('.tanggal_mulai').datepicker({
                 format: 'yyyy-mm-dd',

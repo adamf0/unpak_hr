@@ -18,8 +18,8 @@ class GetAllPegawaiV2QueryHandler extends Query
         $datas = PayrollPegawai::select('nip','nama','struktural')->whereRaw('LENGTH(nip)>=3');
         if($query->GetStruktural()=="verifikator"){
             $datas = $datas->where('struktural','like','%Wakil Rektor Bid SDM dan Keuangan%')->orWhere('struktural','like','%Wakil Dekan 2%');
-        } else if($query->GetStruktural()!="all" && !empty($query->GetStruktural())){
-            $datas = $datas->where('struktural',$query->GetStruktural());
+        } else if($query->GetStruktural()=="struktural_only"){
+            $datas = $datas->where('struktural','!=','');
         }
         $datas = $datas->get();
 
