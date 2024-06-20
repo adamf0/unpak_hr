@@ -212,14 +212,18 @@
           'cuti',
           ],request())">
           <x-sidebar-item-menu-dropdown-child title="Pengajuan" icon="bi bi-menu-button-wide" link="{{ route('cuti.index2',['type'=>Session::get('levelActive')=='dosen'? 'dosen':'tendik']) }}" :active="Utility::stateMenu(['cuti'],request(),1)" />
+          @if (!empty(Session::get('struktural')))
           <x-sidebar-item-menu-dropdown-child title="Verifikasi" icon="bi bi-menu-button-wide" link="{{ route('cuti.verifikasi') }}" :active="Utility::stateMenu(['verifikasi'],request())" />
+          @endif
         </x-sidebar-item-menu-dropdown>
 
         <x-sidebar-item-menu-dropdown title="Izin" parent="sidebar-nav" target="izin" icon="bi bi-menu-button-wide" :active="Utility::stateMenu([
           'izin',
           ],request())">
           <x-sidebar-item-menu-dropdown-child title="Pengajuan" icon="bi bi-menu-button-wide" link="{{ route('izin.index2',['type'=>Session::get('levelActive')=='dosen'? 'dosen':'tendik']) }}" :active="Utility::stateMenu(['izin'],request(),1)" />
+          @if (!empty(Session::get('struktural')))
           <x-sidebar-item-menu-dropdown-child title="Verifikasi" icon="bi bi-menu-button-wide" link="{{ route('izin.verifikasi') }}" :active="Utility::stateMenu(['verifikasi'],request())" />
+          @endif
         </x-sidebar-item-menu-dropdown>
 
         <x-sidebar-item-menu title="Klaim Presensi" icon="bi bi-menu-button-wide" link="{{route('klaim_absen.index')}}" :active="Utility::stateMenu(['klaim_absen'],request())" />
@@ -264,7 +268,9 @@
             'sppd',
             ],request())">
             <x-sidebar-item-menu-dropdown-child title="Pengajuan" icon="bi bi-menu-button-wide" link="{{ route('sppd.index2',['type'=>Session::get('levelActive')=='dosen'? 'dosen':'tendik']) }}" :active="Utility::stateMenu(['sppd'],request(),1)" />
+            @if (!empty(Session::get('struktural')))
             <x-sidebar-item-menu-dropdown-child title="Verifikasi" icon="bi bi-menu-button-wide" link="{{ route('sppd.verifikasi') }}" :active="Utility::stateMenu(['verifikasi'],request())" />
+            @endif
           </x-sidebar-item-menu-dropdown>
       @endif
 
