@@ -24,7 +24,6 @@ class FileSystem //dibuat facades karena ada fitur baru untuk read file dalam di
         if(Storage::disk($this->option->getDisk())->exists($this->option->getFileLocation())){
             Storage::disk($this->option->getDisk())->delete($this->option->getFileLocation());
         }
-        dump($this->option);
         $this->option->getFile()->storeAs('/', $this->option->getFileLocation(), ['disk' => $this->option->getDisk()]);
 
         return $this->option->getFileLocation();
