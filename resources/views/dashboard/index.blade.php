@@ -594,7 +594,7 @@
             const has8hour = () => { //kena
                 if(absenMasuk.isEmpty()) return false;
 
-                let lama = timeAbsen
+                let lama = timeAbsen-1
                 if(getCurrentTime().day()==5){ //jumat
                     lama = timeAbsen-1
                 } else if(getCurrentTime().day()==6){ //sabtu
