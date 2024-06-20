@@ -31,7 +31,8 @@ class GetAllSPPDQueryHandler extends Query
                             ->orWhereHas('EPribadiRemote', fn($subQuery) => $subQuery->where('nidn', $query->GetNIDN()) );
         }
         if(!empty($query->GetNIP())){
-            $datas = $datas->where('nip',$query->GetNIP());
+            $datas = $datas->where('nip',$query->GetNIP())
+                        ->orWhereHas('Anggota', fn($subQuery) => $subQuery->where('nip', $query->GetNIP()) );
         }
         if(!empty($query->GetTahun())){
             $datas = $datas->where(DB::raw('YEAR(tanggal_berangkat)'),'>=',$query->GetTahun())->where(DB::raw('YEAR(tanggal_kembali)'),'<=',$query->GetTahun());
