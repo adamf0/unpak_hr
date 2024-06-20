@@ -28,11 +28,10 @@ class GetAllSPPDQueryHandler extends Query
         $datas = SPPDModel::with(['JenisSPPD','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','Anggota','Anggota.Dosen','Anggota.Dosen.Fakultas','Anggota.Dosen.Prodi','Anggota.Pegawai','FileLaporan','PayrollPegawai','EPribadiRemote']);
         if(!empty($query->GetNIDN())){
             $datas = $datas->where('nidn',$query->GetNIDN())
-                            ->orWhereHas('Anggota.Dosen', fn($subQuery) => $subQuery->where('NIDN', $query->GetNIDN()) )
                             ->orWhereHas('EPribadiRemote', fn($subQuery) => $subQuery->where('nidn', $query->GetNIDN()) );
         }
         if(!empty($query->GetNIP())){
-            $datas = $datas->where('nip',$query->GetNIP())->orWhereHas('Anggota.Pegawai', fn($subQuery) => $subQuery->where('nip', $query->GetNIP()) );
+            $datas = $datas->where('nip',$query->GetNIP());
         }
         if(!empty($query->GetTahun())){
             $datas = $datas->where(DB::raw('YEAR(tanggal_berangkat)'),'>=',$query->GetTahun())->where(DB::raw('YEAR(tanggal_kembali)'),'<=',$query->GetTahun());
