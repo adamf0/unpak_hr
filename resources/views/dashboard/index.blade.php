@@ -603,7 +603,7 @@
                 const masuk = moment(absenMasuk).tz('Asia/Jakarta')
                 // console.info(getCurrentTime().format('YYYY-MM-DD HH:mm:ss'), masuk.format('YYYY-MM-DD HH:mm:ss'), masuk.clone().add(timeAbsen, 'hours').format('YYYY-MM-DD HH:mm:ss'))
 
-                const check = getCurrentTime().isAfter(masuk.add(lama, 'hours'));
+                const check = getCurrentTime().isSameOrAfter(masuk.add(lama, 'hours'));
                 return check;
             }
             const checkCurrentAbove15 = () => {
