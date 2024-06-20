@@ -24,7 +24,7 @@ class Select2VerifikatorController extends Controller
         $listVerifikator = $list_verifikator->reduce(function ($carry, $item){
             $carry[] = [
                 "id"=>$item->GetNIP(),
-                "text"=>$item->GetNama()." - ".$item->GetNIP(),
+                "text"=>$item->GetNama()." - ".$item->GetNIP()." - ".$item->GetStruktural(),
                 // "fakultas_unit"=>,
             ];
             return $carry;
