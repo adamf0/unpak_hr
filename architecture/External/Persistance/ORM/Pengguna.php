@@ -19,6 +19,6 @@ class Pengguna extends Model
       return $this->hasOne(Pengangkatan::class, 'nip', 'nip');
    }
    function PayrollPegawai(){
-      return $this->hasOne(PayrollPegawai::class, 'nip', 'nip');
+      return $this->hasOne(PayrollPegawai::class, 'nip', 'username');
    }
 }
