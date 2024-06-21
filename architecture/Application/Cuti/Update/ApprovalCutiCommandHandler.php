@@ -12,7 +12,6 @@ class ApprovalCutiCommandHandler extends CommandHandler
         $Cuti = ModelCuti::findOrFail($command->GetId());
         $Cuti->status = $command->GetStatus();
         $Cuti->catatan = $command->GetCatatan();
-        dd($Cuti);
         if($Cuti->isDirty()) $Cuti->saveOrFail();
     }
 }
