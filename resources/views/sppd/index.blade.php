@@ -371,7 +371,7 @@
                         <tr>
                             <td>Rencana waktu pelaksanaan tindak lanjut</td>
                             <td>:</td>
-                            <td>${rowData?.rencana_waktu_tindak_lanjut!=null || rowData?.rencana_waktu_tindak_lanjut!=undefined? Date.parse(rowData?.rencana_waktu_tindak_lanjut).toISOString():''}</td>
+                            <td>${rowData?.rencana_waktu_tindak_lanjut!=null || rowData?.rencana_waktu_tindak_lanjut!=undefined? new Date(rowData?.rencana_waktu_tindak_lanjut).toISOString():''}</td>
                         </tr>
                         <tr>
                             <td>Foto</td>
