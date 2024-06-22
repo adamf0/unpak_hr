@@ -355,8 +355,7 @@ class SPPDController extends Controller
                 $tanggal_kembali = empty($row->tanggal_kembali) ? null : Carbon::parse($row->tanggal_kembali)->setTimezone('Asia/Jakarta');
 
                 $row->AnggotaFlat = (!empty($tanggal_berangkat) && !empty($tanggal_kembali)) ? $row->Anggota?->reduce(function ($carry, $item) use ($tanggal_berangkat, $tanggal_kembali) {
-                    $lama_hari = $tanggal_kembali->diff($tanggal_berangkat)->days;
-                    dump($lama_hari);
+                    $lama_hari = $tanggal_berangkat==$tanggal_kembali? 1:$tanggal_kembali->diff($tanggal_berangkat)->days;
                     $nama = match (true) {
                         !empty($item->Dosen) => $item->Dosen->nama_dosen,
                         !empty($item->Pegawai) => $item->Pegawai->nama,
