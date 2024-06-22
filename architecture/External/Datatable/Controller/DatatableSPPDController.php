@@ -101,8 +101,14 @@ class DatatableSPPDController extends Controller
                                         "kontribusi"=> $item->GetKontribusi(),
                                         "rencana_tindak_lanjut"=> $item->GetRencanaTindakLanjut(),
                                         "rencana_waktu_tindak_lanjut"=> $item->GetRencanaWaktuTindakLanjut(),
-                                        "foto"=> $item->GetFotoKegiatan(),
-                                        "undangan"=> $item->GetUndangan(),
+                                        "foto"=> $item->GetFotoKegiatan()->reduce(function($carry,$item){
+                                            $carry[] = $item->getUrl();
+                                            return $carry;
+                                        }),
+                                        "undangan"=> $item->GetUndangan()->reduce(function($carry,$item){
+                                            $carry[] = $item->getUrl();
+                                            return $carry;
+                                        }),
                                     ],
                                 };
                             });
