@@ -35,7 +35,7 @@ class ApiSPPDController extends Controller
             $fileSystem = new FileSystem(new OptionFileDefault($request->file("dokumen_anggaran_biaya"),"dokumen_anggaran"));
             $file = $fileSystem->storeFileWithReplaceFileAndReturnFileLocation();
 
-            $this->commandBus->dispatch(new ApprovalSPPDCommand($request->id,$request->level=="warek"? "menunggu verifikasi sdm":"terima sdm",$file));
+            $this->commandBus->dispatch(new ApprovalSPPDCommand($request->id,$request->level=="warek"? "menunggu verifikasi sdm":"terima sdm",$file, $request->level=="warek"? null:$request->pic));
             return response()->json([
                 "status"=>"ok",
                 "message"=>"berhasil terima SPPD",

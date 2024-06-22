@@ -17,6 +17,8 @@ class ApprovalSPPDCommandHandler extends CommandHandler
         if(!empty($command->GetFile())){
             $SPPD->dokumen_anggaran = $command->GetFile();
         }
+        $SPPD->catatan = $command->GetStatus()=="terima sdm"? $command->GetSDM():null;
+
         if($SPPD->isDirty()) $SPPD->saveOrFail();
     }
 }

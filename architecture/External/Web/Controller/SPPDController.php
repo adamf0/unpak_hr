@@ -203,7 +203,7 @@ class SPPDController extends Controller
             if (empty($id)) throw new Exception("invalid reject sppd");
             // if (!in_array($level, ['sdm', 'warek'])) throw new Exception("selain SDM dan Warek tidak dapat approval sppd");
 
-            $this->commandBus->dispatch(new ApprovalSPPDCommand($id, $type=="warek"? "menunggu verifikasi sdm":"terima sdm"));
+            $this->commandBus->dispatch(new ApprovalSPPDCommand($id, $type=="warek"? "menunggu verifikasi sdm":"terima sdm", $type=="warek"? null:Session::get('id')));
 
             Session::flash(TypeNotif::Create->val(), "berhasil terima SPPD");
             return $redirect;
