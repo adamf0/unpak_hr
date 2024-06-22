@@ -215,6 +215,55 @@
                     @endif
                 @endforeach
         </table>
+        <br>
+        <table class="styled-table">
+            <tr>
+                <td colspan="3">
+                    <h2 align="center">Laporan Kegiatan</h2>
+                </td>
+            </tr>
+            <tr>
+                <td>Intisari / ringkasan kegiatan</td>
+                <td>:</td>
+                <td>{{$sppd->intisari}}</td>
+            </tr>
+            <tr>
+                <td>Kontribusi pada Unit / Fakultas / Universitas</td>
+                <td>:</td>
+                <td>{{$sppd->kontribusi}}</td>
+            </tr>
+            <tr>
+                <td>Rencana tindak lanjut</td>
+                <td>:</td>
+                <td>{{$sppd->rencana_tindak_lanjut}}</td>
+            </tr>
+            <tr>
+                <td>Rencana waktu pelaksanaan tindak lanjut</td>
+                <td>:</td>
+                <td>{{$sppd->rencana_waktu_tindak_lanjut}}</td>
+            </tr>
+            <tr>
+                <td>Foto</td>
+                <td>:</td>
+                <td>
+                    <ol>
+                        @foreach ($sppd->FileLaporan->where('type','foto_kegiatan')->values() as $foto)
+                        <li>{{ Utility::loadAsset('dokumen_laporan_sppd/'.$foto->file) }}</li>
+                        @endforeach
+                    </ol>
+                </td>
+            </tr><tr>
+                <td>Undangan</td>
+                <td>:</td>
+                <td>
+                    <ol>
+                        @foreach ($sppd->FileLaporan->where('type','undangan')->values() as $foto)
+                        <li>{{ Utility::loadAsset('dokumen_laporan_sppd/'.$foto->file) }}</li>
+                        @endforeach
+                    </ol>
+                </td>
+            </tr>
+        </table>
     </div>    
     @endforeach
 </body>

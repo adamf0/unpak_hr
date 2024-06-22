@@ -338,6 +338,62 @@
                 console.log(data)
                 $.redirect(`{{url('sppd/export')}}`,data,"GET","_blank")
             });
+            $('#tb tbody').on('click', '.btn-detail', function(e) {
+                e.preventDefault();
+                const rowData = table.row($(this).closest('tr')).data();
+                
+                const list_foto = (rowData?.undangan ?? []).map(function(item) {
+                    return `<li><a href="${item}" target="_blank">${item}</a></li>`;
+                }).join('');
+
+                const list_undangan = (rowData?.foto ?? []).map(function(item) {
+                    return `<li><a href="${item}" target="_blank">${item}</a></li>`;
+                }).join('');
+
+                modalTitle.text("Laporan Kegiatan");
+                modalBody.html(`
+                    <table class="table">
+                        <tr>
+                            <td>Intisari / ringkasan kegiatan</td>
+                            <td>:</td>
+                            <td>${rowData?.intisari??''}</td>
+                        </tr>
+                        <tr>
+                            <td>Kontribusi pada Unit / Fakultas / Universitas</td>
+                            <td>:</td>
+                            <td>${rowData?.kontribusi??''}</td>
+                        </tr>
+                        <tr>
+                            <td>Rencana tindak lanjut</td>
+                            <td>:</td>
+                            <td>${rowData?.rencana_tindak_lanjut??''}</td>
+                        </tr>
+                        <tr>
+                            <td>Rencana waktu pelaksanaan tindak lanjut</td>
+                            <td>:</td>
+                            <td>${rowData?.rencana_waktu_tindak_lanjut??''}</td>
+                        </tr>
+                        <tr>
+                            <td>Foto</td>
+                            <td>:</td>
+                            <td>
+                                <ol>
+                                    `+list_foto+`
+                                </ol>
+                            </td>
+                        </tr><tr>
+                            <td>Undangan</td>
+                            <td>:</td>
+                            <td>
+                                <ol>
+                                    `+list_undangan+`
+                                </ol>
+                            </td>
+                        </tr>
+                    </table>
+                `);
+                modal.show();
+            });
 
             $('#modal').on('click', '.btn-tolak', function(e){
                 const id = $(".id_sppd").val();

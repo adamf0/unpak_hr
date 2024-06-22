@@ -64,6 +64,18 @@ class DatatableSPPDController extends Controller
                                         "verifikator_nidn"=>$item->GetVerifikasi()?->GetNidn(),
                                         "verifikator_nip"=>$item->GetVerifikasi()?->GetNip(),
                                         "status"=> $item->GetStatus(),
+                                        "intisari"=> $item->GetIntisari(),
+                                        "kontribusi"=> $item->GetKontribusi(),
+                                        "rencana_tindak_lanjut"=> $item->GetRencanaTindakLanjut(),
+                                        "rencana_waktu_tindak_lanjut"=> $item->GetRencanaWaktuTindakLanjut(),
+                                        "foto"=> $item->GetFotoKegiatan()->reduce(function($carry,$item){
+                                            $carry[] = $item->getUrl();
+                                            return $carry;
+                                        }),
+                                        "undangan"=> $item->GetUndangan()->reduce(function($carry,$item){
+                                            $carry[] = $item->getUrl();
+                                            return $carry;
+                                        }),
                                     ],
                                     default=>(object)[
                                         "id"=>$item->GetId(),
@@ -85,41 +97,20 @@ class DatatableSPPDController extends Controller
                                         "verifikator_nidn"=>$item->GetVerifikasi()?->GetNidn(),
                                         "verifikator_nip"=>$item->GetVerifikasi()?->GetNip(),
                                         "status"=> $item->GetStatus(),
+                                        "intisari"=> $item->GetIntisari(),
+                                        "kontribusi"=> $item->GetKontribusi(),
+                                        "rencana_tindak_lanjut"=> $item->GetRencanaTindakLanjut(),
+                                        "rencana_waktu_tindak_lanjut"=> $item->GetRencanaWaktuTindakLanjut(),
+                                        "foto"=> $item->GetFotoKegiatan(),
+                                        "undangan"=> $item->GetUndangan(),
                                     ],
                                 };
                             });
-        
         
         return DataTables::of($listSPPD)
         ->addIndexColumn()
         ->addColumn('action', function ($row) use($level,$nidn,$nip,$verifikasi){
             $render = '';
-            // if(in_array($level,['dosen','pegawai']) && !$verifikasi){
-            //     if(empty($row->status) || in_array($row->status, ['menunggu','tolak atasan','tolak sdm'])){
-            //         $render = '<div class="row">
-            //         <a href="'.route('sppd.edit',['id'=>$row->id]).'" class="col-6 btn btn-warning"><i class="bi bi-pencil-square"></i></a>
-            //         <a href="'.route('sppd.delete',['id'=>$row->id]).'" class="mx-2 col-6 btn btn-danger"><i class="bi bi-trash"></i></a>
-            //         </div>
-            //         ';
-            //     } 
-            //     // else {
-            //     //     $render = '<a href="#" class="btn btn-info btn-download-pdf"><i class="bi bi-file-earmark-pdf"></i></a>';
-            //     // }
-            // }else if( 
-            //     (
-            //         (!is_null($row->verifikator_nidn) && $row->verifikator_nidn==$nidn) ||
-            //         (!is_null($row->verifikator_nip) && $row->verifikator_nip==$nip)
-            //     ) || 
-            //     in_array($row->status, ["menunggu","menunggu verifikasi sdm"])){
-            //     $render = '
-            //         <a href="'.route('sppd.approval',['id'=>$row->id,'type'=>($level=="sdm"? 'terima sdm':'menunggu verifikasi sdm')]).'" class="btn btn-success"><i class="bi bi-check-lg"></i></a>
-            //         <a href="#" class="mx-2 btn btn-danger btn-reject"><i class="bi bi-x-lg"></i></a>
-            //     ';
-            //     // if($row->status=="terima"){
-            //     // $render .= '<a href="#" class="btn btn-info btn-download-pdf"><i class="bi bi-file-earmark-pdf"></i></a>';
-            //     // }
-            // }
-
             if(in_array($level,['dosen','pegawai']) && !$verifikasi){
                 if(in_array($row->status, ['menunggu','tolak warek','tolak sdm']) && (($row->nidn==$nidn && !empty($nidn)) || ($row->nip==$nip && !empty($nip))) ){
                     $render = '<div class="row">
@@ -135,7 +126,8 @@ class DatatableSPPDController extends Controller
                     $render = '
                         <a href="#" class="ml-2 btn btn-secondary btn-download-anggaran"><i class="bi bi-wallet2"></i></a>
                         <a href="#" class="btn btn-info btn-download-pengajuan-pdf"><i class="bi bi-file-earmark-pdf"></i></a>
-                        <a href="'.route('sppd.laporan',['id'=>$row->id]).'" class="btn btn-success"><i class="bi bi-file-earmark-plus-fill"></i></a>';
+                        <a href="'.route('sppd.laporan',['id'=>$row->id]).'" class="btn btn-success"><i class="bi bi-file-earmark-plus-fill"></i></a>
+                        <a href="#" class="btn btn-info btn-detail">Detail</i></a>';
                 }
             }
             else if($verifikasi){
@@ -157,7 +149,8 @@ class DatatableSPPDController extends Controller
                 else if($row->status=="terima sdm"){
                     $render = '
                         <a href="#" class="ml-2 btn btn-secondary btn-download-anggaran"><i class="bi bi-wallet2"></i></a>
-                        <a href="#" class="btn btn-info btn-download-pengajuan-pdf"><i class="bi bi-file-earmark-pdf"></i></a>';
+                        <a href="#" class="btn btn-info btn-download-pengajuan-pdf"><i class="bi bi-file-earmark-pdf"></i></a>
+                        <a href="#" class="btn btn-info btn-detail">Detail</i></a>';
                 }
             }
             
