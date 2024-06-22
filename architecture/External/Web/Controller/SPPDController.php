@@ -381,7 +381,6 @@ class SPPDController extends Controller
             });
 
             if ($type_export == "pdf") {
-                dd($list_sppd);
                 $file = PdfX::From(
                     "template.export_sppd",
                     [
