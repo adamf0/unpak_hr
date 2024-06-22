@@ -271,6 +271,20 @@
                     name: 'action'
                 },
             ];
+            function formatIndonesianDate(dateString) {
+                if(dateString==null || dateString==undefined){
+                    return '';
+                }
+                const months = [
+                    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+                ];
+
+                const [year, month, day] = dateString.split('-').map(Number);
+                const monthName = months[month - 1]; // -1 karena indeks bulan dimulai dari 0
+
+                return `${day} ${monthName} ${year}`;
+            }
 
             let table = eTable({
                 url: `{{ route('datatable.SPPD.index') }}?level={{Session::get('levelActive')}}&nidn=${nidn}&nip=${nip}&type=${type}&verifikasi=${verifikasi}`,
@@ -371,7 +385,7 @@
                         <tr>
                             <td>Rencana waktu pelaksanaan tindak lanjut</td>
                             <td>:</td>
-                            <td>${rowData?.rencana_waktu_tindak_lanjut!=null || rowData?.rencana_waktu_tindak_lanjut!=undefined? new Date(rowData?.rencana_waktu_tindak_lanjut).toLocaleDateString('id-ID'):''}</td>
+                            <td>${formatIndonesianDate(rowData?.rencana_waktu_tindak_lanjut)}</td>
                         </tr>
                         <tr>
                             <td>Foto</td>
