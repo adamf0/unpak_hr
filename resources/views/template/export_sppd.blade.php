@@ -240,7 +240,7 @@
             <tr>
                 <td>Rencana waktu pelaksanaan tindak lanjut</td>
                 <td>:</td>
-                <td>{{$sppd->rencana_waktu_tindak_lanjut}}</td>
+                <td>{{!empty($sppd->rencana_waktu_tindak_lanjut)? date('l, d F Y',strtotime($sppd->rencana_waktu_tindak_lanjut)):''}}</td>
             </tr>
             <tr>
                 <td>Foto</td>

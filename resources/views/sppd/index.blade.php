@@ -371,7 +371,7 @@
                         <tr>
                             <td>Rencana waktu pelaksanaan tindak lanjut</td>
                             <td>:</td>
-                            <td>${rowData?.rencana_waktu_tindak_lanjut??''}</td>
+                            <td>${rowData?.rencana_waktu_tindak_lanjut.length>0? Date.parse(rowData?.rencana_waktu_tindak_lanjut).toLocaleDateString('id-ID'):''}</td>
                         </tr>
                         <tr>
                             <td>Foto</td>
