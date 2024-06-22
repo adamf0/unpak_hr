@@ -356,6 +356,7 @@ class SPPDController extends Controller
 
                 $row->AnggotaFlat = (!empty($tanggal_berangkat) && !empty($tanggal_kembali)) ? $row->Anggota?->reduce(function ($carry, $item) use ($tanggal_berangkat, $tanggal_kembali) {
                     $lama_hari = $tanggal_kembali->diff($tanggal_berangkat)->days;
+                    dump($lama_hari);
                     $nama = match (true) {
                         !empty($item->Dosen) => $item->Dosen->nama_dosen,
                         !empty($item->Pegawai) => $item->Pegawai->nama,
