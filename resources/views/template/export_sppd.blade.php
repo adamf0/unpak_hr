@@ -248,7 +248,7 @@
                 <td>
                     <ol>
                         @foreach ($sppd->FileLaporan->where('type','foto_kegiatan')->values() as $foto)
-                        <li>{{ urlencode(Utility::loadAsset('dokumen_laporan_sppd/'.$foto->file)) }}</li>
+                        <li>{{ rawurlencode(Utility::loadAsset('dokumen_laporan_sppd/'.$foto->file)) }}</li>
                         @endforeach
                     </ol>
                 </td>
@@ -258,7 +258,7 @@
                 <td>
                     <ol>
                         @foreach ($sppd->FileLaporan->where('type','undangan')->values() as $foto)
-                        <li>{{ urlencode(Utility::loadAsset('dokumen_laporan_sppd/'.$foto->file)) }}</li>
+                        <li>{{ rawurlencode(Utility::loadAsset('dokumen_laporan_sppd/'.$foto->file)) }}</li>
                         @endforeach
                     </ol>
                 </td>
