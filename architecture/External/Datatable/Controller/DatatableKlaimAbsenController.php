@@ -47,7 +47,7 @@ class DatatableKlaimAbsenController extends Controller
                                         "tujuan"=>$item->GetTujuan(),
                                         "dokumen"=>empty($item->GetDokumen())? "":[
                                             "file"=>$item->GetDokumen(),
-                                            "url"=>Utility::loadAsset('dokumen_klaim_absen/'.urlencode($item->GetDokumen())),
+                                            "url"=>urlencode(Utility::loadAsset('dokumen_klaim_absen/'.$item->GetDokumen())),
                                         ],
                                         "status"=>$item->GetStatus(),
                                         "catatan"=>$item->GetCatatan(),
@@ -67,7 +67,7 @@ class DatatableKlaimAbsenController extends Controller
                                         "tujuan"=>$item->GetTujuan(),
                                         "dokumen"=>empty($item->GetDokumen())? "":[
                                             "file"=>$item->GetDokumen(),
-                                            "url"=>Utility::loadAsset('dokumen_klaim_absen/'.urlencode($item->GetDokumen())),
+                                            "url"=>urlencode(Utility::loadAsset('dokumen_klaim_absen/'.$item->GetDokumen())),
                                         ],
                                         "status"=>$item->GetStatus(),
                                         "catatan"=>$item->GetCatatan(),
