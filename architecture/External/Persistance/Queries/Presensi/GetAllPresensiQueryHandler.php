@@ -46,9 +46,9 @@ class GetAllPresensiQueryHandler extends Query
     public function handle(GetAllPresensiQuery $query)
     {
         $datas = ModelAbsensi::with([
-            // 'Dosen',
-            // 'Dosen.Fakultas',
-            // 'Dosen.Prodi',
+            'Dosen',
+            'Dosen.Fakultas',
+            'Dosen.Prodi',
             'Pegawai'
         ]);
         if(!empty($query->GetNIDN())){
@@ -61,7 +61,6 @@ class GetAllPresensiQueryHandler extends Query
             $datas = $datas->where(DB::raw('YEAR(tanggal)'),$query->GetTahun());
         }
         $datas = $datas->orderBy('absen_masuk','DESC')->get();
-        dd($datas);
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 
