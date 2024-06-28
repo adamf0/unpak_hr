@@ -63,7 +63,7 @@ class GetAllPresensiQueryHandler extends Query
         if(!empty($query->GetTahun())){
             $datas = $datas->where(DB::raw('YEAR(a.tanggal)'),$query->GetTahun());
         }
-        $datas = $datas->orderBy('a.absen_masuk','DESC')->toRawSql();
+        $datas = $datas->orderBy('a.absen_masuk','DESC')->get();
         dd($datas);
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
