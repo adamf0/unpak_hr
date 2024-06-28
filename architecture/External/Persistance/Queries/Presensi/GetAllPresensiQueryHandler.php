@@ -76,11 +76,10 @@ class GetAllPresensiQueryHandler extends Query
             'cmf.*',
             'crp.*',
             'ms.unit_kerja',
-            'ms.status',
-            // DB::raw("(CASE 
-            //     WHEN cpmp.tgl_keluar IS NULL OR TRIM(cpmp.tgl_keluar) = '' THEN 'aktif'
-            //     ELSE 'keluar'
-            // END) as status"),
+            DB::raw("(CASE 
+                WHEN cpmp.tgl_keluar IS NULL OR TRIM(cpmp.tgl_keluar) = '' THEN 'aktif'
+                ELSE 'keluar'
+            END) as status"),
             'a.*'
         );
         
