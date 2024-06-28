@@ -20,14 +20,14 @@ class GetAllPresensiQueryHandler extends Query
     public function __construct() {}
 
     function getDosen($source){
-        return is_null($source->nip_pegawai)? Creator::buildDosen(DosenEntitas::make(
+        return empty($source->nip_pegawai)? Creator::buildDosen(DosenEntitas::make(
             $source->nidn_dosen,
             $source->nama_dosen,
-            !is_null($source->kode_fakultas)? Creator::buildFakultas(FakultasEntitas::make(
+            !empty($source->kode_fakultas)? Creator::buildFakultas(FakultasEntitas::make(
                 $source->kode_fakultas,
                 $source->nama_fakultas,
             )):null,
-            !is_null($source->kode_prodi)? Creator::buildProdi(ProdiEntitas::make(
+            !empty($source->kode_prodi)? Creator::buildProdi(ProdiEntitas::make(
                 $source->kode_prodi,
                 $source->nama_prodi,
             )):null,
@@ -36,7 +36,7 @@ class GetAllPresensiQueryHandler extends Query
         )):null;
     }
     function getPegawai($source){
-        return !is_null($source->nip_pegawai)? Creator::buildPegawai(PegawaiEntitas::make(
+        return !empty($source->nip_pegawai)? Creator::buildPegawai(PegawaiEntitas::make(
             null,
             $source->nip_pegawai,
             $source->nama_pegawai,
@@ -48,14 +48,8 @@ class GetAllPresensiQueryHandler extends Query
     public function handle(GetAllPresensiQuery $query)
     {
         $datas = DB::table('presensi_view');        
-        // ModelAbsensi::with([
-        //     'Dosen',
-        //     'Dosen.Fakultas',
-        //     'Dosen.Prodi',
-        //     'Pegawai'
-        // ]);
         if(!empty($query->GetNIDN())){
-            $datas = $datas->where('nidn',$query->GetNIDN());
+            $datas = $datas->where('nidn_dosen',$query->GetNIDN());
         }
         if(!empty($query->GetNIP())){
             $datas = $datas->where('nip_pegawai',$query->GetNIP())->orWhere('nip_dosen',$query->GetNIP());

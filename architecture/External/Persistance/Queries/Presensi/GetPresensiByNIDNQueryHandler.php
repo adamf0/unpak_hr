@@ -11,54 +11,59 @@ use Architecture\Domain\Entity\PegawaiEntitas;
 use Architecture\Domain\Entity\PresensiEntitas;
 use Architecture\Domain\Entity\ProdiEntitas;
 use Architecture\Domain\ValueObject\Date;
-use Architecture\External\Persistance\ORM\Absensi as ModelAbsensi;
 use Architecture\Shared\TypeData;
+use Illuminate\Support\Facades\DB;
 
 class GetPresensiByNIDNQueryHandler extends Query
 {
-    public function __construct() {}
-
-    function getDosen($source){
-        return !is_null($source->Dosen)? Creator::buildDosen(DosenEntitas::make(
-            $source->Dosen?->NIDN,
-            $source->Dosen?->nama_dosen,
-            !is_null($source->Dosen->Fakultas)? Creator::buildFakultas(FakultasEntitas::make(
-                $source->Dosen?->Fakultas?->kode_fakultas,
-                $source->Dosen?->Fakultas?->nama_fakultas,
-            )):null,
-            !is_null($source->Prodi)? Creator::buildProdi(ProdiEntitas::make(
-                $source->Prodi?->kode_prodi,
-                $source->Prodi?->nama_prodi,
-            )):null,
-        )):null;
+    public function __construct()
+    {
     }
-    function getPegawai($source){
-        return !is_null($source->Pegawai)? Creator::buildPegawai(PegawaiEntitas::make(
+
+    function getDosen($source)
+    {
+        return empty($source->nip_pegawai) ? Creator::buildDosen(DosenEntitas::make(
+            $source->nidn_dosen,
+            $source->nama_dosen,
+            !empty($source->kode_fakultas) ? Creator::buildFakultas(FakultasEntitas::make(
+                $source->kode_fakultas,
+                $source->nama_fakultas,
+            )) : null,
+            !empty($source->kode_prodi) ? Creator::buildProdi(ProdiEntitas::make(
+                $source->kode_prodi,
+                $source->nama_prodi,
+            )) : null,
+            $source->unit_kerja,
+            $source->status
+        )) : null;
+    }
+    function getPegawai($source)
+    {
+        return !empty($source->nip_pegawai) ? Creator::buildPegawai(PegawaiEntitas::make(
             null,
-            $source->Pegawai?->nip,
-            $source->Pegawai?->nama,
-            $source->Pegawai?->unit,
-        )):null;
+            $source->nip_pegawai,
+            $source->nama_pegawai,
+            $source->unit_kerja,
+            $source->status
+        )) : null;
     }
 
     public function handle(GetPresensiByNIDNQuery $query)
     {
-        $data = ModelAbsensi::with([
-            'Dosen',
-            'Dosen.Fakultas',
-            'Dosen.Prodi',
-            'Pegawai'
-        ])->where('nidn',$query->GetNIDN())->where('tanggal',date('Y-m-d'))->first();
+        $data = DB::table('presensi_view')
+                    ->where('nidn_dosen', $query->GetNIDN())
+                    ->where('tanggal', date('Y-m-d'))
+                    ->first();
 
-        if($query->getOption()==TypeData::Default) return $data;
+        if ($query->getOption() == TypeData::Default) return $data;
 
-        return is_null($data)? null:Creator::buildPresensi(PresensiEntitas::make(
+        return is_null($data) ? null : Creator::buildPresensi(PresensiEntitas::make(
             $data->id,
             $this->getDosen($data),
             $this->getPegawai($data),
-            New Date($data->tanggal),
-            $data->absen_masuk==null? null:new Date($data->absen_masuk),
-            $data->absen_keluar==null? null:new Date($data->absen_keluar),
+            new Date($data->tanggal),
+            $data->absen_masuk == null ? null : new Date($data->absen_masuk),
+            $data->absen_keluar == null ? null : new Date($data->absen_keluar),
             $data->catatan_telat,
             $data->catatan_pulang,
             $data->otomatis_keluar,
