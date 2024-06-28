@@ -37,6 +37,7 @@ class DashboardController extends Controller
             ]);
         } catch (Exception $e) {
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
+            throw $e;
         }
     }
 }

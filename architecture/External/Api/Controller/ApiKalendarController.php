@@ -157,7 +157,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
 
             $listAbsen = $list_absen->reduce(function ($carry, $item) use ($format,$list_klaim_absen) {
                 if($format=="full-calendar"){
-                    $klaim = $list_klaim_absen->where('status','terima')->where('Presensi.tanggal',$item->tanggal);
+                    $klaim = $list_klaim_absen->where('status','terima')->where('tanggal',$item->tanggal);
                     $klaim = $klaim->count()==1? $klaim[0]:null;
 
                     $background = match(true){
