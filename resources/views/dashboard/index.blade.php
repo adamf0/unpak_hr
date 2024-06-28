@@ -275,12 +275,12 @@
                 <div class="row">
                     <div id="calendar" style="display: none;"></div>
                     <div id="calendar-loading" style="display: block;">
-                        <div class="spinner-border text-primary mx-auto" role="status">
+                        <div class="spinner-border text-primary" role="status">
                             <span class="visually-hidden">Loading...</span>
                         </div>
                     </div>
                 </div>
-                <div class="row legend-calendar">
+                <div class="row legend-calendar" style="display: none;">
                     <div class="col">
                         <span class="badge bg-danger rounded-pill">&nbsp;</span>&nbsp;<p>Tidak Masuk / Libur</p>
                     </div>
@@ -353,6 +353,11 @@
                     $.ajax({
                         url: `{{ route('api.kalendar.index', ['tahun' => date('Y'), 'format' => 'full-calendar']) }}?level=${level}&nidn=${nidn}&nip=${nip}`,
                         method: 'GET',
+                        beforeSend: function(){
+                            $('#calendar-loading').show();
+                            $('#calendar').hide();
+                            $('.legend-calendar').hide()
+                        },
                         success: function(response) {
                             var events = response.data.map(function(eventData) {
                                 return {
@@ -370,16 +375,13 @@
                         },
                         error: function(xhr, status, error) {
                             failureCallback(error);
+                        },
+                        complete: function(){
+                            $('#calendar-loading').hide();
+                            $('#calendar').show();
+                            $('.legend-calendar').show()
                         }
                     });
-                },
-                loading: function (bool) {
-                    $('.calendar-loading').show();
-                    $('.calendar-hide').hide();
-                },
-                eventAfterAllRender: function (view) {
-                    $('.calendar-loading').hide();
-                    $('.calendar-hide').show();
                 }
             });
             calendar.render();
