@@ -26,8 +26,8 @@ class DatatablePresensiController extends Controller
             $tahun = $request->has('tahun')? $request->query('tahun'):null;
             $filter = $request->has('filter')? $request->query('filter'):null;
 
-            dd($request->all());
             $datas = $this->queryBus->ask(new GetAllPresensiQuery($nidn,$nip,$tahun));
+            dd($request->all(),$datas);
             if($filter=="dosen"){
                 $datas = $datas->filter(fn($item)=>!is_null($item->GetDosen()));
             } else if($filter=="pegawai"){
