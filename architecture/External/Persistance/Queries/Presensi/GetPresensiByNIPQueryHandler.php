@@ -41,6 +41,7 @@ class GetPresensiByNIPQueryHandler extends Query
             $source->nip_pegawai,
             $source->nama_pegawai,
             $source->unit_kerja,
+            null,
             $source->status
         )):null;
     }

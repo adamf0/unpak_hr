@@ -11,7 +11,6 @@ class Pegawai{
         $nama=null, 
         $unit=null,
         $struktural=null,
-        $unit_kerja=null,
         $status=null
     ){
         $this->nidn = $nidn;
@@ -19,7 +18,6 @@ class Pegawai{
         $this->nama = $nama;
         $this->unit = $unit;
         $this->struktural = $struktural;
-        $this->unit_kerja = $unit_kerja;
         $this->status = $status;
     }
 }

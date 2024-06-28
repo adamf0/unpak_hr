@@ -60,7 +60,6 @@ class Creator{
             $factory->GetNama(),
             $factory->GetUnit(),
             $factory->GetStruktural(),
-            $factory->GetUnitKerja(),
             $factory->GetStatus(),
         );
     }
