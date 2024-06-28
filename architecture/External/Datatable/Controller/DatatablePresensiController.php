@@ -33,7 +33,7 @@ class DatatablePresensiController extends Controller
         }
 
         
-        $datas = Cache::get("list-presensi-$filter", 5*60, function () use($datas,$filter){
+        $datas = Cache::remember("list-presensi-$filter", 5*60, function () use($datas,$filter){
             return $datas
                     ->filter(function($item){
                         return $item->getTanggal()->isEqual(new Date(date('Y-m-d')));
