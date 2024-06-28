@@ -58,7 +58,7 @@ class GetAllPresensiQueryHandler extends Query
             $datas = $datas->where('nidn',$query->GetNIDN());
         }
         if(!empty($query->GetNIP())){
-            $datas = $datas->where('cnp.nip',$query->GetNIP())->orWhere('cep.nip',$query->GetNIP());
+            $datas = $datas->where('nip_pegawai',$query->GetNIP())->orWhere('nip_dosen',$query->GetNIP());
         }
         if(!empty($query->GetTahun())){
             $datas = $datas->where(DB::raw('YEAR(tanggal)'),$query->GetTahun());
