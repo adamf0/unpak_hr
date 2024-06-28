@@ -25,7 +25,8 @@ class DatatablePresensiController extends Controller
             $nip = $request->has('nip')? $request->query('nip'):null;
             $tahun = $request->has('tahun')? $request->query('tahun'):null;
             $filter = $request->has('filter')? $request->query('filter'):null;
-            
+
+            dd($request->all());
             $datas = $this->queryBus->ask(new GetAllPresensiQuery($nidn,$nip,$tahun));
             if($filter=="dosen"){
                 $datas = $datas->filter(fn($item)=>!is_null($item->GetDosen()));
@@ -33,7 +34,6 @@ class DatatablePresensiController extends Controller
                 $datas = $datas->filter(fn($item)=>!is_null($item->GetPegawai()));
             }
 
-            dd($datas);
             $datas = $datas->filter(function($item){
                             return $item->getTanggal()->isEqual(new Date(date('Y-m-d')));
                         })
