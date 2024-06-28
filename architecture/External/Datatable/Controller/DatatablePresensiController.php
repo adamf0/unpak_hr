@@ -37,7 +37,7 @@ class DatatablePresensiController extends Controller
                     ->map(function ($item) use($filter){
                         return match(true){
                             $filter=="dosen"=>[
-                                "nama"=>$item->GetDosen()?->GetNama()." - ".$item->GetDosen()?->GetNIDN(),
+                                "nama"=>$item->GetDosen()?->GetNama()." - ".$item->GetDosen()?->GetNIDN()." - ".$item->GetDosen()?->GetunitKerja(),
                                 "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
                                 "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
                                 "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
@@ -45,7 +45,7 @@ class DatatablePresensiController extends Controller
                                 "catatan_pulang"=>$item->GetCatatanPulang(),
                             ],
                             $filter=="pegawai"=>[
-                                "nama"=>$item->GetPegawai()?->GetNama()." - ".$item->GetPegawai()?->GetNIP(),
+                                "nama"=>$item->GetPegawai()?->GetNama()." - ".$item->GetPegawai()?->GetNIP()." - ".$item->GetPegawai()?->GetunitKerja(),
                                 "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
                                 "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
                                 "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
