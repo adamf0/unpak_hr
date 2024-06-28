@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Dosen extends Model
 {
    use HasFactory;
-   protected $table = 'm_dosen';
+   protected $table = 'connect_m_dosen';
    protected $connection = 'simak';
    protected $fillable = ['*'];
 

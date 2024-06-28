@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Fakultas extends Model
 {
     use HasFactory;
-    protected $table = 'm_fakultas';
+    protected $table = 'connect_m_fakultas';
     protected $fillable = ['*'];
     protected $connection = 'simak';
 }
