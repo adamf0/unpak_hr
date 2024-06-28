@@ -49,6 +49,8 @@ class Creator{
             $factory->GetNama(),
             $factory->GetFakultas(),
             $factory->GetProdi(),
+            $factory->GetUnitKerja(),
+            $factory->GetStatus(),
         );
     }
     public static function buildPegawai(IPegawai $factory){
@@ -58,6 +60,8 @@ class Creator{
             $factory->GetNama(),
             $factory->GetUnit(),
             $factory->GetStruktural(),
+            $factory->GetUnitKerja(),
+            $factory->GetStatus(),
         );
     }
     public static function buildPengguna(IPengguna $factory){

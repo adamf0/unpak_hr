@@ -10,12 +10,16 @@ class Pegawai{
         $nip=null, 
         $nama=null, 
         $unit=null,
-        $struktural=null
+        $struktural=null,
+        $unit_kerja=null,
+        $status=null
     ){
         $this->nidn = $nidn;
         $this->nip = $nip;
         $this->nama = $nama;
         $this->unit = $unit;
         $this->struktural = $struktural;
+        $this->unit_kerja = $unit_kerja;
+        $this->status = $status;
     }
 }

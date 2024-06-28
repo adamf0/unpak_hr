@@ -12,7 +12,6 @@ use Architecture\Domain\Entity\PresensiEntitas;
 use Architecture\Domain\Entity\ProdiEntitas;
 use Architecture\Domain\ValueObject\Date;
 use Architecture\Shared\TypeData;
-use Architecture\External\Persistance\ORM\Absensi as ModelAbsensi;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -32,7 +31,8 @@ class GetAllPresensiQueryHandler extends Query
                 $source->kode_prodi,
                 $source->nama_prodi,
             )):null,
-            // $source->status
+            $source->unit_kerja,
+            $source->status
         )):null;
     }
     function getPegawai($source){
@@ -41,7 +41,7 @@ class GetAllPresensiQueryHandler extends Query
             $source->nip_pegawai,
             $source->nama_pegawai,
             $source->unit_kerja,
-            // $source->status
+            $source->status
         )):null;
     }
 
@@ -64,7 +64,6 @@ class GetAllPresensiQueryHandler extends Query
             $datas = $datas->where(DB::raw('YEAR(tanggal)'),$query->GetTahun());
         }
         $datas = $datas->orderBy('absen_masuk','DESC')->get();
-        dd($datas);
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 

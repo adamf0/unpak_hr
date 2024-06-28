@@ -9,6 +9,8 @@ trait PegawaiBase
     public $nama = null;   
     public $unit = null;
     public $struktural = null;
+    public $unit_kerja = null;
+    public $status = null;
 
     public function GetNidn(){
         return $this->nidn;
@@ -24,5 +26,11 @@ trait PegawaiBase
     }
     public function GetStruktural(){
         return $this->struktural;
+    }
+    public function GetUnitKerja(){
+        return $this->unit_kerja;
+    }
+    public function GetStatus(){
+        return $this->status;
     }
 }

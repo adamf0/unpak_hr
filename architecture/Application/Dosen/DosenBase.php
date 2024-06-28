@@ -11,6 +11,8 @@ trait DosenBase
     public $nama = null;   
     public ?Fakultas $fakultas = null;
     public ?Prodi $prodi=null;
+    public $unit_kerja = null;
+    public $status = null;
 
     public function GetNidn(){
         return $this->nidn;
@@ -23,5 +25,11 @@ trait DosenBase
     }
     public function GetProdi(){
         return $this->prodi;
+    }
+    public function GetUnitKerja(){
+        return $this->unit_kerja;
+    }
+    public function GetStatus(){
+        return $this->status;
     }
 }

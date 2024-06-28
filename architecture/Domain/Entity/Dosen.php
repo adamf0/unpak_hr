@@ -10,10 +10,14 @@ class Dosen{
         $nama=null, 
         ?Fakultas $fakultas=null, 
         ?Prodi $prodi=null,
+        $unit_kerja=null,
+        $status=null,
     ){
         $this->nidn = $nidn;
         $this->nama = $nama;
         $this->fakultas = $fakultas;
         $this->prodi = $prodi;
+        $this->unit_kerja = $unit_kerja;
+        $this->status = $status;
     }
 }
