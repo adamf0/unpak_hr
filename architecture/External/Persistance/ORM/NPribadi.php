@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class NPribadi extends Model
 {
    use HasFactory;
-   protected $table = 'connect_n_pribadi';
+   protected $table = 'n_pribadi';
    protected $connection = 'simpeg';
    protected $fillable = ['*'];
 }
