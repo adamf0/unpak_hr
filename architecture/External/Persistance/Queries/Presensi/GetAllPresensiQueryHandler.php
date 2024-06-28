@@ -54,10 +54,12 @@ class GetAllPresensiQueryHandler extends Query
         ->leftJoin('connect_m_fakultas as cmf', 'cmd.kode_fak', '=', 'cmf.kode_fakultas')
         ->leftJoin('connect_r_prodi as crp', 'cmd.kode_prodi', '=', 'crp.nama_prodi')
         ->rightJoinSub(
-            DB::table('connect_n_pengangkatan')->select('nip', 'unit_kerja')
+            DB::table('connect_n_pengangkatan')
+                ->select('nip', 'unit_kerja')
                 ->whereRaw('LOWER(status_n_pengangkatan) = ?', ['berlaku'])
                 ->unionAll(
-                    DB::table('connect_e_pengangkatan')->select('nip', 'unit_kerja')
+                    DB::table('connect_e_pengangkatan')
+                        ->select('nip', 'unit_kerja')
                         ->whereRaw('LOWER(status_berlaku_pengangkatan) = ?', ['berlaku'])
                 ),
             'mu',
@@ -66,8 +68,7 @@ class GetAllPresensiQueryHandler extends Query
                     ->whereNull('cpmp.tgl_keluar')
                     ->orWhereRaw('TRIM(cpmp.tgl_keluar) = ?', ['']);
             }
-        )->rightJoin('connect_n_pribadi as ms', 'ms.nip', '=', 'cnp.nip')
-        ->select(
+        )->select(
             'cnp.nip as nip_pegawai',
             'cnp.nama as nama_pegawai',
             'cep.nip as nip_dosen',
@@ -75,7 +76,7 @@ class GetAllPresensiQueryHandler extends Query
             'cmd.nama_dosen',
             'cmf.*',
             'crp.*',
-            'ms.unit_kerja',
+            'mu.unit_kerja',
             DB::raw("(CASE 
                 WHEN cpmp.tgl_keluar IS NULL OR TRIM(cpmp.tgl_keluar) = '' THEN 'aktif'
                 ELSE 'keluar'
