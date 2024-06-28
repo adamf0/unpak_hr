@@ -273,7 +273,12 @@
             <div class="card-body">
                 <h5 class="card-title">Calendar</h5>
                 <div class="row">
-                    <div id="calendar"></div>
+                    <div id="calendar" style="display: none;"></div>
+                    <div id="calendar-loading" style="display: block;">
+                        <div class="spinner-border text-primary mx-auto" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
                 </div>
                 <div class="row legend-calendar">
                     <div class="col">
@@ -367,6 +372,14 @@
                             failureCallback(error);
                         }
                     });
+                },
+                loading: function (bool) {
+                    $('.calendar-loading').show();
+                    $('.calendar-hide').hide();
+                },
+                eventAfterAllRender: function (view) {
+                    $('.calendar-loading').hide();
+                    $('.calendar-hide').show();
                 }
             });
             calendar.render();
