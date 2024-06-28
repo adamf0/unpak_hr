@@ -67,8 +67,8 @@ class DatatablePresensiController extends Controller
                     });
         });
 
-        
-                    $table = DataTables::of($datas)
+        dd($datas);
+        $table = DataTables::of($datas)
         ->addIndexColumn()
         ->make(true);
 
