@@ -9,6 +9,7 @@ use Architecture\Application\Presensi\List\GetAllPresensiQuery;
 use Architecture\Domain\Enum\FormatDate;
 use Architecture\Domain\ValueObject\Date;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Yajra\DataTables\DataTables as DataTables;
 
 class DatatablePresensiController extends Controller
@@ -31,7 +32,10 @@ class DatatablePresensiController extends Controller
             $datas = $datas->filter(fn($item)=>!is_null($item->GetPegawai()));
         }
 
-        $datas = $datas->filter(function($item){
+        
+        $datas = Cache::get("list-presensi-$filter", 5*60, function () use($datas,$filter){
+            return $datas
+                    ->filter(function($item){
                         return $item->getTanggal()->isEqual(new Date(date('Y-m-d')));
                     })
                     ->map(function ($item) use($filter){
@@ -61,8 +65,10 @@ class DatatablePresensiController extends Controller
                             ],
                         };
                     });
+        });
 
-        $table = DataTables::of($datas)
+        
+                    $table = DataTables::of($datas)
         ->addIndexColumn()
         ->make(true);
 
