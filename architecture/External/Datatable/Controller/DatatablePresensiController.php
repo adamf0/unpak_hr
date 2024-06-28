@@ -35,9 +35,6 @@ class DatatablePresensiController extends Controller
                         return $item->getTanggal()->isEqual(new Date(date('Y-m-d')));
                     })
                     ->map(function ($item) use($filter){
-                        if($filter=="pegawai" && $item->GetPegawai()?->GetNIP()==2110816439){
-                            dd($item);
-                        }
                         return match(true){
                             $filter=="dosen"=>[
                                 "nama"=>$item->GetDosen()?->GetNama()." - ".$item->GetDosen()?->GetNIDN()." - ".$item->GetDosen()?->GetUnit(),
