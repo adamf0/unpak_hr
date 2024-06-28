@@ -47,43 +47,7 @@ class GetAllPresensiQueryHandler extends Query
 
     public function handle(GetAllPresensiQuery $query)
     {
-        $datas = DB::table('absen as a')
-        ->leftJoin('connect_n_pribadi as cnp', 'a.nip', '=', 'cnp.nip')
-        ->leftJoin('connect_m_dosen as cmd', 'a.nidn', '=', 'cmd.NIDN')
-        ->leftJoin('connect_e_pribadi as cep', 'cmd.NIDN', '=', 'cep.nidn')
-        ->leftJoin('connect_m_fakultas as cmf', 'cmd.kode_fak', '=', 'cmf.kode_fakultas')
-        ->leftJoin('connect_r_prodi as crp', 'cmd.kode_prodi', '=', 'crp.nama_prodi')
-        ->rightJoinSub(
-            DB::table('connect_n_pengangkatan')
-                ->select('nip', 'unit_kerja')
-                ->whereRaw('LOWER(status_n_pengangkatan) = ?', ['berlaku'])
-                ->unionAll(
-                    DB::table('connect_e_pengangkatan')
-                        ->select('nip', 'unit_kerja')
-                        ->whereRaw('LOWER(status_berlaku_pengangkatan) = ?', ['berlaku'])
-                ),
-            'mu',
-            function ($join) {
-                $join->join('connect_payroll_m_pegawai as cpmp', 'mu.nip', '=', 'cpmp.nip')
-                    ->whereNull('cpmp.tgl_keluar')
-                    ->orWhereRaw('TRIM(cpmp.tgl_keluar) = ?', ['']);
-            }
-        )->select(
-            'cnp.nip as nip_pegawai',
-            'cnp.nama as nama_pegawai',
-            'cep.nip as nip_dosen',
-            'a.nidn as nidn_dosen',
-            'cmd.nama_dosen',
-            'cmf.*',
-            'crp.*',
-            'mu.unit_kerja',
-            DB::raw("(CASE 
-                WHEN cpmp.tgl_keluar IS NULL OR TRIM(cpmp.tgl_keluar) = '' THEN 'aktif'
-                ELSE 'keluar'
-            END) as status"),
-            'a.*'
-        );
-        
+        $datas = DB::table('presensi_view');        
         // ModelAbsensi::with([
         //     'Dosen',
         //     'Dosen.Fakultas',
