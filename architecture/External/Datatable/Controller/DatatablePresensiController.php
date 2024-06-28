@@ -21,10 +21,10 @@ class DatatablePresensiController extends Controller
     public function index(Request $request){
         $nidn = $request->has('nidn')? $request->query('nidn'):null;
         $nip = $request->has('nip')? $request->query('nip'):null;
-        $tahun = $request->has('tahun')? $request->query('tahun'):date('Y-m-d');
+        // $tahun = $request->has('tahun')? $request->query('tahun'):date('Y-m-d');
         $filter = $request->has('filter')? $request->query('filter'):null;
         
-        $datas = $this->queryBus->ask(new GetAllPresensiQuery($nidn,$nip,$tahun));
+        $datas = $this->queryBus->ask(new GetAllPresensiQuery($nidn,$nip,date('Y-m-d')));
         if($filter=="dosen"){
             $datas = $datas->filter(fn($item)=>!is_null($item->GetDosen()));
         } else if($filter=="pegawai"){
