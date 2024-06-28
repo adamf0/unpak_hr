@@ -46,10 +46,10 @@ class GetAllPresensiQueryHandler extends Query
     public function handle(GetAllPresensiQuery $query)
     {
         $datas = ModelAbsensi::with([
-            'Dosen',
+            // 'Dosen',
             // 'Dosen.Fakultas',
             // 'Dosen.Prodi',
-            // 'Pegawai'
+            'Pegawai'
         ]);
         if(!empty($query->GetNIDN())){
             $datas = $datas->where('nidn',$query->GetNIDN());
