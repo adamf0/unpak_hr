@@ -60,11 +60,11 @@ class GetAllPresensiQueryHandler extends Query
         if(!empty($query->GetTahun())){
             $datas = $datas->where(DB::raw('YEAR(tanggal)'),$query->GetTahun());
         }
-        $datas = $datas->orderBy('absen_masuk','DESC')->toRawSql();
-        dd($datas);
+        $datas = $datas->orderBy('absen_masuk','DESC')->get();
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 
+        dd($datas);
         return $datas->transform(fn($data)=> Creator::buildPresensi(PresensiEntitas::make(
             $data->id,
             $this->getDosen($data),
