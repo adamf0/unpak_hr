@@ -33,6 +33,7 @@ class DatatablePresensiController extends Controller
                 $datas = $datas->filter(fn($item)=>!is_null($item->GetPegawai()));
             }
 
+            dd($datas);
             $datas = $datas->filter(function($item){
                             return $item->getTanggal()->isEqual(new Date(date('Y-m-d')));
                         })
