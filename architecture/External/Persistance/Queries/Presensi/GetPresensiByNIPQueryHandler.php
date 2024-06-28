@@ -49,8 +49,8 @@ class GetPresensiByNIPQueryHandler extends Query
     public function handle(GetPresensiByNIPQuery $query)
     {
         $data = DB::table('presensi_view')
-        ->where(function($query){
-            $query->where('nip_pegawai',$query->GetNIP())->orWhere('nip_dosen',$query->GetNIP());
+        ->where(function($q) use($query){
+            $q->where('nip_pegawai',$query->GetNIP())->orWhere('nip_dosen',$query->GetNIP());
         })
         ->where('tanggal',date('Y-m-d'))
         ->first();
