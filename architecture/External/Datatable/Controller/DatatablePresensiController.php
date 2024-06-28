@@ -40,7 +40,7 @@ class DatatablePresensiController extends Controller
                         }
                         return match(true){
                             $filter=="dosen"=>[
-                                "nama"=>$item->GetDosen()?->GetNama()." - ".$item->GetDosen()?->GetNIDN()." - ".$item->GetDosen()?->GetUnitKerja(),
+                                "nama"=>$item->GetDosen()?->GetNama()." - ".$item->GetDosen()?->GetNIDN()." - ".$item->GetDosen()?->GetUnit(),
                                 "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
                                 "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
                                 "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
@@ -48,7 +48,7 @@ class DatatablePresensiController extends Controller
                                 "catatan_pulang"=>$item->GetCatatanPulang(),
                             ],
                             $filter=="pegawai"=>[
-                                "nama"=>$item->GetPegawai()?->GetNama()." - ".$item->GetPegawai()?->GetNIP()." - ".$item->GetPegawai()?->GetUnitKerja(),
+                                "nama"=>$item->GetPegawai()?->GetNama()." - ".$item->GetPegawai()?->GetNIP()." - ".$item->GetPegawai()?->GetUnit(),
                                 "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
                                 "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
                                 "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
