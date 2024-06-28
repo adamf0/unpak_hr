@@ -46,7 +46,7 @@ class GetAllPresensiQueryHandler extends Query
     public function handle(GetAllPresensiQuery $query)
     {
         $datas = ModelAbsensi::with([
-            // 'Dosen',
+            'Dosen',
             // 'Dosen.Fakultas',
             // 'Dosen.Prodi',
             // 'Pegawai'

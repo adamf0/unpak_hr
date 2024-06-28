@@ -30,7 +30,7 @@ class Select2PresensiController extends Controller
         $nip = $request->has('nip') ? $request->query('nip') : null;
         // $level = $request->has('level')? $request->query('level'):null;
 
-        $listPresensi = $this->queryBus->ask(new GetAllPresensiQuery($nidn, $nip, date('Y-m-d')));
+        $listPresensi = $this->queryBus->ask(new GetAllPresensiQuery($nidn, $nip, date('Y')));
 
         $list_izin = $this->queryBus->ask(new GetAllIzinQuery($nidn, $nip, date('Y-m-d')));
         $listIzin = $list_izin->reduce(function ($list, $item) {
