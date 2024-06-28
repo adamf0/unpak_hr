@@ -55,15 +55,15 @@ class GetAllPresensiQueryHandler extends Query
         //     'Pegawai'
         // ]);
         if(!empty($query->GetNIDN())){
-            $datas = $datas->where('a.nidn',$query->GetNIDN());
+            $datas = $datas->where('nidn',$query->GetNIDN());
         }
         if(!empty($query->GetNIP())){
             $datas = $datas->where('cnp.nip',$query->GetNIP())->orWhere('cep.nip',$query->GetNIP());
         }
         if(!empty($query->GetTahun())){
-            $datas = $datas->where(DB::raw('YEAR(a.tanggal)'),$query->GetTahun());
+            $datas = $datas->where(DB::raw('YEAR(tanggal)'),$query->GetTahun());
         }
-        $datas = $datas->orderBy('a.absen_masuk','DESC')->get();
+        $datas = $datas->orderBy('absen_masuk','DESC')->get();
         dd($datas);
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
