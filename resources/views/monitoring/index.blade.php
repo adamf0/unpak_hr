@@ -107,7 +107,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-
+                        <x-input-select title="Fakultas" name="fakultas" class="fakultas"></x-input-select>
                     </div>
                     <div class="col-12">
                         <h4 class="card-title">Pegawai</h4>
@@ -219,6 +219,17 @@
 
             load_dropdown('.fakultas', null, `{{ route('select2.FilterMonitor.List') }}`, "{{ old('fakultas') }}", '-- Pilih Fakultas --');
             load_dropdown('.unit', null, `{{ route('select2.FilterMonitor.List') }}`, "{{ old('unit') }}", '-- Pilih Unit --');
+
+            $(".fakultas").on('select', function(e) {
+                // var data = e.params.data;
+                const id = $(this).val()
+                table_absen_dosen.columns(2).search(id).draw();
+            })
+            $(".unit").on('select', function(e) {
+                // var data = e.params.data;
+                const id = $(this).val()
+                table_absen_pegawai.columns(2).search(id).draw();
+            })
         });
     </script>
 @endpush
