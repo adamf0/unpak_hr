@@ -107,7 +107,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <x-input-select title="Fakultas" name="fakultas" class="fakultas"></x-input-select>
+                        <x-input-select title="Unit" name="unit" class="unit"></x-input-select>
                     </div>
                     <div class="col-12">
                         <h4 class="card-title">Pegawai</h4>
