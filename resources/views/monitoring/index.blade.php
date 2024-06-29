@@ -220,16 +220,16 @@
             load_dropdown('.fakultas', null, `{{ route('select2.FilterMonitor.List') }}`, "{{ old('fakultas') }}", '-- Pilih Fakultas --');
             load_dropdown('.unit', null, `{{ route('select2.FilterMonitor.List') }}`, "{{ old('unit') }}", '-- Pilih Unit --');
 
-            $(".fakultas").on('select', function(e) {
-                // var data = e.params.data;
+            $(".fakultas").on('select2:select', function (e) {
+                var data = e.params.data;
                 const id = $(this).val()
-                console.log(id)
+                console.log(id,data)
                 table_absen_dosen.search(id).draw();
             })
-            $(".unit").on('select', function(e) {
-                // var data = e.params.data;
+            $(".unit").on('select2:select', function (e) {
+                var data = e.params.data;
                 const id = $(this).val()
-                console.log(id)
+                console.log(id,data)
                 table_absen_pegawai.search(id).draw();
             })
         });
