@@ -31,9 +31,7 @@ class Select2FilterMonitorController extends Controller
                 "id"=>$item->unit_kerja,
                 "text"=>$item->unit_kerja,
             ];   
-        })
-        ->unique()
-        ->values();
+        });
 
         return response()->json($datas);
     }
