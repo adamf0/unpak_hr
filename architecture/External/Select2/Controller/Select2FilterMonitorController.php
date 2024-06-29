@@ -20,7 +20,7 @@ class Select2FilterMonitorController extends Controller
         protected IQueryBus $queryBus
     ) {}
     
-    public function index(Request $request){
+    public function List(Request $request){
         $datas = $this->queryBus->ask(new GetAllPresensiQuery(null,null,null,TypeData::Default));
         
         // $datas = Cache::remember("filter-monitor", 5*60, function () use($datas){
