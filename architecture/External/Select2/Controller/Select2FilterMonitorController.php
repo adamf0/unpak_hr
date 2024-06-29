@@ -23,17 +23,16 @@ class Select2FilterMonitorController extends Controller
     public function List(Request $request){
         $datas = $this->queryBus->ask(new GetAllPresensiQuery(null,null,null,TypeData::Default));
         
-        // $datas = Cache::remember("filter-monitor", 5*60, function () use($datas){
-        //     return ;
-        // });
-        $datas = $datas->transform(function($item){
-            return [
-                "id"=>$item->unit_kerja,
-                "text"=>$item->unit_kerja,
-            ];   
-        })
-        ->unique("id")
-        ->values();
+        $datas = Cache::remember("filter-monitor", 5*60, function () use($datas){
+            return $datas->transform(function($item){
+                return [
+                    "id"=>$item->unit_kerja,
+                    "text"=>$item->unit_kerja,
+                ];   
+            })
+            ->unique("id")
+            ->values();
+        });
 
         return response()->json($datas);
     }
