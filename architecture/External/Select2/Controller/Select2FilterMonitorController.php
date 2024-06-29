@@ -1,6 +1,6 @@
 <?php
 
-namespace Architecture\External\Datatable\Controller;
+namespace Architecture\External\Select2\Controller;
 
 use App\Http\Controllers\Controller;
 use Architecture\Application\Abstractions\Messaging\ICommandBus;

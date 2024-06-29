@@ -15,7 +15,7 @@
 //     return $request->user();
 // });
 
-use Architecture\External\Datatable\Controller\Select2FilterMonitorController;
+use Architecture\External\Select2\Controller\Select2FilterMonitorController;
 use Architecture\External\Select2\Controller\Select2DosenController;
 use Architecture\External\Select2\Controller\Select2DosenPegawaiController;
 use Architecture\External\Select2\Controller\Select2JenisCutiController;
