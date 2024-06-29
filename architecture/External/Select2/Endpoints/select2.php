@@ -15,6 +15,7 @@
 //     return $request->user();
 // });
 
+use Architecture\External\Datatable\Controller\Select2FilterMonitorController;
 use Architecture\External\Select2\Controller\Select2DosenController;
 use Architecture\External\Select2\Controller\Select2DosenPegawaiController;
 use Architecture\External\Select2\Controller\Select2JenisCutiController;
@@ -33,3 +34,4 @@ Route::get('jenis_izin', [Select2JenisIzinController::class,'List'])->name('sele
 Route::get('jenis_sppd', [Select2JenisSPPDController::class,'List'])->name('select2.JenisSPPD.List');
 Route::get('tanggal_absen', [Select2PresensiController::class,'List'])->name('select2.Presensi.List');
 Route::get('list_pegawai', [Select2VerifikatorController::class,'List'])->name('select2.PegawaiV2.List');
+Route::get('filter_monitoring', [Select2FilterMonitorController::class,'List'])->name('select2.FilterMonitor.List');

@@ -8,6 +8,7 @@
             <li class="breadcrumb-item active">Lembaga Akreditasi</li>
             </ol>
         </nav> -->
+        Info Presensi {{Carbon::now()->setTimezone('Asia/Jakarta')->format("d F Y")}}
     </x-page-title>
 @stop
 
@@ -76,7 +77,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <h4 class="card-title">Info Presensi {{Carbon::now()->setTimezone('Asia/Jakarta')->format("d F Y")}}</h4>
+                        <x-input-select title="Fakultas" name="fakultas" class="fakultas"></x-input-select>
                     </div>
                     <div class="col-12">
                         <h4 class="card-title">Dosen</h4>
@@ -94,6 +95,19 @@
                             </thead>
                             <tbody></tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 table-responsive">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+
                     </div>
                     <div class="col-12">
                         <h4 class="card-title">Pegawai</h4>
@@ -202,6 +216,9 @@
             String.prototype.isEmpty = function() {
                 return (this.length === 0 || !this.trim());
             };
+
+            load_dropdown('.fakultas', null, `{{ route('select2.FilterMonitor.List') }}`, "{{ old('fakultas') }}", '-- Pilih Fakultas --');
+            load_dropdown('.unit', null, `{{ route('select2.FilterMonitor.List') }}`, "{{ old('unit') }}", '-- Pilih Unit --');
         });
     </script>
 @endpush
