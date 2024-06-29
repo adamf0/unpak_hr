@@ -223,11 +223,13 @@
             $(".fakultas").on('select', function(e) {
                 // var data = e.params.data;
                 const id = $(this).val()
+                console.log(id)
                 table_absen_dosen.search(id).draw();
             })
             $(".unit").on('select', function(e) {
                 // var data = e.params.data;
                 const id = $(this).val()
+                console.log(id)
                 table_absen_pegawai.search(id).draw();
             })
         });
