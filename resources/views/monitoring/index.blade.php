@@ -196,14 +196,14 @@
                 },
             ];
 
-            let table_absen_dosen = eTable({
+            table_absen_dosen = eTable({
                 url: `{{ route('datatable.Presensi.index') }}?filter=dosen&nidn=${nidn}&nip=${nip}`,
             }, column,
             function( row, data ){},
             function( settings ){},
             ".tb_absen_dosen");
 
-            let table_absen_pegawai = eTable({
+            table_absen_pegawai = eTable({
                 url: `{{ route('datatable.Presensi.index') }}?filter=pegawai&nidn=${nidn}&nip=${nip}`,
             }, column,
             function( row, data ){},
@@ -223,12 +223,12 @@
             $(".fakultas").on('select', function(e) {
                 // var data = e.params.data;
                 const id = $(this).val()
-                table_absen_dosen.columns(2).search(id).draw();
+                table_absen_dosen.search(id).draw();
             })
             $(".unit").on('select', function(e) {
                 // var data = e.params.data;
                 const id = $(this).val()
-                table_absen_pegawai.columns(2).search(id).draw();
+                table_absen_pegawai.search(id).draw();
             })
         });
     </script>
