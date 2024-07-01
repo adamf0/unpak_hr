@@ -47,7 +47,7 @@ class ApiInfoDashboardController extends Controller
             return $keluar->isGreater($aturanKeluar);
         } 
         else if(!empty($tanggal_jam_keluar) && $this->isLate($tanggal_jam_masuk,$tanggal)){
-            $aturanKeluar = new Date(Carbon::parse($tanggal_jam_keluar)->setTimezone('Asia/Jakarta')->addHour(8)->toISOString());
+            $aturanKeluar = new Date(Carbon::parse($tanggal_jam_masuk)->setTimezone('Asia/Jakarta')->addHour(7)->toISOString());
             $keluar = new Date($tanggal_jam_keluar);
             return $keluar->isGreater($aturanKeluar);
         }
