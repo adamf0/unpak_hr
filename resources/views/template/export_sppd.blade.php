@@ -23,7 +23,7 @@
 
     .styled-table th,
     .styled-table td {
-        padding: 12px 15px;
+        padding: 6px 5px;
         border: 1px solid #000;
     }
 
@@ -133,9 +133,7 @@
                         <p>Menyetujui</p>
                         @if (!empty($sppd->EPribadiRemote) && $sppd->status=="terima sdm")
                         <img src='data:image/png;base64, {!! base64_encode(QrCode::size(100)->generate("Nama : ".$sppd->EPribadiRemote->nama)) !!}' alt="tanda tangan"/>
-                        <br>
                         @else
-                        <br>
                         <br>
                         @endif
                         <b>
