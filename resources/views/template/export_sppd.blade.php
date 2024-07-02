@@ -51,10 +51,10 @@
         }
     }
     .page-break {
-        page-break-after: always;
+        /* page-break-after: always; */
     }
     .page-break:last-child {
-        page-break-after: avoid;
+        /* page-break-after: avoid; */
     }
 </style>
 <body>
@@ -148,22 +148,6 @@
         </table>
         <br>
         <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
         <table class="">
             @php
                 $total_anggota = count($sppd->AnggotaFlat);
@@ -208,11 +192,6 @@
                         <td colspan="2" style="border: 1px solid black !important; width: 350px;">
                             <center>
                             <p>Tanggal {{$anggota->tanggal}}</p>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
                             <br>
                             <br>
                             <br>
