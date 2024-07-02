@@ -152,7 +152,7 @@
                 @foreach($rows as $anggota)
                     @if ($loop->first)
                         <tr style="border: 1px solid black !important">
-                            <td style="border: 1px solid black !important; width: 200px;">
+                            <td style="border: 1px solid black !important; width: 225px;">
                                 <center>
                                 <p>Tanggal {{ $anggota->tanggal }}</p>
                                 <br>
@@ -163,7 +163,7 @@
                                 </center>     
                             </td>
                     @elseif ($loop->last)
-                            <td style="border: 1px solid black !important; width: 200px;">
+                            <td style="border: 1px solid black !important; width: 225px;">
                                 <center>
                                 <p>Tanggal {{ $anggota->tanggal }}</p>
                                 <br>
@@ -175,7 +175,7 @@
                             </td>
                         </tr>
                     @else
-                            <td style="border: 1px solid black !important; width: 200px;">
+                            <td style="border: 1px solid black !important; width: 225px;">
                                 <center>
                                 <p>Tanggal {{ $anggota->tanggal }}</p>
                                 <br>
