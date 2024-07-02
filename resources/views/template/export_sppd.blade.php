@@ -123,8 +123,8 @@
                 <td>Keterangan</td>
                 <td>{{$sppd->keterangan}}</td>
             </tr>
-            <tr>
-                <td colspan="3" style="border: 0px solid transparent; background: white"></td>
+            <tr style="border: 0px solid transparent; background: white">
+                <td colspan="3" style="border-left: 0px solid transparent; border-right: 0px solid transparent; background: white"></td>
             </tr>
             <tr style="border: 0px solid transparent; background: white">
                 <td colspan="2" style="border: 0px solid transparent; background: white"></td>
