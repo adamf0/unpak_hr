@@ -164,14 +164,14 @@
         <br>
         <br>
         <br>
-        <table class="styled-table">
+        <table class="">
             @php
                 $total_anggota = count($sppd->AnggotaFlat);
             @endphp
             @foreach ($sppd->AnggotaFlat as $key => $anggota)
                 @if ($total_anggota>1 && $key%2==0)
-                    <tr style="border-right: 1px solid black !important; border-bottom: 1px solid black !important">
-                        <td style="border-right: 1px solid black !important; border-bottom: 1px solid black !important">
+                    <tr style="border: 1px solid black !important">
+                        <td style="border: 1px solid black !important">
                             <center>
                             <p>Tanggal {{$anggota->tanggal}}</p>
                             <br>
@@ -187,7 +187,7 @@
                             </center>     
                         </td>
                     @elseif($total_anggota>1 && $key%2==1)
-                        <td style="border-right: 1px solid black !important; border-bottom: 1px solid black !important">
+                        <td style="border: 1px solid black !important">
                             <center>
                             <p>Tanggal {{$anggota->tanggal}}</p>
                             <br>
@@ -204,8 +204,8 @@
                         </td>
                     </tr>
                     @else
-                    <tr style="border-right: 1px solid black !important; border-bottom: 1px solid black !important">
-                        <td colspan="2" style="border-right: 1px solid black !important; border-bottom: 1px solid black !important">
+                    <tr style="border: 1px solid black !important">
+                        <td colspan="2" style="border: 1px solid black !important">
                             <center>
                             <p>Tanggal {{$anggota->tanggal}}</p>
                             <br>
