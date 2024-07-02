@@ -54,7 +54,7 @@ class PdfX implements Export, Stream
     }
     public function stream()
     {
-        return view($this->view)->with($this->datas)->render();
+        // return view($this->view)->with($this->datas)->render();
         return $this->compile->stream();
     }
 }
