@@ -124,9 +124,6 @@
                 <td>{{$sppd->keterangan}}</td>
             </tr>
             <tr style="border: 0px solid white !important; background: white">
-                <td colspan="3" style="border-bottom: 0px solid white !important; border-left: 0px solid white !important; border-right: 0px solid white !important; background: white"></td>
-            </tr>
-            <tr style="border: 0px solid white !important; background: white">
                 <td colspan="2" style="border: 0px solid white !important; background: white"></td>
                 <td style="border: 0px solid white !important; background: white">
                     <center>
