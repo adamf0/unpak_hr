@@ -46,9 +46,11 @@
         position: relative;
 
         .paraf__container{
+            position: absolute;
+            right: end;
             /* flex-grow: 1;
             width: 30%; */
-            text-align: center;
+            /* text-align: center; */
         }
     }
     .page-break {
