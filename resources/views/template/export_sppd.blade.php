@@ -126,7 +126,7 @@
             <tr>
                 <td colspan="3" style="border-left: 0px solid transparent; border-right: 0px solid transparent; background: white"></td>
             </tr>
-            <tr>
+            <tr style="border: 0px solid transparent; background: white">
                 <td colspan="2" style="border: 0px solid transparent; background: white"></td>
                 <td style="border: 0px solid transparent; background: white">
                     <center>
