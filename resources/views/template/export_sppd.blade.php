@@ -124,11 +124,12 @@
                 <td>{{$sppd->keterangan}}</td>
             </tr>
             <tr>
-                <td colspan="2"></td>
+                <td colspan="3"></td>
             </tr>
             <tr>
-                <td><p>Menyetujui</p></td>
+                <td colspan="2"></td>
                 <td>
+                    <p>Menyetujui</p>
                     @if (!empty($sppd->EPribadiRemote) && $sppd->status=="terima sdm")
                     <img src='data:image/png;base64, {!! base64_encode(QrCode::size(100)->generate("Nama : ".$sppd->EPribadiRemote->nama)) !!}' alt="tanda tangan"/>
                     <br>
@@ -136,8 +137,6 @@
                     <br>
                     <br>
                     @endif
-                </td>
-                <td>
                     <b>
                         {{$sppd->EPribadiRemote?->nama??"Tidak diketahui"}}<br>
                         {{$sppd->EPribadiRemote?->nip??"Tidak diketahui"}}
