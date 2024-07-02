@@ -146,7 +146,7 @@
                 </td>
             </tr>
         </table>
-        <table class="">
+        <table style="padding: 0px">
             @php
                 $total_anggota = count($sppd->AnggotaFlat);
             @endphp
