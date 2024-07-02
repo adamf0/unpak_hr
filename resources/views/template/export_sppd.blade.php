@@ -125,11 +125,11 @@
             </tr>
             <tr style="border: 0px solid white !important; background: white">
                 <td colspan="2" style="border: 0px solid white !important; background: white"></td>
-                <td style="border: 0px solid white !important; background: white">
+                <td style="padding: 0px; border: 0px solid white !important; background: white">
                     <center>
                         <p>Menyetujui</p>
                         @if (!empty($sppd->EPribadiRemote) && $sppd->status=="terima sdm")
-                        <img src='data:image/png;base64, {!! base64_encode(QrCode::size(60)->generate("Nama : ".$sppd->EPribadiRemote->nama)) !!}' alt="tanda tangan"/>
+                        <img src='data:image/png;base64, {!! base64_encode(QrCode::size(100)->generate("Nama : ".$sppd->EPribadiRemote->nama)) !!}' alt="tanda tangan"/>
                         <br>
                         @else
                         <br>
@@ -143,14 +143,14 @@
                 </td>
             </tr>
         </table>
-        <table style="padding: 0px">
+        <table>
             @php
                 $total_anggota = count($sppd->AnggotaFlat);
             @endphp
             @foreach ($sppd->AnggotaFlat as $key => $anggota)
                 @if ($total_anggota>1 && $key%2==0)
                     <tr style="border: 1px solid black !important">
-                        <td style="border: 1px solid black !important; width: 350px;">
+                        <td style="padding: 0px; border: 1px solid black !important; width: 350px;">
                             <center>
                             <p>Tanggal {{$anggota->tanggal}}</p>
                             <br>
@@ -161,7 +161,7 @@
                             </center>     
                         </td>
                     @elseif($total_anggota>1 && $key%2==1)
-                        <td style="border: 1px solid black !important; width: 350px;">
+                        <td style="padding: 0px; border: 1px solid black !important; width: 350px;">
                             <center>
                             <p>Tanggal {{$anggota->tanggal}}</p>
                             <br>
@@ -174,7 +174,7 @@
                     </tr>
                     @else
                     <tr style="border: 1px solid black !important">
-                        <td colspan="2" style="border: 1px solid black !important; width: 350px;">
+                        <td colspan="2" style="padding:0px; border: 1px solid black !important; width: 350px;">
                             <center>
                             <p>Tanggal {{$anggota->tanggal}}</p>
                             <br>
