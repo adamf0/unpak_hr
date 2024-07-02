@@ -105,14 +105,14 @@
             </tr>
             @foreach ($sppd->anggota as $i => $anggota)
                 @if (!empty($anggota->Dosen))
-                <tr>
+                <tr style="border: 1px solid black !important">
                     <td></td>
                     <td colspan="2">{{ $i+1 }}. {{$anggota->Dosen->NIDN}} - {{$anggota->Dosen->nama_dosen}}</td>
                 </tr>
                 @endif
 
                 @if (!empty($anggota->Pegawai))
-                <tr>
+                <tr style="border: 1px solid black !important">
                     <td></td>
                     <td colspan="2">{{ $i+1 }}. {{$anggota->Pegawai->nip}} - {{$anggota->Pegawai->nama}}</td>
                 </tr>
