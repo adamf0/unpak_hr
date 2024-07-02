@@ -159,11 +159,6 @@
                             <br>
                             <br>
                             <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
                             <b>{{ $anggota->nama }}</b><br>
                             {{ $anggota->kodePengenal }}
                             </center>     
@@ -172,11 +167,6 @@
                         <td style="border: 1px solid black !important; width: 350px;">
                             <center>
                             <p>Tanggal {{$anggota->tanggal}}</p>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
                             <br>
                             <br>
                             <br>
@@ -190,6 +180,8 @@
                         <td colspan="2" style="border: 1px solid black !important; width: 350px;">
                             <center>
                             <p>Tanggal {{$anggota->tanggal}}</p>
+                            <br>
+                            <br>
                             <br>
                             <b>{{ $anggota->nama }}</b><br>
                             {{ $anggota->kodePengenal }}
