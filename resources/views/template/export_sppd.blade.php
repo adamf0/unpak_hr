@@ -143,6 +143,8 @@
                 </td>
             </tr>
         </table>
+        <br>
+        <br>
         <table style="padding: 0px">
             @php
                 $list_anggota = collect($sppd->AnggotaFlat)->chunk(3);
