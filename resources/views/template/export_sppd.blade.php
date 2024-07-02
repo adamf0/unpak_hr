@@ -127,8 +127,8 @@
                 <td colspan="3" style="border-left: 0px solid transparent; border-right: 0px solid transparent; background: white"></td>
             </tr>
             <tr>
-                <td colspan="2"></td>
-                <td>
+                <td colspan="2" style="border: 0px solid transparent; background: white"></td>
+                <td style="border: 0px solid transparent; background: white">
                     <center>
                         <p>Menyetujui</p>
                         @if (!empty($sppd->EPribadiRemote) && $sppd->status=="terima sdm")
