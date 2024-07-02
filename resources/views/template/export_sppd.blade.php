@@ -171,7 +171,7 @@
             @foreach ($sppd->AnggotaFlat as $key => $anggota)
                 @if ($total_anggota>1 && $key%2==0)
                     <tr style="border: 1px solid black !important">
-                        <td style="border: 1px solid black !important; width: 400px;">
+                        <td style="border: 1px solid black !important; width: 200px;">
                             <center>
                             <p>Tanggal {{$anggota->tanggal}}</p>
                             <br>
@@ -187,7 +187,7 @@
                             </center>     
                         </td>
                     @elseif($total_anggota>1 && $key%2==1)
-                        <td style="border: 1px solid black !important; width: 400px;">
+                        <td style="border: 1px solid black !important; width: 200px;">
                             <center>
                             <p>Tanggal {{$anggota->tanggal}}</p>
                             <br>
@@ -205,7 +205,7 @@
                     </tr>
                     @else
                     <tr style="border: 1px solid black !important">
-                        <td colspan="2" style="border: 1px solid black !important; width: 400px;">
+                        <td colspan="2" style="border: 1px solid black !important; width: 200px;">
                             <center>
                             <p>Tanggal {{$anggota->tanggal}}</p>
                             <br>
