@@ -127,16 +127,16 @@
         <div class="paraf">
             <div class="paraf__container">
             <p>Menyetujui</p>
-            @if (!empty($sppd->SDM) && $sppd->status=="terima sdm")
-            <img src='data:image/png;base64, {!! base64_encode(QrCode::size(100)->generate("Nama : ".$sppd->verifikasi)) !!}' alt="tanda tangan"/>
+            @if (!empty($sppd->EPribadiRemote) && $sppd->status=="terima sdm")
+            <img src='data:image/png;base64, {!! base64_encode(QrCode::size(100)->generate("Nama : ".$sppd->EPribadiRemote->nama)) !!}' alt="tanda tangan"/>
             <br>
             @else
             <br>
             <br>
             @endif
             <b>
-                {{$sppd->verifikasi}}<br>
-                {{$sppd->kode_verifikasi}}
+                {{$sppd->EPribadiRemote?->nama??"Tidak diketahui"}}<br>
+                {{$sppd->EPribadiRemote?->nip??"Tidak diketahui"}}
             </b>
             </div>
         </div>

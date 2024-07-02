@@ -397,16 +397,7 @@ class SPPDController extends Controller
                         return $carry;
                     }, []));
 
-                    dd($item->EPribadiRemote);
                     $carry[] = [
-                        'verifikasi' => match (true) {
-                            !is_null($item->EPribadiRemote) => $item->EPribadiRemote->nama,
-                            default => "Tidak diketahui"
-                        },
-                        'kode_verifikasi' => match (true) {
-                            !is_null($item->EPribadiRemote) => $item->EPribadiRemote->nip,
-                            default => "Tidak diketahui"
-                        },
                         'nama' => match (true) {
                             !is_null($item->Dosen) && is_null($item->Pegawai) => $item->Dosen->nama_dosen,
                             is_null($item->Dosen) && !is_null($item->Pegawai) => $item->Pegawai->nama,
