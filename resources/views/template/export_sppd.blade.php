@@ -44,7 +44,12 @@
         justify-content: flex-end;
         width: 100%;
         position: relative;
-        right: 0;
+
+        .paraf__container{
+            /* flex-grow: 1;
+            width: 30%; */
+            text-align: center;
+        }
     }
     .page-break {
         page-break-after: always;
