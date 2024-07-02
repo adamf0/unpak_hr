@@ -145,48 +145,50 @@
         </table>
         <table style="padding: 0px">
             @php
-                $total_anggota = count($sppd->AnggotaFlat);
+                $list_anggota = collect($sppd->AnggotaFlat)->chunk(3);
             @endphp
-            @foreach ($sppd->AnggotaFlat as $key => $anggota)
-                @if ($total_anggota>1 && $key%2==0)
-                    <tr style="border: 1px solid black !important">
-                        <td style="border: 1px solid black !important; width: 350px;">
-                            <center>
-                            <p>Tanggal {{$anggota->tanggal}}</p>
-                            <br>
-                            <br>
-                            <br>
-                            <b>{{ $anggota->nama }}</b><br>
-                            {{ $anggota->kodePengenal }}
-                            </center>     
-                        </td>
-                    @elseif($total_anggota>1 && $key%2==1)
-                        <td style="border: 1px solid black !important; width: 350px;">
-                            <center>
-                            <p>Tanggal {{$anggota->tanggal}}</p>
-                            <br>
-                            <br>
-                            <br>
-                            <b>{{ $anggota->nama }}</b><br>
-                            {{ $anggota->kodePengenal }}
-                            </center>    
-                        </td>
-                    </tr>
+
+            @foreach($list_anggota as $rows)
+                @foreach($rows as $anggota)
+                    @if ($loop->first)
+                        <tr style="border: 1px solid black !important">
+                            <td style="border: 1px solid black !important; width: 350px;">
+                                <center>
+                                <p>Tanggal {{ $anggota->tanggal }}</p>
+                                <br>
+                                <br>
+                                <br>
+                                <b>{{ $anggota->nama }}</b><br>
+                                {{ $anggota->kodePengenal }}
+                                </center>     
+                            </td>
+                    @elseif ($loop->last)
+                            <td style="border: 1px solid black !important; width: 350px;">
+                                <center>
+                                <p>Tanggal {{ $anggota->tanggal }}</p>
+                                <br>
+                                <br>
+                                <br>
+                                <b>{{ $anggota->nama }}</b><br>
+                                {{ $anggota->kodePengenal }}
+                                </center>     
+                            </td>
+                        </tr>
                     @else
-                    <tr style="border: 1px solid black !important">
-                        <td colspan="2" style="border: 1px solid black !important; width: 350px;">
-                            <center>
-                            <p>Tanggal {{$anggota->tanggal}}</p>
-                            <br>
-                            <br>
-                            <br>
-                            <b>{{ $anggota->nama }}</b><br>
-                            {{ $anggota->kodePengenal }}
-                            </center>  
-                        </td>
-                    </tr>
+                            <td style="border: 1px solid black !important; width: 350px;">
+                                <center>
+                                <p>Tanggal {{ $anggota->tanggal }}</p>
+                                <br>
+                                <br>
+                                <br>
+                                <b>{{ $anggota->nama }}</b><br>
+                                {{ $anggota->kodePengenal }}
+                                </center>     
+                            </td>
                     @endif
                 @endforeach
+            @endforeach
+
         </table>
         <br>
         <!-- <table class="styled-table">
