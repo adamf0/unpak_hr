@@ -307,7 +307,7 @@ class SPPDController extends Controller
             $type_export    = $request->has('type_export') ? $request->query('type_export') : null;
 
             $file_name = "sppd";
-            $sppd = SPPD::with(['SDM', 'Dosen', 'Pegawai', 'JenisSPPD', 'Anggota', 'Anggota.Dosen', 'Anggota.Pegawai','FileLaporan']);
+            $sppd = SPPD::with(['SDM', 'EPribadiRemote', 'Dosen', 'Pegawai', 'JenisSPPD', 'Anggota', 'Anggota.Dosen', 'Anggota.Pegawai','FileLaporan']);
 
             if (is_null($type_export)) {
                 throw new Exception("belum pilih cetak sebagai apa");
@@ -398,6 +398,14 @@ class SPPDController extends Controller
                     }, []));
 
                     $carry[] = [
+                        'verifikasi' => match (true) {
+                            !is_null($item->EPribadiRemote) => $item->EPribadiRemote->nama,
+                            default => "Tidak diketahui"
+                        },
+                        'kode_verifikasi' => match (true) {
+                            !is_null($item->EPribadiRemote) => $item->EPribadiRemote->nip,
+                            default => "Tidak diketahui"
+                        },
                         'nama' => match (true) {
                             !is_null($item->Dosen) && is_null($item->Pegawai) => $item->Dosen->nama_dosen,
                             is_null($item->Dosen) && !is_null($item->Pegawai) => $item->Pegawai->nama,

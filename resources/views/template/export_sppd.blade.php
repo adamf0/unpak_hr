@@ -134,7 +134,10 @@
             <br>
             <br>
             @endif
-            <b>SDM</b>
+            <b>
+                {{$sppd->verifikasi}}<br>
+                {{$sppd->kode_verifikasi}}
+            </b>
             </div>
         </div>
         <br>
@@ -216,7 +219,7 @@
                 @endforeach
         </table>
         <br>
-        <table class="styled-table">
+        <!-- <table class="styled-table">
             <tr>
                 <td colspan="3">
                     <h2 align="center">Laporan Kegiatan</h2>
@@ -263,7 +266,7 @@
                     </ol>
                 </td>
             </tr>
-        </table>
+        </table> -->
     </div>    
     @endforeach
 </body>
