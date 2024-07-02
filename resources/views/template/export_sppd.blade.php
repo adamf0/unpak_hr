@@ -132,6 +132,7 @@
                     <center>
                         <p>Menyetujui</p>
                         @if (!empty($sppd->EPribadiRemote) && $sppd->status=="terima sdm")
+                        <br>
                         <img src='data:image/png;base64, {!! base64_encode(QrCode::size(100)->generate("Nama : ".$sppd->EPribadiRemote->nama)) !!}' alt="tanda tangan"/>
                         @else
                         <br>
@@ -144,18 +145,6 @@
                 </td>
             </tr>
         </table>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
         <br>
         <br>
         <br>
