@@ -43,12 +43,8 @@
         display: flex;
         justify-content: flex-end;
         width: 100%;
-
-        .paraf__container{
-            flex-grow: 1;
-            width: 30%;
-            /* text-align: center; */
-        }
+        position: relative;
+        right: 0;
     }
     .page-break {
         page-break-after: always;
