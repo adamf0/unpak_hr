@@ -31,7 +31,7 @@ class PdfX implements Export, Stream
                 // 'enable_remote' => true, 
                 'chroot' => public_path('assets')
             ])
-            ->setPaper('legal')
+            ->setPaper('A4')
             ->loadHTML(
                 view($view)->with($datas)->render()
             );
