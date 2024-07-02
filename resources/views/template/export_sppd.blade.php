@@ -124,22 +124,30 @@
                 <td>{{$sppd->keterangan}}</td>
             </tr>
         </table>
-        <div class="paraf">
-            <div class="paraf__container">
-                <p>Menyetujui</p>
-                @if (!empty($sppd->EPribadiRemote) && $sppd->status=="terima sdm")
-                <img src='data:image/png;base64, {!! base64_encode(QrCode::size(100)->generate("Nama : ".$sppd->EPribadiRemote->nama)) !!}' alt="tanda tangan"/>
-                <br>
-                @else
-                <br>
-                <br>
-                @endif
-                <b>
-                    {{$sppd->EPribadiRemote?->nama??"Tidak diketahui"}}<br>
-                    {{$sppd->EPribadiRemote?->nip??"Tidak diketahui"}}
-                </b>
-            </div>
-        </div>
+        <table>
+            <tr>
+                <td><p>Menyetujui</p></td>
+            </tr>
+            <tr>
+                <td>
+                    @if (!empty($sppd->EPribadiRemote) && $sppd->status=="terima sdm")
+                    <img src='data:image/png;base64, {!! base64_encode(QrCode::size(100)->generate("Nama : ".$sppd->EPribadiRemote->nama)) !!}' alt="tanda tangan"/>
+                    <br>
+                    @else
+                    <br>
+                    <br>
+                    @endif
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>
+                        {{$sppd->EPribadiRemote?->nama??"Tidak diketahui"}}<br>
+                        {{$sppd->EPribadiRemote?->nip??"Tidak diketahui"}}
+                    </b>
+                </td>
+            </tr>
+        </table>
         <br>
         <br>
         <br>
