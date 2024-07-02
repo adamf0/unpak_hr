@@ -105,14 +105,14 @@
             </tr>
             @foreach ($sppd->anggota as $i => $anggota)
                 @if (!empty($anggota->Dosen))
-                <tr style="border: 1px solid black !important">
+                <tr>
                     <td></td>
                     <td colspan="2">{{ $i+1 }}. {{$anggota->Dosen->NIDN}} - {{$anggota->Dosen->nama_dosen}}</td>
                 </tr>
                 @endif
 
                 @if (!empty($anggota->Pegawai))
-                <tr style="border: 1px solid black !important">
+                <tr>
                     <td></td>
                     <td colspan="2">{{ $i+1 }}. {{$anggota->Pegawai->nip}} - {{$anggota->Pegawai->nama}}</td>
                 </tr>
@@ -170,7 +170,7 @@
             @endphp
             @foreach ($sppd->AnggotaFlat as $key => $anggota)
                 @if ($total_anggota>1 && $key%2==0)
-                    <tr>
+                    <tr style="border: 1px solid black !important">
                         <td>
                             <center>
                             <p>Tanggal {{$anggota->tanggal}}</p>
@@ -204,7 +204,7 @@
                         </td>
                     </tr>
                     @else
-                    <tr>
+                    <tr style="border: 1px solid black !important">
                         <td colspan="2">
                             <center>
                             <p>Tanggal {{$anggota->tanggal}}</p>
