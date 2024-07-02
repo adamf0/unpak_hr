@@ -43,13 +43,10 @@
         display: flex;
         justify-content: flex-end;
         width: 100%;
-        position: relative;
 
         .paraf__container{
-            position: absolute;
-            right: end;
-            /* flex-grow: 1;
-            width: 30%; */
+            flex-grow: 1;
+            width: 30%;
             /* text-align: center; */
         }
     }
@@ -126,23 +123,29 @@
                 <td>Keterangan</td>
                 <td>{{$sppd->keterangan}}</td>
             </tr>
+            <tr style="border-left: 0px solid transparent; border-right: 0px solid transparent;">
+                <td colspan="3"></td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td>
+                    <center>
+                        <p>Menyetujui</p>
+                        @if (!empty($sppd->EPribadiRemote) && $sppd->status=="terima sdm")
+                        <img src='data:image/png;base64, {!! base64_encode(QrCode::size(100)->generate("Nama : ".$sppd->EPribadiRemote->nama)) !!}' alt="tanda tangan"/>
+                        <br>
+                        @else
+                        <br>
+                        <br>
+                        @endif
+                        <b>
+                            {{$sppd->EPribadiRemote?->nama??"Tidak diketahui"}}<br>
+                            {{$sppd->EPribadiRemote?->nip??"Tidak diketahui"}}
+                        </b>
+                    </center>
+                </td>
+            </tr>
         </table>
-        <div class="paraf">
-            <div class="paraf__container" style="text-align: end;">
-                <p>Menyetujui</p>
-                @if (!empty($sppd->EPribadiRemote) && $sppd->status=="terima sdm")
-                <img src='data:image/png;base64, {!! base64_encode(QrCode::size(100)->generate("Nama : ".$sppd->EPribadiRemote->nama)) !!}' alt="tanda tangan"/>
-                <br>
-                @else
-                <br>
-                <br>
-                @endif
-                <b>
-                    {{$sppd->EPribadiRemote?->nama??"Tidak diketahui"}}<br>
-                    {{$sppd->EPribadiRemote?->nip??"Tidak diketahui"}}
-                </b>
-            </div>
-        </div>
         <br>
         <br>
         <br>
