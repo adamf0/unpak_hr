@@ -123,12 +123,12 @@
                 <td>Keterangan</td>
                 <td>{{$sppd->keterangan}}</td>
             </tr>
-            <tr style="border: 0px solid transparent; background: white">
-                <td colspan="3" style="border-left: 0px solid transparent; border-right: 0px solid transparent; background: white"></td>
+            <tr style="border: 0px solid white !important; background: white">
+                <td colspan="3" style="border-bottom: 0px solid white !important; border-left: 0px solid white !important; border-right: 0px solid white !important; background: white"></td>
             </tr>
-            <tr style="border: 0px solid transparent; background: white">
-                <td colspan="2" style="border: 0px solid transparent; background: white"></td>
-                <td style="border: 0px solid transparent; background: white">
+            <tr style="border: 0px solid white !important; background: white">
+                <td colspan="2" style="border: 0px solid white !important; background: white"></td>
+                <td style="border: 0px solid white !important; background: white">
                     <center>
                         <p>Menyetujui</p>
                         @if (!empty($sppd->EPribadiRemote) && $sppd->status=="terima sdm")
