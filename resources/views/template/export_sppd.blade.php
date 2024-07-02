@@ -148,7 +148,7 @@
                 $total_anggota = count($sppd->AnggotaFlat);
             @endphp
             @foreach ($sppd->AnggotaFlat as $key => $anggota)
-                @if ($total_anggota>1 && $key%2==0)
+                @if ($total_anggota>1 && $key%3==0)
                     <tr style="border: 1px solid black !important">
                         <td style="padding: 0px; border: 1px solid black !important; width: 350px;">
                             <center>
@@ -160,7 +160,7 @@
                             {{ $anggota->kodePengenal }}
                             </center>     
                         </td>
-                    @elseif($total_anggota>1 && $key%2==1)
+                    @elseif($total_anggota>1 && $key%3==1)
                         <td style="padding: 0px; border: 1px solid black !important; width: 350px;">
                             <center>
                             <p>Tanggal {{$anggota->tanggal}}</p>
