@@ -68,7 +68,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
             $listKalendar = $master_kalendar->reduce(function ($carry, $item) use ($format) {
                 if($format=="full-calendar"){
                     $carry[] = [
-                        "title"=>$item->keterangan??"NA",
+                        "title"=>$item->keterangan??"tanpa keterangan",
                         "start"=>$item->tanggal_mulai,
                         "end"=>($item->tanggal_berakhir == null || $item->tanggal_berakhir == $item->tanggal_mulai)? $item->tanggal_mulai:$item->tanggal_berakhir,
                         "backgroundColor"=>'#dc3545',
@@ -83,7 +83,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                         $carry[] = [
                             "id"=>$item->id,
                             "tanggal"=>Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta')->addDays($i)->format('Y-m-d'),
-                            "keterangan"=>$item->keterangan??"NA",
+                            "keterangan"=>$item->keterangan??"tanpa keterangan",
                         ];
                     }
                 }
@@ -93,7 +93,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
             $listCuti = $list_cuti->reduce(function ($carry, $item) use ($format) {
                 if($format=="full-calendar"){
                     $carry[] = [
-                        "title"=>$item->tujuan??"NA",
+                        "title"=>$item->tujuan??"tanpa keterangan cuti",
                         "start"=>$item->tanggal_mulai,
                         "end"=>($item->tanggal_akhir == null || $item->tanggal_akhir == $item->tanggal_mulai)? $item->tanggal_mulai:$item->tanggal_akhir,
                         "backgroundColor"=>'#ffc107',
@@ -108,7 +108,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                         $carry[] = [
                             "id"=>$item->id,
                             "tanggal"=>Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta')->addDays($i)->format('Y-m-d'),
-                            "keterangan"=>$item->tujuan??"NA",
+                            "keterangan"=>$item->tujuan??"tanpa keterangan cuti",
                         ];
                     }
                 }
@@ -118,7 +118,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
             $listIzin = $list_izin->reduce(function ($carry, $item) use ($format) {
                 if($format=="full-calendar"){
                     $carry[] = [
-                        "title"=>$item->tujuan??"NA",
+                        "title"=>$item->tujuan??"tanpa keterangan izin",
                         "start"=>$item->tanggal_pengajuan,
                         "end"=>$item->tanggal_pengajuan,
                         "backgroundColor"=>'#0044cc',
@@ -129,7 +129,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                     $carry[] = [
                         "id"=>$item->id,
                         "tanggal"=>Carbon::parse($item->tanggal_pengajuan)->setTimezone('Asia/Jakarta')->format('Y-m-d'),
-                        "keterangan"=>$item->tujuan??"NA",
+                        "keterangan"=>$item->tujuan??"tanpa keterangan izin",
                     ];
                 }
                 return $carry;
@@ -138,7 +138,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
             $listSPPD = $list_sppd->reduce(function ($carry, $item) use ($format) {
                 if($format=="full-calendar"){
                     $carry[] = [
-                        "title"=>$item->keterangan??"NA",
+                        "title"=>$item->keterangan??"tanpa keterangan sppd",
                         "start"=>$item->tanggal_berangkat,
                         "end"=>$item->tanggal_kembali,
                         "backgroundColor"=>'#0dcaf0',
@@ -149,7 +149,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                     $carry[] = [
                         "id"=>$item->id,
                         "tanggal"=>Carbon::parse($item->tanggal_pengajuan)->setTimezone('Asia/Jakarta')->format('Y-m-d'),
-                        "keterangan"=>$item->keterangan??"NA",
+                        "keterangan"=>$item->keterangan??"tanpa keterangan sppd",
                     ];
                 }
                 return $carry;
