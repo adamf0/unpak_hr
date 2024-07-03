@@ -79,6 +79,11 @@
                                 <input type="hidden" name="id" class="@error('id') is-invalid @enderror" value="{{ old('id',$SPPD->GetId()) }}">
                                 <div class="row">
                                     <div class="col-12">
+                                        <x-input-file title="File SPPD" name="sppd" accept=".pdf"/>
+                                        <small class="text-primary">* PDF yang boleh diupload</small><br>
+                                        <small class="text-primary">* Maksimal 10Mb</small>
+                                    </div>
+                                    <div class="col-12">
                                         <x-text title="Intisari / ringkasan kegiatan" name="intisari" class="intisari" default="{{ old('intisari',$SPPD?->GetIntisari()) }}"/>
                                     </div>
                                     <div class="col-12">

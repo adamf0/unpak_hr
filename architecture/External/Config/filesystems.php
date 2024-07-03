@@ -86,6 +86,13 @@ return [
             'throw' => false,
         ],
 
+        'dokumen_sppd_merge' => [
+            'driver' => 'local',
+            'root'   => public_path('dokumen_sppd_merge'),
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

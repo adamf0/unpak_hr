@@ -23,6 +23,7 @@ use Architecture\Domain\Entity\JenisSPPDReferensi;
 use Architecture\Domain\Entity\PegawaiReferensi;
 use Architecture\Domain\Entity\SPPDReferensi;
 use Architecture\Domain\Enum\TypeNotif;
+use Architecture\Domain\RuleValidationRequest\SPPD\CreateSPPDLaporanRuleReq;
 use Architecture\Domain\RuleValidationRequest\SPPD\CreateSPPDRuleReq;
 use Architecture\Domain\RuleValidationRequest\SPPD\DeleteSPPDRuleReq;
 use Architecture\Domain\RuleValidationRequest\SPPD\UpdateSPPDRuleReq;
@@ -41,6 +42,7 @@ use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
+use iio\libmergepdf\Merger;
 
 class SPPDController extends Controller
 {
@@ -237,14 +239,15 @@ class SPPDController extends Controller
     public function save_laporan(Request $request)
     {
         try {
-            // $validator      = validator($request->all(), UpdateSPPDRuleReq::create());
+            $validator      = validator($request->all(), CreateSPPDLaporanRuleReq::create(), CreateSPPDLaporanRuleReq::message());
 
-            // if(count($validator->errors())){
-            //     return redirect()->route('sppd.edit',["id"=>$request->get("id")])->withInput()->withErrors($validator->errors()->toArray());    
-            // } 
+            if(count($validator->errors())){
+                return redirect()->route('sppd.laporan',["id"=>$request->get("id")])->withInput()->withErrors($validator->errors()->toArray());    
+            } 
 
             DB::beginTransaction();
             $SPPD = $this->queryBus->ask(new GetSPPDQuery($request->get('id')));
+
             $this->commandBus->dispatch(new UpdateSPPDLaporanCommand(
                 $request->get('id'),
                 $request->get('intisari'),
@@ -261,12 +264,30 @@ class SPPDController extends Controller
                 $this->handleFileUpload($request, 'foto_kegiatan', $SPPD->GetFotoKegiatan());
             }
 
+            $SPPD = $this->queryBus->ask(new GetSPPDQuery($request->get('id')));
+            $file_merger = public_path("dokumen_sppd_merge/sppd_{$SPPD->GetId()}_laporan.pdf");
+            $file = PdfX::From(
+                "template.export_sppd_laporan",
+                [
+                    "sppd" => $SPPD,
+                ],
+                FolderX::FromPath(public_path('export/pdf')),
+                $file_merger
+            );
+            FileManager::MergeFile($file, $request->file('sppd'));
+
+            $sppd = SPPD::findOrFail($request->get('id'));
+            $sppd->file_sppd_laporan = "sppd_{$SPPD->GetId()}_laporan.pdf";
+            $sppd->save();
+
             DB::commit();
+
             Session::flash(TypeNotif::Update->val(), "berhasil update laporan");
 
             return redirect()->route('sppd.index2',['type'=>Session::get('levelActive')=="pegawai"? "tendik":"dosen"]);
         } catch (Exception $e) {
             DB::rollBack();
+            throw $e;
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
             return redirect()->route('sppd.laporan', ["id" => $request->get('id')])->withInput();
         }
@@ -281,8 +302,8 @@ class SPPDController extends Controller
     
         $existingFiles = $existingFiles ?? collect([]);
         foreach ($existingFiles as $file) {
-            if (Storage::disk($this->disk)->exists($file->file)) {
-                Storage::disk($this->disk)->delete($file->file);
+            if (Storage::disk($this->disk)->exists($file->GetFileName())) {
+                Storage::disk($this->disk)->delete($file->GetFileName());
             }
         }
     

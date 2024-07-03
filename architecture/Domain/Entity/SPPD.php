@@ -3,6 +3,7 @@ namespace Architecture\Domain\Entity;
 
 use Architecture\Application\SPPD\SPPDBase;
 use Architecture\Domain\ValueObject\Date;
+use Architecture\Domain\ValueObject\File;
 use Illuminate\Support\Collection;
 
 class SPPD extends BaseEntity{
@@ -28,6 +29,7 @@ class SPPD extends BaseEntity{
         $rencana_waktu_tindak_lanjut=null,
         ?Collection $foto_kegiatan=null,
         ?Collection $undangan=null,
+        ?File $file_sppd_laporan
     ){
         $this->id = $id;
         $this->dosen = $dosen;
@@ -49,5 +51,6 @@ class SPPD extends BaseEntity{
         $this->rencana_waktu_tindak_lanjut = $rencana_waktu_tindak_lanjut;
         $this->foto_kegiatan = $foto_kegiatan;
         $this->undangan = $undangan;
+        $this->file_sppd_laporan = $file_sppd_laporan;
     }
 }

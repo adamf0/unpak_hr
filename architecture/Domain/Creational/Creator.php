@@ -154,6 +154,7 @@ class Creator{
             $factory->GetRencanaWaktuTindakLanjut(),
             $factory->GetFotoKegiatan(),
             $factory->GetUndangan(),
+            $factory->GetFileSppdLaporan()
         );
     }
     public static function buildPresensi(IPresensi $factory){

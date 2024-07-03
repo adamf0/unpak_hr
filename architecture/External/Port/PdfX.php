@@ -4,11 +4,14 @@ namespace Architecture\External\Port;
 
 use Architecture\Domain\Entity\FolderX;
 use Architecture\Shared\Export;
+use Architecture\Shared\MergeFile;
 use Architecture\Shared\Stream;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
+use iio\libmergepdf\Merger;
+use Illuminate\Http\UploadedFile;
 
-class PdfX implements Export, Stream
+class PdfX implements Export, Stream, MergeFile
 {
     private $compile;
 
@@ -56,5 +59,19 @@ class PdfX implements Export, Stream
     {
         // return view($this->view)->with($this->datas)->render();
         return $this->compile->stream();
+    }
+    public function merge(UploadedFile $file)
+    {
+        if(!($file instanceof UploadedFile)){
+            throw new Exception("gagal menggabungkan sppd dengan laporan kegiatan");
+        }
+        $this->compile->render();
+        $output = $this->compile->output();
+        
+        $merger = new Merger();
+        $merger->addFile($file);
+        $merger->addRaw($output);
+        $createdPdf = $merger->merge();
+        file_put_contents($this->file, $createdPdf);
     }
 }

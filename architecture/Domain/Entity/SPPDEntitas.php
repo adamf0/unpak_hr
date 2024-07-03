@@ -3,6 +3,7 @@ namespace Architecture\Domain\Entity;
 
 use Architecture\Domain\Contract\ISPPD;
 use Architecture\Domain\ValueObject\Date;
+use Architecture\Domain\ValueObject\File;
 use Illuminate\Support\Collection;
 
 class SPPDEntitas extends ISPPD{
@@ -27,6 +28,7 @@ class SPPDEntitas extends ISPPD{
         $rencana_waktu_tindak_lanjut=null,
         ?Collection $foto_kegiatan=null,
         ?Collection $undangan=null,
+        ?File $file_sppd_laporan
     ){
         $instance = new self();
         $instance->id = $id;
@@ -49,6 +51,7 @@ class SPPDEntitas extends ISPPD{
         $instance->rencana_waktu_tindak_lanjut = $rencana_waktu_tindak_lanjut;
         $instance->foto_kegiatan = $foto_kegiatan;
         $instance->undangan = $undangan;
+        $instance->file_sppd_laporan = $file_sppd_laporan;
         return $instance;
     }
 }

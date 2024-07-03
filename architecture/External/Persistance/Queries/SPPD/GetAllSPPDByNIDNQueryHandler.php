@@ -90,7 +90,8 @@ class GetAllSPPDByNIDNQueryHandler extends Query
                 $data->rencana_tindak_lanjut,
                 $data->rencana_waktu_tindak_lanjut,
                 $foto_kegiatan,
-                $undangan
+                $undangan,
+                !empty($data->file_sppd_laporan)? new File($data->file_sppd_laporan, "dokumen_sppd_merge"):null
             ));
 
             return $item;

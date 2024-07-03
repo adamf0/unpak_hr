@@ -6,6 +6,7 @@ use Architecture\Domain\Entity\Dosen;
 use Architecture\Domain\Entity\JenisSPPD;
 use Architecture\Domain\Entity\Pegawai;
 use Architecture\Domain\ValueObject\Date;
+use Architecture\Domain\ValueObject\File;
 use Illuminate\Support\Collection;
 
 trait SPPDBase 
@@ -29,7 +30,11 @@ trait SPPDBase
     public $rencana_waktu_tindak_lanjut=null;
     public ?Collection $foto_kegiatan=null;
     public ?Collection $undangan=null;
+    public ?File $file_sppd_laporan;
 
+    public function GetFileSppdLaporan(){
+        return $this->file_sppd_laporan;
+    }
     public function GetIntisari(){
         return $this->intisari;
     }

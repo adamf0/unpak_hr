@@ -68,6 +68,7 @@ class DatatableSPPDController extends Controller
                                         "kontribusi"=> $item->GetKontribusi(),
                                         "rencana_tindak_lanjut"=> $item->GetRencanaTindakLanjut(),
                                         "rencana_waktu_tindak_lanjut"=> $item->GetRencanaWaktuTindakLanjut(),
+                                        "sppd_laporan"=> $item->GetFileSppdLaporan()?->getUrl(),
                                         "foto"=> $item->GetFotoKegiatan()->reduce(function($carry,$item){
                                             $carry[] = $item->getUrl();
                                             return $carry;
@@ -101,6 +102,7 @@ class DatatableSPPDController extends Controller
                                         "kontribusi"=> $item->GetKontribusi(),
                                         "rencana_tindak_lanjut"=> $item->GetRencanaTindakLanjut(),
                                         "rencana_waktu_tindak_lanjut"=> $item->GetRencanaWaktuTindakLanjut(),
+                                        "sppd_laporan"=> $item->GetFileSppdLaporan()?->getUrl(),
                                         "foto"=> $item->GetFotoKegiatan()->reduce(function($carry,$item){
                                             $carry[] = $item->getUrl();
                                             return $carry;
@@ -131,9 +133,13 @@ class DatatableSPPDController extends Controller
                 else if($row->status=="terima sdm"){
                     $render = '
                         <a href="#" class="ml-2 btn btn-secondary btn-download-anggaran"><i class="bi bi-wallet2"></i></a>
-                        <a href="#" class="btn btn-info btn-download-pengajuan-pdf"><i class="bi bi-file-earmark-pdf"></i></a>
-                        <a href="'.route('sppd.laporan',['id'=>$row->id]).'" class="btn btn-success"><i class="bi bi-file-earmark-plus-fill"></i></a>
-                        <a href="#" class="btn btn-info btn-detail">Detail</i></a>';
+                        <a href="#" class="btn btn-info btn-download-pengajuan-pdf"><i class="bi bi-file-earmark-pdf"></i></a>';
+
+                    if(!empty($row->sppd_laporan)){
+                    $render .= '<a href="'.$row->sppd_laporan.'" target="_blank" class="btn btn-success"><i class="bi bi-file-earmark-plus-fill"></i></a>';
+                    }
+                    $render .= '<a href="#" class="btn btn-info btn-detail">Detail</i></a>
+                        <a href="'.route('sppd.laporan',['id'=>$row->id]).'" class="btn btn-info">Laporan</a>';
                 }
             }
             else if($verifikasi){
