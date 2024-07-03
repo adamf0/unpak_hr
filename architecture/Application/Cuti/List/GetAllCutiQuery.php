@@ -13,7 +13,8 @@ class GetAllCutiQuery extends Query
         public $nidn=null,
         public $nip=null,
         public $tahun=null,
-        public TypeData $option = TypeData::Entity
+        public TypeData $option = TypeData::Entity,
+        public $semua=true,
     ) {
         return $this;
     }
@@ -26,5 +27,8 @@ class GetAllCutiQuery extends Query
     }
     public function GetTahun(){
         return $this->tahun;
+    }
+    public function GetSemua(){
+        return $this->semua;
     }
 }

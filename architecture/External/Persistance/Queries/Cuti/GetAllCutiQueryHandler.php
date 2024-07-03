@@ -25,7 +25,11 @@ class GetAllCutiQueryHandler extends Query
     {
         $datas = CutiModel::with(['JenisCuti','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','PayrollPegawai','EPribadiRemote']);
         if(!empty($query->GetNIDN())){
-            $datas = $datas->where('nidn',$query->GetNIDN())->orWhereHas('EPribadiRemote', fn($subQuery) => $subQuery->where('nidn', $query->GetNIDN()) );
+            if($query->GetSemua()){
+                $datas = $datas->where('nidn',$query->GetNIDN())->orWhereHas('EPribadiRemote', fn($subQuery) => $subQuery->where('nidn', $query->GetNIDN()) );
+            } else{
+                $datas = $datas->where('nidn',$query->GetNIDN());
+            }
         }
         if(!empty($query->GetNIP())){
             $datas = $datas->where('nip',$query->GetNIP());
