@@ -356,11 +356,11 @@
                 e.preventDefault();
                 const rowData = table.row($(this).closest('tr')).data();
                 
-                const list_foto = (rowData?.undangan ?? []).map(function(item) {
+                const list_undangan = (rowData?.undangan ?? []).map(function(item) {
                     return `<li><a href="${item}" target="_blank">${item}</a></li>`;
                 }).join('');
 
-                const list_undangan = (rowData?.foto ?? []).map(function(item) {
+                const list_foto = (rowData?.foto ?? []).map(function(item) {
                     return `<li><a href="${item}" target="_blank">${item}</a></li>`;
                 }).join('');
 
