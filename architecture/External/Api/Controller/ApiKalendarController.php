@@ -86,11 +86,11 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                 return $carry;
             }, []);
             $list_izin_ = $list_izin->reduce(function ($carry, $item){
-                $carry[] = Carbon::parse($item->tanggal_pengajuan)->setTimezone('Asia/Jakarta')->format('Y-m-d');
+                $carry[] = $item->tanggal_pengajuan;
                 return $carry;
             }, []);
             $list_sppd_ = $list_sppd->reduce(function ($carry, $item){
-                $carry[] = Carbon::parse($item->tanggal_pengajuan)->setTimezone('Asia/Jakarta')->format('Y-m-d');
+                $carry[] = $item->tanggal_pengajuan;
                 return $carry;
             }, []);
             $skip_tanggal = array_merge($list_libur_, $list_cuti_, $list_izin_, $list_sppd_);
