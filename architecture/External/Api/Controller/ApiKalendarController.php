@@ -234,6 +234,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
 
                 return $carry;
             }, []);
+            dd($listAbsen);
 
             $list = array_merge($listKalendar, $listCuti, $listIzin, $listSPPD, $listAbsen);
 
