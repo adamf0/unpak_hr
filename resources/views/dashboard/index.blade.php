@@ -285,11 +285,11 @@
                     <div class="col">
                         <span class="badge bg-primary rounded-pill">&nbsp;</span>&nbsp;<p>Izin</p>
                     </div>
-                    <div class="col">
+                    <!-- <div class="col">
                         <span class="badge bg-info rounded-pill">&nbsp;</span>&nbsp;<p>SPPD</p>
-                    </div>
+                    </div> -->
                     <div class="col">
-                        <span class="badge bg-success rounded-pill">&nbsp;</span>&nbsp;<p>Masuk</p>
+                        <span class="badge bg-success rounded-pill">&nbsp;</span>&nbsp;<p>Masuk/SPPD</p>
                     </div>
                     <div class="col">
                         <span class="badge bg-black rounded-pill">&nbsp;</span>&nbsp;<p>Telat Masuk</p>
