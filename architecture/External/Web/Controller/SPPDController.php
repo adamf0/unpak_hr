@@ -241,9 +241,9 @@ class SPPDController extends Controller
         try {
             $validator      = validator($request->all(), CreateSPPDLaporanRuleReq::create(), CreateSPPDLaporanRuleReq::message());
 
-            if(count($validator->errors())){
-                return redirect()->route('sppd.laporan',["id"=>$request->get("id")])->withInput()->withErrors($validator->errors()->toArray());    
-            } 
+            // if(count($validator->errors())){
+            //     return redirect()->route('sppd.laporan',["id"=>$request->get("id")])->withInput()->withErrors($validator->errors()->toArray());    
+            // } 
 
             DB::beginTransaction();
             $SPPD = $this->queryBus->ask(new GetSPPDQuery($request->get('id')));
