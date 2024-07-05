@@ -241,9 +241,9 @@ class SPPDController extends Controller
         try {
             $validator      = validator($request->all(), CreateSPPDLaporanRuleReq::create(), CreateSPPDLaporanRuleReq::message());
 
-            // if(count($validator->errors())){
-            //     return redirect()->route('sppd.laporan',["id"=>$request->get("id")])->withInput()->withErrors($validator->errors()->toArray());    
-            // } 
+            if(count($validator->errors())){
+                return redirect()->route('sppd.laporan',["id"=>$request->get("id")])->withInput()->withErrors($validator->errors()->toArray());    
+            } 
 
             DB::beginTransaction();
             $SPPD = $this->queryBus->ask(new GetSPPDQuery($request->get('id')));
@@ -265,7 +265,6 @@ class SPPDController extends Controller
             }
 
             $SPPD = $this->queryBus->ask(new GetSPPDQuery($request->get('id')));
-            dd($SPPD->GetRencanaTindakLanjut());
             $file_merger = public_path("dokumen_sppd_merge/sppd_{$SPPD->GetId()}_laporan.pdf");
             $file = PdfX::From(
                 "template.export_sppd_laporan",
