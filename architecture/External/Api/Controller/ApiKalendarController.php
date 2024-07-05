@@ -67,6 +67,34 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
             $master_kalendar = $this->queryBus->ask(new GetAllMasterKalendarQuery(1, 1, $tahun, TypeData::Default));
             // dd($list_cuti, $list_izin, $list_sppd, $master_kalendar);
 
+            $list_libur_ = $master_kalendar->reduce(function ($carry, $item){
+                $start  = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta');
+                $end    = Carbon::parse($item->tanggal_berakhir)->setTimezone('Asia/Jakarta');
+                $days   = $end->diffInDays($start);
+                for ($i = 0; $i <= $days; $i++) {
+                    $carry[] = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta')->addDays($i)->format('Y-m-d');
+                }
+                return $carry;
+            }, []);
+            $list_cuti_ = $list_cuti->reduce(function ($carry, $item){
+                $start  = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta');
+                $end    = Carbon::parse($item->tanggal_akhir)->setTimezone('Asia/Jakarta');
+                $days   = $end->diffInDays($start);
+                for ($i = 0; $i <= $days; $i++) {
+                    $carry[] = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta')->addDays($i)->format('Y-m-d');
+                }
+                return $carry;
+            }, []);
+            $list_izin_ = $list_izin->reduce(function ($carry, $item){
+                $carry[] = Carbon::parse($item->tanggal_pengajuan)->setTimezone('Asia/Jakarta')->format('Y-m-d');
+                return $carry;
+            }, []);
+            $list_sppd_ = $list_sppd->reduce(function ($carry, $item){
+                $carry[] = Carbon::parse($item->tanggal_pengajuan)->setTimezone('Asia/Jakarta')->format('Y-m-d');
+                return $carry;
+            }, []);
+            $skip_tanggal = array_merge($list_libur_, $list_cuti_, $list_izin_, $list_sppd_);
+            
             $listKalendar = $master_kalendar->reduce(function ($carry, $item) use ($format) {
                 if ($format == "full-calendar") {
                     $carry[] = [
@@ -156,34 +184,6 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                 }
                 return $carry;
             }, []);
-
-            $list_libur_ = $master_kalendar->reduce(function ($carry, $item){
-                $start  = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta');
-                $end    = Carbon::parse($item->tanggal_berakhir)->setTimezone('Asia/Jakarta');
-                $days   = $end->diffInDays($start);
-                for ($i = 0; $i <= $days; $i++) {
-                    $carry[] = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta')->addDays($i)->format('Y-m-d');
-                }
-                return $carry;
-            }, []);
-            $list_cuti_ = $list_cuti->reduce(function ($carry, $item){
-                $start  = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta');
-                $end    = Carbon::parse($item->tanggal_akhir)->setTimezone('Asia/Jakarta');
-                $days   = $end->diffInDays($start);
-                for ($i = 0; $i <= $days; $i++) {
-                    $carry[] = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta')->addDays($i)->format('Y-m-d');
-                }
-                return $carry;
-            }, []);
-            $list_izin_ = $list_izin->reduce(function ($carry, $item){
-                $carry[] = Carbon::parse($item->tanggal_pengajuan)->setTimezone('Asia/Jakarta')->format('Y-m-d');
-                return $carry;
-            }, []);
-            $list_sppd_ = $list_sppd->reduce(function ($carry, $item){
-                $carry[] = Carbon::parse($item->tanggal_pengajuan)->setTimezone('Asia/Jakarta')->format('Y-m-d');
-                return $carry;
-            }, []);
-            $skip_tanggal = array_merge($list_libur_, $list_cuti_, $list_izin_, $list_sppd_);
 
             $listAbsen = $list_absen->reduce(function ($carry, $item) use ($format, $list_klaim_absen,$skip_tanggal) {
                 if(!in_array($item->tanggal,$skip_tanggal)){
