@@ -200,7 +200,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
             // dd($list_absen,$list_libur_, $list_cuti_, $list_izin_);
             $listAbsen = $list_absen->reduce(function ($carry, $item) use ($format, $list_klaim_absen,$skip_tanggal) {
                 if($item->tanggal=="2024-06-18"){
-                    dd($item, !in_array($item->tanggal,$skip_tanggal) , !Carbon::parse($item->tanggal)->isSunday());
+                    dd($item->tanggal,$skip_tanggal, !in_array($item->tanggal,$skip_tanggal) , !Carbon::parse($item->tanggal)->isSunday());
                 }
                 if(!in_array($item->tanggal,$skip_tanggal) && !Carbon::parse($item->tanggal)->isSunday()){
                     if ($format == "full-calendar") {
