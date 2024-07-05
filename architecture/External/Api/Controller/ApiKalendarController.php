@@ -93,8 +93,8 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                 $carry[] = $item->tanggal_pengajuan;
                 return $carry;
             }, []);
-            $skip_tanggal = array_merge($list_libur_, $list_cuti_, $list_izin_, $list_sppd);
-            dd($list_libur_, $list_cuti_, $list_izin_, $list_sppd_, $list_absen);
+            $skip_tanggal = array_merge($list_libur_, $list_cuti_, $list_izin_, $list_sppd_);
+            dd($list_libur_, $list_cuti_, $list_izin_, $list_sppd, $list_absen);
             
             $listKalendar = $master_kalendar->reduce(function ($carry, $item) use ($format) {
                 if ($format == "full-calendar") {
