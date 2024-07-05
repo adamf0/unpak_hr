@@ -103,14 +103,28 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
 
             $listKalendar = $master_kalendar->reduce(function ($carry, $item) use ($format) {
                 if ($format == "full-calendar") {
-                    $carry[] = [
-                        "title" => $item->keterangan ?? "tanpa keterangan",
-                        "start" => $item->tanggal_mulai,
-                        "end" => ($item->tanggal_berakhir == null || $item->tanggal_berakhir == $item->tanggal_mulai) ? $item->tanggal_mulai : $item->tanggal_berakhir,
-                        "backgroundColor" => '#dc3545',
-                        "borderColor" => "transparent",
-                        // "className"=>"bg-danger"
-                    ];
+                    $start  = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta');
+                    $end    = Carbon::parse(($item->tanggal_berakhir == null || $item->tanggal_berakhir == $item->tanggal_mulai) ? $item->tanggal_mulai : $item->tanggal_berakhir)->setTimezone('Asia/Jakarta');
+                    $days   = $end->diffInDays($start);
+                    for ($i = 0; $i <= $days; $i++) {
+                        $tgl = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta')->addDays($i)->format('Y-m-d');
+                        $carry[] = [
+                            "title" => $item->keterangan ?? "tanpa keterangan",
+                            "start" => $tgl,
+                            "end" => $tgl,
+                            "backgroundColor" => '#dc3545',
+                            "borderColor" => "transparent",
+                            // "className"=>"bg-danger"
+                        ];
+                    }
+                    // $carry[] = [
+                    //     "title" => $item->keterangan ?? "tanpa keterangan",
+                    //     "start" => $item->tanggal_mulai,
+                    //     "end" => ($item->tanggal_berakhir == null || $item->tanggal_berakhir == $item->tanggal_mulai) ? $item->tanggal_mulai : $item->tanggal_berakhir,
+                    //     "backgroundColor" => '#dc3545',
+                    //     "borderColor" => "transparent",
+                    //     // "className"=>"bg-danger"
+                    // ];
                 } else {
                     $start  = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta');
                     $end    = Carbon::parse($item->tanggal_berakhir)->setTimezone('Asia/Jakarta');
