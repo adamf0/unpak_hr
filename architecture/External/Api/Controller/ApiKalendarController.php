@@ -197,7 +197,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
             }, []);
 
             $skip_tanggal = array_merge($list_libur_, $list_cuti_, $list_izin_, $list_sppd_);
-            dd($list_absen,$list_libur_, $list_cuti_, $list_izin_);
+            // dd($list_absen,$list_libur_, $list_cuti_, $list_izin_);
             $listAbsen = $list_absen->reduce(function ($carry, $item) use ($format, $list_klaim_absen,$skip_tanggal) {
                 if(!in_array($item->tanggal,$skip_tanggal) && !Carbon::parse($item->tanggal)->isSunday()){
                     if ($format == "full-calendar") {
@@ -247,7 +247,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
 
                 return $carry;
             }, []);
-            // dd($list_libur_, $list_cuti_, $list_izin_, $list_sppd_, $listAbsen);
+            dd($list_libur_, $listAbsen);
 
             $list = array_merge($listKalendar, $listCuti, $listIzin, $listSPPD, $listAbsen);
 
