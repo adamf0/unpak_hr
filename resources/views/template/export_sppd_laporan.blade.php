@@ -83,7 +83,7 @@
             <tr>
                 <td>Rencana waktu pelaksanaan tindak lanjut</td>
                 <td>:</td>
-                <td>{{!empty($sppd->GetRencanaTindakLanjut())? date('l, d F Y',strtotime($sppd->GetRencanaWaktuTindakLanjut())):''}}</td>
+                <td>{{!empty($sppd->GetRencanaWaktuTindakLanjut())? date('l, d F Y',strtotime($sppd->GetRencanaWaktuTindakLanjut())):''}}</td>
             </tr>
             <tr>
                 <td>Foto</td>
