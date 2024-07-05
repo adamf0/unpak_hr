@@ -191,7 +191,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                         "title" => $item->keterangan ?? "tanpa keterangan sppd",
                         "start" => $item->tanggal_berangkat,
                         "end" => $item->tanggal_kembali,
-                        "backgroundColor" => '#198754',
+                        "backgroundColor" => '#0dcaf0',
                         "borderColor" => "transparent",
                         // "className"=>"bg-danger"
                     ];
