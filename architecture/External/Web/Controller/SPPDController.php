@@ -265,6 +265,7 @@ class SPPDController extends Controller
             }
 
             $SPPD = $this->queryBus->ask(new GetSPPDQuery($request->get('id')));
+            dd($SPPD->GetRencanaTindakLanjut());
             $file_merger = public_path("dokumen_sppd_merge/sppd_{$SPPD->GetId()}_laporan.pdf");
             $file = PdfX::From(
                 "template.export_sppd_laporan",
