@@ -374,7 +374,7 @@
                         error: function(xhr, status, error) {
                             failureCallback(error);
                         },
-                        done:function(){
+                        finally:function(){
                             $('.loading-calendar').hide()
                         },
                     });
