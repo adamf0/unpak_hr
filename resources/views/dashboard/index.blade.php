@@ -369,11 +369,11 @@
                                 };
                             });
                             console.log(events)
-                            $('.loading-calendar').hide()
+                            $('.loading-calendar').attr('style', 'display: none !important;');
                             successCallback(events);
                         },
                         error: function(xhr, status, error) {
-                            $('.loading-calendar').hide()
+                            $('.loading-calendar').attr('style', 'display: none !important;');
                             failureCallback(error);
                         }
                     });
