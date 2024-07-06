@@ -273,7 +273,12 @@
             <div class="card-body">
                 <h5 class="card-title">Calendar</h5>
                 <div class="row">
-                    <div id="calendar"></div>
+                    <div class="loading-calendar d-flex justify-content-center align-items-center" style="position: absolute;width: -webkit-fill-available;height: -webkit-fill-available;background: #b3b3b3;z-index: 2;opacity: 0.7;">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>    
+                    </div>
+                    <div id="calendar" style="z-index: 1;"></div>
                 </div>
                 <div class="row legend-calendar">
                     <div class="col">
@@ -348,6 +353,9 @@
                     $.ajax({
                         url: `{{ route('api.kalendar.index', ['tahun' => date('Y'), 'format' => 'full-calendar']) }}?level=${level}&nidn=${nidn}&nip=${nip}`,
                         method: 'GET',
+                        beforeSend:function(){
+                            $('.loading-calendar').show()
+                        },
                         success: function(response) {
                             var events = response.data.map(function(eventData) {
                                 return {
@@ -365,7 +373,10 @@
                         },
                         error: function(xhr, status, error) {
                             failureCallback(error);
-                        }
+                        },
+                        complete:function(){
+                            $('.loading-calendar').hide()
+                        },
                     });
                 }
             });
