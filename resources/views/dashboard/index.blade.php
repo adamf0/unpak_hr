@@ -369,14 +369,13 @@
                                 };
                             });
                             console.log(events)
+                            $('.loading-calendar').hide()
                             successCallback(events);
                         },
                         error: function(xhr, status, error) {
-                            failureCallback(error);
-                        },
-                        finally:function(){
                             $('.loading-calendar').hide()
-                        },
+                            failureCallback(error);
+                        }
                     });
                 }
             });
