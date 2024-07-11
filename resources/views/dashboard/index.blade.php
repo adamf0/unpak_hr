@@ -642,7 +642,7 @@
 
                 const currentTime = (absenMasuk == null ? getCurrentTime() : moment(absenMasuk)).tz('Asia/Jakarta');
                 const absenMasukTime = moment(dateNow + ' '+ timeAbsenString).tz('Asia/Jakarta').add('30', 'minutes');
-                console.log(currentTime.format('YYYY-MM-DD HH:mm:ss'), absenMasukTime.format('YYYY-MM-DD HH:mm:ss'))
+                console.log(currentTime.format('YYYY-MM-DD HH:mm:ss'), dateNow + ' '+ timeAbsenString)
                 const custom = currentTime.isAfter(absenMasukTime);
                 return custom;
             }
