@@ -640,10 +640,8 @@
             const customCase = () => {
                 if(absenMasuk.isEmpty()) return false;
 
-                const currentTime = (absenMasuk == null ? getCurrentTime() : moment(absenMasuk)).tz('Asia/Jakarta');
-                const absenMasukTime = moment(dateNow + ' '+ timeAbsenString).tz('Asia/Jakarta').add('30', 'minutes');
-                console.log(currentTime.format('YYYY-MM-DD HH:mm:ss'), dateNow + ' '+ timeAbsenString)
-                const custom = currentTime.isAfter(absenMasukTime);
+                const currentTime = (absenMasuk == null ? getCurrentTime() : moment(absenMasuk)).tz('Asia/Jakarta').add('30', 'minutes');
+                const custom = moment().isAfter(currentTime);
                 return custom;
             }
 
