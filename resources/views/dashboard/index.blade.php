@@ -249,6 +249,10 @@
                     <img src="{{ Utility::loadAsset('assets/img/libur_hrportal.jpg') }}" style="width:100%" alt="libur">
                     <!-- <h4 class="text-center">Tidak ada absen untuk hari libur</h4> -->
                 </div>
+                <div class="absen_kerja" style="display: none;">
+                    <img src="{{ Utility::loadAsset('assets/img/work_hrportal.jpg') }}" style="width:100%" alt="libur">
+                    <!-- <h4 class="text-center">Tidak ada absen untuk hari libur</h4> -->
+                </div>
             </div>
         </div>
     </div>
@@ -393,6 +397,7 @@
             const refInfoAbsenCatatanPulang = '.info_absen_catatan_pulang'
             const refInfoAbsenJamKerja = '.info_absen_jam_kerja'
             const refAbsenLibur = '.absen_libur';
+            const refAbsenKerja = '.absen_kerja';
 
             const refPresensiTotal = '.presensi_total'
             const refPresensiTidakMasuk = '.presensi_tidak_masuk'
@@ -516,6 +521,15 @@
                     $(refAbsenForm).hide()
                     $(refAbsenDone).hide()
                     $(refAbsenLibur).show()
+                    $(refAbsenMessage).html("")
+
+                    $(refAbsenMessage).hide()
+                    $(refAbsenKeterangan).hide()
+                    changeClass($(refAbsenSubmit), "btn-warning", "btn-success")
+                }
+                else if(state=="work"){
+                    $(refAbsenForm).hide()
+                    $(refAbsenKerja).show()
                     $(refAbsenMessage).html("")
 
                     $(refAbsenMessage).hide()
@@ -726,6 +740,8 @@
                     } else {
                         showLayoutAbsen("8 hour work")   
                     }
+                } else {
+                    showLayoutAbsen("work")
                 }
 
                 const _jamMasuk = moment(absenMasuk).tz('Asia/Jakarta')
