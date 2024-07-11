@@ -709,6 +709,7 @@
             })
             setInterval(function(){
                 console.log({
+                    "custom":customCase(),
                     "absenMasuk":absenMasuk,
                     "absenKeluar":absenKeluar,
                     "isBefore8Time":isBefore8Time(),
