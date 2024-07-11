@@ -637,6 +637,14 @@
                 const checkLate = currentTime.isAfter(absenMasukTime);
                 return checkLate;
             }
+            const customCase = () => {
+                if(absenMasuk.isEmpty()) return false;
+
+                const currentTime = (absenMasuk == null ? getCurrentTime() : moment(absenMasuk)).tz('Asia/Jakarta');
+                const absenMasukTime = moment(dateNow + ' '+ timeAbsenString).tz('Asia/Jakarta').add('30', 'minutes');
+                const custom = currentTime.isAfter(absenMasukTime);
+                return custom;
+            }
 
             $(refAbsenSubmit).click(async function(e){
                 e.preventDefault();
@@ -712,7 +720,7 @@
                     showLayoutAbsen("done")
                 } else if(absenMasuk.isEmpty()){ //belum absen jam <08:00
                     showLayoutAbsen(isBefore8Time()? "initial":"initial but late")
-                } else{
+                } else if(customCase()){
                     if( (isLate() && !has8hour()) || (!isLate() && !checkCurrentAbove15()) ){
                         showLayoutAbsen("less 8 hour work") 
                     } else {
