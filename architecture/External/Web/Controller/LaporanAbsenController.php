@@ -15,6 +15,7 @@ use Architecture\Shared\TypeData;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
@@ -68,7 +69,10 @@ class LaporanAbsenController extends Controller
             } else if($tanggal_mulai && $tanggal_akhir){
                 $file_name = $file_name."_$tanggal_mulai-$tanggal_akhir";
             }
-            $laporan = $this->queryBus->ask(new GetAllLaporanAbsenQuery($nidn,$nip,$tanggal_mulai,$tanggal_akhir,$type,TypeData::Default));
+            $laporan = Cache::remember($file_name, 1*60, function () use($nidn,$nip,$tanggal_mulai,$tanggal_akhir,$type){
+                return $this->queryBus->ask(new GetAllLaporanAbsenQuery($nidn,$nip,$tanggal_mulai,$tanggal_akhir,$type,TypeData::Default));
+            });
+            // $laporan = $this->queryBus->ask(new GetAllLaporanAbsenQuery($nidn,$nip,$tanggal_mulai,$tanggal_akhir,$type,TypeData::Default));
 
             if($type_export=="pdf"){
                 return $this->generateHtml(true, 0, null, null, $laporan);
