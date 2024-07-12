@@ -93,7 +93,16 @@ class GetAllLaporanAbsenQueryHandler extends Query
         } else if(!empty($query->GetNIP())){
             $this->list_pengguna = $this->list_pengguna->where('nip',$query->GetNIP());
         }
-        $this->list_pengguna = $this->list_pengguna->get();
+        $this->list_pengguna = $this->list_pengguna
+                                    ->get()
+                                    ->filter(function($item) use($query){
+                                        return match($query){
+                                            "dosen"=>$item->GetType()=="dosen",
+                                            "tendik"=>$item->GetType()=="pegawai",
+                                            default=>$item
+                                        };
+                                    })
+                                    ->values();
 
         for ($date = Carbon::now()->setTimezone('Asia/Jakarta')->startOfMonth(); $date->lte($end); $date->addDay()) {
             $this->list_tanggal[] = $date->copy()->format('Y-m-d');

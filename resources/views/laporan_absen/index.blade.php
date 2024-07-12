@@ -248,6 +248,7 @@
                         nip : cetak_nip,
                         tanggal_mulai : cetak_tanggal_mulai,
                         tanggal_akhir : cetak_tanggal_akhir,
+                        type: type,
                         type_export : cetak_type_export
                     };
 

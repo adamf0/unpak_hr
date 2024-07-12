@@ -44,6 +44,7 @@ class LaporanAbsenController extends Controller
             $nip            = $request->has('nip')? $request->query('nip'):null;
             $tanggal_mulai  = $request->has('tanggal_mulai')? $request->query('tanggal_mulai'):null;
             $tanggal_akhir  = $request->has('tanggal_akhir')? $request->query('tanggal_akhir'):null;
+            $type           = $request->has('type')? $request->query('type'):null;
             $type_export    = $request->has('type_export')? $request->query('type_export'):null;
 
             if(!is_null($nidn) && !is_null($nip)){
@@ -67,7 +68,7 @@ class LaporanAbsenController extends Controller
             } else if($tanggal_mulai && $tanggal_akhir){
                 $file_name = $file_name."_$tanggal_mulai-$tanggal_akhir";
             }
-            $laporan = $this->queryBus->ask(new GetAllLaporanAbsenQuery($nidn,$nip,$tanggal_mulai,$tanggal_akhir,TypeData::Default));
+            $laporan = $this->queryBus->ask(new GetAllLaporanAbsenQuery($nidn,$nip,$tanggal_mulai,$tanggal_akhir,$type,TypeData::Default));
 
             if($type_export=="pdf"){
                 return $this->generateHtml(true, 0, null, null, $laporan);

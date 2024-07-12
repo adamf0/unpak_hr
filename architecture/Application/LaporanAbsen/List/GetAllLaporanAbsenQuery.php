@@ -14,6 +14,7 @@ class GetAllLaporanAbsenQuery extends Query
         public $nip=null,
         public $tanggal_mulai=null,
         public $tanggal_akhir=null,
+        public $type=null,
         public TypeData $option = TypeData::Entity
     ) {
         return $this;
@@ -30,5 +31,8 @@ class GetAllLaporanAbsenQuery extends Query
     }
     public function GetTanggalAkhir(){
         return $this->tanggal_akhir;
+    }
+    public function GetType(){
+        return $this->type;
     }
 }
