@@ -26,14 +26,14 @@ class DatatableLaporanAbsenController extends Controller
         $level = $request->has('level')? $request->query('level'):null;
         $type = $request->has('type')? $request->query('type'):null;
 
-        $laporan = $this->queryBus->ask(new GetAllLaporanAbsenQuery(null,null,null,null,null,TypeData::Default));
-        $list_data = collect(isset($laporan["list_data"])? $laporan["list_data"]:[])->filter(function($item) use($type){
-            return match($type){
-                "dosen"=>$item['type']=="dosen",
-                "tendik"=>$item['type']=="pegawai",
-                default=>$item
-            };
-        })->values();
+        $list_data = $this->queryBus->ask(new GetAllLaporanAbsenQuery(null,null,null,null,$type,TypeData::Default));
+        // $list_data = collect(isset($laporan["list_data"])? $laporan["list_data"]:[])->filter(function($item) use($type){
+        //     return match($type){
+        //         "dosen"=>$item['type']=="dosen",
+        //         "tendik"=>$item['type']=="pegawai",
+        //         default=>$item
+        //     };
+        // })->values();
 
         $table = DataTables::of($list_data)
         ->addIndexColumn()
