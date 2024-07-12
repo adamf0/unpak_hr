@@ -77,6 +77,7 @@ class LaporanAbsenController extends Controller
             // $laporan = $this->queryBus->ask(new GetAllLaporanAbsenQuery($nidn,$nip,$tanggal_mulai,$tanggal_akhir,$type,TypeData::Default));
 
             if($type_export=="pdf"){
+                throw new Exception("export pdf masih di perbaiki");
                 return $this->generateHtml(true, 0, null, null, $laporan);
                 $file = PdfX::From(
                     "template.export_absen", 
@@ -134,7 +135,6 @@ class LaporanAbsenController extends Controller
                 return Excel::download(new ExportAbsenXls(collect($listData), array_merge(["nama"],$listTanggalFormat)), "$file_name.xlsx");
             }
         } catch (Exception $e) {
-            throw $e;
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
             return redirect()->route('laporan_absen.index');
         }
