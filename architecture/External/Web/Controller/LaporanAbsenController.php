@@ -69,7 +69,7 @@ class LaporanAbsenController extends Controller
             } else if($tanggal_mulai && $tanggal_akhir){
                 $file_name = $file_name."_$tanggal_mulai-$tanggal_akhir";
             }
-            $laporan = Cache::remember($file_name, 1*60, function () use($nidn,$nip,$tanggal_mulai,$tanggal_akhir,$type){
+            $laporan = Cache::remember($file_name, 5*60, function () use($nidn,$nip,$tanggal_mulai,$tanggal_akhir,$type){
                 return $this->queryBus->ask(new GetAllLaporanAbsenQuery($nidn,$nip,$tanggal_mulai,$tanggal_akhir,$type,TypeData::Default));
             });
             // $laporan = $this->queryBus->ask(new GetAllLaporanAbsenQuery($nidn,$nip,$tanggal_mulai,$tanggal_akhir,$type,TypeData::Default));
