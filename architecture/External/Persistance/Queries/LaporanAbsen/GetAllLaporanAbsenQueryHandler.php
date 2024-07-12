@@ -53,8 +53,8 @@ class GetAllLaporanAbsenQueryHandler extends Query
             } else if(!empty($pengguna->nip)){
                 $this->laporan = DB::table('laporan_merge_absen_izin_cuti')->where('nip',$pengguna->nip)->get();
             }
-            $dosen      = Dosen::where('NIDN',$pengguna->nidn)->first();
-            $pegawai    = NPribadi::where('nip',$pengguna->nip)->first();
+            $dosen      = Dosen::select('NIDN','nama_dosen','kode_fak','kode_jurusan','kode_prodi','status_aktif')->where('NIDN',$pengguna->nidn)->first();
+            $pegawai    = NPribadi::select('nip','nama','status_pegawai')->where('nip',$pengguna->nip)->first();
             
             $list_data[$kode]["pengguna"] = $dosen??$pegawai;
             $list_data[$kode]["type"] = match(true){
