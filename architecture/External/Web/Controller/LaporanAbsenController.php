@@ -118,7 +118,7 @@ class LaporanAbsenController extends Controller
                             $item[$key] = match(true){
                                 count($info)==1 => $info[0],
                                 count($info)>1 => end($info),
-                                default => "tidak ada data"
+                                default => ""
                             };
                         }
                     }
