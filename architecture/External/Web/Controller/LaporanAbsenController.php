@@ -161,7 +161,7 @@ class LaporanAbsenController extends Controller
             $html .= '</thead>';
             $html .= '<tbody>';
             $html .= $this->generateHtml(false, 0, 0, 0, $source);
-        } else if(!$initial && !is_null($i_data) && !is_null($i_t) && $i_t<=count($source['list_data']) ){
+        } else if(!$initial && !is_null($i_data) && !is_null($i_t) && $i_t<count($source['list_data']) ){
             // dump($i_t, $i_data, $source['list_data']);
             $data = array_key_exists($i_data, $source['list_data'])? $source['list_data'][$i_t]:null;
             if(is_null($data)){
