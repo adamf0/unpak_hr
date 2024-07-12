@@ -40,6 +40,8 @@ class LaporanAbsenController extends Controller
 
 
     public function export(Request $request){ //gagal harus lebih spesifik
+        ini_set('memory_limit', '8192M');
+        
         try {
             $nidn           = $request->has('nidn')? $request->query('nidn'):null;
             $nip            = $request->has('nip')? $request->query('nip'):null;
