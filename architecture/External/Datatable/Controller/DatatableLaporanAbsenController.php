@@ -7,6 +7,7 @@ use Architecture\Application\Abstractions\Messaging\ICommandBus;
 use Architecture\Application\Abstractions\Messaging\IQueryBus;
 use Architecture\Application\LaporanAbsen\List\GetAllLaporanAbsenQuery;
 use Architecture\Shared\TypeData;
+use Exception;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables as DataTables;
 
@@ -18,45 +19,48 @@ class DatatableLaporanAbsenController extends Controller
     ) {}
     
     public function index(Request $request){
-        ini_set('memory_limit', '-1');
-        ini_set('max_execution_time','-1');        
-        
-        $nidn = $request->has('nidn')? $request->query('nidn'):null;
-        $nip = $request->has('nip')? $request->query('nip'):null;
-        $level = $request->has('level')? $request->query('level'):null;
-        $type = $request->has('type')? $request->query('type'):null;
+        try {
+            ini_set('memory_limit', '-1');
+            ini_set('max_execution_time','-1');        
+            
+            $nidn = $request->has('nidn')? $request->query('nidn'):null;
+            $nip = $request->has('nip')? $request->query('nip'):null;
+            $level = $request->has('level')? $request->query('level'):null;
+            $type = $request->has('type')? $request->query('type'):null;
 
-        dump($type);
-        $list_data = $this->queryBus->ask(new GetAllLaporanAbsenQuery(null,null,null,null,$type,TypeData::Default));
-        // $list_data = collect(isset($laporan["list_data"])? $laporan["list_data"]:[])->filter(function($item) use($type){
-        //     return match($type){
-        //         "dosen"=>$item['type']=="dosen",
-        //         "tendik"=>$item['type']=="pegawai",
-        //         default=>$item
-        //     };
-        // })->values();
+            $list_data = $this->queryBus->ask(new GetAllLaporanAbsenQuery(null,null,null,null,$type,TypeData::Default));
+            // $list_data = collect(isset($laporan["list_data"])? $laporan["list_data"]:[])->filter(function($item) use($type){
+            //     return match($type){
+            //         "dosen"=>$item['type']=="dosen",
+            //         "tendik"=>$item['type']=="pegawai",
+            //         default=>$item
+            //     };
+            // })->values();
 
-        $table = DataTables::of($list_data)
-        ->addIndexColumn()
-        ->addColumn('nama', function ($row) {
-            $row = (object) $row;
-            if($row->type=="dosen"){
-                $nama = $row->pengguna->nama_dosen??"NA";
-                $kode = $row->pengguna->NIDN??"NA";
-                return "{$nama} - {$kode}";
-            } else if($row->type=="pegawai"){
-                $nama = $row->pengguna->nama??"NA";
-                $kode = $row->pengguna->nip??"NA";
-                return "{$nama} - {$kode}";
-            } else{
-                $nama = "NA";
-                $kode = "NA";
-                return "{$nama} - {$kode}";
-            }
-        })
-        ->rawColumns(['nama'])
-        ->make(true);
+            $table = DataTables::of($list_data)
+            ->addIndexColumn()
+            ->addColumn('nama', function ($row) {
+                $row = (object) $row;
+                if($row->type=="dosen"){
+                    $nama = $row->pengguna->nama_dosen??"NA";
+                    $kode = $row->pengguna->NIDN??"NA";
+                    return "{$nama} - {$kode}";
+                } else if($row->type=="pegawai"){
+                    $nama = $row->pengguna->nama??"NA";
+                    $kode = $row->pengguna->nip??"NA";
+                    return "{$nama} - {$kode}";
+                } else{
+                    $nama = "NA";
+                    $kode = "NA";
+                    return "{$nama} - {$kode}";
+                }
+            })
+            ->rawColumns(['nama'])
+            ->make(true);
 
-        return $table;
+            return $table;
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 }
