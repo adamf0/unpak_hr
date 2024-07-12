@@ -78,6 +78,7 @@ class GetAllLaporanAbsenQueryHandler extends Query
 
     public function handle(GetAllLaporanAbsenQuery $query)
     {
+        dump($query);
         if($query->getOption()==TypeData::Entity) throw new Exception("no implementation GetAllLaporanAbsenQuery to Entity");
 
         ini_set('memory_limit', '-1');
