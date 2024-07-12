@@ -75,7 +75,7 @@ class LaporanAbsenController extends Controller
             // $laporan = $this->queryBus->ask(new GetAllLaporanAbsenQuery($nidn,$nip,$tanggal_mulai,$tanggal_akhir,$type,TypeData::Default));
 
             if($type_export=="pdf"){
-                return $this->generateHtml($file_name, true, 0, null, null, $laporan);
+                return $this->generateHtml(true, 0, null, null, $laporan);
                 $file = PdfX::From(
                     "template.export_absen", 
                     $laporan, 
@@ -138,7 +138,7 @@ class LaporanAbsenController extends Controller
         }
     }
 
-    public function generateHtml($file_name=null,$initial=true,$index=0,$i_t=null,$i_data=null,$source)
+    public function generateHtml($initial=true,$index=0,$i_t=null,$i_data=null,$source)
     {
         $html = "";
         if($initial){
@@ -160,19 +160,17 @@ class LaporanAbsenController extends Controller
             $html .= '</tr>';
             $html .= '</thead>';
             $html .= '<tbody>';
-            $html .= $this->generateHtml($file_name,false, 0, 0, 0, $source);
-            Cache::put('cache_'.$file_name, $html, 1*60);
+            $html .= $this->generateHtml(false, 0, 0, 0, $source);
         } else if(!$initial && !is_null($i_data) && !is_null($i_t) && $i_t<count($source['list_data']) ){
-            $html = Cache::get('cache_'.$file_name, '');
+            // dump($i_t, $i_data, $source['list_data']);
             $data = array_key_exists($i_data, $source['list_data'])? $source['list_data'][$i_t]:null;
             if(is_null($data)){
                 if($i_t<count($source['list_tanggal'])){
-                    $html .= $this->generateHtml($file_name,false, $index, $i_t+1, $i_data, $source);
+                    $html .= $this->generateHtml(false, $index, $i_t+1, $i_data, $source);
                 }
                 if($i_data<count($source['list_data'])){
-                    $html .= $this->generateHtml($file_name,false, $index, $i_t, $i_data+1, $source);
+                    $html .= $this->generateHtml(false, $index, $i_t, $i_data+1, $source);
                 }
-                Cache::put('cache_'.$file_name, $html, 1*60);
                 return $html;
             }
             $nama = $data['type'] == "pegawai" ? $data['pengguna']['nama'] : $data['pengguna']['nama_dosen'];
@@ -235,12 +233,11 @@ class LaporanAbsenController extends Controller
             $html .= '</tr>';
 
             if($i_t<count($source['list_tanggal'])){
-                $html .= $this->generateHtml($file_name,false, $index, $i_t+1, $i_data, $source);
+                $html .= $this->generateHtml(false, $index, $i_t+1, $i_data, $source);
             }
             if($i_data<count($source['list_data'])){
-                $html .= $this->generateHtml($file_name,false, $index, $i_t, $i_data+1, $source);
+                $html .= $this->generateHtml(false, $index, $i_t, $i_data+1, $source);
             }
-            Cache::put('cache_'.$file_name, $html, 1*60);
         }
 
         // foreach ($source['list_data'] as $index => $data) {
