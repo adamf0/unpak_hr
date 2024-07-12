@@ -96,7 +96,7 @@ class GetAllLaporanAbsenQueryHandler extends Query
         $this->list_pengguna = $this->list_pengguna
                                     ->get()
                                     ->filter(function($item) use($query){
-                                        dump($item, !empty($item->nidn), !empty($item->nip));
+                                        dump($item, $query->GetType()=="dosen" && !empty($item->nidn), $query->GetType()=="pegawai" && !empty($item->nip));
                                         return match(true){
                                             $query->GetType()=="dosen"=>$query->GetType()=="dosen" && !empty($item->nidn),
                                             $query->GetType()=="pegawai"=>$query->GetType()=="pegawai" && !empty($item->nip),
