@@ -62,8 +62,8 @@
                               </div>
                             </div>
                             <div class="col-12 d-grid gap-2">
-                              <button class="btn btn-dark btn-lg" type="submit">Masuk</button>
-                              <a href="{{ Utility::loadAsset('USER GUIDE DOSEN & TENDIK NON STRUKTURAL - DESAIN FIX 13 JULY 2024.pdf')}}" class="btn btn-primary btn-lg">Buku Panduan</a>
+                              <button class="btn btn-dark btn-lg" type="submit">Login</button>
+                              <a href="{{ Utility::loadAsset('USER GUIDE DOSEN & TENDIK NON STRUKTURAL - DESAIN FIX 13 JULY 2024.pdf')}}" class="btn btn-primary btn-lg">Manual Guide</a>
                             </div>
                           </div>
                         </form>
