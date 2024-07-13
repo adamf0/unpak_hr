@@ -22,7 +22,7 @@ trait Utility
             'Content-Type'=> 'application/json', 
         ]) 
         ->post('http://103.169.192.61/api/darihrportal'); 
-        // echo $response->body();
+        return $response->body();
     }
     public static function showNotif()
     {
