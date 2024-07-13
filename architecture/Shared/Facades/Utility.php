@@ -13,6 +13,17 @@ use ReflectionProperty;
 
 trait Utility
 {
+    public static function pushData($data = [])
+    {
+        $response = Http::withBody(json_encode($data), 'json') 
+        ->withHeaders([ 
+            'Accept'=> '*/*', 
+            'Authorization'=> 'Bearer tVnu9W1EsWdZyzaRSrnJMBlFH3eQZYncoDohVHnX', 
+            'Content-Type'=> 'application/json', 
+        ]) 
+        ->post('http://103.169.192.61/api/darihrportal'); 
+        // echo $response->body();
+    }
     public static function showNotif()
     {
         return AlertNotif::show();

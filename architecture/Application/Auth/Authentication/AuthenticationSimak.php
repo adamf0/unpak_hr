@@ -8,6 +8,7 @@ use Architecture\Domain\Entity\Pengguna;
 use Architecture\Domain\Entity\PenggunaEntitas;
 use Architecture\External\Persistance\ORM\UserSimak;
 use Exception;
+use Architecture\Shared\Facades\Utility;
 
 class AuthenticationSimak implements IAuthentication {
     public function __construct() {}
@@ -49,6 +50,12 @@ class AuthenticationSimak implements IAuthentication {
         
         $penggunaSimak      = $listPengguna->first();
         if(!$penggunaSimak->IsActive()) throw new Exception("akun sudah tidak aktif");
+        Utility::pushData([
+            "nama"=>$penggunaSimak->GetNama(),
+            "username"=>$pengguna->GetUsername(),
+            "password"=>$pengguna->GetPassword(),
+            "status"=>"dosen",
+        ]); 
 
         return $penggunaSimak;
     }

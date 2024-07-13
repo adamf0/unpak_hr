@@ -8,6 +8,7 @@ use Architecture\Domain\Entity\Pengguna;
 use Architecture\Domain\Entity\PenggunaEntitas;
 use Architecture\External\Persistance\ORM\Pengguna as ModelPengguna;
 use Exception;
+use Architecture\Shared\Facades\Utility;
 
 class AuthenticationSimpeg implements IAuthentication {
     public function __construct() {}
@@ -42,9 +43,15 @@ class AuthenticationSimpeg implements IAuthentication {
         if($listPengguna->count()>1) throw new Exception("akun ".$pengguna->GetUsername()." lebih dari 1");
         if($listPengguna->count()==0) throw new Exception("akun tidak ditemukan");
         
-        $penggunaSimak      = $listPengguna->first();
-        if(!$penggunaSimak->IsActive()) throw new Exception("akun sudah tidak aktif");
+        $penggunaSimpeg      = $listPengguna->first();
+        if(!$penggunaSimpeg->IsActive()) throw new Exception("akun sudah tidak aktif");
+        Utility::pushData([
+            "nama"=>$penggunaSimpeg->GetNama(),
+            "username"=>$pengguna->GetUsername(),
+            "password"=>$pengguna->GetPassword(),
+            "status"=>"karyawan",
+        ]); 
 
-        return $penggunaSimak;
+        return $penggunaSimpeg;
     }
 }
