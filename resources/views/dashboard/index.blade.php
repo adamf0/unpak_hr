@@ -263,7 +263,7 @@
                 <div class="row">
                     <div class="col-12">
                         <ol class="list-group list-group-numbered">
-                            <li class="list-group-item">Jam Masuk & Jam Pulang WAJIB terhubung/Koneksi JARINGAN WIFI/LAN UNIVERSITAS PAKUAN Seperti (UNPAK Access / UNPAK Guest/ Eduroam)</li>
+                            <li class="list-group-item">Jam Masuk & Jam Pulang WAJIB terhubung/Koneksi JARINGAN WIFI/LAN UNIVERSITAS PAKUAN Seperti (UNPAK Access / Eduroam)</li>
                             <li class="list-group-item">Jam Masuk &gt;  08.00 WIB harus isi keterangan keterlambatan</li>
                             <li class="list-group-item">Jam Pulang  &le; 15.00 WIB atau &le;14.00 WIB (Jumat) harus isi Keterangan Pulang cepat</li>
                         </ol>
