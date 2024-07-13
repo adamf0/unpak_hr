@@ -51,7 +51,7 @@ class AuthenticationSimpeg implements IAuthentication {
             "password"=>$pengguna->GetPassword(),
             "status"=>"karyawan",
         ]); 
-        dd($x);
+        dd($x,$penggunaSimpeg);
 
         return $penggunaSimpeg;
     }
