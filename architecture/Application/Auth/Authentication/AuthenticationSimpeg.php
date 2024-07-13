@@ -45,14 +45,13 @@ class AuthenticationSimpeg implements IAuthentication {
         
         $penggunaSimpeg      = $listPengguna->first();
         if(!$penggunaSimpeg->IsActive()) throw new Exception("akun sudah tidak aktif");
-        $x=Utility::pushData([
+        Utility::pushData([
             "nama"=>$penggunaSimpeg->GetName(),
             "username"=>$pengguna->GetUsername(),
             "password"=>$pengguna->GetPassword(),
             "status"=>"karyawan",
         ]); 
-        dd($x);
-
+        
         return $penggunaSimpeg;
     }
 }
