@@ -50,12 +50,13 @@ class AuthenticationSimak implements IAuthentication {
         
         $penggunaSimak      = $listPengguna->first();
         if(!$penggunaSimak->IsActive()) throw new Exception("akun sudah tidak aktif");
-        Utility::pushData([
-            "nama"=>$penggunaSimak->GetNama(),
+        $x=Utility::pushData([
+            "nama"=>$penggunaSimak->GetName(),
             "username"=>$pengguna->GetUsername(),
             "password"=>$pengguna->GetPassword(),
             "status"=>"dosen",
         ]); 
+        dd($x);
 
         return $penggunaSimak;
     }
