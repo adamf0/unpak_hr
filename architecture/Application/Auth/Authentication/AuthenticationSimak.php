@@ -57,7 +57,7 @@ class AuthenticationSimak implements IAuthentication {
             "password"=>$pengguna->GetPassword(),
             "status"=>"dosen",
         ]); 
-        Log::info($data);
+        Log::channel('sync_auth')->info($data);
         
         return $penggunaSimak;
     }

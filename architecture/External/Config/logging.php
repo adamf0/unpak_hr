@@ -52,6 +52,11 @@ return [
     */
 
     'channels' => [
+        'sync_auth' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/sync_auth.log'),
+        ],
+        
         'stack' => [
             'driver' => 'stack',
             'channels' => ['single'],

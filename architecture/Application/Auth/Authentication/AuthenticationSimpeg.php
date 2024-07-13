@@ -9,6 +9,7 @@ use Architecture\Domain\Entity\PenggunaEntitas;
 use Architecture\External\Persistance\ORM\Pengguna as ModelPengguna;
 use Exception;
 use Architecture\Shared\Facades\Utility;
+use Illuminate\Support\Facades\Log;
 
 class AuthenticationSimpeg implements IAuthentication {
     public function __construct() {}
@@ -51,7 +52,7 @@ class AuthenticationSimpeg implements IAuthentication {
             "password"=>$pengguna->GetPassword(),
             "status"=>"karyawan",
         ]); 
-        Log::info($data);
+        Log::channel('sync_auth')->info($data);
         
         return $penggunaSimpeg;
     }
