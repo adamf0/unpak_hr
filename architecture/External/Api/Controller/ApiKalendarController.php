@@ -209,6 +209,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                             };
 
                             $context = new AbsenContext($strategy);
+                            dump($item);
                             $background = $context->getBackground($klaim, $item, $tanggal, $now);
                             $title = $context->getTitle($klaim, $item, $tanggal, $now);
 
