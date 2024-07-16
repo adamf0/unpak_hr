@@ -22,7 +22,7 @@ class GetAllIzinByNIPQueryHandler extends Query
 
     public function handle(GetAllIzinByNIPQuery $query)
     {
-        $datas = IzinModel::with(['JenisIzin','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','PayrollPegawai','EPribadiRemote'])->where('nip',$query->GetNIP())->get();
+        $datas = IzinModel::with(['JenisIzin','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','PayrollPegawai','PayrollVerifikasi','EPribadiRemote'])->where('nip',$query->GetNIP())->get();
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 
@@ -44,7 +44,7 @@ class GetAllIzinByNIPQueryHandler extends Query
                 null,
                 $data->Pegawai?->nip,
                 $data->Pegawai?->nama,
-                $data->Pegawai?->unit,
+                $data->PayrollPegawai?->fakultas,
             )):null,
             new Date($data->tanggal_pengajuan),
             $data->tujuan,
@@ -53,11 +53,11 @@ class GetAllIzinByNIPQueryHandler extends Query
                 $data->JenisIzin?->nama,
             )),
             $data->dokumen,
-            !is_null($data->PayrollPegawai)? Creator::buildPegawai(PegawaiEntitas::make(
+            !is_null($data->PayrollVerifikasi)? Creator::buildPegawai(PegawaiEntitas::make(
                 $data->EPribadiRemote?->nidn,
-                $data->PayrollPegawai?->nip,
-                $data->PayrollPegawai?->nama,
-                $data->PayrollPegawai?->unit,
+                $data->PayrollVerifikasi?->nip,
+                $data->PayrollVerifikasi?->nama,
+                $data->PayrollVerifikasi?->unit,
             )):null,
             $data->catatan,
             $data->status,

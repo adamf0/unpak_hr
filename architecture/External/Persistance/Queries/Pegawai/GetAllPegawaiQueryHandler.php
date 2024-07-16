@@ -15,7 +15,7 @@ class GetAllPegawaiQueryHandler extends Query
 
     public function handle(GetAllPegawaiQuery $query)
     {
-        $datas = NPribadi::select('id_n_pribadi','nip','nama','status_pegawai')->get();
+        $datas = NPribadi::with('PayrollPegawai')->select('id_n_pribadi','nip','nama','status_pegawai')->get();
 
         if($query->getOption()==TypeData::Default) return $datas;
 
@@ -23,7 +23,7 @@ class GetAllPegawaiQueryHandler extends Query
             null,
             $data->nip,
             $data->nama,
-            "unit",
+            $data->PayrollPegawai?->fakultas,
         )) );
     }
 }

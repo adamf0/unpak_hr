@@ -22,6 +22,9 @@ class Cuti extends Model
       return $this->hasOne(NPribadi::class, 'nip' ,'nip');
    }
    public function PayrollPegawai(){
+      return $this->hasOne(PayrollPegawai::class, 'nip' ,'nip');
+   }
+   public function PayrollVerifikasi(){
       return $this->hasOne(PayrollPegawai::class, 'nip' ,'verifikasi');
    }
    public function EPribadiRemote(){

@@ -34,6 +34,9 @@ class SPPD extends Model
       return $this->hasMany(FileLaporanSPPD::class, 'id_sppd' ,'id');
    }
    public function PayrollPegawai(){
+      return $this->hasOne(PayrollPegawai::class, 'nip' ,'nip');
+   }
+   public function PayrollVerifikasi(){
       return $this->hasOne(PayrollPegawai::class, 'nip' ,'verifikasi');
    }
    public function EPribadiRemote(){

@@ -25,7 +25,7 @@ class GetAllSPPDQueryHandler extends Query
 
     public function handle(GetAllSPPDQuery $query)
     {
-        $datas = SPPDModel::with(['JenisSPPD','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','Anggota','Anggota.Dosen','Anggota.Dosen.Fakultas','Anggota.Dosen.Prodi','Anggota.Pegawai','FileLaporan','PayrollPegawai','EPribadiRemote']);
+        $datas = SPPDModel::with(['JenisSPPD','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','Anggota','Anggota.Dosen','Anggota.Dosen.Fakultas','Anggota.Dosen.Prodi','Anggota.Pegawai','FileLaporan','PayrollPegawai','PayrollVerifikasi','EPribadiRemote']);
         if(!empty($query->GetNIDN())){
             if($query->GetSemua()){
                 $datas = $datas->where('nidn',$query->GetNIDN())->orWhereHas('EPribadiRemote', fn($subQuery) => $subQuery->where('nidn', $query->GetNIDN()) );
@@ -94,7 +94,7 @@ class GetAllSPPDQueryHandler extends Query
                     null,
                     $data->Pegawai?->nip,
                     $data->Pegawai?->nama,
-                    $data->Pegawai?->unit,
+                    $data->PayrollPegawai?->fakultas,
                 )):null,
                 Creator::buildJenisSPPD(JenisSPPDEntitas::make(
                     $data->JenisSPPD?->id,
@@ -105,11 +105,11 @@ class GetAllSPPDQueryHandler extends Query
                 $data->tujuan,
                 $data->keterangan,
                 $data->sarana_transportasi,
-                !is_null($data->PayrollPegawai)? Creator::buildPegawai(PegawaiEntitas::make(
+                !is_null($data->PayrollVerifikasi)? Creator::buildPegawai(PegawaiEntitas::make(
                     $data->EPribadiRemote?->nidn,
-                    $data->PayrollPegawai?->nip,
-                    $data->PayrollPegawai?->nama,
-                    $data->PayrollPegawai?->unit,
+                    $data->PayrollVerifikasi?->nip,
+                    $data->PayrollVerifikasi?->nama,
+                    $data->PayrollVerifikasi?->fakultas,
                 )):null,
                 $data->status,
                 $data->catatan,

@@ -11,4 +11,8 @@ class NPribadi extends Model
    protected $table = 'n_pribadi';
    protected $connection = 'simpeg';
    protected $fillable = ['*'];
+
+   public function PayrollPegawai(){
+      return $this->hasOne(PayrollPegawai::class, 'nip' ,'nip');
+   }
 }
