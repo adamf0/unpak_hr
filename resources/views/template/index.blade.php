@@ -218,7 +218,7 @@
           @endif
         </x-sidebar-item-menu-dropdown>
 
-        <x-sidebar-item-menu-dropdown title="Izin" parent="sidebar-nav" target="izin" icon="bi bi-menu-button-wide" :active="Utility::stateMenu([
+        <x-sidebar-item-menu-dropdown title="Izin" parent="sidebar-nav" target="izin" class="text-primary" icon="bi bi-menu-button-wide" :active="Utility::stateMenu([
           'izin',
           ],request())">
           <x-sidebar-item-menu-dropdown-child title="Pengajuan" icon="bi bi-menu-button-wide" link="{{ route('izin.index2',['type'=>Session::get('levelActive')=='dosen'? 'dosen':'tendik']) }}" :active="Utility::stateMenu(['izin'],request(),1)" />
@@ -227,7 +227,7 @@
           @endif
         </x-sidebar-item-menu-dropdown>
 
-        <x-sidebar-item-menu title="Klaim Presensi" icon="fa-solid fa-file-shield" link="{{route('klaim_absen.index')}}" :active="Utility::stateMenu(['klaim_absen'],request())" />
+        <x-sidebar-item-menu title="Klaim Presensi" class="text-primary" icon="fa-solid fa-file-shield" link="{{route('klaim_absen.index')}}" :active="Utility::stateMenu(['klaim_absen'],request())" />
       @endif
 
       @if (Utility::hasSDM())
@@ -238,14 +238,14 @@
         <x-sidebar-item-menu-dropdown-child title="Tendik" icon="bi bi-menu-button-wide" link="{{ route('cuti.index2',['type'=>'tendik']) }}" :active="Utility::stateMenu(['cuti','tendik'],request(),1)" />
       </x-sidebar-item-menu-dropdown>
 
-      <x-sidebar-item-menu-dropdown title="Izin" parent="sidebar-nav" target="izin" icon="bi bi-menu-button-wide" :active="Utility::stateMenu([
+      <x-sidebar-item-menu-dropdown title="Izin" parent="sidebar-nav" target="izin" class="text-primary" icon="bi bi-menu-button-wide" :active="Utility::stateMenu([
         'izin',
         ],request())">
         <x-sidebar-item-menu-dropdown-child title="Dosen" icon="bi bi-menu-button-wide" link="{{ route('izin.index2',['type'=>'dosen']) }}" :active="Utility::stateMenu(['izin'],request(),1)" />
         <x-sidebar-item-menu-dropdown-child title="Tendik" icon="bi bi-menu-button-wide" link="{{ route('izin.index2',['type'=>'tendik']) }}" :active="Utility::stateMenu(['izin'],request(),1)" />
       </x-sidebar-item-menu-dropdown>
 
-      <x-sidebar-item-menu-dropdown title="Klaim Presensi" parent="fa-solid fa-file-shieldklaim_absen" icon="bi bi-menu-button-wide" :active="Utility::stateMenu([
+      <x-sidebar-item-menu-dropdown title="Klaim Presensi" class="text-primary" parent="fa-solid fa-file-shieldklaim_absen" icon="bi bi-menu-button-wide" :active="Utility::stateMenu([
         'klaim_absen',
         ],request())">
         <x-sidebar-item-menu-dropdown-child title="Dosen" icon="bi bi-menu-button-wide" link="{{ route('klaim_absen.index2',['type'=>'dosen']) }}" :active="Utility::stateMenu(['klaim_absen'],request(),1)" />
@@ -263,9 +263,9 @@
       @endphp
 
       @if (Utility::hasSDM())
-        <x-sidebar-item-menu title="SPPD" icon="fa-regular fa-file-signature" link="{{route('sppd.index2',['type'=>'dosen'])}}" :active="Utility::stateMenu(['sppd'],request(),1)" />
+        <x-sidebar-item-menu title="SPPD" icon="fa-solid fa-file-signature" class="text-primary" link="{{route('sppd.index2',['type'=>'dosen'])}}" :active="Utility::stateMenu(['sppd'],request(),1)" />
       @else
-        <x-sidebar-item-menu-dropdown title="SPPD" parent="sidebar-nav" target="sppd" icon="fa-regular fa-file-signature" :active="Utility::stateMenu([
+        <x-sidebar-item-menu-dropdown title="SPPD" parent="sidebar-nav" target="sppd" icon="fa-solid fa-file-signature" class="text-primary" :active="Utility::stateMenu([
             'sppd',
             ],request())">
             <x-sidebar-item-menu-dropdown-child title="Pengajuan" icon="bi bi-menu-button-wide" link="{{ route('sppd.index2',['type'=>Session::get('levelActive')=='dosen'? 'dosen':'tendik']) }}" :active="Utility::stateMenu(['sppd'],request(),1)" />
