@@ -245,7 +245,7 @@
         <x-sidebar-item-menu-dropdown-child title="Tendik" icon="bi bi-menu-button-wide" link="{{ route('izin.index2',['type'=>'tendik']) }}" :active="Utility::stateMenu(['izin'],request(),1)" />
       </x-sidebar-item-menu-dropdown>
 
-      <x-sidebar-item-menu-dropdown title="Klaim Presensi" class="text-primary" parent="fa-solid fa-file-shieldklaim_absen" icon="bi bi-menu-button-wide" :active="Utility::stateMenu([
+      <x-sidebar-item-menu-dropdown title="Klaim Presensi" class="text-primary" parent="klaim_absen" icon="fa-solid fa-file-shield" :active="Utility::stateMenu([
         'klaim_absen',
         ],request())">
         <x-sidebar-item-menu-dropdown-child title="Dosen" icon="bi bi-menu-button-wide" link="{{ route('klaim_absen.index2',['type'=>'dosen']) }}" :active="Utility::stateMenu(['klaim_absen'],request(),1)" />
