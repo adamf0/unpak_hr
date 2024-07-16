@@ -12,10 +12,18 @@ class AbsenStrategy implements IAbsenStrategy {
             $aturanPulang = "11:59:00";
         }
 
+        //$jam_masuk = is_null($dataAbsen?->absen_masuk) ? $klaim?->jam_masuk : $dataAbsen?->absen_masuk;
         $jam_keluar = is_null($dataAbsen?->absen_keluar) ? $klaim?->jam_keluar : $dataAbsen?->absen_keluar;
-        $pulangCepat = is_null($jam_keluar)? false:strtotime($dataAbsen?->tanggal." ".$jam_keluar)<=strtotime($dataAbsen?->tanggal." ".$aturanPulang);
+        //$pulangCepat = is_null($jam_keluar)? false:strtotime($dataAbsen?->tanggal." ".$jam_keluar)<=strtotime($dataAbsen?->tanggal." ".$aturanPulang);
+        
+        $warna = match(true){
+            !empty($klaim?->jam_masuk) || !empty($klaim?->jam_keluar) => "#198754",
+            !empty($dataAbsen?->catatan_pulang) => "#000",
+            Utility::isLate($dataAbsen?->absen_masuk, $dataAbsen?->tanggal) => "#000",
+            default => "#198754"
+        };
 
-        return "#198754"; // masuk
+        return $warna; // masuk
     }
 
     public function getTitle($klaim, $dataAbsen, $tanggal, $now) {
@@ -29,6 +37,7 @@ class AbsenStrategy implements IAbsenStrategy {
         $jam_masuk = is_null($dataAbsen?->absen_masuk) ? $klaim?->jam_masuk : $dataAbsen?->absen_masuk;
         $jam_keluar = is_null($dataAbsen?->absen_keluar) ? $klaim?->jam_keluar : $dataAbsen?->absen_keluar;
         $pulangCepat = is_null($jam_keluar)? false:strtotime($dataAbsen?->tanggal." ".$jam_keluar)<=strtotime($dataAbsen?->tanggal." ".$aturanPulang);
+        // /dump($dataAbsen?->tanggal." ".$jam_keluar, $dataAbsen?->tanggal." ".$aturanPulang);
 
         $label = match(true){
             !empty($klaim?->jam_masuk) || !empty($klaim?->jam_keluar) => "(klaim)",
