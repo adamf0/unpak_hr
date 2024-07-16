@@ -41,7 +41,7 @@ class DatatablePresensiController extends Controller
                     ->map(function ($item) use($filter){
                         return match(true){
                             $filter=="dosen"=>[
-                                "nama"=>$item->GetDosen()?->GetNama()." - ".$item->GetDosen()?->GetNIDN()." - ".$item->GetDosen()?->GetUnit(),
+                                "nama"=>$item->GetDosen()?->GetNama()." - ".$item->GetDosen()?->GetNIDN()." - ".$item->GetDosen()?->GetUnitKerja(),
                                 "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
                                 "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
                                 "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
