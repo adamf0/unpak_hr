@@ -14,6 +14,9 @@ class AbsenStrategy implements IAbsenStrategy {
             Utility::isLate($dataAbsen->absen_masuk, $dataAbsen->tanggal) => "(Telat)",
             default => ""
         };
+        if(is_null($dataAbsen?->absen_keluar)){
+            dd($dataAbsen);
+        }
         return sprintf(
             "%s - %s %s",
             date('H:i:s', strtotime(empty($dataAbsen->absen_masuk) ? $klaim->jam_masuk : $dataAbsen->absen_masuk)),
