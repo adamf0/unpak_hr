@@ -15,7 +15,7 @@ class AbsenStrategy implements IAbsenStrategy {
             default => ""
         };
         if(is_null($dataAbsen?->absen_keluar)){
-            dd($dataAbsen);
+            dd($dataAbsen,$klaim);
         }
         return sprintf(
             "%s - %s %s",
