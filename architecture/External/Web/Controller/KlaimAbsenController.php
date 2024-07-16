@@ -103,9 +103,9 @@ class KlaimAbsenController extends Controller
             
             $klaim_absen = $this->queryBus->ask(new GetKlaimAbsenQuery($request->get("id")));
             if($request->has("dokumen") && $request->file("dokumen")!=null){
-                $klaim_absen = $this->queryBus->ask(new GetKlaimAbsenQuery($request->get("id")));
-                if(Storage::disk($this->disk_klaim_absen)->exists($klaim_absen->GetDokumen()->getFileName())){
-                    Storage::disk($this->disk_klaim_absen)->delete($klaim_absen->GetDokumen()->getFileName());
+                // $klaim_absen = $this->queryBus->ask(new GetKlaimAbsenQuery($request->get("id")));
+                if(Storage::disk($this->disk_klaim_absen)->exists($klaim_absen?->GetDokumen())){
+                    Storage::disk($this->disk_klaim_absen)->delete($klaim_absen?->GetDokumen());
                 }
                 $fileSystem = new FileSystem(new OptionFileDefault($request->file("dokumen"),$this->disk_klaim_absen));
                 $file = $fileSystem->storeFileWithReplaceFileAndReturnFileLocation();

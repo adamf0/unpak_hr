@@ -126,9 +126,9 @@ class IzinController extends Controller
 
             $izin = $this->queryBus->ask(new GetIzinQuery($request->get("id")));
             if($request->has("dokumen") && $request->file("dokumen")!=null){
-                $izin = $this->queryBus->ask(new GetIzinQuery($request->get("id")));
-                if(Storage::disk($this->disk_izin)->exists($izin->GetDokumen()->getFileName())){
-                    Storage::disk($this->disk_izin)->delete($izin->GetDokumen()->getFileName());
+                // $izin = $this->queryBus->ask(new GetIzinQuery($request->get("id")));
+                if(Storage::disk($this->disk_izin)->exists($izin?->GetDokumen())){
+                    Storage::disk($this->disk_izin)->delete($izin?->GetDokumen());
                 }
                 $fileSystem = new FileSystem(new OptionFileDefault($request->file("dokumen"),"dokumen_izin"));
                 $file = $fileSystem->storeFileWithReplaceFileAndReturnFileLocation();

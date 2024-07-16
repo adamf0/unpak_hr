@@ -127,9 +127,9 @@ class CutiController extends Controller
             
             $cuti = $this->queryBus->ask(new GetCutiQuery($request->get("id")));
             if($request->has("dokumen") && $request->file("dokumen")!=null){
-                $cuti = $this->queryBus->ask(new GetCutiQuery($request->get("id")));
-                if(Storage::disk($this->disk_cuti)->exists($cuti->GetDokumen()->getFileName())){
-                    Storage::disk($this->disk_cuti)->delete($cuti->GetDokumen()->getFileName());
+                // $cuti = $this->queryBus->ask(new GetCutiQuery($request->get("id")));
+                if(Storage::disk($this->disk_cuti)->exists($cuti?->GetDokumen())){
+                    Storage::disk($this->disk_cuti)->delete($cuti?->GetDokumen());
                 }
                 $fileSystem = new FileSystem(new OptionFileDefault($request->file("dokumen"),"dokumen_cuti"));
                 $file = $fileSystem->storeFileWithReplaceFileAndReturnFileLocation();
