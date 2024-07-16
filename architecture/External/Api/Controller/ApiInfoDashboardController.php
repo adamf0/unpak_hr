@@ -12,15 +12,13 @@ use Architecture\Application\Izin\List\GetAllIzinByNIPQuery;
 use Architecture\Application\KlaimAbsen\List\GetAllKlaimAbsenQuery;
 use Architecture\Application\Presensi\List\GetAllPresensiByNIDNQuery;
 use Architecture\Application\Presensi\List\GetAllPresensiByNIPQuery;
-use Architecture\Application\Presensi\List\GetAllPresensiQuery;
 use Architecture\Application\SPPD\List\GetAllSPPDByNIDNQuery;
 use Architecture\Application\SPPD\List\GetAllSPPDByNIPQuery;
 use Architecture\Domain\ValueObject\Date;
 use Architecture\Shared\TypeData;
 use Carbon\Carbon;
 use Exception;
-
-use function PHPUnit\Framework\isEmpty;
+use Architecture\Shared\Facades\Utility;
 
 class ApiInfoDashboardController extends Controller
 {
@@ -29,32 +27,6 @@ class ApiInfoDashboardController extends Controller
         protected IQueryBus $queryBus
     ) {}
     
-    public function isLate($tanggal_jam_masuk=null,$tanggal=null){
-        $masuk = new Date($tanggal_jam_masuk);
-        $keluar = new Date($tanggal." 08:01:00");
-        return $masuk->isGreater($keluar);
-    }
-    public function is8Hour($tanggal=null,$tanggal_jam_masuk=null,$tanggal_jam_keluar=null){
-        if(!empty($tanggal_jam_keluar) && !$this->isLate($tanggal_jam_masuk,$tanggal)){
-            $jam_pulang = "14:59:00";
-            if (Carbon::now()->setTimezone('Asia/Jakarta')->dayOfWeek == Carbon::FRIDAY) {
-                $jam_pulang = "13:59:00";
-            } elseif (Carbon::now()->setTimezone('Asia/Jakarta')->dayOfWeek == Carbon::SATURDAY) {
-                $jam_pulang = "11:59:00";
-            }
-            $aturanKeluar = new Date($tanggal." $jam_pulang");
-            $keluar = new Date($tanggal_jam_keluar);
-            return $keluar->isGreater($aturanKeluar);
-        } 
-        else if(!empty($tanggal_jam_keluar) && $this->isLate($tanggal_jam_masuk,$tanggal)){
-            $aturanKeluar = new Date(Carbon::parse($tanggal_jam_masuk)->setTimezone('Asia/Jakarta')->addHour(7)->toISOString());
-            $keluar = new Date($tanggal_jam_keluar);
-            return $keluar->isGreater($aturanKeluar);
-        }
-        else 
-            return false;
-    }
-
     public function index($type,$id){
         try {
             $presensi = $this->queryBus->ask(
@@ -97,14 +69,14 @@ class ApiInfoDashboardController extends Controller
                     $tidak_masuk += 1;
                 }
                 if(!empty($item->absen_masuk)){
-                    if(!$this->isLate($item->absen_masuk, $item->tanggal) && is_null($klaim)){
+                    if(!Utility::isLate($item->absen_masuk, $item->tanggal) && is_null($klaim)){
                         $tepat += 1;
-                    } else if ($this->isLate($item->absen_masuk, $item->tanggal) && is_null($klaim)){
+                    } else if (Utility::isLate($item->absen_masuk, $item->tanggal) && is_null($klaim)){
                         $telat += 1;
                     }
                 }
                 if(!empty($item->absen_masuk) && !empty($item->absen_keluar)){
-                    if(!$this->is8Hour($item->tanggal, $item->absen_masuk, $item->absen_keluar)){
+                    if(!Utility::is8Hour($item->tanggal, $item->absen_masuk, $item->absen_keluar)){
                         $l8 += 1;
                     } else{
                         $r8 += 1;

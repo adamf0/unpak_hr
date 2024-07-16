@@ -15,6 +15,7 @@
 //     return $request->user();
 // });
 
+use Architecture\External\Datatable\Controller\DatatableActiveCutiController;
 use Architecture\External\Datatable\Controller\DatatableCutiController;
 use Architecture\External\Datatable\Controller\DatatableIzinController;
 use Architecture\External\Datatable\Controller\DatatableJenisCutiController;
@@ -31,6 +32,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('pengguna', [DatatablePenggunaController::class,'index'])->name('datatable.Pengguna.index');
 Route::get('master_kalendar', [DatatableMasterKalendarController::class,'index'])->name('datatable.MasterKalendar.index');
 Route::get('cuti', [DatatableCutiController::class,'index'])->name('datatable.Cuti.index');
+Route::get('cuti/active', [DatatableActiveCutiController::class,'index'])->name('datatable.ActiveCuti.index');
 Route::get('izin', [DatatableIzinController::class,'index'])->name('datatable.Izin.index');
 Route::get('sppd', [DatatableSPPDController::class,'index'])->name('datatable.SPPD.index');
 Route::get('klaim_absen', [DatatableKlaimAbsenController::class,'index'])->name('datatable.KlaimAbsen.index');

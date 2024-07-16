@@ -75,7 +75,7 @@
     <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6">
         <div class="card info-card sales-card">
             <div class="card-body">
-                <h5 class="card-title">Presensi</h5>
+                <h5 class="card-title">PRESENSI</h5>
                 <div class="row">
                     <div class="col-12">
                         <div class="d-flex flex-row flex-wrap flex-grow-1 align-items-center placeholder-glow">
@@ -114,7 +114,7 @@
     <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6">
         <div class="card info-card sales-card">
             <div class="card-body">
-                <h5 class="card-title">Cuti</h5>
+                <h5 class="card-title">CUTI</h5>
                 <div class="row">
                     <div class="col-12">
                         <div class="d-flex flex-row flex-wrap flex-grow-1 align-items-center placeholder-glow">
@@ -141,7 +141,7 @@
     <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6">
         <div class="card info-card sales-card">
             <div class="card-body">
-                <h5 class="card-title">Izin</h5>
+                <h5 class="card-title">IZIN</h5>
                 <div class="row">
                     <div class="col-12">
                         <div class="d-flex flex-row flex-wrap flex-grow-1 align-items-center placeholder-glow">
@@ -286,23 +286,43 @@
                 </div>
                 <div class="row legend-calendar">
                     <div class="col">
-                        <span class="badge bg-danger rounded-pill">&nbsp;</span>&nbsp;<p>Tidak Masuk / Libur</p>
+                        <span class="badge bg-danger rounded-pill">&nbsp;</span>&nbsp;<p>TIDAK MASUK / LIBUR</p>
                     </div>
                     <div class="col">
-                        <span class="badge bg-warning rounded-pill">&nbsp;</span>&nbsp;<p>Cuti</p>
+                        <span class="badge bg-warning rounded-pill">&nbsp;</span>&nbsp;<p>CUTI</p>
                     </div>
                     <div class="col">
-                        <span class="badge bg-primary rounded-pill">&nbsp;</span>&nbsp;<p>Izin</p>
+                        <span class="badge bg-primary rounded-pill">&nbsp;</span>&nbsp;<p>IZIN</p>
                     </div>
                     <div class="col">
                         <span class="badge bg-info rounded-pill">&nbsp;</span>&nbsp;<p>SPPD</p>
                     </div>
                     <div class="col">
-                        <span class="badge bg-success rounded-pill">&nbsp;</span>&nbsp;<p>Masuk</p>
+                        <span class="badge bg-success rounded-pill">&nbsp;</span>&nbsp;<p>MASUK</p>
                     </div>
                     <div class="col">
-                        <span class="badge bg-black rounded-pill">&nbsp;</span>&nbsp;<p>Telat Masuk</p>
+                        <span class="badge bg-black rounded-pill">&nbsp;</span>&nbsp;<p>TELAT MASUK / PULANG CEPAT</p>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
+        <div class="card info-card sales-card">
+            <div class="card-body">
+                <h5 class="card-title">DAFTAR DOSEN AKTIF CUTI</h5>
+                <small class="text-primary">(hari ini)</small>
+                <div class="row col-12 table">
+                    <table id="tbCutiDosen" class="table-stripped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nama</th>
+                                <th>Tujuan</th>
+                                <th>Catatan</th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
         </div>
@@ -311,7 +331,20 @@
     <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 table-responsive">
         <div class="card">
             <div class="card-body">
-                
+                <h5 class="card-title">DAFTAR TENDIK AKTIF CUTI</h5>
+                <small class="text-primary">(hari ini)</small>
+                <div class="row col-12 table">
+                    <table id="tbCutiPegawai" class="table-stripped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nama</th>
+                                <th>Tujuan</th>
+                                <th>Catatan</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -764,6 +797,43 @@
                     )? "-":`${selisihKeluarJam>0? selisihKeluarJam:selisihKeluarMenit} ${selisihKeluarJam>0? 'Jam':'menit'}`
                 )
             }, 1000);
+
+            const columns = [
+                    {
+                        data: 'DT_RowIndex', 
+                        name: 'DT_RowIndex', 
+                        sWidth:'3%'
+                    },
+                    {
+                        data: 'nama', 
+                        name: 'nama',
+                        render: function ( data, type, row, meta ) {
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'tujuan', 
+                        name: 'tujuan',
+                        render: function ( data, type, row, meta ) {
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'catatan', 
+                        name: 'catatan',
+                        render: function ( data, type, row, meta ) {
+                            return data;
+                        }
+                    },
+            ];
+            $('#tbCutiDosen').DataTable( {
+                ajax: `{{route('datatable.ActiveCuti.index')}}?nidn=${nidn}`,
+                columns: columns
+            });
+            $('#tbCutiPegawai').DataTable( {
+                ajax: `{{route('datatable.ActiveCuti.index')}}?nip=${nip}`,
+                columns: columns
+            });
         });
     </script>
 @endpush

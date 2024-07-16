@@ -11,12 +11,16 @@ use Architecture\Application\KlaimAbsen\List\GetAllKlaimAbsenQuery;
 use Architecture\Application\MasterKalendar\List\GetAllMasterKalendarQuery;
 use Architecture\Application\Presensi\List\GetAllPresensiQuery;
 use Architecture\Application\SPPD\List\GetAllSPPDQuery;
-use Architecture\Domain\ValueObject\Date;
+use Architecture\Domain\Behavioral\AbsenContext;
+use Architecture\Domain\Behavioral\AbsenStrategy;
+use Architecture\Domain\Behavioral\DefaultStrategy;
+use Architecture\Domain\Behavioral\TidakAbsenStrategy;
 use Architecture\Shared\TypeData;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Architecture\Shared\Facades\Utility;
 
 class ApiKalendarController extends Controller //data cuti, izin, sppd, absen belum masuk
 {
@@ -24,33 +28,6 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
         protected ICommandBus $commandBus,
         protected IQueryBus $queryBus
     ) {
-    }
-
-    public function isLate($tanggal_jam_masuk = null, $tanggal = null)
-    {
-        $masuk = new Date($tanggal_jam_masuk);
-        $keluar = new Date($tanggal . " 08:01:00");
-        return $masuk->isGreater($keluar);
-    }
-    public function is8Hour($tanggal=null,$tanggal_jam_masuk=null,$tanggal_jam_keluar=null){
-        if(!empty($tanggal_jam_keluar) && !$this->isLate($tanggal_jam_masuk,$tanggal)){
-            $jam_pulang = "14:59:00";
-            if (Carbon::now()->setTimezone('Asia/Jakarta')->dayOfWeek == Carbon::FRIDAY) {
-                $jam_pulang = "13:59:00";
-            } elseif (Carbon::now()->setTimezone('Asia/Jakarta')->dayOfWeek == Carbon::SATURDAY) {
-                $jam_pulang = "11:59:00";
-            }
-            $aturanKeluar = new Date($tanggal." $jam_pulang");
-            $keluar = new Date($tanggal_jam_keluar);
-            return $keluar->isGreater($aturanKeluar);
-        } 
-        else if(!empty($tanggal_jam_keluar) && $this->isLate($tanggal_jam_masuk,$tanggal)){
-            $aturanKeluar = new Date(Carbon::parse($tanggal_jam_masuk)->setTimezone('Asia/Jakarta')->addHour(7)->toISOString());
-            $keluar = new Date($tanggal_jam_keluar);
-            return $keluar->isGreater($aturanKeluar);
-        }
-        else 
-            return false;
     }
 
     public function index(Request $request, $tahun, $format = 'default')
@@ -221,30 +198,48 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                         if ($format == "full-calendar") {
                             $klaim = $list_klaim_absen->where('status', 'terima')->where('tanggal', $item->tanggal);
                             $klaim = $klaim->count() == 1 ? $klaim[0] : null;
-        
-                            $background = match (true) {
-                                is_null($klaim) && empty($item->absen_masuk) && Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta')->lessThan(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d')) => "#dc3545", //tidak masuk
-                                !is_null($klaim) || (!empty($item->absen_masuk) && !$this->isLate($item->absen_masuk, $item->tanggal)) => "#198754", //masuk
-                                !is_null($klaim) || (!empty($item->absen_masuk) && !empty($item->absen_keluar) && $this->is8Hour($item->tanggal, $item->absen_masuk, $item->absen_keluar)) => "#198754", //masuk (anulir)
-                                default => "#000"
+                            $tanggal = Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta');
+                            $now = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d');
+
+                            $strategy = match (true) {
+                                is_null($klaim) && empty($item->absen_masuk) && $tanggal->lessThan($now) => new TidakAbsenStrategy(),
+                                !is_null($klaim) || (!empty($item->absen_masuk) && !Utility::isLate($item->absen_masuk, $item->tanggal)) => new AbsenStrategy(),
+                                !is_null($klaim) || (!empty($item->absen_masuk) && !empty($item->absen_keluar) && Utility::is8Hour($item->tanggal, $item->absen_masuk, $item->absen_keluar)) => new AbsenStrategy(),
+                                default => new DefaultStrategy()
                             };
+
+                            $context = new AbsenContext($strategy);
+                            $background = $context->getBackground($klaim, $item, $tanggal, $now);
+                            $title = $context->getTitle($klaim, $item, $tanggal, $now);
+
+                            // $background = match (true) {
+                            //     is_null($klaim) && empty($item->absen_masuk) && $tanggal->lessThan($now) => "#dc3545", //tidak masuk
+                            //     !is_null($klaim) || (!empty($item->absen_masuk) && !Utility::isLate($item->absen_masuk, $item->tanggal)) => "#198754", //masuk
+                            //     !is_null($klaim) || (!empty($item->absen_masuk) && !empty($item->absen_keluar) && Utility::is8Hour($item->tanggal, $item->absen_masuk, $item->absen_keluar)) => "#198754", //masuk (anulir)
+                            //     default => "#000"
+                            // };
         
-                            $title = match (true) {
-                                is_null($klaim) && empty($item->absen_masuk) && Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta')->lessThan(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d')) => "tidak masuk", //tidak masuk
-                                !is_null($klaim) => sprintf(
-                                    "%s - %s %s",
-                                    (date('H:i:s', strtotime(empty($item->absen_masuk) ? $klaim->jam_masuk : $item->absen_masuk))),
-                                    (date('H:i:s', strtotime(empty($item->absen_keluar) ? $klaim->jam_keluar : $item->absen_keluar))),
-                                    ((!empty($klaim->jam_masuk) || !empty($klaim->jam_keluar)) ? "(klaim)" : "")
-                                ), //klaim
+                            // $title = match (true) {
+                            //     is_null($klaim) && empty($item->absen_masuk) && $tanggal->lessThan($now) => "tidak masuk", //tidak masuk
+                            //     !is_null($klaim) => sprintf(
+                            //         "%s - %s %s",
+                            //         (date('H:i:s', strtotime(empty($item->absen_masuk) ? $klaim->jam_masuk : $item->absen_masuk))),
+                            //         (date('H:i:s', strtotime(empty($item->absen_keluar) ? $klaim->jam_keluar : $item->absen_keluar))),
+                            //         ((!empty($klaim->jam_masuk) || !empty($klaim->jam_keluar)) ? "(klaim)" : "")
+                            //     ), //klaim
         
-                                !empty($item->absen_masuk) && !$this->isLate($item->absen_masuk, $item->tanggal) => sprintf("%s - %s", date('H:i:s', strtotime($item->absen_masuk)), (empty($item->absen_keluar) ? "" : date('H:i:s', strtotime($item->absen_keluar)))), //masuk
-                                default => sprintf(
-                                    "%s - %s",
-                                    empty($item->absen_masuk) ? "-" : date('H:i:s', strtotime($item->absen_masuk)),
-                                    empty($item->absen_keluar) ? "-" : date('H:i:s', strtotime($item->absen_keluar))
-                                )
-                            };
+                            //     !empty($item->absen_masuk) && !Utility::isLate($item->absen_masuk, $item->tanggal) => sprintf("%s - %s", date('H:i:s', strtotime($item->absen_masuk)), (empty($item->absen_keluar) ? "" : date('H:i:s', strtotime($item->absen_keluar))), ), //masuk //pulang cepat
+                            //     default => sprintf(
+                            //         "%s - %s %s",
+                            //         empty($item->absen_masuk) ? "-" : date('H:i:s', strtotime($item->absen_masuk)),
+                            //         empty($item->absen_keluar) ? "-" : date('H:i:s', strtotime($item->absen_keluar)),
+                            //         match(true){
+                            //             !empty($item->catatan_pulang) => "(Pulang Cepat)",
+                            //             Utility::isLate($item->absen_masuk, $item->tanggal) => "(Telat)",
+                            //             default => ""
+                            //         }
+                            //     )
+                            // };
                             if (!empty($title)) {
                                 $carry[] = [
                                     "title" => $title,

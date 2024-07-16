@@ -9,10 +9,36 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 use ReflectionClass;
 use ReflectionProperty;
-// use Architecture\Domain\Enum\TypeStatusAdministrasi;
+use Architecture\Domain\ValueObject\Date;
+use Carbon\Carbon;
 
 trait Utility
 {
+    public static function isLate($tanggal_jam_masuk=null,$tanggal=null){
+        $masuk = new Date($tanggal_jam_masuk);
+        $keluar = new Date($tanggal." 08:01:00");
+        return $masuk->isGreater($keluar);
+    }
+    public static function is8Hour($tanggal=null,$tanggal_jam_masuk=null,$tanggal_jam_keluar=null){
+        if(!empty($tanggal_jam_keluar) && !self::isLate($tanggal_jam_masuk,$tanggal)){
+            $jam_pulang = "14:59:00";
+            if (Carbon::now()->setTimezone('Asia/Jakarta')->dayOfWeek == Carbon::FRIDAY) {
+                $jam_pulang = "13:59:00";
+            } elseif (Carbon::now()->setTimezone('Asia/Jakarta')->dayOfWeek == Carbon::SATURDAY) {
+                $jam_pulang = "11:59:00";
+            }
+            $aturanKeluar = new Date($tanggal." $jam_pulang");
+            $keluar = new Date($tanggal_jam_keluar);
+            return $keluar->isGreater($aturanKeluar);
+        } 
+        else if(!empty($tanggal_jam_keluar) && self::isLate($tanggal_jam_masuk,$tanggal)){
+            $aturanKeluar = new Date(Carbon::parse($tanggal_jam_masuk)->setTimezone('Asia/Jakarta')->addHour(7)->toISOString());
+            $keluar = new Date($tanggal_jam_keluar);
+            return $keluar->isGreater($aturanKeluar);
+        }
+        else 
+            return false;
+    }
     public static function pushData($data = [])
     {
         $response = Http::withBody(json_encode($data), 'json') 
