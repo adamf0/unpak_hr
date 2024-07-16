@@ -33,10 +33,10 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
     }
     public function is8Hour($tanggal_jam_masuk = null, $tanggal_jam_keluar = null)
     {
-        $masuk = new Date($tanggal_jam_masuk);
-        $keluar = new Date($tanggal_jam_keluar);
+        //$masuk = new Date($tanggal_jam_masuk);
+        //$keluar = new Date($tanggal_jam_keluar);
 
-        if (!empty($keluar) && !$this->isLate($masuk, $keluar)) {
+        if (!empty($tanggal_jam_keluar) && !$this->isLate($tanggal_jam_masuk, date('Y-m-d',strtotime($tanggal_jam_masuk)))) {
             $jam_pulang = "14:59:00";
             if (Carbon::now()->setTimezone('Asia/Jakarta')->dayOfWeek == Carbon::FRIDAY) {
                 $jam_pulang = "13:59:00";
@@ -45,8 +45,8 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
             }
             $keluar = new Date($tanggal_jam_keluar . " $jam_pulang");
             return $keluar->isGreater($keluar);
-        } else if (!empty($keluar) && $this->isLate($masuk, $keluar)) {
-            $keluar = new Date(Carbon::parse($tanggal_jam_keluar)->setTimezone('Asia/Jakarta')->addHour(8)->toISOString());
+        } else if (!empty($tanggal_jam_keluar) && $this->isLate($tanggal_jam_masuk, date('Y-m-d',strtotime($tanggal_jam_masuk)))) {
+            $keluar = new Date(Carbon::parse($tanggal_jam_keluar)->setTimezone('Asia/Jakarta')->addHour(7)->toISOString());
             return $keluar->isGreater($keluar);
         } else
             return false;
