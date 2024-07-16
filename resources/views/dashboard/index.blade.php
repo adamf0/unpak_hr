@@ -327,7 +327,6 @@
             </div>
         </div>
     </div>
-    @elseif (Utility::hasSDM() || Utility::hasWarek())
     <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 table-responsive">
         <div class="card">
             <div class="card-body">
