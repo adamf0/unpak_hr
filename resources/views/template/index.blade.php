@@ -19,6 +19,7 @@
   <link rel="stylesheet" href="{{ Utility::loadAsset('assets/css/datepicker.css') }}" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     .offset-x {
       margin-left: 3.33333333%;
@@ -196,7 +197,7 @@
 
   <aside id="sidebar" class="sidebar">
     <ul class="sidebar-nav" id="sidebar-nav">
-      <x-sidebar-item-menu title="Dashboard" icon="bi bi-menu-button-wide" link="{{route('dashboard.index')}}" :active="Utility::stateMenu(['dashboard'],request())" />
+      <x-sidebar-item-menu title="Dashboard" icon="bi bi-columns-gap" class="text-primary" link="{{route('dashboard.index')}}" :active="Utility::stateMenu(['dashboard'],request())" />
 
       <!-- <li class="nav-heading">Form Pengajuan</li> -->
 
@@ -208,7 +209,7 @@
       @endif
 
       @if (Utility::hasUser())
-        <x-sidebar-item-menu-dropdown title="Cuti" parent="sidebar-nav" target="cuti" icon="bi bi-menu-button-wide" :active="Utility::stateMenu([
+        <x-sidebar-item-menu-dropdown title="Cuti" parent="sidebar-nav" target="cuti" icon="bi bi-file-earmark-text-fill" class="text-primary" :active="Utility::stateMenu([
           'cuti',
           ],request())">
           <x-sidebar-item-menu-dropdown-child title="Pengajuan" icon="bi bi-menu-button-wide" link="{{ route('cuti.index2',['type'=>Session::get('levelActive')=='dosen'? 'dosen':'tendik']) }}" :active="Utility::stateMenu(['cuti'],request(),1)" />
@@ -226,11 +227,11 @@
           @endif
         </x-sidebar-item-menu-dropdown>
 
-        <x-sidebar-item-menu title="Klaim Presensi" icon="bi bi-menu-button-wide" link="{{route('klaim_absen.index')}}" :active="Utility::stateMenu(['klaim_absen'],request())" />
+        <x-sidebar-item-menu title="Klaim Presensi" icon="fa-solid fa-file-shield" link="{{route('klaim_absen.index')}}" :active="Utility::stateMenu(['klaim_absen'],request())" />
       @endif
 
       @if (Utility::hasSDM())
-      <x-sidebar-item-menu-dropdown title="Cuti" parent="sidebar-nav" target="cuti" icon="bi bi-menu-button-wide" :active="Utility::stateMenu([
+      <x-sidebar-item-menu-dropdown title="Cuti" parent="sidebar-nav" target="cuti" icon="bi bi-file-earmark-text-fill" class="text-primary" :active="Utility::stateMenu([
         'cuti',
         ],request())">
         <x-sidebar-item-menu-dropdown-child title="Dosen" icon="bi bi-menu-button-wide" link="{{ route('cuti.index2',['type'=>'dosen']) }}" :active="Utility::stateMenu(['cuti','dosen'],request(),1)" />
@@ -244,7 +245,7 @@
         <x-sidebar-item-menu-dropdown-child title="Tendik" icon="bi bi-menu-button-wide" link="{{ route('izin.index2',['type'=>'tendik']) }}" :active="Utility::stateMenu(['izin'],request(),1)" />
       </x-sidebar-item-menu-dropdown>
 
-      <x-sidebar-item-menu-dropdown title="Klaim Presensi" parent="sidebar-nav" target="klaim_absen" icon="bi bi-menu-button-wide" :active="Utility::stateMenu([
+      <x-sidebar-item-menu-dropdown title="Klaim Presensi" parent="fa-solid fa-file-shieldklaim_absen" icon="bi bi-menu-button-wide" :active="Utility::stateMenu([
         'klaim_absen',
         ],request())">
         <x-sidebar-item-menu-dropdown-child title="Dosen" icon="bi bi-menu-button-wide" link="{{ route('klaim_absen.index2',['type'=>'dosen']) }}" :active="Utility::stateMenu(['klaim_absen'],request(),1)" />
@@ -262,9 +263,9 @@
       @endphp
 
       @if (Utility::hasSDM())
-        <x-sidebar-item-menu title="SPPD" icon="bi bi-menu-button-wide" link="{{route('sppd.index2',['type'=>'dosen'])}}" :active="Utility::stateMenu(['sppd'],request(),1)" />
+        <x-sidebar-item-menu title="SPPD" icon="fa-regular fa-file-signature" link="{{route('sppd.index2',['type'=>'dosen'])}}" :active="Utility::stateMenu(['sppd'],request(),1)" />
       @else
-        <x-sidebar-item-menu-dropdown title="SPPD" parent="sidebar-nav" target="sppd" icon="bi bi-menu-button-wide" :active="Utility::stateMenu([
+        <x-sidebar-item-menu-dropdown title="SPPD" parent="sidebar-nav" target="sppd" icon="fa-regular fa-file-signature" :active="Utility::stateMenu([
             'sppd',
             ],request())">
             <x-sidebar-item-menu-dropdown-child title="Pengajuan" icon="bi bi-menu-button-wide" link="{{ route('sppd.index2',['type'=>Session::get('levelActive')=='dosen'? 'dosen':'tendik']) }}" :active="Utility::stateMenu(['sppd'],request(),1)" />
