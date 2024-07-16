@@ -10,17 +10,17 @@ class GetAllActiveCutiQuery extends Query
 {
     use PagingQuery;
     public function __construct(
-        public $nidn=null,
-        public $nip=null,
+        public $isnidn=null,
+        public $isnip=null,
         public TypeData $option = TypeData::Entity,
     ) {
         return $this;
     }
 
-    public function GetNIDN(){
-        return $this->nidn;
+    public function IsNIDN(){
+        return $this->isnidn;
     }
-    public function GetNip(){
-        return $this->nip;
+    public function IsNip(){
+        return $this->isnip;
     }
 }

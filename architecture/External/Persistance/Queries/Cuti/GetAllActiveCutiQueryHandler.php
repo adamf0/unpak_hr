@@ -23,11 +23,11 @@ class GetAllActiveCutiQueryHandler extends Query
     public function handle(GetAllActiveCutiQuery $query)
     {
         $datas = CutiModel::with(['JenisCuti','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','PayrollPegawai','EPribadiRemote']);
-        if(!empty($query->GetNIDN())){
-            $datas = $datas->where('nidn',$query->GetNIDN());
+        if(!empty($query->IsNIDN())){
+            $datas = $datas->where('nidn',"!=","");
         }
-        if(!empty($query->GetNIP())){
-            $datas = $datas->where('nip',$query->GetNIP());
+        if(!empty($query->IsNIP())){
+            $datas = $datas->where('nip',"!=","");
         }
         $datas = $datas->where('tanggal_mulai','>=',date('Y-m-d'))->where('tanggal_akhir','<=',date('Y-m-d'));
         $datas = $datas->where('status','terima sdm');

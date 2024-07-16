@@ -19,9 +19,8 @@ class DatatableActiveCutiController extends Controller
     ) {}
     
     public function index(Request $request){
-        $nidn = $request->has('nidn')? $request->query('nidn'):null;
-        $nip = $request->has('nip')? $request->query('nip'):null;
-        $q = new GetAllActiveCutiQuery($nidn,$nip);
+        $filter = $request->has('filter')? $request->query('filter'):null;
+        $q = new GetAllActiveCutiQuery($filter=="nidn",$filter=="nip");
         // $q->SetOffset($request->get('start')??null)->SetLimit($request->get('length')??null);
         
         $listCuti = $this->queryBus->ask($q);
