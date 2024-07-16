@@ -218,7 +218,7 @@
           @endif
         </x-sidebar-item-menu-dropdown>
 
-        <x-sidebar-item-menu-dropdown title="Izin" parent="sidebar-nav" target="izin" class="text-primary" icon="bi bi-menu-button-wide" :active="Utility::stateMenu([
+        <x-sidebar-item-menu-dropdown title="Izin" parent="sidebar-nav" target="izin" class="text-primary" icon="bi bi-files" :active="Utility::stateMenu([
           'izin',
           ],request())">
           <x-sidebar-item-menu-dropdown-child title="Pengajuan" icon="bi bi-menu-button-wide" link="{{ route('izin.index2',['type'=>Session::get('levelActive')=='dosen'? 'dosen':'tendik']) }}" :active="Utility::stateMenu(['izin'],request(),1)" />
@@ -238,7 +238,7 @@
         <x-sidebar-item-menu-dropdown-child title="Tendik" icon="bi bi-menu-button-wide" link="{{ route('cuti.index2',['type'=>'tendik']) }}" :active="Utility::stateMenu(['cuti','tendik'],request(),1)" />
       </x-sidebar-item-menu-dropdown>
 
-      <x-sidebar-item-menu-dropdown title="Izin" parent="sidebar-nav" target="izin" class="text-primary" icon="bi bi-menu-button-wide" :active="Utility::stateMenu([
+      <x-sidebar-item-menu-dropdown title="Izin" parent="sidebar-nav" target="izin" class="text-primary" icon="bi bi-files" :active="Utility::stateMenu([
         'izin',
         ],request())">
         <x-sidebar-item-menu-dropdown-child title="Dosen" icon="bi bi-menu-button-wide" link="{{ route('izin.index2',['type'=>'dosen']) }}" :active="Utility::stateMenu(['izin'],request(),1)" />

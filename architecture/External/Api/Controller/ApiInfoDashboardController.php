@@ -78,12 +78,16 @@ class ApiInfoDashboardController extends Controller
             $r8         =0;
             $tidak_masuk=0;
             $belum_absen=0;
-            $presensi->each(function ($item) use($list_klaim_absen,&$tepat,&$telat,&$l8,&$r8,&$tidak_masuk,&$belum_absen){
+            $total_libur=0;
+            $presensi->each(function ($item) use($list_klaim_absen,&$tepat,&$telat,&$l8,&$r8,&$tidak_masuk,&$belum_absen,&$total_libur){
                 $klaim = $list_klaim_absen->where('status','terima')->where('Presensi.tanggal',$item->tanggal);
                 $klaim = $klaim->count()==1? $klaim[0]:null;
 
                 $tgl = Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta');
-                $rule_belum_absen = is_null($klaim) && empty($item->absen_masuk) && !$tgl->isSunday() && $tgl->equalTo(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d'));
+                if($tgl->isSunday()){
+                    $total_libur += 1;
+                }
+                $rule_belum_absen = is_null($klaim) && empty($item->absen_masuk) && !$tgl->isSunday() && $tgl->format('Y-m-d')==Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d');
                 $rule_tidak_masuk = is_null($klaim) && empty($item->absen_masuk) && !$tgl->isSunday() && $tgl->lessThan(Carbon::now()->setTimezone('Asia/Jakarta')->subDay()->format('Y-m-d'));
                 
                 if($rule_belum_absen){
@@ -113,7 +117,7 @@ class ApiInfoDashboardController extends Controller
                 "message"=>"",
                 "data"=>(object)[
                     "presensi"=>[
-                        "total"=>($presensi??collect([]))->count(),
+                        "total"=>($presensi??collect([]))->count() - $total_libur,
                         "tepat"=>$tepat,
                         "telat"=>$telat,
                         "l8"=>$l8,
