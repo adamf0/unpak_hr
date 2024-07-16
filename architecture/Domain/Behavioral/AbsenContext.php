@@ -4,11 +4,11 @@ namespace Architecture\Domain\Behavioral;
 class AbsenContext {
     private $strategy;
 
-    public function __construct(AbsenStrategy $strategy) {
+    public function __construct(IAbsenStrategy $strategy) {
         $this->strategy = $strategy;
     }
 
-    public function setStrategy(AbsenStrategy $strategy) {
+    public function setStrategy(IAbsenStrategy $strategy) {
         $this->strategy = $strategy;
     }
 
