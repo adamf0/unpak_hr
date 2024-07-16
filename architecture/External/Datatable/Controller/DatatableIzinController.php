@@ -50,7 +50,7 @@ class DatatableIzinController extends Controller
                                 "jenis_izin" => $item->GetJenisIzin()?->GetNama(),
                                 "dokumen"=>empty($item->GetDokumen())? "":[
                                     "file"=>$item->GetDokumen(),
-                                    "url"=>Utility::loadAsset('dokumen_cuti/'.rawurlencode($item->GetDokumen())),
+                                    "url"=>Utility::loadAsset('dokumen_izin/'.rawurlencode($item->GetDokumen())),
                                 ],
                                 "verifikator_nidn"=>$item->GetVerifikasi()?->GetNidn(),
                                 "verifikator_nip"=>$item->GetVerifikasi()?->GetNip(),
@@ -69,7 +69,7 @@ class DatatableIzinController extends Controller
                                 "jenis_izin" => $item->GetJenisIzin()?->GetNama(),
                                 "dokumen"=>empty($item->GetDokumen())? "":[
                                     "file"=>$item->GetDokumen(),
-                                    "url"=>Utility::loadAsset('dokumen_cuti/'.rawurlencode($item->GetDokumen())),
+                                    "url"=>Utility::loadAsset('dokumen_izin/'.rawurlencode($item->GetDokumen())),
                                 ],
                                 "verifikator_nidn"=>$item->GetVerifikasi()?->GetNidn(),
                                 "verifikator_nip"=>$item->GetVerifikasi()?->GetNip(),
