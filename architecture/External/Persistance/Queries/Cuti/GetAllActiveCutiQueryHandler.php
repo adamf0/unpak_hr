@@ -31,6 +31,7 @@ class GetAllActiveCutiQueryHandler extends Query
         }
         $datas = $datas->where('tanggal_mulai','>=',date('Y-m-d'))->where('tanggal_akhir','<=',date('Y-m-d'));
         $datas = $datas->where('status','terima sdm');
+        dd($datas->toRawSql());
         $datas = $datas->orderBy('id', 'DESC')->get();
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
