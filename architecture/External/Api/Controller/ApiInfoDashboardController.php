@@ -88,7 +88,7 @@ class ApiInfoDashboardController extends Controller
                     $total_libur += 1;
                 }
                 $rule_belum_absen = is_null($klaim) && empty($item->absen_masuk) && !$tgl->isSunday() && $tgl->format('Y-m-d')==Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d');
-                $rule_tidak_masuk = is_null($klaim) && empty($item->absen_masuk) && !$tgl->isSunday() && $tgl->lessThan(Carbon::now()->setTimezone('Asia/Jakarta')->subDay()->format('Y-m-d'));
+                $rule_tidak_masuk = is_null($klaim) && empty($item->absen_masuk) && !$tgl->isSunday() && $tgl->lessThanOrEqualTo(Carbon::now()->setTimezone('Asia/Jakarta')->subDay()->format('Y-m-d'));
                 
                 if($rule_belum_absen){
                     $belum_absen += 1;
