@@ -9,15 +9,15 @@ class DefaultStrategy implements IAbsenStrategy {
 
     public function getTitle($klaim, $dataAbsen, $tanggal, $now) {
         $label = match(true){
-            !empty($dataAbsen->catatan_pulang) => "(Pulang Cepat)",
-            Utility::isLate($dataAbsen->absen_masuk, $dataAbsen->tanggal) => "(Telat)",
+            !empty($dataAbsen?->catatan_pulang) => "(Pulang Cepat)",
+            Utility::isLate($dataAbsen?->absen_masuk, $dataAbsen?->tanggal) => "(Telat)",
             default => ""
         };
 
         return sprintf(
             "%s - %s %s",
-            empty($dataAbsen->absen_masuk) ? "-" : date('H:i:s', strtotime($dataAbsen->absen_masuk)),
-            empty($dataAbsen->absen_keluar) ? "-" : date('H:i:s', strtotime($dataAbsen->absen_keluar)),
+            is_null($dataAbsen?->absen_masuk) ? "-" : date('H:i:s', strtotime($dataAbsen?->absen_masuk)),
+            is_null($dataAbsen?->absen_keluar) ? "-" : date('H:i:s', strtotime($dataAbsen?->absen_keluar)),
             $label
         );
     }

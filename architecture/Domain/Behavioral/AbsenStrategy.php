@@ -9,18 +9,18 @@ class AbsenStrategy implements IAbsenStrategy {
 
     public function getTitle($klaim, $dataAbsen, $tanggal, $now) {
         $label = match(true){
-            !empty($klaim->jam_masuk) || !empty($klaim->jam_keluar) => "(klaim)",
-            !empty($dataAbsen->catatan_pulang) => "(Pulang Cepat)",
-            Utility::isLate($dataAbsen->absen_masuk, $dataAbsen->tanggal) => "(Telat)",
+            !empty($klaim?->jam_masuk) || !empty($klaim?->jam_keluar) => "(klaim)",
+            !empty($dataAbsen?->catatan_pulang) => "(Pulang Cepat)",
+            Utility::isLate($dataAbsen?->absen_masuk, $dataAbsen?->tanggal) => "(Telat)",
             default => ""
         };
-        if(is_null($dataAbsen?->absen_keluar)){
-            dd($dataAbsen,$klaim);
-        }
+        
+        $jam_masuk = is_null($dataAbsen?->absen_masuk) ? $klaim?->jam_masuk : $dataAbsen?->absen_masuk;
+        $jam_keluar = is_null($dataAbsen?->absen_keluar) ? $klaim?->jam_keluar : $dataAbsen?->absen_keluar;
         return sprintf(
             "%s - %s %s",
-            date('H:i:s', strtotime(empty($dataAbsen->absen_masuk) ? $klaim->jam_masuk : $dataAbsen->absen_masuk)),
-            date('H:i:s', strtotime(empty($dataAbsen->absen_keluar) ? $klaim->jam_keluar : $dataAbsen->absen_keluar)),
+            is_null($jam_masuk)? "-":date('H:i:s', strtotime($jam_masuk)),
+            is_null($jam_keluar)? "-":date('H:i:s', strtotime($jam_keluar)),
             $label
         );
     }

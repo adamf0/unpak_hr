@@ -21,7 +21,7 @@ class Select2DosenPegawaiController extends Controller
 
         $listPegawai = $list_pegawai->reduce(function ($carry, $item){
             $carry[] = [
-                "id"=>$item->GetNip(),
+                "id"=>$item->GetNip(), //GetUnitKerja
                 "text"=>sprintf("%s - %s (%s)", $item->GetNama(), $item->GetNip(), (!empty($item->GetUnit())? $item->GetUnit():null)),
                 "type"=>"pegawai",
             ];
