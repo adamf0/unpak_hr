@@ -16,6 +16,7 @@ use Architecture\Shared\TypeData;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class ApiKalendarController extends Controller //data cuti, izin, sppd, absen belum masuk
 {
@@ -67,193 +68,207 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
             $master_kalendar = $this->queryBus->ask(new GetAllMasterKalendarQuery(1, 1, $tahun, TypeData::Default));
             // dd($list_cuti, $list_izin, $list_sppd, $master_kalendar);
 
-            $list_libur_ = $master_kalendar->reduce(function ($carry, $item){
-                $start  = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta');
-                $end    = Carbon::parse($item->tanggal_berakhir)->setTimezone('Asia/Jakarta');
-                $days   = $end->diffInDays($start);
-                for ($i = 0; $i <= $days; $i++) {
-                    $carry[] = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta')->addDays($i)->format('Y-m-d');
-                }
-                return $carry;
-            }, []);
-            $list_cuti_ = $list_cuti->reduce(function ($carry, $item){
-                $start  = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta');
-                $end    = Carbon::parse($item->tanggal_akhir)->setTimezone('Asia/Jakarta');
-                $days   = $end->diffInDays($start);
-                for ($i = 0; $i <= $days; $i++) {
-                    $carry[] = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta')->addDays($i)->format('Y-m-d');
-                }
-                return $carry;
-            }, []);
-            $list_izin_ = $list_izin->reduce(function ($carry, $item){
-                $carry[] = $item->tanggal_pengajuan;
-                return $carry;
-            }, []);
-            $list_sppd_ = $list_sppd->reduce(function ($carry, $item){
-                $start  = Carbon::parse($item->tanggal_berangkat)->setTimezone('Asia/Jakarta');
-                $end    = Carbon::parse($item->tanggal_kembali)->setTimezone('Asia/Jakarta');
-                $days   = $end->diffInDays($start);
-                for ($i = 0; $i <= $days; $i++) {
-                    $carry[] = Carbon::parse($item->tanggal_berangkat)->setTimezone('Asia/Jakarta')->addDays($i)->format('Y-m-d');
-                }
-                return $carry;
-            }, []);
-            
-
-
-            $listKalendar = $master_kalendar->reduce(function ($carry, $item) use ($format) {
-                if ($format == "full-calendar") {
-                    $start  = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta');
-                    $end    = Carbon::parse(($item->tanggal_berakhir == null || $item->tanggal_berakhir == $item->tanggal_mulai) ? $item->tanggal_mulai : $item->tanggal_berakhir)->setTimezone('Asia/Jakarta');
-                    $days   = $end->diffInDays($start);
-                    for ($i = 0; $i <= $days; $i++) {
-                        $tgl = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta')->addDays($i)->format('Y-m-d');
-                        $carry[] = [
-                            "title" => $item->keterangan ?? "tanpa keterangan",
-                            "start" => $tgl,
-                            "end" => $tgl,
-                            "backgroundColor" => '#dc3545',
-                            "borderColor" => "transparent",
-                            // "className"=>"bg-danger"
-                        ];
-                    }
-                } else {
+            $key = match(true){
+                !empty($nidn) => $nidn,
+                !empty($nip) => $nip,
+                default => "#",
+            };
+            $list = Cache::remember("kalender-$key", 5*60, function () use(
+                $format,
+                $list_cuti,
+                $list_izin,
+                $list_sppd,
+                $list_absen,
+                $list_klaim_absen,
+                $master_kalendar,
+            ){
+                $list_libur_ = $master_kalendar->reduce(function ($carry, $item){
                     $start  = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta');
                     $end    = Carbon::parse($item->tanggal_berakhir)->setTimezone('Asia/Jakarta');
                     $days   = $end->diffInDays($start);
                     for ($i = 0; $i <= $days; $i++) {
-                        $carry[] = [
-                            "id" => $item->id,
-                            "tanggal" => Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta')->addDays($i)->format('Y-m-d'),
-                            "keterangan" => $item->keterangan ?? "tanpa keterangan",
-                        ];
+                        $carry[] = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta')->addDays($i)->format('Y-m-d');
                     }
-                }
-                return $carry;
-            }, []);
-
-            $listCuti = $list_cuti->reduce(function ($carry, $item) use ($format) {
-                if ($format == "full-calendar") {
-                    $carry[] = [
-                        "title" => $item->tujuan ?? "tanpa keterangan cuti",
-                        "start" => $item->tanggal_mulai,
-                        "end" => ($item->tanggal_akhir == null || $item->tanggal_akhir == $item->tanggal_mulai) ? $item->tanggal_mulai : $item->tanggal_akhir,
-                        "backgroundColor" => '#ffc107',
-                        "borderColor" => "transparent",
-                        // "className"=>"bg-danger"
-                    ];
-                } else {
+                    return $carry;
+                }, []);
+                $list_cuti_ = $list_cuti->reduce(function ($carry, $item){
                     $start  = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta');
                     $end    = Carbon::parse($item->tanggal_akhir)->setTimezone('Asia/Jakarta');
                     $days   = $end->diffInDays($start);
                     for ($i = 0; $i <= $days; $i++) {
-                        $carry[] = [
-                            "id" => $item->id,
-                            "tanggal" => Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta')->addDays($i)->format('Y-m-d'),
-                            "keterangan" => $item->tujuan ?? "tanpa keterangan cuti",
-                        ];
+                        $carry[] = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta')->addDays($i)->format('Y-m-d');
                     }
-                }
-                return $carry;
-            }, []);
-
-            $listIzin = $list_izin->reduce(function ($carry, $item) use ($format) {
-                if ($format == "full-calendar") {
-                    $carry[] = [
-                        "title" => $item->tujuan ?? "tanpa keterangan izin",
-                        "start" => $item->tanggal_pengajuan,
-                        "end" => $item->tanggal_pengajuan,
-                        "backgroundColor" => '#0044cc',
-                        "borderColor" => "transparent",
-                        // "className"=>"bg-danger"
-                    ];
-                } else {
-                    $carry[] = [
-                        "id" => $item->id,
-                        "tanggal" => Carbon::parse($item->tanggal_pengajuan)->setTimezone('Asia/Jakarta')->format('Y-m-d'),
-                        "keterangan" => $item->tujuan ?? "tanpa keterangan izin",
-                    ];
-                }
-                return $carry;
-            }, []);
-
-            $listSPPD = $list_sppd->reduce(function ($carry, $item) use ($format) {
-                if ($format == "full-calendar") {
-                    $carry[] = [
-                        "title" => $item->keterangan ?? "tanpa keterangan sppd",
-                        "start" => $item->tanggal_berangkat,
-                        "end" => $item->tanggal_kembali,
-                        "backgroundColor" => '#0dcaf0',
-                        "borderColor" => "transparent",
-                        // "className"=>"bg-danger"
-                    ];
-                } else {
+                    return $carry;
+                }, []);
+                $list_izin_ = $list_izin->reduce(function ($carry, $item){
+                    $carry[] = $item->tanggal_pengajuan;
+                    return $carry;
+                }, []);
+                $list_sppd_ = $list_sppd->reduce(function ($carry, $item){
                     $start  = Carbon::parse($item->tanggal_berangkat)->setTimezone('Asia/Jakarta');
                     $end    = Carbon::parse($item->tanggal_kembali)->setTimezone('Asia/Jakarta');
                     $days   = $end->diffInDays($start);
                     for ($i = 0; $i <= $days; $i++) {
-                        $carry[] = [
-                            "id" => $item->id,
-                            "tanggal" => Carbon::parse($item->tanggal_berangkat)->setTimezone('Asia/Jakarta')->format('Y-m-d'),
-                            "keterangan" => $item->keterangan ?? "tanpa keterangan sppd",
-                        ];
+                        $carry[] = Carbon::parse($item->tanggal_berangkat)->setTimezone('Asia/Jakarta')->addDays($i)->format('Y-m-d');
                     }
-                }
-                return $carry;
-            }, []);
+                    return $carry;
+                }, []);
 
-            $skip_tanggal = array_merge($list_libur_, $list_cuti_, $list_izin_, $list_sppd_);
-            $listAbsen = $list_absen->reduce(function ($carry, $item) use ($format, $list_klaim_absen,$skip_tanggal) {
-                if(!in_array($item->tanggal,$skip_tanggal) && !Carbon::parse($item->tanggal)->isSunday()){
+                $listKalendar = $master_kalendar->reduce(function ($carry, $item) use ($format) {
                     if ($format == "full-calendar") {
-                        $klaim = $list_klaim_absen->where('status', 'terima')->where('tanggal', $item->tanggal);
-                        $klaim = $klaim->count() == 1 ? $klaim[0] : null;
-    
-                        $background = match (true) {
-                            is_null($klaim) && empty($item->absen_masuk) && Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta')->lessThan(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d')) => "#dc3545", //tidak masuk
-                            !is_null($klaim) || (!empty($item->absen_masuk) && !$this->isLate($item->absen_masuk, $item->tanggal)) => "#198754", //masuk
-                            !is_null($klaim) || (!empty($item->absen_masuk) && !empty($item->absen_keluar) && $this->is8Hour($item->tanggal, $item->absen_masuk, $item->absen_keluar)) => "#198754", //masuk (anulir)
-                            default => "#000"
-                        };
-    
-                        $title = match (true) {
-                            is_null($klaim) && empty($item->absen_masuk) && Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta')->lessThan(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d')) => "tidak masuk", //tidak masuk
-                            !is_null($klaim) => sprintf(
-                                "%s - %s %s",
-                                (date('H:i:s', strtotime(empty($item->absen_masuk) ? $klaim->jam_masuk : $item->absen_masuk))),
-                                (date('H:i:s', strtotime(empty($item->absen_keluar) ? $klaim->jam_keluar : $item->absen_keluar))),
-                                ((!empty($klaim->jam_masuk) || !empty($klaim->jam_keluar)) ? "(klaim)" : "")
-                            ), //klaim
-    
-                            !empty($item->absen_masuk) && !$this->isLate($item->absen_masuk, $item->tanggal) => sprintf("%s - %s", date('H:i:s', strtotime($item->absen_masuk)), (empty($item->absen_keluar) ? "" : date('H:i:s', strtotime($item->absen_keluar)))), //masuk
-                            default => sprintf(
-                                "%s - %s",
-                                empty($item->absen_masuk) ? "-" : date('H:i:s', strtotime($item->absen_masuk)),
-                                empty($item->absen_keluar) ? "-" : date('H:i:s', strtotime($item->absen_keluar))
-                            )
-                        };
-                        if (!empty($title)) {
+                        $start  = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta');
+                        $end    = Carbon::parse(($item->tanggal_berakhir == null || $item->tanggal_berakhir == $item->tanggal_mulai) ? $item->tanggal_mulai : $item->tanggal_berakhir)->setTimezone('Asia/Jakarta');
+                        $days   = $end->diffInDays($start);
+                        for ($i = 0; $i <= $days; $i++) {
+                            $tgl = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta')->addDays($i)->format('Y-m-d');
                             $carry[] = [
-                                "title" => $title,
-                                "start" => $item->tanggal,
-                                "end" => $item->tanggal,
-                                "backgroundColor" => $background,
+                                "title" => $item->keterangan ?? "tanpa keterangan",
+                                "start" => $tgl,
+                                "end" => $tgl,
+                                "backgroundColor" => '#dc3545',
                                 "borderColor" => "transparent",
                                 // "className"=>"bg-danger"
                             ];
                         }
                     } else {
+                        $start  = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta');
+                        $end    = Carbon::parse($item->tanggal_berakhir)->setTimezone('Asia/Jakarta');
+                        $days   = $end->diffInDays($start);
+                        for ($i = 0; $i <= $days; $i++) {
+                            $carry[] = [
+                                "id" => $item->id,
+                                "tanggal" => Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta')->addDays($i)->format('Y-m-d'),
+                                "keterangan" => $item->keterangan ?? "tanpa keterangan",
+                            ];
+                        }
+                    }
+                    return $carry;
+                }, []);
+    
+                $listCuti = $list_cuti->reduce(function ($carry, $item) use ($format) {
+                    if ($format == "full-calendar") {
+                        $carry[] = [
+                            "title" => $item->tujuan ?? "tanpa keterangan cuti",
+                            "start" => $item->tanggal_mulai,
+                            "end" => ($item->tanggal_akhir == null || $item->tanggal_akhir == $item->tanggal_mulai) ? $item->tanggal_mulai : $item->tanggal_akhir,
+                            "backgroundColor" => '#ffc107',
+                            "borderColor" => "transparent",
+                            // "className"=>"bg-danger"
+                        ];
+                    } else {
+                        $start  = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta');
+                        $end    = Carbon::parse($item->tanggal_akhir)->setTimezone('Asia/Jakarta');
+                        $days   = $end->diffInDays($start);
+                        for ($i = 0; $i <= $days; $i++) {
+                            $carry[] = [
+                                "id" => $item->id,
+                                "tanggal" => Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta')->addDays($i)->format('Y-m-d'),
+                                "keterangan" => $item->tujuan ?? "tanpa keterangan cuti",
+                            ];
+                        }
+                    }
+                    return $carry;
+                }, []);
+    
+                $listIzin = $list_izin->reduce(function ($carry, $item) use ($format) {
+                    if ($format == "full-calendar") {
+                        $carry[] = [
+                            "title" => $item->tujuan ?? "tanpa keterangan izin",
+                            "start" => $item->tanggal_pengajuan,
+                            "end" => $item->tanggal_pengajuan,
+                            "backgroundColor" => '#0044cc',
+                            "borderColor" => "transparent",
+                            // "className"=>"bg-danger"
+                        ];
+                    } else {
                         $carry[] = [
                             "id" => $item->id,
-                            "tanggal" => date('Y-m-d', strtotime($item->tanggal_pengajuan)),
-                            "keterangan" => $item->keterangan ?? "NA",
+                            "tanggal" => Carbon::parse($item->tanggal_pengajuan)->setTimezone('Asia/Jakarta')->format('Y-m-d'),
+                            "keterangan" => $item->tujuan ?? "tanpa keterangan izin",
                         ];
                     }
-                }
-
-                return $carry;
-            }, []);
-            $list = array_merge($listAbsen, $listKalendar, $listCuti, $listIzin, $listSPPD);
+                    return $carry;
+                }, []);
+    
+                $listSPPD = $list_sppd->reduce(function ($carry, $item) use ($format) {
+                    if ($format == "full-calendar") {
+                        $carry[] = [
+                            "title" => $item->keterangan ?? "tanpa keterangan sppd",
+                            "start" => $item->tanggal_berangkat,
+                            "end" => $item->tanggal_kembali,
+                            "backgroundColor" => '#0dcaf0',
+                            "borderColor" => "transparent",
+                            // "className"=>"bg-danger"
+                        ];
+                    } else {
+                        $start  = Carbon::parse($item->tanggal_berangkat)->setTimezone('Asia/Jakarta');
+                        $end    = Carbon::parse($item->tanggal_kembali)->setTimezone('Asia/Jakarta');
+                        $days   = $end->diffInDays($start);
+                        for ($i = 0; $i <= $days; $i++) {
+                            $carry[] = [
+                                "id" => $item->id,
+                                "tanggal" => Carbon::parse($item->tanggal_berangkat)->setTimezone('Asia/Jakarta')->format('Y-m-d'),
+                                "keterangan" => $item->keterangan ?? "tanpa keterangan sppd",
+                            ];
+                        }
+                    }
+                    return $carry;
+                }, []);
+    
+                $skip_tanggal = array_merge($list_libur_, $list_cuti_, $list_izin_, $list_sppd_);
+                $listAbsen = $list_absen->reduce(function ($carry, $item) use ($format, $list_klaim_absen,$skip_tanggal) {
+                    if(!in_array($item->tanggal,$skip_tanggal) && !Carbon::parse($item->tanggal)->isSunday()){
+                        if ($format == "full-calendar") {
+                            $klaim = $list_klaim_absen->where('status', 'terima')->where('tanggal', $item->tanggal);
+                            $klaim = $klaim->count() == 1 ? $klaim[0] : null;
+        
+                            $background = match (true) {
+                                is_null($klaim) && empty($item->absen_masuk) && Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta')->lessThan(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d')) => "#dc3545", //tidak masuk
+                                !is_null($klaim) || (!empty($item->absen_masuk) && !$this->isLate($item->absen_masuk, $item->tanggal)) => "#198754", //masuk
+                                !is_null($klaim) || (!empty($item->absen_masuk) && !empty($item->absen_keluar) && $this->is8Hour($item->tanggal, $item->absen_masuk, $item->absen_keluar)) => "#198754", //masuk (anulir)
+                                default => "#000"
+                            };
+        
+                            $title = match (true) {
+                                is_null($klaim) && empty($item->absen_masuk) && Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta')->lessThan(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d')) => "tidak masuk", //tidak masuk
+                                !is_null($klaim) => sprintf(
+                                    "%s - %s %s",
+                                    (date('H:i:s', strtotime(empty($item->absen_masuk) ? $klaim->jam_masuk : $item->absen_masuk))),
+                                    (date('H:i:s', strtotime(empty($item->absen_keluar) ? $klaim->jam_keluar : $item->absen_keluar))),
+                                    ((!empty($klaim->jam_masuk) || !empty($klaim->jam_keluar)) ? "(klaim)" : "")
+                                ), //klaim
+        
+                                !empty($item->absen_masuk) && !$this->isLate($item->absen_masuk, $item->tanggal) => sprintf("%s - %s", date('H:i:s', strtotime($item->absen_masuk)), (empty($item->absen_keluar) ? "" : date('H:i:s', strtotime($item->absen_keluar)))), //masuk
+                                default => sprintf(
+                                    "%s - %s",
+                                    empty($item->absen_masuk) ? "-" : date('H:i:s', strtotime($item->absen_masuk)),
+                                    empty($item->absen_keluar) ? "-" : date('H:i:s', strtotime($item->absen_keluar))
+                                )
+                            };
+                            if (!empty($title)) {
+                                $carry[] = [
+                                    "title" => $title,
+                                    "start" => $item->tanggal,
+                                    "end" => $item->tanggal,
+                                    "backgroundColor" => $background,
+                                    "borderColor" => "transparent",
+                                    // "className"=>"bg-danger"
+                                ];
+                            }
+                        } else {
+                            $carry[] = [
+                                "id" => $item->id,
+                                "tanggal" => date('Y-m-d', strtotime($item->tanggal_pengajuan)),
+                                "keterangan" => $item->keterangan ?? "NA",
+                            ];
+                        }
+                    }
+    
+                    return $carry;
+                }, []);
+                
+                return array_merge($listAbsen, $listKalendar, $listCuti, $listIzin, $listSPPD);;
+            });
 
             return response()->json([
                 "status" => "ok",

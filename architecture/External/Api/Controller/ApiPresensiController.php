@@ -14,6 +14,7 @@ use Architecture\Domain\RuleValidationRequest\Presensi\CreatePresensiRuleReq;
 use Architecture\Domain\ValueObject\Date;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class ApiPresensiController extends Controller
 {
@@ -37,6 +38,11 @@ class ApiPresensiController extends Controller
 
             $nidn = empty($request?->nidn)? null:$request?->nidn;
             $nip = empty($request?->nip)? null:$request?->nip;
+            $key = match(true){
+                !empty($nidn) => $nidn,
+                !empty($nip) => $nip,
+                default => "#",
+            };
 
             if($request->type=="absen_masuk"){
                 $this->commandBus->dispatch(new CreatePresensiMasukCommand(
@@ -46,6 +52,7 @@ class ApiPresensiController extends Controller
                     new Date($request->absen_masuk),
                     $request->catatan_telat,
                 ));
+                Cache::delete("kalender-$key");
 
                 return response()->json([
                     "status"=>"ok",
@@ -60,6 +67,7 @@ class ApiPresensiController extends Controller
                     new Date($request->absen_keluar),
                     $request->catatan_pulang,
                 ));
+                Cache::delete("kalender-$key");
 
                 return response()->json([
                     "status"=>"ok",
