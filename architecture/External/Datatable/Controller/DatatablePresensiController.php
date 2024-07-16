@@ -25,19 +25,19 @@ class DatatablePresensiController extends Controller
         // $tahun = $request->has('tahun')? $request->query('tahun'):date('Y-m-d');
         $filter = $request->has('filter')? $request->query('filter'):null;
         
-        $datas = $this->queryBus->ask(new GetAllPresensiQuery($nidn,$nip,date('Y')));
-        if($filter=="dosen"){
-            $datas = $datas->filter(fn($item)=>!is_null($item->GetDosen()));
-        } else if($filter=="pegawai"){
-            $datas = $datas->filter(fn($item)=>!is_null($item->GetPegawai()));
-        }
+        $datas = $this->queryBus->ask(new GetAllPresensiQuery($nidn,$nip,date('Y'),date('Y-m-d')));
+        // if($filter=="dosen"){
+        //     $datas = $datas->filter(fn($item)=>!is_null($item->GetDosen()));
+        // } else if($filter=="pegawai"){
+        //     $datas = $datas->filter(fn($item)=>!is_null($item->GetPegawai()));
+        // }
 
         
         $datas = Cache::remember("list-presensi-$filter", 5*60, function () use($datas,$filter){
             return $datas
-                    ->filter(function($item){
-                        return $item->getTanggal()->isEqual(new Date(date('Y-m-d')));
-                    })
+                    // ->filter(function($item){
+                    //     return $item->getTanggal()->isEqual(new Date(date('Y-m-d')));
+                    // })
                     ->map(function ($item) use($filter){
                         return match(true){
                             $filter=="dosen"=>[

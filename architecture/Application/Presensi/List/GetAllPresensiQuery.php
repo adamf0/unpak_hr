@@ -13,6 +13,7 @@ class GetAllPresensiQuery extends Query
         public $nidn=null,
         public $nip=null,
         public $tahun=null,
+        public $tanggal_spesifik=null,
         public TypeData $option = TypeData::Entity
     ) {
         return $this;
@@ -26,5 +27,8 @@ class GetAllPresensiQuery extends Query
     }
     public function GetTahun(){
         return $this->tahun;
+    }
+    public function GetTanggalSpesifik(){
+        return $this->tanggal_spesifik;
     }
 }

@@ -63,7 +63,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
             $list_cuti = in_array($level, ["dosen", "pegawai"]) ? $this->queryBus->ask(new GetAllCutiQuery($nidn, $nip, $tahun, TypeData::Default, false)) : collect([]);
             $list_izin = in_array($level, ["dosen", "pegawai"]) ? $this->queryBus->ask(new GetAllIzinQuery($nidn, $nip, $tahun, TypeData::Default, false)) : collect([]);
             $list_sppd = in_array($level, ["dosen", "pegawai"]) ? $this->queryBus->ask(new GetAllSPPDQuery($nidn, $nip, $tahun, TypeData::Default, false)) : collect([]);
-            $list_absen = in_array($level, ["dosen", "pegawai"]) ? $this->queryBus->ask(new GetAllPresensiQuery($nidn, $nip, $tahun, TypeData::Default)) : collect([]);
+            $list_absen = in_array($level, ["dosen", "pegawai"]) ? $this->queryBus->ask(new GetAllPresensiQuery($nidn, $nip, $tahun, null, TypeData::Default)) : collect([]);
             $list_klaim_absen = in_array($level, ["dosen", "pegawai"]) ? $this->queryBus->ask(new GetAllKlaimAbsenQuery($nidn, $nip, $tahun, TypeData::Default)) : collect([]);
             $master_kalendar = $this->queryBus->ask(new GetAllMasterKalendarQuery(1, 1, $tahun, TypeData::Default));
             // dd($list_cuti, $list_izin, $list_sppd, $master_kalendar);
