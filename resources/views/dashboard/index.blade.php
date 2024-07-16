@@ -788,6 +788,7 @@
                 const waktuKeluar = (absenKeluar.isEmpty? getCurrentTime():moment(absenKeluar)).tz('Asia/Jakarta');
                 const selisihKeluarMenit = waktuKeluar.diff(moment(absenMasuk).tz('Asia/Jakarta'), 'minutes')
                 const selisihKeluarJam = waktuKeluar.diff(moment(absenMasuk).tz('Asia/Jakarta'), 'hours')
+                console.log({"selisihKeluarMenit":selisihKeluarMenit,"selisihKeluarJam":selisihKeluarJam});
 
                 $(refInfoAbsenKeluar).html(absenKeluar.isEmpty()? (absenMasuk.isEmpty()? "-":getCurrentTime().format("HH:mm:ss")):moment(absenKeluar).tz('Asia/Jakarta').format("HH:mm:ss"))
                 $(refInfoAbsenJamKerja).html(
