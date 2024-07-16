@@ -80,7 +80,7 @@
                     <div class="col-12">
                         <div class="d-flex flex-row flex-wrap flex-grow-1 align-items-center placeholder-glow">
                             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                <i class="bi bi-file-earmark-x"></i>
+                                <img src="{{ Utility::loadAsset('assets/img/icon 32x32/icons8-persensi.png') }}" alt=""/>
                             </div>
                             <h6 class="mx-3 flex-grow-1 presensi_total"><span class="placeholder col-2"></span></h6>
                         </div>
@@ -119,7 +119,7 @@
                     <div class="col-12">
                         <div class="d-flex flex-row flex-wrap flex-grow-1 align-items-center placeholder-glow">
                             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                <i class="bi bi-file-earmark-x"></i>
+                                <img src="{{ Utility::loadAsset('assets/img/icon 32x32/icons8-cuti.png') }}" alt=""/>
                             </div>
                             <h6 class="mx-3 flex-grow-1 cuti_total"><span class="placeholder col-2"></span></h6>
                         </div>
@@ -146,7 +146,7 @@
                     <div class="col-12">
                         <div class="d-flex flex-row flex-wrap flex-grow-1 align-items-center placeholder-glow">
                             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                <i class="bi bi-file-earmark-x"></i>
+                                <img src="{{ Utility::loadAsset('assets/img/icon 32x32/icons8-izin.png') }}" alt=""/>
                             </div>
                             <h6 class="mx-3 flex-grow-1 izin_total"><span class="placeholder col-2"></span></h6>
                         </div>
@@ -173,7 +173,7 @@
                     <div class="col-12">
                         <div class="d-flex flex-row flex-wrap flex-grow-1 align-items-center placeholder-glow">
                             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                <i class="bi bi-file-earmark-x"></i>
+                                <img src="{{ Utility::loadAsset('assets/img/icon 32x32/icons8-sppd.png') }}" alt=""/>
                             </div>
                             <h6 class="mx-3 flex-grow-1 sppd_total"><span class="placeholder col-2"></span></h6>
                         </div>
