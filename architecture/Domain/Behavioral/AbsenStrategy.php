@@ -18,7 +18,7 @@ class AbsenStrategy implements IAbsenStrategy {
         
         $warna = match(true){
             !empty($klaim?->jam_masuk) || !empty($klaim?->jam_keluar) => "#198754",
-            !empty($dataAbsen?->catatan_pulang) => "#000",
+            !empty($dataAbsen?->catatan_pulang) || !Utility::is8Hour($dataAbsen->tanggal, $dataAbsen->absen_masuk, $dataAbsen->absen_keluar) => "#000",
             Utility::isLate($dataAbsen?->absen_masuk, $dataAbsen?->tanggal) => "#000",
             default => "#198754"
         };
@@ -41,7 +41,7 @@ class AbsenStrategy implements IAbsenStrategy {
 
         $label = match(true){
             !empty($klaim?->jam_masuk) || !empty($klaim?->jam_keluar) => "(klaim)",
-            !empty($dataAbsen?->catatan_pulang) => "(Pulang Cepat)",
+            !empty($dataAbsen?->catatan_pulang) || !Utility::is8Hour($dataAbsen->tanggal, $dataAbsen->absen_masuk, $dataAbsen->absen_keluar) => "(Pulang Cepat)",
             Utility::isLate($dataAbsen?->absen_masuk, $dataAbsen?->tanggal) => "(Telat)",
             default => ""
         };
