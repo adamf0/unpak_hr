@@ -117,14 +117,6 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                             // "className"=>"bg-danger"
                         ];
                     }
-                    // $carry[] = [
-                    //     "title" => $item->keterangan ?? "tanpa keterangan",
-                    //     "start" => $item->tanggal_mulai,
-                    //     "end" => ($item->tanggal_berakhir == null || $item->tanggal_berakhir == $item->tanggal_mulai) ? $item->tanggal_mulai : $item->tanggal_berakhir,
-                    //     "backgroundColor" => '#dc3545',
-                    //     "borderColor" => "transparent",
-                    //     // "className"=>"bg-danger"
-                    // ];
                 } else {
                     $start  = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta');
                     $end    = Carbon::parse($item->tanggal_berakhir)->setTimezone('Asia/Jakarta');
@@ -220,6 +212,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                         $background = match (true) {
                             is_null($klaim) && empty($item->absen_masuk) && Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta')->lessThan(Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d')) => "#dc3545", //tidak masuk
                             !is_null($klaim) || (!empty($item->absen_masuk) && !$this->isLate($item->absen_masuk, $item->tanggal)) => "#198754", //masuk
+                            !is_null($klaim) || (!empty($item->absen_masuk) && !empty($item->absen_keluar) && $this->is8Hour($item->absen_masuk, $item->absen_keluar)) => "#198754", //masuk (anulir)
                             default => "#000"
                         };
     
