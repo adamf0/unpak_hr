@@ -370,27 +370,27 @@
                         <tr>
                             <td>Intisari / ringkasan kegiatan</td>
                             <td>:</td>
-                            <td>${rowData?.intisari??''}</td>
+                            <td class="text-break">${rowData?.intisari??''}</td>
                         </tr>
                         <tr>
                             <td>Kontribusi pada Unit / Fakultas / Universitas</td>
                             <td>:</td>
-                            <td>${rowData?.kontribusi??''}</td>
+                            <td class="text-break">${rowData?.kontribusi??''}</td>
                         </tr>
                         <tr>
                             <td>Rencana tindak lanjut</td>
                             <td>:</td>
-                            <td>${rowData?.rencana_tindak_lanjut??''}</td>
+                            <td class="text-break">${rowData?.rencana_tindak_lanjut??''}</td>
                         </tr>
                         <tr>
                             <td>Rencana waktu pelaksanaan tindak lanjut</td>
                             <td>:</td>
-                            <td>${formatIndonesianDate(rowData?.rencana_waktu_tindak_lanjut)}</td>
+                            <td class="text-break">${formatIndonesianDate(rowData?.rencana_waktu_tindak_lanjut)}</td>
                         </tr>
                         <tr>
                             <td>Foto</td>
                             <td>:</td>
-                            <td>
+                            <td class="text-break">
                                 <ol>
                                     `+list_foto+`
                                 </ol>
@@ -398,7 +398,7 @@
                         </tr><tr>
                             <td>Undangan</td>
                             <td>:</td>
-                            <td>
+                            <td class="text-break">
                                 <ol>
                                     `+list_undangan+`
                                 </ol>

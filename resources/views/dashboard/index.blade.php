@@ -312,8 +312,8 @@
             <div class="card-body">
                 <h5 class="card-title">DAFTAR DOSEN AKTIF CUTI</h5>
                 <small class="text-primary">(hari ini)</small>
-                <div class="row col-12 table">
-                    <table id="tbCutiDosen" class="table-stripped">
+                <div class="row col-12 table-responsive">
+                    <table id="tbCutiDosen" class="table table-stripped">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -332,8 +332,8 @@
             <div class="card-body">
                 <h5 class="card-title">DAFTAR TENDIK AKTIF CUTI</h5>
                 <small class="text-primary">(hari ini)</small>
-                <div class="row col-12 table">
-                    <table id="tbCutiPegawai" class="table-stripped">
+                <div class="row col-12 table-responsive">
+                    <table id="tbCutiPegawai" class="table table-stripped">
                         <thead>
                             <tr>
                                 <th>#</th>
