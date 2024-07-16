@@ -1,16 +1,38 @@
 <?php
 namespace Architecture\Domain\Behavioral;
 use Architecture\Shared\Facades\Utility;
+use Carbon\Carbon;
 
 class AbsenStrategy implements IAbsenStrategy {
     public function getBackground($klaim, $dataAbsen, $tanggal, $now) {
-        return "#198754"; // masuk
+        $aturanPulang = "14:59:00";
+        if (Carbon::now()->setTimezone('Asia/Jakarta')->dayOfWeek == Carbon::FRIDAY) {
+            $aturanPulang = "13:59:00";
+        } elseif (Carbon::now()->setTimezone('Asia/Jakarta')->dayOfWeek == Carbon::SATURDAY) {
+            $aturanPulang = "11:59:00";
+        }
+
+        $jam_keluar = is_null($dataAbsen?->absen_keluar) ? $klaim?->jam_keluar : $dataAbsen?->absen_keluar;
+        $pulangCepat = is_null($jam_keluar)? false:strtotime($dataAbsen?->tanggal." ".$jam_keluar)<=strtotime($dataAbsen?->tanggal." ".$aturanPulang);
+
+        return $pulangCepat? "#000":"#198754"; // masuk
     }
 
     public function getTitle($klaim, $dataAbsen, $tanggal, $now) {
+        $aturanPulang = "14:59:00";
+        if (Carbon::now()->setTimezone('Asia/Jakarta')->dayOfWeek == Carbon::FRIDAY) {
+            $aturanPulang = "13:59:00";
+        } elseif (Carbon::now()->setTimezone('Asia/Jakarta')->dayOfWeek == Carbon::SATURDAY) {
+            $aturanPulang = "11:59:00";
+        }
+
+        $jam_masuk = is_null($dataAbsen?->absen_masuk) ? $klaim?->jam_masuk : $dataAbsen?->absen_masuk;
+        $jam_keluar = is_null($dataAbsen?->absen_keluar) ? $klaim?->jam_keluar : $dataAbsen?->absen_keluar;
+        $pulangCepat = is_null($jam_keluar)? false:strtotime($dataAbsen?->tanggal." ".$jam_keluar)<=strtotime($dataAbsen?->tanggal." ".$aturanPulang);
+
         $label = match(true){
             !empty($klaim?->jam_masuk) || !empty($klaim?->jam_keluar) => "(klaim)",
-            !empty($dataAbsen?->catatan_pulang) => "(Pulang Cepat)",
+            !empty($dataAbsen?->catatan_pulang) || $pulangCepat => "(Pulang Cepat)",
             Utility::isLate($dataAbsen?->absen_masuk, $dataAbsen?->tanggal) => "(Telat)",
             default => ""
         };
