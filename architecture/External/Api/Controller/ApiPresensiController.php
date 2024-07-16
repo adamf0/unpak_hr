@@ -52,7 +52,7 @@ class ApiPresensiController extends Controller
                     new Date($request->absen_masuk),
                     $request->catatan_telat,
                 ));
-                Cache::delete("kalender-$key");
+                Cache::forget("kalender-$key");
 
                 return response()->json([
                     "status"=>"ok",
@@ -67,7 +67,7 @@ class ApiPresensiController extends Controller
                     new Date($request->absen_keluar),
                     $request->catatan_pulang,
                 ));
-                Cache::delete("kalender-$key");
+                Cache::forget("kalender-$key");
 
                 return response()->json([
                     "status"=>"ok",
