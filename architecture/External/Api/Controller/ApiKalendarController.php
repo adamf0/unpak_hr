@@ -271,6 +271,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                 "data" => $list,
             ]);
         } catch (Exception $e) {
+            throw $e;
             return response()->json([
                 "status" => "fail",
                 "message" => "data tidak ditemukan",
