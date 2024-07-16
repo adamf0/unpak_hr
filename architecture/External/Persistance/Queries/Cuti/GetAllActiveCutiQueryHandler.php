@@ -27,7 +27,7 @@ class GetAllActiveCutiQueryHandler extends Query
             $datas = $datas->whereNotNull('nidn');
         }
         if($query->IsNIP()){
-            $datas = $datas->whereNotNull('nip',"!=","");
+            $datas = $datas->whereNotNull('nip');
         }
         $datas = $datas->where('tanggal_mulai','>=',date('Y-m-d'))->where('tanggal_akhir','<=',date('Y-m-d'));
         $datas = $datas->where('status','terima sdm');
