@@ -17,7 +17,7 @@ class File {
         
         $this->fileName = $fileName;
         $this->available = Storage::disk($disk)->exists($fileName);
-        $this->url = Utility::loadAsset("$disk/$fileName");
+        $this->url = Utility::loadAsset($disk."/".rawurlencode($fileName));
         $this->extension = pathinfo($fileName, PATHINFO_EXTENSION);
     }
 
