@@ -29,7 +29,7 @@ class AbsenStrategy implements IAbsenStrategy {
             !Utility::isLate($jam_masuk, $dataAbsen?->tanggal) &&
             !Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)
         ){
-            $warna = "#000";
+            $warna = empty($jam_keluar)? "#198754":"#000";
         }
 
         return $warna; // masuk
