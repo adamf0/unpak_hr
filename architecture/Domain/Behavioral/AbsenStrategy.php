@@ -24,12 +24,12 @@ class AbsenStrategy implements IAbsenStrategy {
             Utility::isLate($jam_masuk, $dataAbsen?->tanggal) &&
             !Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)
         ){
-            $warna = "#ddd";
+            $warna = "red";
         } else if( 
             !Utility::isLate($jam_masuk, $dataAbsen?->tanggal) &&
             !Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)
         ){
-            $warna = "#000";
+            $warna = "purple";
         }
 
         return $warna; // masuk
