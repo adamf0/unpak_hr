@@ -204,9 +204,10 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                             $strategy = new DefaultStrategy();
                             if(is_null($klaim) && empty($item->absen_masuk) && $tanggal->lessThan($now)){
                                 $strategy = new TidakAbsenStrategy();
-                            } else if(!is_null($klaim) || (!empty($item->absen_masuk) && !Utility::isLate($item->absen_masuk, $item->tanggal))){
-                                $strategy = new AbsenStrategy();
-                            } else if(!is_null($klaim) || (!empty($item->absen_masuk) && !empty($item->absen_keluar) && Utility::is8Hour($item->tanggal, $item->absen_masuk, $item->absen_keluar))){
+                            } else if(
+                                !is_null($klaim) || 
+                                !empty($item->absen_masuk)
+                            ){
                                 $strategy = new AbsenStrategy();
                             }
 
