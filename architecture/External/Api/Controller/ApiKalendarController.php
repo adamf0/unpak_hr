@@ -50,15 +50,15 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                 !empty($nip) => $nip,
                 default => "#",
             };
-            $list = Cache::remember("kalender-$key", 5*60, function () use(
-                $format,
-                $list_cuti,
-                $list_izin,
-                $list_sppd,
-                $list_absen,
-                $list_klaim_absen,
-                $master_kalendar,
-            ){
+            // $list = Cache::remember("kalender-$key", 5*60, function () use(
+            //     $format,
+            //     $list_cuti,
+            //     $list_izin,
+            //     $list_sppd,
+            //     $list_absen,
+            //     $list_klaim_absen,
+            //     $master_kalendar,
+            // ){
                 $list_libur_ = $master_kalendar->reduce(function ($carry, $item){
                     $start  = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta');
                     $end    = Carbon::parse($item->tanggal_berakhir)->setTimezone('Asia/Jakarta');
@@ -212,34 +212,6 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                             $background = $context->getBackground($klaim, $item, $tanggal, $now);
                             $title = $context->getTitle($klaim, $item, $tanggal, $now);
 
-                            // $background = match (true) {
-                            //     is_null($klaim) && empty($item->absen_masuk) && $tanggal->lessThan($now) => "#dc3545", //tidak masuk
-                            //     !is_null($klaim) || (!empty($item->absen_masuk) && !Utility::isLate($item->absen_masuk, $item->tanggal)) => "#198754", //masuk
-                            //     !is_null($klaim) || (!empty($item->absen_masuk) && !empty($item->absen_keluar) && Utility::is8Hour($item->tanggal, $item->absen_masuk, $item->absen_keluar)) => "#198754", //masuk (anulir)
-                            //     default => "#000"
-                            // };
-        
-                            // $title = match (true) {
-                            //     is_null($klaim) && empty($item->absen_masuk) && $tanggal->lessThan($now) => "tidak masuk", //tidak masuk
-                            //     !is_null($klaim) => sprintf(
-                            //         "%s - %s %s",
-                            //         (date('H:i:s', strtotime(empty($item->absen_masuk) ? $klaim->jam_masuk : $item->absen_masuk))),
-                            //         (date('H:i:s', strtotime(empty($item->absen_keluar) ? $klaim->jam_keluar : $item->absen_keluar))),
-                            //         ((!empty($klaim->jam_masuk) || !empty($klaim->jam_keluar)) ? "(klaim)" : "")
-                            //     ), //klaim
-        
-                            //     !empty($item->absen_masuk) && !Utility::isLate($item->absen_masuk, $item->tanggal) => sprintf("%s - %s", date('H:i:s', strtotime($item->absen_masuk)), (empty($item->absen_keluar) ? "" : date('H:i:s', strtotime($item->absen_keluar))), ), //masuk //pulang cepat
-                            //     default => sprintf(
-                            //         "%s - %s %s",
-                            //         empty($item->absen_masuk) ? "-" : date('H:i:s', strtotime($item->absen_masuk)),
-                            //         empty($item->absen_keluar) ? "-" : date('H:i:s', strtotime($item->absen_keluar)),
-                            //         match(true){
-                            //             !empty($item->catatan_pulang) => "(Pulang Cepat)",
-                            //             Utility::isLate($item->absen_masuk, $item->tanggal) => "(Telat)",
-                            //             default => ""
-                            //         }
-                            //     )
-                            // };
                             if (!empty($title)) {
                                 $carry[] = [
                                     "title" => $title,
@@ -262,8 +234,8 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                     return $carry;
                 }, []);
                 
-                return array_merge($listAbsen, $listKalendar, $listCuti, $listIzin, $listSPPD);;
-            });
+                $list = array_merge($listAbsen, $listKalendar, $listCuti, $listIzin, $listSPPD);;
+            // });
 
             return response()->json([
                 "status" => "ok",
