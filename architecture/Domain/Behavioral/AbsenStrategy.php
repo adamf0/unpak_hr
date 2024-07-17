@@ -5,12 +5,14 @@ use Carbon\Carbon;
 
 class AbsenStrategy implements IAbsenStrategy {
     public function getBackground($klaim, $dataAbsen, $tanggal, $now) {
-        $warna = match(true){
-            !empty($klaim?->jam_masuk) || !empty($klaim?->jam_keluar) => "#198754",
-            !empty($dataAbsen?->catatan_pulang) || !Utility::is8Hour($dataAbsen->tanggal, $dataAbsen->absen_masuk, $dataAbsen->absen_keluar) => "#808080",
-            Utility::isLate($dataAbsen?->absen_masuk, $dataAbsen?->tanggal) => "#000",
-            default => "#198754"
-        };
+        $warna = "#198754";
+        if(!empty($klaim?->jam_masuk) || !empty($klaim?->jam_keluar)){
+            $warna = "#198754";
+        } else if(!empty($dataAbsen?->catatan_pulang) || !Utility::is8Hour($dataAbsen->tanggal, $dataAbsen->absen_masuk, $dataAbsen->absen_keluar)){
+            $warna = "#808080";
+        } else if(Utility::isLate($dataAbsen?->absen_masuk, $dataAbsen?->tanggal)){
+            $warna = "#000";
+        }
 
         return $warna; // masuk
     }
