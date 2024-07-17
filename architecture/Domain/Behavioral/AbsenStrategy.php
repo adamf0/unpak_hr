@@ -10,30 +10,25 @@ class AbsenStrategy implements IAbsenStrategy {
         $jam_keluar = $klaim?->jam_keluar??$dataAbsen?->absen_keluar;
         
         if( 
-            Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar) &&
-            Utility::isLate($jam_masuk, $dataAbsen?->tanggal)
+            !Utility::isLate($jam_masuk, $dataAbsen?->tanggal) &&
+            Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)
         ){
-            $warna = "#dc3544";
+            $warna = "#198754";
         } else if( 
-            Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar) &&
-            !Utility::isLate($jam_masuk, $dataAbsen?->tanggal)
+            Utility::isLate($jam_masuk, $dataAbsen?->tanggal) &&
+            Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)
         ){
-            $warna = "#ffc107";
+            $warna = "#198754";
         }
         if( 
-            !Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar) &&
-            Utility::isLate($jam_masuk, $dataAbsen?->tanggal)
+            Utility::isLate($jam_masuk, $dataAbsen?->tanggal) &&
+            !Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)
         ){
-            $warna = "#4154f1";
+            $warna = "#000";
         } else if( 
-            !Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar) &&
-            !Utility::isLate($jam_masuk, $dataAbsen?->tanggal)
+            !Utility::isLate($jam_masuk, $dataAbsen?->tanggal) &&
+            !Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)
         ){
-            $warna = "#808080";
-        }
-        
-
-        else if(Utility::isLate($jam_masuk, $dataAbsen?->tanggal)){
             $warna = "#000";
         }
 
