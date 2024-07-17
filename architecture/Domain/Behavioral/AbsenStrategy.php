@@ -9,27 +9,31 @@ class AbsenStrategy implements IAbsenStrategy {
         $jam_masuk = $klaim?->jam_masuk??$dataAbsen?->absen_masuk;
         $jam_keluar = $klaim?->jam_keluar??$dataAbsen?->absen_keluar;
         
-        if( 
-            !Utility::isLate($jam_masuk, $dataAbsen?->tanggal) &&
-            Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)
-        ){
-            $warna = "#198754";
-        } else if( 
-            Utility::isLate($jam_masuk, $dataAbsen?->tanggal) &&
-            Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)
-        ){
-            $warna = "#198754";
-        }
-        if( 
-            Utility::isLate($jam_masuk, $dataAbsen?->tanggal) &&
-            !Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)
-        ){
-            $warna = "#dc3545";
-        } else if( 
-            !Utility::isLate($jam_masuk, $dataAbsen?->tanggal) &&
-            !Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)
-        ){
-            $warna = "#000";
+        if(!empty($jam_masuk) && !empty($jam_keluar)){
+            if( 
+                !Utility::isLate($jam_masuk, $dataAbsen?->tanggal) &&
+                Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)
+            ){
+                $warna = "#198754";
+            } else if( 
+                Utility::isLate($jam_masuk, $dataAbsen?->tanggal) &&
+                Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)
+            ){
+                $warna = "#198754";
+            }
+            if( 
+                Utility::isLate($jam_masuk, $dataAbsen?->tanggal) &&
+                !Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)
+            ){
+                $warna = "#000";
+            } else if( 
+                !Utility::isLate($jam_masuk, $dataAbsen?->tanggal) &&
+                !Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)
+            ){
+                $warna = "#000";
+            }
+        } else{
+            $warna = !Utility::isLate($jam_masuk, $dataAbsen?->tanggal)? "#198754":"#000";
         }
 
         return $warna; // masuk
