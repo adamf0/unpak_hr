@@ -53,6 +53,34 @@ class AbsenStrategy implements IAbsenStrategy {
         // /dump($dataAbsen?->tanggal." ".$jam_keluar, $dataAbsen?->tanggal." ".$aturanPulang);
 
         $label = "";
+        if(!empty($jam_masuk) && !empty($jam_keluar)){
+            if(!empty($klaim?->jam_masuk) || !empty($klaim?->jam_keluar)){
+                $label = "(klaim)";
+            } else if( 
+                !Utility::isLate($jam_masuk, $dataAbsen?->tanggal) &&
+                Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)
+            ){
+                $label = "";
+            } else if( 
+                Utility::isLate($jam_masuk, $dataAbsen?->tanggal) &&
+                Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)
+            ){
+                $label = "(telat)";
+            }
+            if( 
+                Utility::isLate($jam_masuk, $dataAbsen?->tanggal) &&
+                !Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)
+            ){
+                $label = "(pulang)";
+            } else if( 
+                !Utility::isLate($jam_masuk, $dataAbsen?->tanggal) &&
+                !Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)
+            ){
+                $label = "(pulang)";
+            }
+        } else{
+            $label = "";
+        }
         // if(!empty($klaim?->jam_masuk) || !empty($klaim?->jam_keluar)){
         //     $label = "(klaim)";
         // } else if( 
