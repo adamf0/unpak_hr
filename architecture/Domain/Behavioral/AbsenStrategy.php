@@ -62,12 +62,12 @@ class AbsenStrategy implements IAbsenStrategy {
                 Utility::isLate($jam_masuk, $dataAbsen?->tanggal) &&
                 !Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)
             ){
-                $label = "(pulang1)";
+                $label = "(pulang1)"; //masalah
             } else if( 
                 !Utility::isLate($jam_masuk, $dataAbsen?->tanggal) &&
                 !Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)
             ){
-                $label = "(pulang2)";
+                $label = "(pulang)";
             }
         } else{
             $label = "";
