@@ -72,7 +72,7 @@ class ApiInfoDashboardController extends Controller
                 }
                 if(!empty($masuk)){
                     $tepat += !Utility::isLate($masuk, $item->tanggal)? 1:0;
-                    $telat += Utility::isLate($masuk, $item->tanggal)? 1:1;
+                    $telat += Utility::isLate($masuk, $item->tanggal)? 1:0;
                 }
                 if(!empty($masuk) && !empty($keluar)){
                     $l8 += !Utility::is8Hour($item->tanggal, $masuk, $keluar)? 1:0;
