@@ -8,20 +8,31 @@ class AbsenStrategy implements IAbsenStrategy {
         $warna = "#198754";
         $jam_masuk = $klaim?->jam_masuk??$dataAbsen?->absen_masuk;
         $jam_keluar = $klaim?->jam_keluar??$dataAbsen?->absen_keluar;
-        // if(!empty($klaim?->jam_masuk) || !empty($klaim?->jam_keluar)){
-        //     $warna = "#198754";
-        // } else 
+        
         if( 
-            (!empty($dataAbsen?->catatan_pulang) || !Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)) &&
-            !Utility::isLate($jam_masuk, $dataAbsen?->tanggal)
-        ){
-            $warna = "#198754";
-        } else if( 
-            (!empty($dataAbsen?->catatan_pulang) || !Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)) &&
+            Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar) &&
             Utility::isLate($jam_masuk, $dataAbsen?->tanggal)
         ){
+            $warna = "#dc3544";
+        } else if( 
+            Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar) &&
+            !Utility::isLate($jam_masuk, $dataAbsen?->tanggal)
+        ){
+            $warna = "#ffc107";
+        }
+        if( 
+            !Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar) &&
+            Utility::isLate($jam_masuk, $dataAbsen?->tanggal)
+        ){
+            $warna = "#4154f1";
+        } else if( 
+            !Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar) &&
+            !Utility::isLate($jam_masuk, $dataAbsen?->tanggal)
+        ){
             $warna = "#808080";
-        } 
+        }
+        
+
         else if(Utility::isLate($jam_masuk, $dataAbsen?->tanggal)){
             $warna = "#000";
         }
@@ -43,6 +54,23 @@ class AbsenStrategy implements IAbsenStrategy {
         // /dump($dataAbsen?->tanggal." ".$jam_keluar, $dataAbsen?->tanggal." ".$aturanPulang);
 
         $label = "";
+        // if(!empty($klaim?->jam_masuk) || !empty($klaim?->jam_keluar)){
+        //     $label = "(klaim)";
+        // } else if( 
+        //     (!empty($dataAbsen?->catatan_pulang) || !Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)) &&
+        //     !Utility::isLate($jam_masuk, $dataAbsen?->tanggal)
+        // ){
+        //     $label = "#198754";
+        // } else if( 
+        //     (!empty($dataAbsen?->catatan_pulang) || !Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)) &&
+        //     Utility::isLate($jam_masuk, $dataAbsen?->tanggal)
+        // ){
+        //     $label = "#808080";
+        // } 
+        // else if(Utility::isLate($jam_masuk, $dataAbsen?->tanggal)){
+        //     $label = "#000";
+        // }
+
         if(!empty($klaim?->jam_masuk) || !empty($klaim?->jam_keluar)){
             $label = "(klaim)";
         } else if(!empty($dataAbsen?->catatan_pulang) || !Utility::is8Hour($dataAbsen->tanggal, $dataAbsen->absen_masuk, $dataAbsen->absen_keluar)){
