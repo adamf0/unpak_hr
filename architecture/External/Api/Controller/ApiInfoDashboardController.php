@@ -71,7 +71,7 @@ class ApiInfoDashboardController extends Controller
                     $tidak_masuk += 1;
                 }
                 if(!empty($masuk)){
-                    $tepat += !Utility::isLate($masuk, $item->tanggal)? 1:0;
+                    // $tepat += !Utility::isLate($masuk, $item->tanggal)? 1:0;
                     $telat += Utility::isLate($masuk, $item->tanggal)? 1:0;
                 }
                 if(!empty($masuk) && !empty($keluar)){
@@ -86,7 +86,7 @@ class ApiInfoDashboardController extends Controller
                 "data"=>(object)[
                     "presensi"=>[
                         "total"=>($presensi??collect([]))->count() - $total_libur,
-                        "tepat"=>$tepat,
+                        "tepat"=>($presensi??collect([]))->count() - $telat - $total_libur - ($sppd->count() - ($sppd->filter(fn($c)=>$c->GetStatus()=="tolak")->count() + $sppd->filter(fn($c)=>$c->GetStatus()=="menunggu")->count())),
                         "telat"=>$telat,
                         "l8"=>$l8,
                         "r8"=>$r8,
