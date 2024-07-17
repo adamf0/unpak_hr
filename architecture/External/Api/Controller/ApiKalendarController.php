@@ -201,12 +201,14 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                             $tanggal = Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta');
                             $now = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d');
 
-                            $strategy = match (true) {
-                                is_null($klaim) && empty($item->absen_masuk) && $tanggal->lessThan($now) => new TidakAbsenStrategy(),
-                                !is_null($klaim) || (!empty($item->absen_masuk) && !Utility::isLate($item->absen_masuk, $item->tanggal)) => new AbsenStrategy(),
-                                !is_null($klaim) || (!empty($item->absen_masuk) && !empty($item->absen_keluar) && Utility::is8Hour($item->tanggal, $item->absen_masuk, $item->absen_keluar)) => new AbsenStrategy(),
-                                default => new DefaultStrategy()
-                            };
+                            $strategy = new DefaultStrategy();
+                            if(is_null($klaim) && empty($item->absen_masuk) && $tanggal->lessThan($now)){
+                                $strategy = new TidakAbsenStrategy();
+                            } else if(!is_null($klaim) || (!empty($item->absen_masuk) && !Utility::isLate($item->absen_masuk, $item->tanggal))){
+                                $strategy = new AbsenStrategy();
+                            } else if(!is_null($klaim) || (!empty($item->absen_masuk) && !empty($item->absen_keluar) && Utility::is8Hour($item->tanggal, $item->absen_masuk, $item->absen_keluar))){
+                                $strategy = new AbsenStrategy();
+                            }
 
                             $context = new AbsenContext($strategy);
                             $background = $context->getBackground($klaim, $item, $tanggal, $now);

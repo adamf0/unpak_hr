@@ -81,30 +81,6 @@ class AbsenStrategy implements IAbsenStrategy {
         } else{
             $label = "";
         }
-        // if(!empty($klaim?->jam_masuk) || !empty($klaim?->jam_keluar)){
-        //     $label = "(klaim)";
-        // } else if( 
-        //     (!empty($dataAbsen?->catatan_pulang) || !Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)) &&
-        //     !Utility::isLate($jam_masuk, $dataAbsen?->tanggal)
-        // ){
-        //     $label = "#198754";
-        // } else if( 
-        //     (!empty($dataAbsen?->catatan_pulang) || !Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)) &&
-        //     Utility::isLate($jam_masuk, $dataAbsen?->tanggal)
-        // ){
-        //     $label = "#808080";
-        // } 
-        // else if(Utility::isLate($jam_masuk, $dataAbsen?->tanggal)){
-        //     $label = "#000";
-        // }
-
-        // if(!empty($klaim?->jam_masuk) || !empty($klaim?->jam_keluar)){
-        //     $label = "(klaim)";
-        // } else if(!empty($dataAbsen?->catatan_pulang) || !Utility::is8Hour($dataAbsen->tanggal, $dataAbsen->absen_masuk, $dataAbsen->absen_keluar)){
-        //     $label = "(Pulang Cepat)";
-        // } else if(Utility::isLate($dataAbsen?->absen_masuk, $dataAbsen?->tanggal)){
-        //     $label = "(Telat)";
-        // }
         
         $jam_masuk = is_null($dataAbsen?->absen_masuk) ? $klaim?->jam_masuk : $dataAbsen?->absen_masuk;
         $jam_keluar = is_null($dataAbsen?->absen_keluar) ? $klaim?->jam_keluar : $dataAbsen?->absen_keluar;
