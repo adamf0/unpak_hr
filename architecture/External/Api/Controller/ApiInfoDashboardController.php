@@ -54,13 +54,15 @@ class ApiInfoDashboardController extends Controller
             $presensi->each(function ($item) use($list_klaim_absen,&$tepat,&$telat,&$l8,&$r8,&$tidak_masuk,&$belum_absen,&$total_libur){
                 $klaim = $list_klaim_absen->where('status','terima')->where('Presensi.tanggal',$item->tanggal);
                 $klaim = $klaim->count()==1? $klaim[0]:null;
+                $masuk = $klaim?->jam_masuk??$item->absen_masuk;
+                $keluar = $klaim?->jam_keluar??$item->absen_keluar;
 
                 $tgl = Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta');
                 if($tgl->isSunday()){
                     $total_libur += 1;
                 }
-                $rule_belum_absen = is_null($klaim) && empty($item->absen_masuk) && !$tgl->isSunday() && $tgl->format('Y-m-d')==Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d');
-                $rule_tidak_masuk = is_null($klaim) && empty($item->absen_masuk) && !$tgl->isSunday() && $tgl->lessThanOrEqualTo(Carbon::now()->setTimezone('Asia/Jakarta')->subDay()->format('Y-m-d'));
+                $rule_belum_absen = empty($masuk) && !$tgl->isSunday() && $tgl->format('Y-m-d')==Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d');
+                $rule_tidak_masuk = empty($masuk) && !$tgl->isSunday() && $tgl->lessThanOrEqualTo(Carbon::now()->setTimezone('Asia/Jakarta')->subDay());
                 
                 if($rule_belum_absen){
                     $belum_absen += 1;
@@ -68,19 +70,13 @@ class ApiInfoDashboardController extends Controller
                 if($rule_tidak_masuk){
                     $tidak_masuk += 1;
                 }
-                if(!empty($item->absen_masuk)){
-                    if(!Utility::isLate($item->absen_masuk, $item->tanggal) && is_null($klaim)){
-                        $tepat += 1;
-                    } else if (Utility::isLate($item->absen_masuk, $item->tanggal) && is_null($klaim)){
-                        $telat += 1;
-                    }
+                if(!empty($masuk)){
+                    $tepat += !Utility::isLate($masuk, $item->tanggal)? 1:0;
+                    $telat += Utility::isLate($masuk, $item->tanggal)? 1:1;
                 }
-                if(!empty($item->absen_masuk) && !empty($item->absen_keluar)){
-                    if(!Utility::is8Hour($item->tanggal, $item->absen_masuk, $item->absen_keluar)){
-                        $l8 += 1;
-                    } else{
-                        $r8 += 1;
-                    }   
+                if(!empty($masuk) && !empty($keluar)){
+                    $l8 += !Utility::is8Hour($item->tanggal, $masuk, $keluar)? 1:0;
+                    $r8 += Utility::is8Hour($item->tanggal, $masuk, $keluar)? 1:0;
                 }
             });
 
