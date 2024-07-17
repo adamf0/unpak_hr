@@ -30,7 +30,7 @@ class AbsenStrategy implements IAbsenStrategy {
         $pulangCepat = is_null($jam_keluar)? false:strtotime($dataAbsen?->tanggal." ".$jam_keluar)<=strtotime($dataAbsen?->tanggal." ".$aturanPulang);
         // /dump($dataAbsen?->tanggal." ".$jam_keluar, $dataAbsen?->tanggal." ".$aturanPulang);
 
-        $lebel = "";
+        $label = "";
         if(!empty($klaim?->jam_masuk) || !empty($klaim?->jam_keluar)){
             $label = "(klaim)";
         } else if(!empty($dataAbsen?->catatan_pulang) || !Utility::is8Hour($dataAbsen->tanggal, $dataAbsen->absen_masuk, $dataAbsen->absen_keluar)){
