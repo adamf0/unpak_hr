@@ -28,12 +28,14 @@ class AbsenStrategy implements IAbsenStrategy {
         $pulangCepat = is_null($jam_keluar)? false:strtotime($dataAbsen?->tanggal." ".$jam_keluar)<=strtotime($dataAbsen?->tanggal." ".$aturanPulang);
         // /dump($dataAbsen?->tanggal." ".$jam_keluar, $dataAbsen?->tanggal." ".$aturanPulang);
 
-        $label = match(true){
-            !empty($klaim?->jam_masuk) || !empty($klaim?->jam_keluar) => "(klaim)",
-            !empty($dataAbsen?->catatan_pulang) || !Utility::is8Hour($dataAbsen->tanggal, $dataAbsen->absen_masuk, $dataAbsen->absen_keluar) => "(Pulang Cepat)",
-            Utility::isLate($dataAbsen?->absen_masuk, $dataAbsen?->tanggal) => "(Telat)",
-            default => ""
-        };
+        $lebel = "";
+        if(!empty($klaim?->jam_masuk) || !empty($klaim?->jam_keluar)){
+            $label = "(klaim)";
+        } else if(!empty($dataAbsen?->catatan_pulang) || !Utility::is8Hour($dataAbsen->tanggal, $dataAbsen->absen_masuk, $dataAbsen->absen_keluar)){
+            $label = "(Pulang Cepat)";
+        } else if(Utility::isLate($dataAbsen?->absen_masuk, $dataAbsen?->tanggal)){
+            $label = "(Telat)";
+        }
         
         $jam_masuk = is_null($dataAbsen?->absen_masuk) ? $klaim?->jam_masuk : $dataAbsen?->absen_masuk;
         $jam_keluar = is_null($dataAbsen?->absen_keluar) ? $klaim?->jam_keluar : $dataAbsen?->absen_keluar;
