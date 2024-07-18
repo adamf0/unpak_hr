@@ -15,6 +15,7 @@ use Architecture\Domain\ValueObject\Date;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 
 class ApiPresensiController extends Controller
 {
@@ -52,7 +53,9 @@ class ApiPresensiController extends Controller
                     new Date($request->absen_masuk),
                     $request->catatan_telat,
                 ));
-                Cache::forget("kalender-$key");
+                if(Redis::exists("kalender-$key")){
+                    Redis::delete("kalender-$key");
+                }
 
                 return response()->json([
                     "status"=>"ok",
@@ -67,8 +70,9 @@ class ApiPresensiController extends Controller
                     new Date($request->absen_keluar),
                     $request->catatan_pulang,
                 ));
-                Cache::forget("kalender-$key");
-
+                if(Redis::exists("kalender-$key")){
+                    Redis::delete("kalender-$key");
+                }
                 return response()->json([
                     "status"=>"ok",
                     "message"=>"anda berhasil absen keluar",
