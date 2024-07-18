@@ -15,6 +15,7 @@ use Architecture\Domain\ValueObject\Date;
 use Architecture\External\Persistance\ORM\Cuti as CutiModel;
 use Architecture\Shared\TypeData;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 
 class GetAllActiveCutiQueryHandler extends Query
 {
@@ -29,9 +30,11 @@ class GetAllActiveCutiQueryHandler extends Query
         if($query->IsNIP()){
             $datas = $datas->whereNotNull('nip');
         }
-        $datas = $datas->where('tanggal_mulai','>=',date('Y-m-d'))->where('tanggal_akhir','<=',date('Y-m-d'));
-        $datas = $datas->where('status','terima sdm');
-        $datas = $datas->orderBy('id', 'DESC')->get();
+        $datas = $datas->where('tanggal_mulai','>=',date('Y-m-d'))->where('tanggal_akhir','<=',date('Y-m-d'))
+                        ->where('status','terima sdm')
+                        ->orderBy('id', 'DESC');
+        Log::chanel('mysql_query')->info($datas->toRaqSql());
+        $datas = $datas->get();
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 

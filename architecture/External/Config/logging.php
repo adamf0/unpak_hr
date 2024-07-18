@@ -86,6 +86,10 @@ return [
             'level' => env('LOG_LEVEL', 'critical'),
             'replace_placeholders' => true,
         ],
+        'mysql_query' => [
+            'driver' => 'single',
+            'path' => public_path('logs/mysql_query.log'),
+        ],
 
         'papertrail' => [
             'driver' => 'monolog',
