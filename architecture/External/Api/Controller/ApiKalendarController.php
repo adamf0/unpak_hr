@@ -53,12 +53,12 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                 default => "#",
             };
 
-            if (Redis::exists("kalender-$key")) {
-                $res = Redis::get("kalender-$key");
+            if (Redis::exists("laravel_database_kalender-$key")) {
+                $res = Redis::get("laravel_database_kalender-$key");
                 $list = json_decode($res);
-                Log::channel('cache_redis')->info("cache dengan key 'kalender-$key' ditemukan");
+                Log::channel('cache_redis')->info("cache dengan key 'laravel_database_kalender-$key' ditemukan");
             } else{
-            // $list = Cache::remember("kalender-$key", 5*60, function () use(
+            // $list = Cache::remember("laravel_database_kalender-$key", 5*60, function () use(
             //     $format,
             //     $list_cuti,
             //     $list_izin,
@@ -246,8 +246,8 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                 }, []);
                 
                 $list = array_merge($listAbsen, $listKalendar, $listCuti, $listIzin, $listSPPD);
-                Log::channel('cache_redis')->info("cache dengan key 'kalender-$key' tidak ditemukan. data akan di simpan ke redis!");
-                Redis::setex("kalender-$key", 5*60, json_encode($list));
+                Log::channel('cache_redis')->info("cache dengan key 'laravel_database_kalender-$key' tidak ditemukan. data akan di simpan ke redis!");
+                Redis::setex("laravel_database_kalender-$key", 5*60, json_encode($list));
             // });
             }
 
