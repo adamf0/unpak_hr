@@ -53,8 +53,8 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                 default => "#",
             };
 
-            if (Redis::exists("laravel_database_kalender-$key")) {
-                $res = Redis::get("laravel_database_kalender-$key");
+            if (Redis::exists("kalender-$key")) {
+                $res = Redis::get("kalender-$key");
                 $list = json_decode($res);
                 Log::channel('cache_redis')->info("cache dengan key 'kalender-$key' ditemukan");
             } else{
