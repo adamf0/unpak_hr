@@ -318,6 +318,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Nama</th>
+                                <th>Unit Kerja</th>
                                 <th>Tujuan</th>
                                 <th>Catatan</th>
                             </tr>
@@ -338,6 +339,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Nama</th>
+                                <th>Unit Kerja</th>
                                 <th>Tujuan</th>
                                 <th>Catatan</th>
                             </tr>
@@ -807,6 +809,13 @@
                     {
                         data: 'nama', 
                         name: 'nama',
+                        render: function ( data, type, row, meta ) {
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'unit', 
+                        name: 'unit',
                         render: function ( data, type, row, meta ) {
                             return data;
                         }

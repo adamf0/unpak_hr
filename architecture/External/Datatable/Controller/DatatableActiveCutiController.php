@@ -32,6 +32,11 @@ class DatatableActiveCutiController extends Controller
                                 is_null($item->GetDosen()) && !is_null($item->GetPegawai())=>$item->GetPegawai()->GetNIP()." - ".$item->GetPegawai()->GetNama(),
                                 default=>"NA",
                             },
+                            "unit" => match(true){
+                                !is_null($item->GetDosen()) && is_null($item->GetPegawai())=>$item->GetDosen()?->GetUnitKerja(),
+                                is_null($item->GetDosen()) && !is_null($item->GetPegawai())=>$item->GetPegawai()?->GetUnit(),
+                                default=>"",
+                            },
                             "jenis_cuti"=>$item->GetJenisCuti()?->GetNama()??"-",
                             "lama_cuti"=>$item->GetLamaCuti(),
                             "tanggal_mulai"=>$item->GetTanggalMulai()->toFormat(FormatDate::LDFY),
