@@ -33,7 +33,7 @@ class GetAllActiveCutiQueryHandler extends Query
         $datas = $datas->where('tanggal_mulai','>=',date('Y-m-d'))->where('tanggal_akhir','<=',date('Y-m-d'))
                         ->where('status','terima sdm')
                         ->orderBy('id', 'DESC');
-        Log::channel('mysql_query')->info($datas->toRaqSql());
+        Log::channel('mysql_query')->info($datas->toRawSql());
         $datas = $datas->get();
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
