@@ -21,6 +21,8 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Architecture\Shared\Facades\Utility;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
 
 class ApiKalendarController extends Controller //data cuti, izin, sppd, absen belum masuk
 {
@@ -50,15 +52,21 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                 !empty($nip) => $nip,
                 default => "#",
             };
-            $list = Cache::remember("kalender-$key", 5*60, function () use(
-                $format,
-                $list_cuti,
-                $list_izin,
-                $list_sppd,
-                $list_absen,
-                $list_klaim_absen,
-                $master_kalendar,
-            ){
+
+            if (Redis::exists("kalender-$key")) {
+                $res = Redis::get("kalender-$key");
+                $list = json_decode($res);
+                Log::channel('cache_redis')->info("cache dengan key 'kalender-$key' ditemukan");
+            } else{
+            // $list = Cache::remember("kalender-$key", 5*60, function () use(
+            //     $format,
+            //     $list_cuti,
+            //     $list_izin,
+            //     $list_sppd,
+            //     $list_absen,
+            //     $list_klaim_absen,
+            //     $master_kalendar,
+            // ){
                 $list_libur_ = $master_kalendar->reduce(function ($carry, $item){
                     $start  = Carbon::parse($item->tanggal_mulai)->setTimezone('Asia/Jakarta');
                     $end    = Carbon::parse($item->tanggal_berakhir)->setTimezone('Asia/Jakarta');
@@ -237,8 +245,11 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                     return $carry;
                 }, []);
                 
-                return $list = array_merge($listAbsen, $listKalendar, $listCuti, $listIzin, $listSPPD);
-            });
+                $list = array_merge($listAbsen, $listKalendar, $listCuti, $listIzin, $listSPPD);
+                Log::channel('cache_redis')->info("cache dengan key 'kalender-$key' tidak ditemukan. data akan di simpan ke redis!");
+                Redis::setex("kalender-$key", 5*60, json_encode($list));
+            // });
+            }
 
             return response()->json([
                 "status" => "ok",

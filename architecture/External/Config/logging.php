@@ -90,6 +90,10 @@ return [
             'driver' => 'single',
             'path' => public_path('logs/mysql_query.log'),
         ],
+        'cache_redis' => [
+            'driver' => 'single',
+            'path' => public_path('logs/cache_redis.log'),
+        ],
 
         'papertrail' => [
             'driver' => 'monolog',
