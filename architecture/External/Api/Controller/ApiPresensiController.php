@@ -54,7 +54,7 @@ class ApiPresensiController extends Controller
                     $request->catatan_telat,
                 ));
                 if(Redis::exists("kalender-$key")){
-                    Redis::delete("kalender-$key");
+                    Redis::del("kalender-$key");
                 }
 
                 return response()->json([
@@ -71,7 +71,7 @@ class ApiPresensiController extends Controller
                     $request->catatan_pulang,
                 ));
                 if(Redis::exists("kalender-$key")){
-                    Redis::delete("kalender-$key");
+                    Redis::del("kalender-$key");
                 }
                 return response()->json([
                     "status"=>"ok",
