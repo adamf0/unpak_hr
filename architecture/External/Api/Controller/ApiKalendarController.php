@@ -53,12 +53,13 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                 default => "#",
             };
 
-            if (Redis::exists("kalender-$key")) {
-                $res = Redis::get("kalender-$key");
-                $list = json_decode($res);
-                $from = "cache";
-                Log::channel('cache_redis')->info("cache dengan key 'kalender-$key' ditemukan");
-            } else{
+            // if (Redis::exists("kalender-$key")) {
+            //     $res = Redis::get("kalender-$key");
+            //     $list = json_decode($res);
+            //     $from = "cache";
+            //     Log::channel('cache_redis')->info("cache dengan key 'kalender-$key' ditemukan");
+            // } else{
+
             // $list = Cache::remember("kalender-$key", 5*60, function () use(
             //     $format,
             //     $list_cuti,
@@ -248,10 +249,10 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                 
                 $list = array_merge($listAbsen, $listKalendar, $listCuti, $listIzin, $listSPPD);
                 $from = "db";
-                Log::channel('cache_redis')->info("cache dengan key 'kalender-$key' tidak ditemukan. data akan di simpan ke redis!");
-                Redis::setex("kalender-$key", 5*60, json_encode($list));
+                // Log::channel('cache_redis')->info("cache dengan key 'kalender-$key' tidak ditemukan. data akan di simpan ke redis!");
+                // Redis::setex("kalender-$key", 5*60, json_encode($list));
             // });
-            }
+            // }
 
             return response()->json([
                 "status" => "ok",

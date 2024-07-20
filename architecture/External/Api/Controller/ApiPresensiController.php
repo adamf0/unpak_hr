@@ -53,9 +53,9 @@ class ApiPresensiController extends Controller
                     new Date($request->absen_masuk),
                     $request->catatan_telat,
                 ));
-                if(Redis::exists("kalender-$key")){
-                    Redis::del("kalender-$key");
-                }
+                // if(Redis::exists("kalender-$key")){
+                //     Redis::del("kalender-$key");
+                // }
 
                 return response()->json([
                     "status"=>"ok",
@@ -70,9 +70,9 @@ class ApiPresensiController extends Controller
                     new Date($request->absen_keluar),
                     $request->catatan_pulang,
                 ));
-                if(Redis::exists("kalender-$key")){
-                    Redis::del("kalender-$key");
-                }
+                // if(Redis::exists("kalender-$key")){
+                //     Redis::del("kalender-$key");
+                // }
                 return response()->json([
                     "status"=>"ok",
                     "message"=>"anda berhasil absen keluar",
