@@ -41,11 +41,17 @@ class GetAllLaporanAbsenQueryHandler extends Query
 
         $tanggal    = $this->list_tanggal[$i_t];
         $pengguna   = $this->list_pengguna[$i_p_curr];
-        $kode       = match(true){
-            !empty($pengguna->nidn)=>$pengguna->nidn,
-            !empty($pengguna->nip)=>$pengguna->nip,
-            default=>"NA",
-        };
+        $kode       = "NA";
+        if(!empty($pengguna->nidn)){
+            $kode = $pengguna->nidn;
+        } else if(!empty($pengguna->nip)){
+            $kode = $pengguna->nip;
+        }
+        // $kode       = match(true){
+        //     !empty($pengguna->nidn)=>$pengguna->nidn,
+        //     !empty($pengguna->nip)=>$pengguna->nip,
+        //     default=>"NA",
+        // };
 
         if(empty($i_p_prev) || $i_p_prev!=$i_p_curr){
             if(!empty($pengguna->nidn)){
@@ -57,11 +63,18 @@ class GetAllLaporanAbsenQueryHandler extends Query
             $pegawai    = NPribadi::select('nip','nama','status_pegawai')->where('nip',$pengguna->nip)->first();
             
             $list_data[$kode]["pengguna"] = $dosen??$pegawai;
-            $list_data[$kode]["type"] = match(true){
-                !empty($pengguna->nidn)=>"dosen",
-                !empty($pengguna->nip)=>"pegawai",
-                default=>"NA",
-            };
+            if(!empty($pengguna->nidn)){
+                $list_data[$kode]["type"] = "dosen";
+            } else if(!empty($pengguna->nip)){
+                $list_data[$kode]["type"] = "pegawai";
+            } else{
+                $list_data[$kode]["type"] = "NA";
+            }
+            // $list_data[$kode]["type"] = match(true){
+            //     !empty($pengguna->nidn)=>"dosen",
+            //     !empty($pengguna->nip)=>"pegawai",
+            //     default=>"NA",
+            // };
         }
         if($i_t<count($this->list_tanggal)){
             $list_data[$kode][$tanggal] = $this->laporan->where('tanggal',$tanggal)->map(function($item){
@@ -96,12 +109,17 @@ class GetAllLaporanAbsenQueryHandler extends Query
         $this->list_pengguna = $this->list_pengguna
                                     ->get()
                                     ->filter(function($item) use($query){
-                                        // dump($item, $query->GetType(), $item->nidn, $item->nip);
-                                        return match($query->GetType()){
-                                            "dosen"=>!empty($item->nidn),
-                                            "pegawai"=>!empty($item->nip),
-                                            default=>$item
-                                        };
+                                        // return match($query->GetType()){
+                                        //     "dosen"=>!empty($item->nidn),
+                                        //     "pegawai"=>!empty($item->nip),
+                                        //     default=>$item
+                                        // };
+                                        if($query->GetType()=="dosen"){
+                                            return !empty($item->nidn);
+                                        } else if($query->GetType()=="pegawai"){
+                                            return !empty($item->nip);
+                                        }
+                                        return $item;
                                     })
                                     ->values();
 

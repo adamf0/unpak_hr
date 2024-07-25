@@ -61,12 +61,20 @@ class GetAllSPPDQueryHandler extends Query
             $list_anggota = collect([]);
             if(!is_null($data->Anggota)){
                 $list_anggota = collect($data->Anggota->reduce(function ($carry, $item){
-                    $nama = match (true) {
-                        !is_null($item->Dosen) && !is_null($item->Pegawai)=> "Error",
-                        !is_null($item->Dosen)=> $item->Dosen->nama_dosen,
-                        !is_null($item->Pegawai)=> $item->Pegawai->nama,
-                        default=> "NA"
-                    };
+                    // $nama = match (true) {
+                    //     !is_null($item->Dosen) && !is_null($item->Pegawai)=> "Error",
+                    //     !is_null($item->Dosen)=> $item->Dosen->nama_dosen,
+                    //     !is_null($item->Pegawai)=> $item->Pegawai->nama,
+                    //     default=> "NA"
+                    // };
+                    $nama = "NA";
+                    if(!is_null($item->Dosen) && !is_null($item->Pegawai)){
+                        $nama = "Error";
+                    } else if(!is_null($item->Dosen)){
+                        $nama = $item->Dosen->nama_dosen;
+                    } else if(!is_null($item->Pegawai)){
+                        $nama = $item->Pegawai->nama;
+                    }
                     $carry[] = new AnggotaSPPD($item->id,$item->nidn,$item->nip,$nama);
                     return $carry;
                 },[]));
