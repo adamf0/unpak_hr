@@ -109,9 +109,9 @@ class GetAllLaporanAbsenQueryHandler extends Query
         }
 
         if($query->GetType()=="dosen"){
-            $this->list_pengguna = $this->list_pengguna->whereNotNull('nidn');
-        } else if($query->GetType()=="pegawai"){
-            $this->list_pengguna = $this->list_pengguna->whereNotNull('nip');
+            $this->list_pengguna = $this->list_pengguna->where(DB::raw("TRIM(nidn)"),'<>','');
+        } else if($query->GetType()=="tendik"){
+            $this->list_pengguna = $this->list_pengguna->where(DB::raw("TRIM(nip)"),'<>','');
         }
         Log::info("sql: ".$this->list_pengguna->toRawSql());
         
