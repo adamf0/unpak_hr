@@ -106,22 +106,27 @@ class GetAllLaporanAbsenQueryHandler extends Query
         } else if(!empty($query->GetNIP())){
             $this->list_pengguna = $this->list_pengguna->where('nip',$query->GetNIP());
         }
-        $this->list_pengguna = $this->list_pengguna
-                                    ->get()
-                                    ->filter(function($item) use($query){
-                                        // return match($query->GetType()){
-                                        //     "dosen"=>!empty($item->nidn),
-                                        //     "pegawai"=>!empty($item->nip),
-                                        //     default=>$item
-                                        // };
-                                        if($query->GetType()=="dosen"){
-                                            return !empty($item->nidn);
-                                        } else if($query->GetType()=="pegawai"){
-                                            return !empty($item->nip);
-                                        }
-                                        return $item;
-                                    })
-                                    ->values();
+
+        if($query->GetType()=="dosen"){
+            $this->list_pengguna = $this->list_pengguna->whereNotNull('nidn');
+        } else if($query->GetType()=="pegawai"){
+            $this->list_pengguna = $this->list_pengguna->whereNotNull('nip');
+        }
+        $this->list_pengguna = $this->list_pengguna->get();
+                                    // ->filter(function($item) use($query){
+                                    //     // return match($query->GetType()){
+                                    //     //     "dosen"=>!empty($item->nidn),
+                                    //     //     "pegawai"=>!empty($item->nip),
+                                    //     //     default=>$item
+                                    //     // };
+                                    //     if($query->GetType()=="dosen"){
+                                    //         return !empty($item->nidn);
+                                    //     } else if($query->GetType()=="pegawai"){
+                                    //         return !empty($item->nip);
+                                    //     }
+                                    //     return $item;
+                                    // })
+                                    // ->values();
 
         for ($date = Carbon::now()->setTimezone('Asia/Jakarta')->startOfMonth(); $date->lte($end); $date->addDay()) {
             $this->list_tanggal[] = $date->copy()->format('Y-m-d');
