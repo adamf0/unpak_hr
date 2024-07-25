@@ -9,8 +9,10 @@ use Architecture\External\Persistance\ORM\NPribadi;
 use Architecture\Shared\TypeData;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Log\Logger;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class GetAllLaporanAbsenQueryHandler extends Query
 {
@@ -112,6 +114,8 @@ class GetAllLaporanAbsenQueryHandler extends Query
         } else if($query->GetType()=="pegawai"){
             $this->list_pengguna = $this->list_pengguna->whereNotNull('nip');
         }
+        Logger::info("sql: ".$this->list_pengguna->toRawSql());
+
         $this->list_pengguna = $this->list_pengguna->get();
                                     // ->filter(function($item) use($query){
                                     //     // return match($query->GetType()){
