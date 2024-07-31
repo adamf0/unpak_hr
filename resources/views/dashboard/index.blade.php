@@ -28,6 +28,7 @@
     }
     .grid-card{
         display: grid;
+        gap: .5rem;
         grid-template-rows: 2;
         grid-template-columns: minmax(min-content, 1fr) minmax(min-content, 1fr);
     }
