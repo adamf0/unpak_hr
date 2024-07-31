@@ -60,8 +60,8 @@
     .fc-toolbar-chunk:nth-child(3)>* {
         width: 100% !important;
     }
-    .fc-toolbar-chunk:nth-child(3)>*>.fc-button-group{
-        margin: 0 !important;
+    .fc-direction-ltr .fc-toolbar>*>:not(:first-child) {
+        margin-left: 0 !important;
     }
     .fc-toolbar-chunk:nth-child(3)>*:nth-child(2)>* {
         width: 100% !important;
