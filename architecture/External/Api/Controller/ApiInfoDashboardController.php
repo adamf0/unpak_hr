@@ -71,7 +71,7 @@ class ApiInfoDashboardController extends Controller
                     $tidak_masuk += 1;
                 }
                 if(!empty($masuk)){
-                    // $tepat += !Utility::isLate($masuk, $item->tanggal)? 1:0;
+                    $tepat += !Utility::isLate($masuk, $item->tanggal)? 1:0;
                     $telat += Utility::isLate($masuk, $item->tanggal)? 1:0;
                 }
                 if(!empty($masuk) && !empty($keluar)){
@@ -80,13 +80,16 @@ class ApiInfoDashboardController extends Controller
                 }
             });
 
+            $sppd_tunggu = $sppd->filter(fn($c)=>in_array($c->GetStatus(), ["tolak","menunggu"]))->count();
+            $sppd_total = $sppd->count();
+
             return response()->json([
                 "status"=>"ok",
                 "message"=>"",
                 "data"=>(object)[
                     "presensi"=>[
                         "total"=>($presensi??collect([]))->count() - $total_libur,
-                        "tepat"=>($presensi??collect([]))->count() - $telat - $total_libur - ($sppd->count() - ($sppd->filter(fn($c)=>$c->GetStatus()=="tolak")->count() + $sppd->filter(fn($c)=>$c->GetStatus()=="menunggu")->count())),
+                        "tepat"=>$tepat - $telat - $total_libur - ($sppd_total - $sppd_tunggu),
                         "telat"=>$telat,
                         "l8"=>$l8,
                         "r8"=>$r8,
