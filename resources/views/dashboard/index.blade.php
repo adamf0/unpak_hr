@@ -60,6 +60,12 @@
     .fc-toolbar-chunk:nth-child(3)>* {
         width: 100% !important;
     }
+    .fc-toolbar-chunk:nth-child(3)>*>.fc-button-group{
+        padding: 0 !important;
+    }
+    .fc-toolbar-chunk:nth-child(3)>*:nth-child(2)>* {
+        width: 100% !important;
+    }
     .fc .fc-toolbar {
         flex-wrap: wrap;
         gap:1rem;
