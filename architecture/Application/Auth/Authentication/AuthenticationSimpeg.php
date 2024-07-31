@@ -11,6 +11,8 @@ use Exception;
 use Architecture\Shared\Facades\Utility;
 use Illuminate\Support\Facades\Log;
 
+use function PHPUnit\Framework\isEmpty;
+
 class AuthenticationSimpeg implements IAuthentication {
     public function __construct() {}
 
@@ -43,8 +45,10 @@ class AuthenticationSimpeg implements IAuthentication {
 
         if($listPengguna->count()>1) throw new Exception("akun ".$pengguna->GetUsername()." lebih dari 1");
         if($listPengguna->count()==0) throw new Exception("akun tidak ditemukan");
-        
+
         $penggunaSimpeg      = $listPengguna->first();
+        if(isEmpty($penggunaSimpeg->GetName()) || isEmpty($penggunaSimpeg->GetNIP())) throw new Exception("data simpeg tidak ditemukan");
+        
         if(!$penggunaSimpeg->IsActive()) throw new Exception("akun sudah tidak aktif");
         $data = Utility::pushData([
             "nama"=>$penggunaSimpeg->GetName(),
