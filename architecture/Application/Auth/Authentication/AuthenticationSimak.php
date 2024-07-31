@@ -11,8 +11,6 @@ use Exception;
 use Architecture\Shared\Facades\Utility;
 use Illuminate\Support\Facades\Log;
 
-use function PHPUnit\Framework\isEmpty;
-
 class AuthenticationSimak implements IAuthentication {
     public function __construct() {}
 
@@ -53,7 +51,7 @@ class AuthenticationSimak implements IAuthentication {
         
         $penggunaSimak      = $listPengguna->first();
         if(!$penggunaSimak->IsActive()) throw new Exception("akun sudah tidak aktif");
-        // if(isEmpty($penggunaSimak->GetName()) || isEmpty($penggunaSimak->GetNIDN())) throw new Exception("data simak tidak ditemukan");
+        if(empty($penggunaSimak->GetName()) || empty($penggunaSimak->GetNIDN())) throw new Exception("data simak tidak ditemukan");
 
         $data = Utility::pushData([
             "nama"=>$penggunaSimak->GetName(),
