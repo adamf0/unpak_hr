@@ -70,11 +70,11 @@ class ApiInfoDashboardController extends Controller
                 if($rule_tidak_masuk){
                     $tidak_masuk += 1;
                 }
-                if(!empty($masuk)){
+                if(!empty($masuk) && !$tgl->isSunday()){
                     $tepat += !Utility::isLate($masuk, $item->tanggal)? 1:0;
                     $telat += Utility::isLate($masuk, $item->tanggal)? 1:0;
                 }
-                if(!empty($masuk) && !empty($keluar)){
+                if(!empty($masuk) && !empty($keluar) && !$tgl->isSunday()){
                     $l8 += !Utility::is8Hour($item->tanggal, $masuk, $keluar)? 1:0;
                     $r8 += Utility::is8Hour($item->tanggal, $masuk, $keluar)? 1:0;
                 }
@@ -89,7 +89,7 @@ class ApiInfoDashboardController extends Controller
                 "data"=>(object)[
                     "presensi"=>[
                         "total"=>($presensi??collect([]))->count() - $total_libur,
-                        "tepat"=>$tepat - $telat - $total_libur - ($sppd_total - $sppd_tunggu),
+                        "tepat"=>$tepat,
                         "telat"=>$telat,
                         "l8"=>$l8,
                         "r8"=>$r8,
