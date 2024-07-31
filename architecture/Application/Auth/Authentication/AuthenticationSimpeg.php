@@ -11,8 +11,6 @@ use Exception;
 use Architecture\Shared\Facades\Utility;
 use Illuminate\Support\Facades\Log;
 
-use function PHPUnit\Framework\isEmpty;
-
 class AuthenticationSimpeg implements IAuthentication {
     public function __construct() {}
 
@@ -48,7 +46,7 @@ class AuthenticationSimpeg implements IAuthentication {
 
         $penggunaSimpeg      = $listPengguna->first();
         if(!$penggunaSimpeg->IsActive()) throw new Exception("akun sudah tidak aktif");
-        dd($penggunaSimpeg, isEmpty($penggunaSimpeg->GetName()), isEmpty($penggunaSimpeg->GetNIP()));
+        dd($penggunaSimpeg, empty($penggunaSimpeg->GetName()), empty($penggunaSimpeg->GetNIP()));
         // if(isEmpty($penggunaSimpeg->GetName()) || isEmpty($penggunaSimpeg->GetNIP())) throw new Exception("data simpeg tidak ditemukan");
 
         $data = Utility::pushData([
