@@ -51,6 +51,19 @@
     .fc-toolbar-chunk {
         min-width: fit-content;
     }
+    .fc-toolbar-chunk:nth-child(3) {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: .5rem;
+    }
+    .fc-toolbar-chunk:nth-child(3)>*+* {
+        width: 100 !important;
+    }
+    .fc .fc-toolbar {
+        flex-wrap: wrap;
+        gap:1rem;
+    }
     @media (max-width: 350px) {
         .grid-card{
             grid-template-rows: 1;
