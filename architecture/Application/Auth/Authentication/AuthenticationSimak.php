@@ -53,7 +53,7 @@ class AuthenticationSimak implements IAuthentication {
         
         $penggunaSimak      = $listPengguna->first();
         if(!$penggunaSimak->IsActive()) throw new Exception("akun sudah tidak aktif");
-        if(isEmpty($penggunaSimak->GetName()) || isEmpty($penggunaSimak->GetNIDN())) throw new Exception("data simak tidak ditemukan");
+        // if(isEmpty($penggunaSimak->GetName()) || isEmpty($penggunaSimak->GetNIDN())) throw new Exception("data simak tidak ditemukan");
 
         $data = Utility::pushData([
             "nama"=>$penggunaSimak->GetName(),
