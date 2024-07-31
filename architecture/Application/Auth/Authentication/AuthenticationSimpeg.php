@@ -48,7 +48,8 @@ class AuthenticationSimpeg implements IAuthentication {
 
         $penggunaSimpeg      = $listPengguna->first();
         if(!$penggunaSimpeg->IsActive()) throw new Exception("akun sudah tidak aktif");
-        if(isEmpty($penggunaSimpeg->GetName()) || isEmpty($penggunaSimpeg->GetNIP())) throw new Exception("data simpeg tidak ditemukan");
+        dd($penggunaSimpeg);
+        // if(isEmpty($penggunaSimpeg->GetName()) || isEmpty($penggunaSimpeg->GetNIP())) throw new Exception("data simpeg tidak ditemukan");
 
         $data = Utility::pushData([
             "nama"=>$penggunaSimpeg->GetName(),
