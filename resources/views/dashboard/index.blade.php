@@ -57,8 +57,8 @@
         justify-content: center;
         gap: .5rem;
     }
-    .fc-toolbar-chunk:nth-child(3)>*+* {
-        width: 100 !important;
+    .fc-toolbar-chunk:nth-child(3)>* {
+        width: 100% !important;
     }
     .fc .fc-toolbar {
         flex-wrap: wrap;
