@@ -86,7 +86,7 @@ class ApiPresensiController extends Controller
                 "status"=>"fail",
                 "message"=>"data tidak ditemukan",
                 "data"=>$request->all(),
-                "log"=>$e->getMessage()
+                "log"=>$e->getTrace()
             ]);
         }
     }
