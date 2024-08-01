@@ -21,7 +21,7 @@ class AuthenticationSimpeg implements IAuthentication {
                                     'NPribadi'=>fn($query)=>$query->select('id_n_pribadi','nip','nama','status_pegawai')]
                                 )
                                 ->where('username',$pengguna->GetUsername())
-                                ->get();
+                                ->get()
                                 ->transform(function($row){
                                     return Creator::buildPengguna(PenggunaEntitas::make(
                                         $row->id,
