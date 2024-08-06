@@ -17,18 +17,25 @@ trait Utility
     public static function isLate($tanggal_jam_masuk=null,$tanggal=null){
         $masuk = new Date($tanggal_jam_masuk);
         $keluar = new Date($tanggal." 08:01:00");
+        // dump([
+        //     $tanggal_jam_masuk, $tanggal." 08:01:00", $masuk->isGreater($keluar)
+        // ]);
         return $masuk->isGreater($keluar);
     }
     public static function is8Hour($tanggal=null,$tanggal_jam_masuk=null,$tanggal_jam_keluar=null){
         if(!empty($tanggal_jam_keluar) && !self::isLate($tanggal_jam_masuk,$tanggal)){
             $jam_pulang = "14:59:00";
-            if (Carbon::now()->setTimezone('Asia/Jakarta')->dayOfWeek == Carbon::FRIDAY) {
+            if (($tanggal!=date('Y-m-d')? Carbon::parse($tanggal):Carbon::now())->setTimezone('Asia/Jakarta')->dayOfWeek == Carbon::FRIDAY) {
                 $jam_pulang = "13:59:00";
-            } elseif (Carbon::now()->setTimezone('Asia/Jakarta')->dayOfWeek == Carbon::SATURDAY) {
+            } elseif (($tanggal!=date('Y-m-d')? Carbon::parse($tanggal):Carbon::now())->setTimezone('Asia/Jakarta')->dayOfWeek == Carbon::SATURDAY) {
                 $jam_pulang = "11:59:00";
             }
             $aturanKeluar = new Date($tanggal." $jam_pulang");
             $keluar = new Date($tanggal_jam_keluar);
+
+            // dump([
+            //     $tanggal." $jam_pulang", $tanggal_jam_keluar, $keluar->isGreater($aturanKeluar)
+            // ]);
             return $keluar->isGreater($aturanKeluar);
         } 
         else if(!empty($tanggal_jam_keluar) && self::isLate($tanggal_jam_masuk,$tanggal)){

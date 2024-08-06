@@ -13,6 +13,7 @@ use Architecture\External\Web\Controller\MasterKalendarController;
 use Architecture\External\Web\Controller\MonitoringController;
 use Architecture\External\Web\Controller\PenggunaController;
 use Architecture\External\Web\Controller\SPPDController;
+use Architecture\External\Web\Controller\TesController;
 use Architecture\External\Web\Controller\VideoKegiatanController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [AuthController::class,'Authorization'])->name('auth.authorization');
 Route::post('login', [AuthController::class,'Authentication'])->name('auth.authentication');
 Route::get('logout', [AuthController::class,'Logout'])->name('auth.logout');
+Route::get('/tes', [TesController::class,'tes'])->name('tes');
 
 Route::middleware(['throwSession'])->group(function () {
     Route::get('dashboard', [DashboardController::class,'index'])->name('dashboard.index');

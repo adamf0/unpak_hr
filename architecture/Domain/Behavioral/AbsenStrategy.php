@@ -57,8 +57,7 @@ class AbsenStrategy implements IAbsenStrategy {
                 Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)
             ){
                 $label = "(TELAT)";
-            }
-            if( 
+            } else if( 
                 Utility::isLate($jam_masuk, $dataAbsen?->tanggal) &&
                 !Utility::is8Hour($dataAbsen->tanggal, $jam_masuk, $jam_keluar)
             ){
