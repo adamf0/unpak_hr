@@ -105,9 +105,10 @@
                             var tgl = moment('{{$tanggal}}');
                             if (tgl.day() === 5) { // 5 is Friday in moment.js
                                 aturan_jam = "08:00 - 14:00";
-                            } else if (tgl.day() === 6) { // 6 is Saturday in moment.js
-                                aturan_jam = "08:00 - 12:00";
-                            }
+                            } 
+                            // else if (tgl.day() === 6) { // 6 is Saturday in moment.js
+                            //     aturan_jam = "08:00 - 12:00";
+                            // }
 
                             var keterangan = "";
                             data.forEach(function(d) {

@@ -193,9 +193,10 @@ class LaporanAbsenController extends Controller
             $dayOfWeek = isset($tanggal)? Carbon::parse($tanggal)->setTimezone('Asia/Jakarta')->dayOfWeek:null;
             if ($dayOfWeek == Carbon::FRIDAY) {
                 $aturan_jam = "08:00 - 14:00";
-            } elseif ($dayOfWeek == Carbon::SATURDAY) {
-                $aturan_jam = "08:00 - 12:00";
-            }
+            } 
+            // elseif ($dayOfWeek == Carbon::SATURDAY) {
+            //     $aturan_jam = "08:00 - 12:00";
+            // }
 
             $html .= $aturan_jam;
             $html .= '              </td>';

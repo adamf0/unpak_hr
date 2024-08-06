@@ -27,9 +27,10 @@ trait Utility
             $jam_pulang = "14:59:00";
             if (($tanggal!=date('Y-m-d')? Carbon::parse($tanggal):Carbon::now())->setTimezone('Asia/Jakarta')->dayOfWeek == Carbon::FRIDAY) {
                 $jam_pulang = "13:59:00";
-            } elseif (($tanggal!=date('Y-m-d')? Carbon::parse($tanggal):Carbon::now())->setTimezone('Asia/Jakarta')->dayOfWeek == Carbon::SATURDAY) {
-                $jam_pulang = "11:59:00";
-            }
+            } 
+            // elseif (($tanggal!=date('Y-m-d')? Carbon::parse($tanggal):Carbon::now())->setTimezone('Asia/Jakarta')->dayOfWeek == Carbon::SATURDAY) {
+            //     $jam_pulang = "11:59:00";
+            // }
             $aturanKeluar = new Date($tanggal." $jam_pulang");
             $keluar = new Date($tanggal_jam_keluar);
 
