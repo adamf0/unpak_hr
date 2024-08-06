@@ -45,9 +45,7 @@
                                                         $dayOfWeek = Carbon::parse($tanggal)->setTimezone('Asia/Jakarta')->dayOfWeek;
                                                         if ($dayOfWeek == Carbon::FRIDAY) {
                                                             $aturan_jam = "08:00 - 14:00";
-                                                        } elseif ($dayOfWeek == Carbon::SATURDAY) {
-                                                            $aturan_jam = "08:00 - 12:00";
-                                                        }
+                                                        } 
                                                     @endphp
                                                     {{ $aturan_jam }}
                                                 </td>
