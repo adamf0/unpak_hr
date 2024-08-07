@@ -43,6 +43,7 @@
                     </div>
                     <div class="col-12">
                         <button class="btn btn-primary btn_cetak">Cetak</button>
+                        <button class="btn btn-primary btn_filter">Filter</button>
                     </div>
                 </div>
             </div>
@@ -84,7 +85,7 @@
             const level = `{{Session::get('levelActive')}}`
             const type = `{{$type}}`
             
-            $('#tb').DataTable({
+            table = $('#tb').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: `{{ route("datatable.LaporanAbsen.index") }}?level=${level}&nidn=${nidn}&nip=${nip}&type=${type}`,
@@ -236,6 +237,13 @@
             });
             $('.nip').on('change', function(e) {
                 cetak_nip = $(this).val()
+            });
+            $('.btn_filter').click(function(e){
+                e.preventDefault();
+                const tanggal_mulai = $('.tanggal_mulai').val();
+                const tanggal_akhir = $('.tanggal_akhir').val();
+
+                table.ajax.url(`{{ route("datatable.LaporanAbsen.index") }}?tanggal_awal=${tanggal_mulai}&tanggal_akhir=${tanggal_akhir}&level=${level}&nidn=${nidn}&nip=${nip}&type=${type}`).load();
             });
             $('.btn_cetak').click(function(e){
                 e.preventDefault();

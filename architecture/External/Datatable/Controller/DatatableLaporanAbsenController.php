@@ -25,8 +25,10 @@ class DatatableLaporanAbsenController extends Controller
         $nip = $request->has('nip')? $request->query('nip'):null;
         $level = $request->has('level')? $request->query('level'):null;
         $type = $request->has('type')? $request->query('type'):null;
+        $tanggal_awal = $request->has('tanggal_awal')? $request->query('tanggal_awal'):null;
+        $tanggal_akhir = $request->has('tanggal_akhir')? $request->query('tanggal_akhir'):null;
 
-        $laporan = $this->queryBus->ask(new GetAllLaporanAbsenQuery(null,null,null,null,$type,TypeData::Default));
+        $laporan = $this->queryBus->ask(new GetAllLaporanAbsenQuery(null,null,$tanggal_awal,$tanggal_akhir,$type,TypeData::Default));
         $list_data = collect(isset($laporan["list_data"])? $laporan["list_data"]:[]);
         // $list_data = collect(isset($laporan["list_data"])? $laporan["list_data"]:[])->filter(function($item) use($type){
         //     return match($type){
