@@ -317,6 +317,8 @@
                             }
                         });
                     });
+
+                    console.log($("#tb-head").html(), columns);
                     
                     if ($.fn.DataTable.isDataTable('#tb')) {
                         $('#tb').DataTable().clear().destroy(); // Properly destroy the existing DataTable
