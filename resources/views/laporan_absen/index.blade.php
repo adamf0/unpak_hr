@@ -43,7 +43,7 @@
                     </div>
                     <div class="col-12">
                         <button class="btn btn-primary btn_cetak">Cetak</button>
-                        <button class="btn btn-primary btn_filter">Filter</button>
+                        <button class="btn btn-primary btn_filter">Filter Tanggal</button>
                     </div>
                 </div>
             </div>
@@ -55,7 +55,7 @@
                         </div>
                         <div class="col-12 table-responsive">
                             <table id="tb" class="table table-striped text-center">
-                                <thead id="tb-head">
+                                <thead>
                                     <tr>
                                         <th>Nama</th>
                                         @foreach ($list_tanggal as $tanggal)
@@ -84,11 +84,13 @@
             const nip = `{{Session::get('nip')}}`
             const level = `{{Session::get('levelActive')}}`
             const type = `{{$type}}`
+            const tanggal_mulai = `{{$tanggal_mulai}}`
+            const tanggal_akhir = `{{$tanggal_akhir}}`
             
             table = $('#tb').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: `{{ route("datatable.LaporanAbsen.index") }}?level=${level}&nidn=${nidn}&nip=${nip}&type=${type}`,
+                ajax: `{{ route("datatable.LaporanAbsen.index") }}?tanggal_awal=${tanggal_mulai}&tanggal_akhir=${tanggal_akhir}&level=${level}&nidn=${nidn}&nip=${nip}&type=${type}`,
                 columns: [
                     { 
                         data: 'nama', 
@@ -244,93 +246,10 @@
                 const tanggal_akhir = $('.tanggal_akhir').val();
 
                 if(tanggal_mulai && tanggal_akhir && tanggal_mulai.trim() !== "" && tanggal_akhir.trim() !== "") {
-                    const startDate = new Date(tanggal_mulai);
-                    const endDate = new Date(tanggal_akhir);
-                    const list_tanggal = [];
-
-                    $("#tb-head").html(`
-                            <tr>
-                                <th>Nama</th>
-                    `)
-                    while(startDate <= endDate) {
-                        let yyyy = startDate.getFullYear();
-                        let mm = String(startDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-                        let dd = String(startDate.getDate()).padStart(2, '0');
-
-                        $("#tb-head").append(`<th>${mm}-${dd}</th>`)
-                        list_tanggal.push(`${yyyy}-${mm}-${dd}`);
-                        startDate.setDate(startDate.getDate() + 1);
-                    }
-                    $("#tb-head").append(`</tr>`)
-
-                    var columns = [
-                        { 
-                            data: 'nama', 
-                            name: 'nama',
-                            render: function (data, type, row, meta) {
-                                return data;
-                            }
-                        }
-                    ];
-                    list_tanggal.forEach(function(tanggal) {
-                        columns.push({
-                            data: tanggal,
-                            name: tanggal,
-                            render: function (data, type, row, meta) {
-                                var aturan_jam = "08:00 - 15:00";
-                                var tgl = moment(tanggal);
-                                if (tgl.day() === 5) { // 5 is Friday in moment.js
-                                    aturan_jam = "08:00 - 14:00";
-                                }
-                                // else if (tgl.day() === 6) { // 6 is Saturday in moment.js
-                                //     aturan_jam = "08:00 - 12:00";
-                                // }
-
-                                var keterangan = "";
-                                data.forEach(function(d) {
-                                    if (d.info?.type === "absen") {
-                                        if (!d.info?.keterangan?.masuk && !d.info?.keterangan?.keluar) {
-                                            keterangan = "<span class='badge bg-danger'>Tidak Masuk</span>";
-                                        } else if (d.info?.keterangan?.masuk && !d.info?.keterangan?.keluar) {
-                                            var masuk = moment(d.info?.keterangan?.masuk);
-                                            keterangan = "<span class='badge bg-success'>" + masuk.format('HH:mm') + "</span> - <span class='badge bg-danger'>Masih Masuk</span>";
-                                        } else {
-                                            var masuk = moment(d.info?.keterangan?.masuk);
-                                            var keluar = moment(d.info?.keterangan?.keluar);
-                                            keterangan = "<span class='badge bg-success'>" + masuk.format('HH:mm') + "</span> - <span class='badge bg-danger'>" + keluar.format('HH:mm') + "</span>";
-                                        }
-                                    } else if (d.info?.type === "izin") {
-                                        keterangan = "<span class='badge bg-primary'>Izin</span>";
-                                    } else if (d.info?.type === "cuti") {
-                                        keterangan = "<span class='badge bg-warning text-black'>Cuti</span>";
-                                    }
-                                });
-
-                                return '<table>' +
-                                    '<tr>' +
-                                        '<td class="column_min">' + aturan_jam + '</td>' +
-                                    '</tr>' +
-                                    '<tr>' +
-                                        '<td>' + keterangan + '</td>' +
-                                    '</tr>' +
-                                '</table>';
-                            }
-                        });
-                    });
-
-                    console.log($("#tb-head").html(), columns);
-                    
-                    if ($.fn.DataTable.isDataTable('#tb')) {
-                        $('#tb').DataTable().clear().destroy(); // Properly destroy the existing DataTable
-                    }
-                    table = $('#tb').DataTable({
-                        processing: true,
-                        serverSide: true,
-                        ajax: `{{ route("datatable.LaporanAbsen.index") }}?tanggal_awal=${tanggal_mulai}&tanggal_akhir=${tanggal_akhir}&level=${level}&nidn=${nidn}&nip=${nip}&type=${type}`,
-                        columns: columns
-                    }); 
+                    let url = `{{route('laporan_absen.index',['type'=>'?'])}}?tanggal_awal=${tanggal_mulai}&tanggal_akhir=${tanggal_akhir}`
+                    window.location.replace(url.replace('?', type));
                 }
-            });
+            });                
             $('.btn_cetak').click(function(e){
                 e.preventDefault();
 

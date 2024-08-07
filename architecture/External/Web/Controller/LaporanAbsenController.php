@@ -27,15 +27,23 @@ class LaporanAbsenController extends Controller
         protected IQueryBus $queryBus
     ) {}
     
-    public function Index($type=null){
+    public function Index(Request $request, $type=null){
         ini_set('memory_limit', '-1');
-        $start = Carbon::now()->startOfMonth();
-        $end = Carbon::now()->endOfMonth();
+        $start = ($request->get('tanggal_awal')? Carbon::parse($request->get('tanggal_awal')):Carbon::now()->startOfMonth());
+        $end = ($request->get('tanggal_akhir')? Carbon::parse($request->get('tanggal_akhir')):Carbon::now()->endOfMonth());
         $list_tanggal = [];
-        for ($date = Carbon::now()->startOfMonth(); $date->lte($end); $date->addDay()) {
+        for ($date = ($request->get('tanggal_awal')? Carbon::parse($request->get('tanggal_awal')):Carbon::now())->startOfMonth(); $date->lte($end); $date->addDay()) {
             $list_tanggal[] = $date->copy()->format('Y-m-d');
         }
-        return view('laporan_absen.index',['type'=>$type, 'list_tanggal'=>$list_tanggal,'start'=>$start->format('d F Y'),'end'=>$end->format('d F Y')]);
+        
+        return view('laporan_absen.index',[
+            'type'=>$type, 
+            'list_tanggal'=>$list_tanggal,
+            'start'=>$start->format('d F Y'),
+            'tanggal_mulai'=>$start->format('Y-m-d'),
+            'end'=>$end->format('d F Y'),
+            'tanggal_akhir'=>$end->format('Y-m-d'),
+        ]);
     }
 
 
