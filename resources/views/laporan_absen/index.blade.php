@@ -5,7 +5,7 @@
         <nav>
             <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Laporan Presensi</li>
+            <li class="breadcrumb-item active">Laporan Presensi {{!empty($type)? ucfirst($type):''}}</li>
             </ol>
         </nav>
     </x-page-title>
