@@ -117,6 +117,7 @@ class LaporanAbsenController extends Controller
                         if($item['pengguna'] instanceof NPribadi){
                             $nama = $item['pengguna']->nama;
                         } else{
+                            dd($item['pengguna']);
                             $nama = $item['pengguna']['nama'];
                         }
                     }
