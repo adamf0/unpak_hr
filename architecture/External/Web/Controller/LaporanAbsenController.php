@@ -110,7 +110,7 @@ class LaporanAbsenController extends Controller
                         $nama = $item['pengguna']['nama_dosen'];
                     } else if($item['type']=="pegawai"){
                         if($item['pengguna'] instanceof NPribadi){
-                            dd($item);
+                            dd($item, $item['pengguna']->nama);
                         }
                         $nama = $item['pengguna']['nama'];
                     }
