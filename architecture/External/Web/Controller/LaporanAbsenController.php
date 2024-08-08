@@ -32,7 +32,7 @@ class LaporanAbsenController extends Controller
         $start = ($request->get('tanggal_awal')? Carbon::parse($request->get('tanggal_awal')):Carbon::now()->startOfMonth());
         $end = ($request->get('tanggal_akhir')? Carbon::parse($request->get('tanggal_akhir')):Carbon::now()->endOfMonth());
         $list_tanggal = [];
-        for ($date = ($request->get('tanggal_awal')? Carbon::parse($request->get('tanggal_awal')):Carbon::now())->startOfMonth(); $date->lte($end); $date->addDay()) {
+        for ($date = $start; $date->lte($end); $date->addDay()) {
             $list_tanggal[] = $date->copy()->format('Y-m-d');
         }
         
