@@ -107,18 +107,17 @@ class LaporanAbsenController extends Controller
                 $listData = collect($laporan['list_data'])->map(function($item){
                     dump($item['type']);
                     $nama=  "NA";
-                    if($item['type']=="dosen"){
+                    if($item['type']=="dosen" && !is_null($item['pengguna'])){
                         if($item['pengguna'] instanceof Dosen){
                             $nama = $item['pengguna']->nama_dosen;
                         } else{
                             $nama = $item['pengguna']['nama_dosen'];
                         }
-                    } else if($item['type']=="pegawai"){
+                    } else if($item['type']=="pegawai" && !is_null($item['pengguna'])){
                         if($item['pengguna'] instanceof NPribadi){
                             $nama = $item['pengguna']->nama;
-                        } else{
-                            dd($item['pengguna']);
-                            $nama = $item['pengguna']['nama'];
+                        } else {
+                            $nama = is_null($item['pengguna']) $item['pengguna']['nama'];
                         }
                     }
                     // $nama = match($item['type']){
