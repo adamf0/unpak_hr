@@ -8,6 +8,8 @@ use Architecture\Application\Abstractions\Messaging\IQueryBus;
 use Architecture\Application\LaporanAbsen\List\GetAllLaporanAbsenQuery;
 use Architecture\Domain\Entity\FolderX;
 use Architecture\Domain\Enum\TypeNotif;
+use Architecture\External\Persistance\ORM\Dosen;
+use Architecture\External\Persistance\ORM\NPribadi;
 use Architecture\External\Port\ExportAbsenXls;
 use Architecture\External\Port\PdfX;
 use Architecture\Shared\Creational\FileManager;
@@ -106,9 +108,17 @@ class LaporanAbsenController extends Controller
                     dump($item['type']);
                     $nama=  "NA";
                     if($item['type']=="dosen"){
-                        $nama = $item['pengguna']->nama_dosen;
+                        if($item['pengguna'] instanceof Dosen){
+                            $nama = $item['pengguna']->nama_dosen;
+                        } else{
+                            $nama = $item['pengguna']['nama_dosen'];
+                        }
                     } else if($item['type']=="pegawai"){
-                        $nama = $item['pengguna']->nama;
+                        if($item['pengguna'] instanceof NPribadi){
+                            $nama = $item['pengguna']->nama;
+                        } else{
+                            $nama = $item['pengguna']['nama'];
+                        }
                     }
                     // $nama = match($item['type']){
                     //     "dosen"=>$item['pengguna']['nama_dosen'],
