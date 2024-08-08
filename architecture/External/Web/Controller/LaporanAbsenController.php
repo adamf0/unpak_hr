@@ -8,6 +8,7 @@ use Architecture\Application\Abstractions\Messaging\IQueryBus;
 use Architecture\Application\LaporanAbsen\List\GetAllLaporanAbsenQuery;
 use Architecture\Domain\Entity\FolderX;
 use Architecture\Domain\Enum\TypeNotif;
+use Architecture\External\Persistance\ORM\NPribadi;
 use Architecture\External\Port\ExportAbsenXls;
 use Architecture\External\Port\PdfX;
 use Architecture\Shared\Creational\FileManager;
@@ -108,7 +109,7 @@ class LaporanAbsenController extends Controller
                     if($item['type']=="dosen"){
                         $nama = $item['pengguna']['nama_dosen'];
                     } else if($item['type']=="pegawai"){
-                        if(!array_key_exists("nama",$item['pengguna'])){
+                        if($item['pengguna'] instanceof NPribadi){
                             dd($item);
                         }
                         $nama = $item['pengguna']['nama'];
