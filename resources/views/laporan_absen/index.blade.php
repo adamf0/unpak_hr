@@ -1,7 +1,7 @@
 @extends('template.index')
  
 @section('page-title')
-    <x-page-title title="Laporan Presensi">
+    <x-page-title title="Laporan Presensi {{!empty($type)? ucfirst($type):''}}">
         <nav>
             <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
