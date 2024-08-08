@@ -104,7 +104,6 @@ class LaporanAbsenController extends Controller
                 );
                 return FileManager::StreamFile($file);
             } else{
-                dd($request->all());
                 $listData = collect($laporan['list_data'])->map(function($item){
                     $nama=  "NA";
                     if($item['type']=="dosen" && !is_null($item['pengguna'])){
