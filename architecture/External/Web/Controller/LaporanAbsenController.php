@@ -44,9 +44,9 @@ class LaporanAbsenController extends Controller
             'type'=>$type, 
             'list_tanggal'=>$list_tanggal,
             'start'=>$start->format('d F Y'),
-            'tanggal_mulai'=>$start->format('Y-m-d'),
+            'tanggal_mulai'=>$start_string,
             'end'=>$end->format('d F Y'),
-            'tanggal_akhir'=>$end->format('Y-m-d'),
+            'tanggal_akhir'=>$end_string,
         ]);
     }
 
