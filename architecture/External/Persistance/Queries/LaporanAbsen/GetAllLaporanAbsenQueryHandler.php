@@ -134,6 +134,7 @@ class GetAllLaporanAbsenQueryHandler extends Query
         for ($date = $start; $date->lte($end); $date->addDay()) {
             $this->list_tanggal[] = $date->copy()->format('Y-m-d');
         }
+        dd($start, $end, $this->list_tanggal);
         return [
             "list_tanggal"=>$this->list_tanggal,
             "list_data"=>array_values($this->gen_data_tbl(null,0,0,[])),
