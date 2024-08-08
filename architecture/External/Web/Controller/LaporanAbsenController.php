@@ -30,7 +30,11 @@ class LaporanAbsenController extends Controller
     public function Index(Request $request, $type=null){
         ini_set('memory_limit', '-1');
         $start = ($request->get('tanggal_awal')? Carbon::parse($request->get('tanggal_awal')):Carbon::now()->startOfMonth());
+        $start_string = $start->format('Y-m-d');
+
         $end = ($request->get('tanggal_akhir')? Carbon::parse($request->get('tanggal_akhir')):Carbon::now()->endOfMonth());
+        $end_string  =$end->format('Y-m-d');
+
         $list_tanggal = [];
         for ($date = $start; $date->lte($end); $date->addDay()) {
             $list_tanggal[] = $date->copy()->format('Y-m-d');
