@@ -103,11 +103,17 @@ class LaporanAbsenController extends Controller
                 return FileManager::StreamFile($file);
             } else{
                 $listData = collect($laporan['list_data'])->map(function($item){
-                    dd($item);
-                    $nama = match($item['type']){
-                        "dosen"=>$item['pengguna']['nama_dosen'],
-                        "pegawai"=>$item['pengguna']['nama'],
-                    };
+                    dump($item['type']);
+                    $nama=  "NA";
+                    if($item['type']=="dosen"){
+                        $nama = $item['pengguna']['nama_dosen'];
+                    } else if($item['type']=="pegawai"){
+                        $nama = $item['pengguna']['nama'];
+                    }
+                    // $nama = match($item['type']){
+                    //     "dosen"=>$item['pengguna']['nama_dosen'],
+                    //     "pegawai"=>$item['pengguna']['nama'],
+                    // };
                     unset($item['pengguna']);
                     unset($item['type']);
                     $item = array_merge(['nama'=>$nama],(array) $item);
