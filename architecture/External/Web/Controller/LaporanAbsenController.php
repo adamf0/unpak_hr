@@ -108,6 +108,9 @@ class LaporanAbsenController extends Controller
                     if($item['type']=="dosen"){
                         $nama = $item['pengguna']['nama_dosen'];
                     } else if($item['type']=="pegawai"){
+                        if(!array_key_exists("nama",$item['pengguna'])){
+                            dd($item);
+                        }
                         $nama = $item['pengguna']['nama'];
                     }
                     // $nama = match($item['type']){
