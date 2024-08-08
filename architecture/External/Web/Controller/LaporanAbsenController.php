@@ -102,6 +102,7 @@ class LaporanAbsenController extends Controller
                 );
                 return FileManager::StreamFile($file);
             } else{
+                dd($laporan);
                 $listData = collect($laporan['list_data'])->map(function($item){
                     $nama = match($item['type']){
                         "dosen"=>$item['pengguna']['nama_dosen'],
