@@ -31,9 +31,11 @@ class LaporanAbsenController extends Controller
         ini_set('memory_limit', '-1');
         $start = ($request->get('tanggal_awal')? Carbon::parse($request->get('tanggal_awal')):Carbon::now()->startOfMonth());
         $start_string = $start->format('Y-m-d');
+        $start_string2 = $start->format('d F Y');
 
         $end = ($request->get('tanggal_akhir')? Carbon::parse($request->get('tanggal_akhir')):Carbon::now()->endOfMonth());
         $end_string  =$end->format('Y-m-d');
+        $end_string2 = $end->format('d F Y');
 
         $list_tanggal = [];
         for ($date = $start; $date->lte($end); $date->addDay()) {
@@ -43,9 +45,9 @@ class LaporanAbsenController extends Controller
         return view('laporan_absen.index',[
             'type'=>$type, 
             'list_tanggal'=>$list_tanggal,
-            'start'=>$start->format('d F Y'),
+            'start'=>$start_string2,
             'tanggal_mulai'=>$start_string,
-            'end'=>$end->format('d F Y'),
+            'end'=>$end_string2,
             'tanggal_akhir'=>$end_string,
         ]);
     }
