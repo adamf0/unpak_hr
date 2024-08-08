@@ -149,6 +149,7 @@ class LaporanAbsenController extends Controller
                 return Excel::download(new ExportAbsenXls(collect($listData), array_merge(["nama"],$listTanggalFormat)), "$file_name.xlsx");
             }
         } catch (Exception $e) {
+            throw $e;
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
             return redirect()->route('laporan_absen.index',['type'=>$request->get('type')]);
         }
