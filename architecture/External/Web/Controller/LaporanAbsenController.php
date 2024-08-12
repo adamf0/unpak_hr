@@ -211,7 +211,7 @@ class LaporanAbsenController extends Controller
         } catch (Exception $e) {
             throw $e;
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
-            return redirect()->route('laporan_absen.index', ['type' => $request->get('type')]);
+            return redirect()->route('laporan_absen.index');
         }
     }
 
