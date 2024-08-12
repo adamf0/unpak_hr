@@ -40,8 +40,12 @@ class DatatablePresensiController extends Controller
                     // })
                     ->reduce(function ($carry, $item) use($filter){
                         if($filter=="dosen"){
+                            $arr = [$item->GetDosen()?->GetNama(),$item->GetDosen()?->GetNIDN()];
+                            if(!empty($item->GetDosen()?->GetUnitKerja()))
+                            $arr[] = $item->GetDosen()?->GetUnitKerja();
+                            
                             $carry[] = [
-                                "nama"=>$item->GetDosen()?->GetNama()." - ".$item->GetDosen()?->GetNIDN()." - ".$item->GetDosen()?->GetUnitKerja(),
+                                "nama"=>implode(" - ",$arr),
                                 "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
                                 "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
                                 "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
@@ -50,8 +54,12 @@ class DatatablePresensiController extends Controller
                                 "id"=>$item->GetId(),
                             ];
                         } else if($filter=="pegawai"){
+                            $arr = [$item->GetPegawai()?->GetNama(),$item->GetPegawai()?->GetNIP()];
+                            if(!empty($item->GetPegawai()?->GetUnit()))
+                            $arr[] = $item->GetPegawai()?->GetUnit();
+
                             $carry[] = [
-                                "nama"=>$item->GetPegawai()?->GetNama()." - ".$item->GetPegawai()?->GetNIP()." - ".$item->GetPegawai()?->GetUnit(),
+                                "nama"=>implode(" - ",$arr),
                                 "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
                                 "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
                                 "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
