@@ -34,28 +34,30 @@ class DatatablePresensiController extends Controller
 
         
         // $datas = Cache::remember("list-presensi-$filter", 5*60, function () use($datas,$filter){
-            $datas
+        $datas = $datas
                     // ->filter(function($item){
                     //     return $item->getTanggal()->isEqual(new Date(date('Y-m-d')));
                     // })
-                    ->map(function ($item) use($filter){
+                    ->reduce(function ($carry, $item) use($filter){
                         if($filter=="dosen"){
-                            return [
+                            $carry[] = [
                                 "nama"=>$item->GetDosen()?->GetNama()." - ".$item->GetDosen()?->GetNIDN()." - ".$item->GetDosen()?->GetUnitKerja(),
                                 "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
                                 "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
                                 "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
                                 "catatan_telat"=>$item->GetCatatanTelat(),
                                 "catatan_pulang"=>$item->GetCatatanPulang(),
+                                "id"=>$item->GetId(),
                             ];
                         } else if($filter=="pegawai"){
-                            return [
+                            $carry[] = [
                                 "nama"=>$item->GetPegawai()?->GetNama()." - ".$item->GetPegawai()?->GetNIP()." - ".$item->GetPegawai()?->GetUnit(),
                                 "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
                                 "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
                                 "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
                                 "catatan_telat"=>$item->GetCatatanTelat(),
                                 "catatan_pulang"=>$item->GetCatatanPulang(),
+                                "id"=>$item->GetId(),
                             ];
                         } else{
                             return [
@@ -64,8 +66,11 @@ class DatatablePresensiController extends Controller
                                 "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
                                 "catatan_telat"=>$item->GetCatatanTelat(),
                                 "catatan_pulang"=>$item->GetCatatanPulang(),
+                                "id"=>$item->GetId(),
                             ];
                         }
+
+                        return $carry;
                     });
         // });
 
