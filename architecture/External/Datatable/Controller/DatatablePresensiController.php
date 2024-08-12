@@ -47,7 +47,6 @@ class DatatablePresensiController extends Controller
                                 "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
                                 "catatan_telat"=>$item->GetCatatanTelat(),
                                 "catatan_pulang"=>$item->GetCatatanPulang(),
-                                "id"=>$item->GetId(),
                             ];
                         } else if($filter=="pegawai"){
                             return [
@@ -57,7 +56,6 @@ class DatatablePresensiController extends Controller
                                 "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
                                 "catatan_telat"=>$item->GetCatatanTelat(),
                                 "catatan_pulang"=>$item->GetCatatanPulang(),
-                                "id"=>$item->GetId(),
                             ];
                         } else{
                             return [
@@ -66,7 +64,6 @@ class DatatablePresensiController extends Controller
                                 "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
                                 "catatan_telat"=>$item->GetCatatanTelat(),
                                 "catatan_pulang"=>$item->GetCatatanPulang(),
-                                "id"=>$item->GetId(),
                             ];
                         }
                     });
