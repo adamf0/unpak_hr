@@ -514,11 +514,11 @@
                             `)
                             $(refPresensiR8).html(`
                                 <span class="text-success small pt-1 fw-bold">${data?.presensi?.r8??0}</span> 
-                                <span class="text-muted small pt-2 ps-1">&ge;8 Jam</span>
+                                <span class="text-muted small pt-2 ps-1">&ge;7 Jam</span>
                             `)
                             $(refPresensiL8).html(`
                                 <span class="text-danger small pt-1 fw-bold">${data?.presensi?.l8??0}</span> 
-                                <span class="text-muted small pt-2 ps-1">&lt;8 Jam</span>
+                                <span class="text-muted small pt-2 ps-1">&lt;7 Jam</span>
                             `)
 
                             $(refCutiTotal).html(data?.cuti?.total??0)
