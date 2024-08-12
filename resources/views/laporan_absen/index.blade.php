@@ -1,275 +1,405 @@
 @extends('template.index')
- 
+
 @section('page-title')
-    <x-page-title title="Laporan Presensi {{!empty($type)? ucfirst($type):''}}">
+    <x-page-title title="Laporan Presensi">
         <nav>
             <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Laporan Presensi {{!empty($type)? ucfirst($type):''}}</li>
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">Laporan Presensi</li>
             </ol>
         </nav>
     </x-page-title>
 @stop
 
 @section('content')
-<style>
-    .column_min{
-        min-width: 200px !important;
-    }
-</style>
-<div class="row">
-    <div class="col-lg-12">
-        <div class="row">
-            <div class="col-12">
-                {{ Utility::showNotif() }}
-            </div>
-            <div class="col-12">
-            <div class="card">
-                <div class="card-body row">
-                    <div class="col-6">
-                        <x-input-text title="NIDN" name="nidn" class="nidn" default=""/>
-                    </div>
-                    <div class="col-6">
-                        <x-input-text title="NIP" name="nip" class="nip" default=""/>
-                    </div>
-                    <div class="col-5">
-                        <x-input-text title="Tanggal Mulai" name="tanggal_mulai" class="tanggal_mulai" default=""/>
-                    </div>
-                    <div class="col-5">
-                        <x-input-text title="Tanggal Akhir" name="tanggal_akhir" class="tanggal_akhir" default=""/>
-                    </div>
-                    <div class="col-2">
-                        <x-input-select title="Cetak Sebagai" name="type_export" class="type_export"></x-input-select>
-                    </div>
-                    <div class="col-12">
-                        <button class="btn btn-primary btn_cetak">Cetak</button>
-                        <button class="btn btn-primary btn_filter">Filter Tanggal</button>
-                    </div>
+    <style>
+        .column_min {
+            min-width: 200px !important;
+        }
+    </style>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-12">
+                    {{ Utility::showNotif() }}
                 </div>
-            </div>
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body row">
-                        <div class="col-12">
-                            <h5>Per Tanggal {{ $start }} - {{ $end }}</h5>
-                        </div>
-                        <div class="col-12 table-responsive">
-                            <table id="tb" class="table table-striped text-center">
-                                <thead>
-                                    <tr>
-                                        <th>Nama</th>
-                                        @foreach ($list_tanggal as $tanggal)
-                                        <th>{{Carbon::parse($tanggal)->setTimezone('Asia/Jakarta')->format('d F')}}</th>
-                                        @endforeach
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
+                <div class="col-12">
+                    <div class="card">
+                        <form method="get">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-floating mb-2">
+                                            <input type="date" name="tanggal_mulai" class="form-control" id="tgl_awal"
+                                                placeholder="Tanggal Awal" value="{{ $start ?? '' }}">
+                                            <label for="tgl_awal">Tanggal Awal</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-floating">
+                                            <input type="date" name="tanggal_akhir" class="form-control" id="tgl_akhir"
+                                                placeholder="Tanggal Akhir" value="{{ $end ?? '' }}">
+                                            <label for="tgl_akhir">Tanggal Akhir</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-primary">Filter</button>
+                                <button class="btn btn-success">Cetak</button>
+                            </div>
+                        </form>
                     </div>
+                    @if ($start && $end)
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0 p-2">List Data Presensi</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="tb" class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>NIP/NIDN</th>
+                                                    <th>Nama</th>
+                                                    <th class="select-filter-unit">Unit Kerja</th>
+                                                    <th class="select-filter">Status</th>
+                                                    <th>Total</th>
+                                                    @php
+                                                        $startdate = new DateTime($start);
+                                                        $currentdate = new DateTime($start);
+                                                        $enddate = new DateTime($end);
+                                                    @endphp
+                                                    @while ($currentdate <= $enddate)
+                                                        @php
+                                                            $minggu = $currentdate->format('w') == 0 ? 'bg-danger' : '';
+                                                            echo '<th class="text-nowrap ' .
+                                                                $minggu .
+                                                                '">' .
+                                                                $currentdate->format('d/m/Y') .
+                                                                '</th>';
+                                                            $currentdate->add(new DateInterval('P1D'));
+                                                        @endphp
+                                                    @endwhile
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
-    </div>
-</div>
-@stop
+    @stop
 
-@push('scripts')
-    <script type="text/javascript" src="{{ Utility::loadAsset('my.js') }}"></script>
-    <script>
-        $(document).ready(function () {
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            
-            const nidn = `{{Session::get('nidn')}}`
-            const nip = `{{Session::get('nip')}}`
-            const level = `{{Session::get('levelActive')}}`
-            const type = `{{$type}}`
-            const tanggal_mulai = `{{$tanggal_mulai}}`
-            const tanggal_akhir = `{{$tanggal_akhir}}`
-            
-            table = $('#tb').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: `{{ route("datatable.LaporanAbsen.index") }}?tanggal_awal=${tanggal_mulai}&tanggal_akhir=${tanggal_akhir}&level=${level}&nidn=${nidn}&nip=${nip}&type=${type}`,
-                columns: [
-                    { 
-                        data: 'nama', 
-                        name: 'nama',
-                        render: function ( data, type, row, meta ) {
-                            return data;
-                        }
-                    },
-                    @foreach ($list_tanggal as $tanggal)
-                    { 
-                        data: `{{ $tanggal }}`, 
-                        name: `{{ $tanggal }}`,
-                        render: function ( data, type, row, meta ) {
-                            var aturan_jam = "08:00 - 15:00";
-                            var tgl = moment('{{$tanggal}}');
-                            if (tgl.day() === 5) { // 5 is Friday in moment.js
-                                aturan_jam = "08:00 - 14:00";
-                            } 
-                            // else if (tgl.day() === 6) { // 6 is Saturday in moment.js
-                            //     aturan_jam = "08:00 - 12:00";
-                            // }
+    @push('scripts')
+        <script type="text/javascript" src="{{ Utility::loadAsset('my.js') }}"></script>
+        <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        @if ($start && $end)
+            <script>
+                $(document).ready(function() {
+                    const listdata = JSON.parse('<?= json_encode($listpegawai, JSON_HEX_APOS) ?>');
+                    const listpresensi = JSON.parse('<?= json_encode($listpresensi) ?>');
+                    const listcuti = JSON.parse('<?= json_encode($listcuti) ?>');
+                    const listizin = JSON.parse('<?= json_encode($listizin) ?>');
+                    const listsppd = JSON.parse('<?= json_encode($listsppd) ?>');
 
-                            var keterangan = "";
-                            data.forEach(function(d) {
-                                if (d.info?.type === "absen") {
-                                    if (!d.info?.keterangan?.masuk && !d.info?.keterangan?.keluar) {
-                                        keterangan = "<span class='badge bg-danger'>Tidak Masuk</span>";
-                                    } else if (d.info?.keterangan?.masuk && !d.info?.keterangan?.keluar) {
-                                        var masuk = moment(d.info?.keterangan?.masuk);
-                                        keterangan = "<span class='badge bg-success'>" + masuk.format('HH:mm') + "</span> - <span class='badge bg-danger'>Masih Masuk</span>";
-                                    } else {
-                                        var masuk = moment(d.info?.keterangan?.masuk);
-                                        var keluar = moment(d.info?.keterangan?.keluar);
-                                        keterangan = "<span class='badge bg-success'>" + masuk.format('HH:mm') + "</span> - <span class='badge bg-danger'>" + keluar.format('HH:mm') + "</span>";
-                                    }
-                                } else if (d.info.type === "izin") {
-                                    keterangan = "<span class='badge bg-primary'>Izin</span>";
-                                } else if (d.info.type === "cuti") {
-                                    keterangan = "<span class='badge bg-warning text-black'>Cuti</span>";
+                    const startdate = '<?= $start ?>';
+                    const enddate = '<?= $end ?>';
+
+                    $('#tb').DataTable({
+                        dom: 'Bfrtip',
+                        buttons: [{
+                                extend: 'excelHtml5',
+                                text: 'Excel',
+                                action: function(e, dt, node, config) {
+
+                                    var $buttonUnit = $('.buttonSelectUnit').detach();
+                                    var $button = $('.buttonSelect').detach();
+
+                                    // Trigger the Excel export
+                                    $.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt, node,
+                                        config);
+
+                                    // Revert the visibility after export
+                                    $('th.select-filter').append($button);
+                                    $('th.select-filter-unit').append($buttonUnit);
+                                    // setTimeout(function() {}, 100);
+                                },
+                            },
+                            {
+                                extend: 'pdfHtml5',
+                                orientation: 'landscape',
+                                pageSize: 'A4',
+                                download: 'open',
+                                action: function(e, dt, node, config) {
+
+                                    var $buttonUnit = $('.buttonSelectUnit').detach();
+                                    var $button = $('.buttonSelect').detach();
+
+                                    $.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, node,
+                                        config);
+
+                                    $('th.select-filter').append($button);
+                                    $('th.select-filter-unit').append($buttonUnit);
+                                },
+                                customize: function(doc) {
+                                    doc.pageSize = {
+                                        width: 3000,
+                                        height: 700
+                                    };
+                                    var body = doc.content[1].table.body;
+
+                                    const tHeader = doc.content[1].table.body[0];
+                                    let warna = [];
+                                    tHeader.forEach(function(item, index) {
+                                        if (index > 6) {
+                                            var dayCell = item;
+                                            var dateText = dayCell.text;
+
+                                            let [day, month, year] = dateText.split(
+                                                '/');
+                                            var date = new Date(year + '-' + month +
+                                                '-' + day);
+                                            if (date.getDay() === 0) {
+                                                warna[index] = 'red';
+                                            } else {
+                                                warna[index] = '';
+                                            }
+                                        }
+                                    });
+
+                                    body.forEach(function(row, rowIndex) {
+                                        if (rowIndex > 0) {
+                                            for (let index = 0; index < row.length; index++) {
+                                                var dayCell = row[index];
+                                                dayCell.fillColor = warna[index] ? warna[
+                                                        index] :
+                                                    dayCell.fillColor;
+                                            }
+                                        }
+                                    });
                                 }
-                            })
- 
-                            return '<table>' +
-                                '<tr>' +
-                                    '<td class="column_min">' + aturan_jam + '</td>' +
-                                '</tr>' +
-                                '<tr>' +
-                                    '<td>' + keterangan + '</td>' +
-                                '</tr>' +
-                            '</table>';
-                        } 
-                    },
-                    @endforeach
-                ]
-            });
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            let cetak_nidn = null;
-            let cetak_nip = null;
-            let cetak_tanggal_mulai = null;
-            let cetak_tanggal_akhir = null;
-            let cetak_type_export = null;
+                            }
+                        ],
+                        columns: [{
+                                title: 'No.',
+                                render: function(data, type, row, meta) {
+                                    return meta.row + 1;
+                                }
+                            },
+                            {
+                                title: 'NIP/NIDN',
+                                data: 'nik'
+                            },
+                            {
+                                title: 'Name',
+                                data: 'nama'
+                            },
+                            {
+                                title: 'Unit Kerja',
+                                data: 'pengangkatan',
+                                render: function(data) {
+                                    return data?.unit_kerja ?? ''
+                                }
+                            },
+                            {
+                                title: 'Status',
+                                data: 'status'
+                            },
+                            {
+                                className: 'text-center',
+                                render: function(data, type, row, meta) {
+                                    let presensi = listpresensi.filter(item => item.nik == row.nik);
 
-            const status = [
-                {
-                    "id":"semua",
-                    "text":"Semua",
-                },
-                {
-                    "id":"menunggu",
-                    "text":"Menunggu",
-                },
-                {
-                    "id":"tolak",
-                    "text":"Tolak",
-                },
-                {
-                    "id":"terima",
-                    "text":"Terima",
-                },
-            ];
-            const type_export = [
-                {
-                    "id":"pdf",
-                    "text":"PDF",
-                },
-                {
-                    "id":"xls",
-                    "text":"Excel",
-                },
-            ];
-            load_dropdown('.type_export', type_export, null, null, '-- Pilih --');
+                                    let totalabsensi = [];
+                                    presensi.map(function(item) {
+                                        totalabsensi.push(item.tanggal);
+                                    });
 
-            $('.tanggal_mulai').datepicker({
-                format: 'yyyy-mm-dd',
-                autoclose: true,
-                todayHighlidht: true,
-                orientation: 'bottom',
-                datesDisabled:[],
-                daysOfWeekDisabled:[],
-                }).on('show', function(e) {
-                // Mengatur posisi popover Datepicker ke center (middle).
-                var $input = $(e.currentTarget);
-                var $datepicker = $input.data('datepicker').picker;
-                var $parent = $input.parent();
-                var bottom = ($parent.offset().bottom - $datepicker.outerHeight()) + $parent.outerHeight();
-                $datepicker.css({
-                    bottom: bottom,
-                    left: $parent.offset().left
+                                    let cuti = listcuti.filter(item => item.nik == row.nik);
+
+                                    cuti.map(function(item) {
+                                        let startDateCuti = new Date(item.tanggal_mulai);
+                                        let endDateCuti = new Date(item.tanggal_akhir);
+                                        while (startDateCuti <= endDateCuti) {
+                                            let year = startDateCuti.getFullYear();
+                                            let month = String(startDateCuti.getMonth() + 1)
+                                                .padStart(2,
+                                                    '0');
+                                            let day = String(startDateCuti.getDate()).padStart(2,
+                                                '0');
+                                            let full = `${year}-${month}-${day}`;
+                                            let dayOfWeek = startDateCuti.getDay();
+                                            if (dayOfWeek !== 0) {
+                                                totalabsensi.push(full);
+                                            }
+                                            startDateCuti.setDate(startDateCuti.getDate() + 1);
+                                        }
+                                    });
+
+                                    let sppd = listsppd.filter(item => item.nik == '2110718457');
+
+                                    sppd.map(function(item) {
+                                        let startDateSppd = new Date(item.sppd.tanggal_berangkat);
+                                        let endDateSppd = new Date(item.sppd.tanggal_kembali);
+                                        while (startDateSppd <= endDateSppd) {
+                                            let year = startDateSppd.getFullYear();
+                                            let month = String(startDateSppd.getMonth() + 1)
+                                                .padStart(2,
+                                                    '0');
+                                            let day = String(startDateSppd.getDate()).padStart(2,
+                                                '0');
+                                            let full = `${year}-${month}-${day}`;
+                                            let dayOfWeek = startDateSppd.getDay();
+                                            if (dayOfWeek !== 0) {
+                                                totalabsensi.push(full);
+                                            }
+                                            startDateSppd.setDate(startDateSppd.getDate() + 1);
+                                        }
+                                    });
+
+                                    let uniqueDates = [...new Set(totalabsensi)];
+
+                                    let waktu = uniqueDates.filter(item => startdate <= item && item <=
+                                        enddate);
+
+                                    return waktu.length;
+                                }
+                            },
+                            @while ($startdate <= $enddate)
+                                @php
+                                    $minggu = $startdate->format('w') == 0 ? 'bg-danger' : '';
+                                @endphp {
+                                    // data: "{{ $startdate->format('d-m-Y') }}",
+                                    className: 'text-center {{ $minggu }}',
+                                    data: 'nik',
+                                    render: function(data) {
+                                        let currentdate = "{{ $startdate->format('Y-m-d') }}";
+                                        let getPresensi = listpresensi.find(item => item.nik == data &&
+                                            item.tanggal == currentdate);
+                                        let getCuti = listcuti.find(item => item.nik == data &&
+                                            item.tanggal_mulai <= currentdate && currentdate <= item
+                                            .tanggal_akhir);
+                                        let getSppd = listsppd.find(item => item.nik == data &&
+                                            item.sppd.tanggal_berangkat <= currentdate && currentdate <=
+                                            item.sppd
+                                            .tanggal_kembali);
+                                        let getIzin = listizin.find(item => item.nik == data &&
+                                            item.tanggal_pengajuan == currentdate);
+
+                                        let minggu = "{{ $startdate->format('w') }}";
+                                        let absenMasukTime = '';
+                                        let absenKeluarTime = '';
+                                        let showTime = '';
+                                        if (getPresensi) {
+                                            absenMasukTime = getPresensi.absen_masuk ? new Date(
+                                                getPresensi.absen_masuk).toLocaleTimeString(
+                                                'id-ID', {
+                                                    hour: '2-digit',
+                                                    minute: '2-digit',
+                                                    second: '2-digit',
+                                                    hour12: false
+                                                }) : '';
+                                            absenKeluarTime = getPresensi.absen_keluar ?? '';
+
+                                            showTime = (minggu != 0) ? absenMasukTime + (
+                                                absenMasukTime ?
+                                                ' - ' : '') + absenKeluarTime : '';
+                                        } else if (getSppd) {
+                                            showTime = (minggu != 0) ? 'SPPD' : '';
+                                        } else if (getCuti) {
+                                            showTime = (minggu != 0) ? 'Cuti' : '';
+                                        } else if (getIzin) {
+                                            showTime = (minggu != 0) ? 'Izin' : '';
+                                        }
+
+                                        return showTime;
+                                    },
+                                },
+                                @php
+                                    $startdate->add(new DateInterval('P1D'));
+                                @endphp
+                            @endwhile
+                        ],
+
+                        "columnDefs": [{
+                            "orderable": false,
+                            "targets": [3, 4]
+                        }],
+                        data: listdata,
+                        initComplete: function() {
+                            let api = this.api();
+
+                            api.columns('.select-filter-unit')
+                                .every(function() {
+                                    let column = this;
+
+                                    let select = document.createElement('select');
+                                    select.classList.add('buttonSelectUnit');
+                                    select.add(new Option('Pilih', ''));
+                                    column.header().appendChild(select);
+
+                                    select.addEventListener('change', function() {
+                                        column
+                                            .search(select.value, {
+                                                exact: true
+                                            })
+                                            .draw();
+                                    });
+                                    let uniqueData = new Set();
+
+                                    column
+                                        .data()
+                                        .each(function(d) {
+                                            if (d && typeof d === 'object' && 'unit_kerja' in d) {
+                                                uniqueData.add(d.unit_kerja); // Extract unit_kerja
+                                            }
+                                        });
+
+                                    Array.from(uniqueData)
+                                        .sort()
+                                        .forEach(function(value) {
+                                            select.add(new Option(value, value));
+                                        });
+                                });
+
+                            api.columns('.select-filter')
+                                .every(function() {
+                                    let column = this;
+
+                                    let select = document.createElement('select');
+                                    select.classList.add('buttonSelect');
+                                    select.add(new Option('Pilih', ''));
+                                    column.header().appendChild(select);
+
+                                    select.addEventListener('change', function() {
+                                        column
+                                            .search(select.value, {
+                                                exact: true
+                                            })
+                                            .draw();
+                                    });
+
+                                    column
+                                        .data()
+                                        .unique()
+                                        .each(function(d) {
+                                            select.add(new Option(d));
+                                        });
+                                });
+                        }
+                    });
                 });
-            });
-            $('.tanggal_akhir').datepicker({
-                format: 'yyyy-mm-dd',
-                autoclose: true,
-                todayHighlidht: true,
-                orientation: 'bottom',
-                datesDisabled:[],
-                daysOfWeekDisabled:[],
-                startDate:"{{old('tanggal_mulai')}}",
-                }).on('show', function(e) {
-                // Mengatur posisi popover Datepicker ke center (middle).
-                var $input = $(e.currentTarget);
-                var $datepicker = $input.data('datepicker').picker;
-                var $parent = $input.parent();
-                var bottom = ($parent.offset().bottom - $datepicker.outerHeight()) + $parent.outerHeight();
-                $datepicker.css({
-                    bottom: bottom,
-                    left: $parent.offset().left
-                });
-            });
-
-            $('.tanggal_mulai').change(function(e) {
-                const min = $(this).val()
-                cetak_tanggal_mulai = min
-                $('.tanggal_akhir').datepicker('setStartDate', min);
-            });
-            $('.tanggal_akhir').change(function(e) {
-                const min = $(this).val()
-                cetak_tanggal_akhir = min
-            });
-            $('.type_export').on('select2:select', function(e) {
-                // var data = e.params.data;
-                cetak_type_export = $(this).val()
-            });
-            $('.nidn').on('change', function(e) {
-                cetak_nidn = $(this).val()
-            });
-            $('.nip').on('change', function(e) {
-                cetak_nip = $(this).val()
-            });
-            $('.btn_filter').click(function(e){
-                e.preventDefault();
-                const tanggal_mulai = $('.tanggal_mulai').val();
-                const tanggal_akhir = $('.tanggal_akhir').val();
-
-                if(tanggal_mulai && tanggal_akhir && tanggal_mulai.trim() !== "" && tanggal_akhir.trim() !== "") {
-                    let url = `{{route('laporan_absen.index',['type'=>'?'])}}?tanggal_awal=${tanggal_mulai}&tanggal_akhir=${tanggal_akhir}`
-                    window.location.replace(url.replace('?', type));
-                }
-            });                
-            $('.btn_cetak').click(function(e){
-                e.preventDefault();
-
-                if(cetak_type_export==null || cetak_type_export == undefined){
-                    alert("wajib pilih jenis file yg akan di simpan")
-                } else{
-                    const data = {
-                        _token: '{{ csrf_token() }}',
-                        nidn : cetak_nidn,
-                        nip : cetak_nip,
-                        tanggal_mulai : cetak_tanggal_mulai,
-                        tanggal_akhir : cetak_tanggal_akhir,
-                        type: type,
-                        type_export : cetak_type_export
-                    };
-
-                    console.log(data)
-                    $.redirect(`{{url('laporan_absen/export')}}`,data,"GET","_blank")
-                }
-            });
-        });
-    </script>
-@endpush
+            </script>
+        @endif
+    @endpush

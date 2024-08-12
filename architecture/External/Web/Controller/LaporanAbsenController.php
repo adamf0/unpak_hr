@@ -3,13 +3,17 @@
 namespace Architecture\External\Web\Controller;
 
 use App\Http\Controllers\Controller;
+use App\Models\Absen;
+use App\Models\Cuti;
+use App\Models\EPribadi;
+use App\Models\Izin;
+use App\Models\NPribadi;
+use App\Models\SppdAnggota;
 use Architecture\Application\Abstractions\Messaging\ICommandBus;
 use Architecture\Application\Abstractions\Messaging\IQueryBus;
 use Architecture\Application\LaporanAbsen\List\GetAllLaporanAbsenQuery;
 use Architecture\Domain\Entity\FolderX;
 use Architecture\Domain\Enum\TypeNotif;
-use Architecture\External\Persistance\ORM\Dosen;
-use Architecture\External\Persistance\ORM\NPribadi;
 use Architecture\External\Port\ExportAbsenXls;
 use Architecture\External\Port\PdfX;
 use Architecture\Shared\Creational\FileManager;
@@ -28,96 +32,136 @@ class LaporanAbsenController extends Controller
         protected ICommandBus $commandBus,
         protected IQueryBus $queryBus
     ) {}
-    
-    public function Index(Request $request, $type=null){
-        ini_set('memory_limit', '-1');
-        $start = ($request->get('tanggal_awal')? Carbon::parse($request->get('tanggal_awal')):Carbon::now()->startOfMonth());
-        $start_string = $start->format('Y-m-d');
-        $start_string2 = $start->format('d F Y');
 
-        $end = ($request->get('tanggal_akhir')? Carbon::parse($request->get('tanggal_akhir')):Carbon::now()->endOfMonth());
-        $end_string  =$end->format('Y-m-d');
-        $end_string2 = $end->format('d F Y');
+    public function Index(Request $request, $type = null)
+    {
+        $dosen = EPribadi::with('pengangkatan')
+            ->selectRaw('TRIM(nip) as nip, TRIM(nidn) as nik, REPLACE(TRIM(nama), CHAR(9), "") as nama, "DOSEN" as status')
+            ->whereNotIn('nidn', ['', '-', '0', 'KONTRAK'])
+            ->get();
+        $tendik = NPribadi::with('pengangkatan')
+            ->selectRaw('TRIM(nip) as nip, TRIM(nip) as nik, REPLACE(TRIM(nama), CHAR(9), "") as nama, "TENDIK" as status')
+            ->whereNotIn('nip', ['56'])
+            ->get();
+        $pegawai = collect($dosen)->merge($tendik);
 
-        $list_tanggal = [];
-        for ($date = $start; $date->lte($end); $date->addDay()) {
-            $list_tanggal[] = $date->copy()->format('Y-m-d');
-        }
-        
-        return view('laporan_absen.index',[
-            'type'=>$type, 
-            'list_tanggal'=>$list_tanggal,
-            'start'=>$start_string2,
-            'tanggal_mulai'=>$start_string,
-            'end'=>$end_string2,
-            'tanggal_akhir'=>$end_string,
+        $start = $request->tanggal_mulai ?? '';
+        $end = $request->tanggal_akhir ?? '';
+        $presensi = Absen::selectRaw('IF(nip = "", nidn, nip) as nik, tanggal, absen_masuk, absen_keluar')
+            ->when($start && $end, function ($q) use ($start, $end) {
+                $q->where('tanggal', '>=', $start)
+                    ->where('tanggal', '<=', $end);
+            })->whereNot('absen_masuk', null)->get();
+        echo $start . " sd ";
+        echo $end;
+        $cuti = Cuti::selectRaw('IF(nip = "", nidn, nip) as nik, tanggal_mulai, tanggal_akhir, status')
+            ->when($start && $end, function ($q) use ($start, $end) {
+                $q->where(function ($q) use ($start) {
+                    $q->where('tanggal_mulai', '>=', $start)
+                        ->where('tanggal_akhir', '<=', $start);
+                })->orWhere(function ($q) use ($end) {
+                    $q->where('tanggal_mulai', '<=', $end)
+                        ->where('tanggal_akhir', '>=', $end);
+                })->orWhere(function ($q) use ($start, $end) {
+                    $q->where('tanggal_mulai', '>=', $start)
+                        ->where('tanggal_akhir', '<=', $end);
+                });
+            })
+            ->where('status', 'terima sdm')->get();
+        $izin = Izin::selectRaw('IF(nip = "", nidn, nip) as nik, tanggal_pengajuan, status')
+            ->when($start && $end, function ($q) use ($start, $end) {
+                $q->where('tanggal_pengajuan', '>=', $start)
+                    ->where('tanggal_pengajuan', '<=', $end);
+            })
+            ->where('status', 'terima sdm')->get();
+
+        $sppd = SppdAnggota::selectRaw('IF(nip = "", nidn, nip) as nik, id_sppd')->whereHas('sppd', function ($query) use ($start, $end) {
+            $query->where('status', 'terima sdm')
+                ->when($start && $end, function ($q) use ($start, $end) {
+                    $q->where(function ($q) use ($start) {
+                        $q->where('tanggal_berangkat', '>=', $start)
+                            ->where('tanggal_kembali', '<=', $start);
+                    })->orWhere(function ($q) use ($end) {
+                        $q->where('tanggal_berangkat', '<=', $end)
+                            ->where('tanggal_kembali', '>=', $end);
+                    })->orWhere(function ($q) use ($start, $end) {
+                        $q->where('tanggal_berangkat', '>=', $start)
+                            ->where('tanggal_kembali', '<=', $end);
+                    });
+                });
+        })->with('sppd:id,tanggal_berangkat,tanggal_kembali,status')->get();
+
+        return view('laporan_absen.index', [
+            'listpegawai' => $pegawai,
+            'listpresensi' => $presensi,
+            'listcuti' => $cuti,
+            'listizin' => $izin,
+            'listsppd' => $sppd,
+            'start' => $start,
+            'end' => $end,
         ]);
     }
 
 
-    public function export(Request $request){ //gagal harus lebih spesifik
+    public function export(Request $request)
+    { //gagal harus lebih spesifik
         ini_set('memory_limit', '8192M');
-        
-        try {
-            $nidn           = $request->has('nidn')? $request->query('nidn'):null;
-            $nip            = $request->has('nip')? $request->query('nip'):null;
-            $tanggal_mulai  = $request->has('tanggal_mulai')? $request->query('tanggal_mulai'):null;
-            $tanggal_akhir  = $request->has('tanggal_akhir')? $request->query('tanggal_akhir'):null;
-            $type           = $request->has('type')? $request->query('type'):null;
-            $type_export    = $request->has('type_export')? $request->query('type_export'):null;
 
-            if(!is_null($nidn) && !is_null($nip)){
+        try {
+            $nidn           = $request->has('nidn') ? $request->query('nidn') : null;
+            $nip            = $request->has('nip') ? $request->query('nip') : null;
+            $tanggal_mulai  = $request->has('tanggal_mulai') ? $request->query('tanggal_mulai') : null;
+            $tanggal_akhir  = $request->has('tanggal_akhir') ? $request->query('tanggal_akhir') : null;
+            $type           = $request->has('type') ? $request->query('type') : null;
+            $type_export    = $request->has('type_export') ? $request->query('type_export') : null;
+
+            if (!is_null($nidn) && !is_null($nip)) {
                 throw new Exception("harus salah satu antara nidn dan nip");
-            } else if(is_null($type_export)){
+            } else if (is_null($type_export)) {
                 throw new Exception("belum pilih cetak sebagai apa");
             }
 
             $file_name = "laporan_absen";
-            if($nidn){
-                $file_name = $file_name."_$nidn";
+            if ($nidn) {
+                $file_name = $file_name . "_$nidn";
             }
-            if($nip){
-                $file_name = $file_name."_$nip";
+            if ($nip) {
+                $file_name = $file_name . "_$nip";
             }
-            if($tanggal_mulai && is_null($tanggal_akhir)){
-                $file_name = $file_name."_$tanggal_mulai";
+            if ($tanggal_mulai && is_null($tanggal_akhir)) {
+                $file_name = $file_name . "_$tanggal_mulai";
+            } else if ($tanggal_akhir && is_null($tanggal_mulai)) {
+                $file_name = $file_name . "_$tanggal_akhir";
+            } else if ($tanggal_mulai && $tanggal_akhir) {
+                $file_name = $file_name . "_$tanggal_mulai-$tanggal_akhir";
             }
-            else if($tanggal_akhir && is_null($tanggal_mulai)){
-                $file_name = $file_name."_$tanggal_akhir";
-            } else if($tanggal_mulai && $tanggal_akhir){
-                $file_name = $file_name."_$tanggal_mulai-$tanggal_akhir";
-            }
-            $laporan = Cache::remember($file_name, 1*60, function () use($nidn,$nip,$tanggal_mulai,$tanggal_akhir,$type){
-                return $this->queryBus->ask(new GetAllLaporanAbsenQuery($nidn,$nip,$tanggal_mulai,$tanggal_akhir,$type,TypeData::Default));
+            $laporan = Cache::remember($file_name, 1 * 60, function () use ($nidn, $nip, $tanggal_mulai, $tanggal_akhir, $type) {
+                return $this->queryBus->ask(new GetAllLaporanAbsenQuery($nidn, $nip, $tanggal_mulai, $tanggal_akhir, $type, TypeData::Default));
             });
             // $laporan = $this->queryBus->ask(new GetAllLaporanAbsenQuery($nidn,$nip,$tanggal_mulai,$tanggal_akhir,$type,TypeData::Default));
 
-            if($type_export=="pdf"){
+            if ($type_export == "pdf") {
                 throw new Exception("export pdf masih di perbaiki");
                 return $this->generateHtml(true, 0, null, null, $laporan);
                 $file = PdfX::From(
-                    "template.export_absen", 
-                    $laporan, 
-                    FolderX::FromPath(public_path('export/pdf')), 
+                    "template.export_absen",
+                    $laporan,
+                    FolderX::FromPath(public_path('export/pdf')),
                     "$file_name.pdf",
                     true
                 );
                 return FileManager::StreamFile($file);
-            } else{
-                $listData = collect($laporan['list_data'])->map(function($item){
-                    $nama=  "NA";
-                    if($item['type']=="dosen" && !is_null($item['pengguna'])){
-                        if($item['pengguna'] instanceof Dosen){
-                            $nama = $item['pengguna']->nama_dosen;
-                        } else{
-                            $nama = $item['pengguna']['nama_dosen'];
+            } else {
+                $listData = collect($laporan['list_data'])->map(function ($item) {
+                    dump($item['type']);
+                    $nama =  "NA";
+                    if ($item['type'] == "dosen") {
+                        $nama = $item['pengguna']['nama_dosen'];
+                    } else if ($item['type'] == "pegawai") {
+                        if (!array_key_exists("nama", $item['pengguna'])) {
+                            dd($item);
                         }
-                    } else if($item['type']=="pegawai" && !is_null($item['pengguna'])){
-                        if($item['pengguna'] instanceof NPribadi){
-                            $nama = $item['pengguna']->nama;
-                        } else {
-                            $nama = $item['pengguna']['nama'];
-                        }
+                        $nama = $item['pengguna']['nama'];
                     }
                     // $nama = match($item['type']){
                     //     "dosen"=>$item['pengguna']['nama_dosen'],
@@ -125,56 +169,56 @@ class LaporanAbsenController extends Controller
                     // };
                     unset($item['pengguna']);
                     unset($item['type']);
-                    $item = array_merge(['nama'=>$nama],(array) $item);
+                    $item = array_merge(['nama' => $nama], (array) $item);
 
                     $keys = array_keys((array)$item);
                     foreach ($keys as $key) {
                         if ($key !== 'nama') {
                             $listInfo = $item[$key];
-                            $info = array_reduce($listInfo, function($carry, $info) {
+                            $info = array_reduce($listInfo, function ($carry, $info) {
                                 $type = strtolower($info->info->type);
                                 if ($type == "absen") {
                                     $masuk = $info->info->keterangan['masuk'];
                                     $keluar = $info->info->keterangan['keluar'];
 
-                                    $carry[] = match(true){
-                                        !empty($masuk) && !empty($keluar) => date("H:i:s", strtotime($masuk))." - ".date("H:i:s", strtotime($keluar)),
-                                        !empty($masuk) && empty($keluar) => date("H:i:s", strtotime($masuk))." - tidak ada absen keluar",
-                                        empty($masuk) && !empty($keluar) => "tidak ada absen masuk - ".date("H:i:s", strtotime($keluar)),
+                                    $carry[] = match (true) {
+                                        !empty($masuk) && !empty($keluar) => date("H:i:s", strtotime($masuk)) . " - " . date("H:i:s", strtotime($keluar)),
+                                        !empty($masuk) && empty($keluar) => date("H:i:s", strtotime($masuk)) . " - tidak ada absen keluar",
+                                        empty($masuk) && !empty($keluar) => "tidak ada absen masuk - " . date("H:i:s", strtotime($keluar)),
                                         default => "tidak masuk"
                                     };
                                 } elseif ($type == "izin" || $type == "cuti" || $type == "sppd") {
                                     $carry[] = $type; //$info->info->keterangan['tujuan'];
-                                } 
+                                }
                                 return $carry;
                             }, []);
-                            $item[$key] = match(true){
-                                count($info)==1 => $info[0],
-                                count($info)>1 => end($info),
+                            $item[$key] = match (true) {
+                                count($info) == 1 => $info[0],
+                                count($info) > 1 => end($info),
                                 default => ""
                             };
                         }
                     }
                     return $item;
                 });
-                $listTanggalFormat = collect($laporan['list_tanggal'])->reduce(function($carry,$item){
+                $listTanggalFormat = collect($laporan['list_tanggal'])->reduce(function ($carry, $item) {
                     $carry[] = date('d F Y', strtotime($item));
                     return $carry;
-                },[]);
+                }, []);
 
-                return Excel::download(new ExportAbsenXls(collect($listData), array_merge(["nama"],$listTanggalFormat)), "$file_name.xlsx");
+                return Excel::download(new ExportAbsenXls(collect($listData), array_merge(["nama"], $listTanggalFormat)), "$file_name.xlsx");
             }
         } catch (Exception $e) {
             throw $e;
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
-            return redirect()->route('laporan_absen.index',['type'=>$request->get('type')]);
+            return redirect()->route('laporan_absen.index', ['type' => $request->get('type')]);
         }
     }
 
-    public function generateHtml($initial=true,$index=0,$i_t=null,$i_data=null,$source)
+    public function generateHtml($initial = true, $index = 0, $i_t = null, $i_data = null, $source)
     {
         $html = "";
-        if($initial){
+        if ($initial) {
             $html .= '<div class="card-body row">';
             $html .= '<div class="col-12">';
             $html .= '<h5>Per Tanggal ' . $source['start'] . ' - ' . $source['end'] . '</h5>';
@@ -189,20 +233,20 @@ class LaporanAbsenController extends Controller
             foreach ($source['list_tanggal'] as $tanggal) {
                 $html .= '<th>' . Carbon::parse($tanggal)->setTimezone('Asia/Jakarta')->format('d') . '</th>';
             }
-            
+
             $html .= '</tr>';
             $html .= '</thead>';
             $html .= '<tbody>';
             $html .= $this->generateHtml(false, 0, 0, 0, $source);
-        } else if(!$initial && !is_null($i_data) && !is_null($i_t) && $i_t<count($source['list_data']) ){
+        } else if (!$initial && !is_null($i_data) && !is_null($i_t) && $i_t < count($source['list_data'])) {
             // dump($i_t, $i_data, $source['list_data']);
-            $data = array_key_exists($i_data, $source['list_data'])? $source['list_data'][$i_t]:null;
-            if(is_null($data)){
-                if($i_t<count($source['list_tanggal'])){
-                    $html .= $this->generateHtml(false, $index, $i_t+1, $i_data, $source);
+            $data = array_key_exists($i_data, $source['list_data']) ? $source['list_data'][$i_t] : null;
+            if (is_null($data)) {
+                if ($i_t < count($source['list_tanggal'])) {
+                    $html .= $this->generateHtml(false, $index, $i_t + 1, $i_data, $source);
                 }
-                if($i_data<count($source['list_data'])){
-                    $html .= $this->generateHtml(false, $index, $i_t, $i_data+1, $source);
+                if ($i_data < count($source['list_data'])) {
+                    $html .= $this->generateHtml(false, $index, $i_t, $i_data + 1, $source);
                 }
                 return $html;
             }
@@ -213,7 +257,7 @@ class LaporanAbsenController extends Controller
             $html .= '  <td>' . ($index + 1) . '</td>';
             $html .= '  <td>' . $nama . ' - ' . $kode . '</td>';
 
-            $tanggal = array_key_exists($i_t, $source['list_tanggal'])? $source['list_tanggal'][$i_t]:null;
+            $tanggal = array_key_exists($i_t, $source['list_tanggal']) ? $source['list_tanggal'][$i_t] : null;
 
             $html .= '  <td>';
             $html .= '      <table>';
@@ -221,10 +265,10 @@ class LaporanAbsenController extends Controller
             $html .= '              <td class="column_min">';
 
             $aturan_jam = "08:00 - 15:00";
-            $dayOfWeek = isset($tanggal)? Carbon::parse($tanggal)->setTimezone('Asia/Jakarta')->dayOfWeek:null;
+            $dayOfWeek = isset($tanggal) ? Carbon::parse($tanggal)->setTimezone('Asia/Jakarta')->dayOfWeek : null;
             if ($dayOfWeek == Carbon::FRIDAY) {
                 $aturan_jam = "08:00 - 14:00";
-            } 
+            }
             // elseif ($dayOfWeek == Carbon::SATURDAY) {
             //     $aturan_jam = "08:00 - 12:00";
             // }
@@ -266,11 +310,11 @@ class LaporanAbsenController extends Controller
             $html .= '  </td>';
             $html .= '</tr>';
 
-            if($i_t<count($source['list_tanggal'])){
-                $html .= $this->generateHtml(false, $index, $i_t+1, $i_data, $source);
+            if ($i_t < count($source['list_tanggal'])) {
+                $html .= $this->generateHtml(false, $index, $i_t + 1, $i_data, $source);
             }
-            if($i_data<count($source['list_data'])){
-                $html .= $this->generateHtml(false, $index, $i_t, $i_data+1, $source);
+            if ($i_data < count($source['list_data'])) {
+                $html .= $this->generateHtml(false, $index, $i_t, $i_data + 1, $source);
             }
         }
 
