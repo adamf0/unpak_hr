@@ -33,14 +33,15 @@ class DatatablePresensiController extends Controller
         // }
 
         
-        $datas = Cache::remember("list-presensi-$filter", 5*60, function () use($datas,$filter){
-            return $datas
+        // $datas = Cache::remember("list-presensi-$filter", 5*60, function () use($datas,$filter){
+            $datas
                     // ->filter(function($item){
                     //     return $item->getTanggal()->isEqual(new Date(date('Y-m-d')));
                     // })
                     ->map(function ($item) use($filter){
                         return match(true){
                             $filter=="dosen"=>[
+                                "id"=>$item->GetId(),
                                 "nama"=>$item->GetDosen()?->GetNama()." - ".$item->GetDosen()?->GetNIDN()." - ".$item->GetDosen()?->GetUnitKerja(),
                                 "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
                                 "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
@@ -49,6 +50,7 @@ class DatatablePresensiController extends Controller
                                 "catatan_pulang"=>$item->GetCatatanPulang(),
                             ],
                             $filter=="pegawai"=>[
+                                "id"=>$item->GetId(),
                                 "nama"=>$item->GetPegawai()?->GetNama()." - ".$item->GetPegawai()?->GetNIP()." - ".$item->GetPegawai()?->GetUnit(),
                                 "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
                                 "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
@@ -57,6 +59,7 @@ class DatatablePresensiController extends Controller
                                 "catatan_pulang"=>$item->GetCatatanPulang(),
                             ],
                             default=>[
+                                "id"=>$item->GetId(),
                                 "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
                                 "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
                                 "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
@@ -65,7 +68,7 @@ class DatatablePresensiController extends Controller
                             ],
                         };
                     });
-        });
+        // });
 
         $table = DataTables::of($datas)
         ->addIndexColumn()
