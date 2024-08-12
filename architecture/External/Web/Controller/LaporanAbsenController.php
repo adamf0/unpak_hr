@@ -33,7 +33,7 @@ class LaporanAbsenController extends Controller
         protected IQueryBus $queryBus
     ) {}
 
-    public function Index(Request $request, $type = null)
+    public function Index(Request $request)
     {
         $dosen = EPribadi::with('pengangkatan')
             ->selectRaw('TRIM(nip) as nip, TRIM(nidn) as nik, REPLACE(TRIM(nama), CHAR(9), "") as nama, "DOSEN" as status')
