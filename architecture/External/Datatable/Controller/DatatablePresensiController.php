@@ -39,9 +39,6 @@ class DatatablePresensiController extends Controller
                     //     return $item->getTanggal()->isEqual(new Date(date('Y-m-d')));
                     // })
                     ->reduce(function ($carry, $item) use($filter){
-                        if($item->GetId() == 143390)
-                            dump($item);
-
                         if($filter=="dosen"){
                             $carry[] = [
                                 "nama"=>$item->GetDosen()?->GetNama()." - ".$item->GetDosen()?->GetNIDN()." - ".$item->GetDosen()?->GetUnitKerja(),
