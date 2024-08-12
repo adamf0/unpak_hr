@@ -33,54 +33,54 @@ class DatatablePresensiController extends Controller
         }
 
         
-        // $datas = Cache::remember("list-presensi-$filter", 5*60, function () use($datas,$filter){
-        $datas = $datas
-                    // ->filter(function($item){
-                    //     return $item->getTanggal()->isEqual(new Date(date('Y-m-d')));
-                    // })
-                    ->reduce(function ($carry, $item) use($filter){
-                        if($filter=="dosen"){
-                            $arr = [$item->GetDosen()?->GetNama(),$item->GetDosen()?->GetNIDN()];
-                            if(!empty($item->GetDosen()?->GetUnitKerja()))
-                            $arr[] = $item->GetDosen()?->GetUnitKerja();
-                            
-                            $carry[] = [
-                                "nama"=>implode(" - ",$arr),
-                                "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
-                                "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
-                                "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
-                                "catatan_telat"=>$item->GetCatatanTelat(),
-                                "catatan_pulang"=>$item->GetCatatanPulang(),
-                                "id"=>$item->GetId(),
-                            ];
-                        } else if($filter=="pegawai"){
-                            $arr = [$item->GetPegawai()?->GetNama(),$item->GetPegawai()?->GetNIP()];
-                            if(!empty($item->GetPegawai()?->GetUnit()))
-                            $arr[] = $item->GetPegawai()?->GetUnit();
+        $datas = Cache::remember("list-presensi-$filter", 5*60, function () use($datas,$filter){
+                    return $datas
+                        // ->filter(function($item){
+                        //     return $item->getTanggal()->isEqual(new Date(date('Y-m-d')));
+                        // })
+                        ->reduce(function ($carry, $item) use($filter){
+                            if($filter=="dosen"){
+                                $arr = [$item->GetDosen()?->GetNama(),$item->GetDosen()?->GetNIDN()];
+                                if(!empty($item->GetDosen()?->GetUnitKerja()))
+                                $arr[] = $item->GetDosen()?->GetUnitKerja();
+                                
+                                $carry[] = [
+                                    "nama"=>implode(" - ",$arr),
+                                    "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
+                                    "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
+                                    "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
+                                    "catatan_telat"=>$item->GetCatatanTelat(),
+                                    "catatan_pulang"=>$item->GetCatatanPulang(),
+                                    "id"=>$item->GetId(),
+                                ];
+                            } else if($filter=="pegawai"){
+                                $arr = [$item->GetPegawai()?->GetNama(),$item->GetPegawai()?->GetNIP()];
+                                if(!empty($item->GetPegawai()?->GetUnit()))
+                                $arr[] = $item->GetPegawai()?->GetUnit();
 
-                            $carry[] = [
-                                "nama"=>implode(" - ",$arr),
-                                "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
-                                "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
-                                "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
-                                "catatan_telat"=>$item->GetCatatanTelat(),
-                                "catatan_pulang"=>$item->GetCatatanPulang(),
-                                "id"=>$item->GetId(),
-                            ];
-                        } else{
-                            return [
-                                "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
-                                "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
-                                "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
-                                "catatan_telat"=>$item->GetCatatanTelat(),
-                                "catatan_pulang"=>$item->GetCatatanPulang(),
-                                "id"=>$item->GetId(),
-                            ];
-                        }
+                                $carry[] = [
+                                    "nama"=>implode(" - ",$arr),
+                                    "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
+                                    "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
+                                    "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
+                                    "catatan_telat"=>$item->GetCatatanTelat(),
+                                    "catatan_pulang"=>$item->GetCatatanPulang(),
+                                    "id"=>$item->GetId(),
+                                ];
+                            } else{
+                                return [
+                                    "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
+                                    "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
+                                    "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
+                                    "catatan_telat"=>$item->GetCatatanTelat(),
+                                    "catatan_pulang"=>$item->GetCatatanPulang(),
+                                    "id"=>$item->GetId(),
+                                ];
+                            }
 
-                        return $carry;
-                    });
-        // });
+                            return $carry;
+                        });
+        });
 
         $table = DataTables::of($datas)
         ->addIndexColumn()
