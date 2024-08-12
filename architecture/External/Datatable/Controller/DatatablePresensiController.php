@@ -39,8 +39,8 @@ class DatatablePresensiController extends Controller
                     //     return $item->getTanggal()->isEqual(new Date(date('Y-m-d')));
                     // })
                     ->map(function ($item) use($filter){
-                        return match(true){
-                            $filter=="dosen"=>[
+                        return match($filter){
+                            "dosen"=>[
                                 "nama"=>$item->GetDosen()?->GetNama()." - ".$item->GetDosen()?->GetNIDN()." - ".$item->GetDosen()?->GetUnitKerja(),
                                 "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
                                 "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
@@ -48,7 +48,7 @@ class DatatablePresensiController extends Controller
                                 "catatan_telat"=>$item->GetCatatanTelat(),
                                 "catatan_pulang"=>$item->GetCatatanPulang(),
                             ],
-                            $filter=="pegawai"=>[
+                            "pegawai"=>[
                                 "nama"=>$item->GetPegawai()?->GetNama()." - ".$item->GetPegawai()?->GetNIP()." - ".$item->GetPegawai()?->GetUnit(),
                                 "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
                                 "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
