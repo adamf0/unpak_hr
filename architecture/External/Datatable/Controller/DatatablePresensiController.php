@@ -33,8 +33,8 @@ class DatatablePresensiController extends Controller
         // }
 
         
-        $datas = Cache::remember("list-presensi-$filter", 5*60, function () use($datas,$filter){
-            return $datas
+        // $datas = Cache::remember("list-presensi-$filter", 5*60, function () use($datas,$filter){
+            $datas
                     // ->filter(function($item){
                     //     return $item->getTanggal()->isEqual(new Date(date('Y-m-d')));
                     // })
@@ -70,7 +70,7 @@ class DatatablePresensiController extends Controller
                             ];
                         }
                     });
-        });
+        // });
 
         $table = DataTables::of($datas)
         ->addIndexColumn()
