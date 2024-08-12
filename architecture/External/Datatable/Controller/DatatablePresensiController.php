@@ -26,11 +26,11 @@ class DatatablePresensiController extends Controller
         $filter = $request->has('filter')? $request->query('filter'):null;
         
         $datas = $this->queryBus->ask(new GetAllPresensiQuery($nidn,$nip,date('Y'),date('Y-m-d')));
-        // if($filter=="dosen"){
-        //     $datas = $datas->filter(fn($item)=>!is_null($item->GetDosen()));
-        // } else if($filter=="pegawai"){
-        //     $datas = $datas->filter(fn($item)=>!is_null($item->GetPegawai()));
-        // }
+        if($filter=="dosen"){
+            $datas = $datas->filter(fn($item)=>!is_null($item->GetDosen()));
+        } else if($filter=="pegawai"){
+            $datas = $datas->filter(fn($item)=>!is_null($item->GetPegawai()));
+        }
 
         
         // $datas = Cache::remember("list-presensi-$filter", 5*60, function () use($datas,$filter){
