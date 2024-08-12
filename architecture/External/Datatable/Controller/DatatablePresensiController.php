@@ -39,31 +39,36 @@ class DatatablePresensiController extends Controller
                     //     return $item->getTanggal()->isEqual(new Date(date('Y-m-d')));
                     // })
                     ->map(function ($item) use($filter){
-                        return match($filter){
-                            "dosen"=>[
+                        if($filter=="dosen"){
+                            return [
                                 "nama"=>$item->GetDosen()?->GetNama()." - ".$item->GetDosen()?->GetNIDN()." - ".$item->GetDosen()?->GetUnitKerja(),
                                 "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
                                 "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
                                 "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
                                 "catatan_telat"=>$item->GetCatatanTelat(),
                                 "catatan_pulang"=>$item->GetCatatanPulang(),
-                            ],
-                            "pegawai"=>[
+                                "id"=>$item->GetId(),
+                            ];
+                        } else if($filter=="pegawai"){
+                            return [
                                 "nama"=>$item->GetPegawai()?->GetNama()." - ".$item->GetPegawai()?->GetNIP()." - ".$item->GetPegawai()?->GetUnit(),
                                 "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
                                 "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
                                 "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
                                 "catatan_telat"=>$item->GetCatatanTelat(),
                                 "catatan_pulang"=>$item->GetCatatanPulang(),
-                            ],
-                            default=>[
+                                "id"=>$item->GetId(),
+                            ];
+                        } else{
+                            return [
                                 "tanggal"=>$item->GetTanggal()?->toFormat(FormatDate::LDFY),
                                 "masuk"=>$item->GetAbsenMasuk()?->toFormat(FormatDate::HIS),
                                 "keluar"=>$item->GetAbsenKeluar()?->toFormat(FormatDate::HIS),
                                 "catatan_telat"=>$item->GetCatatanTelat(),
                                 "catatan_pulang"=>$item->GetCatatanPulang(),
-                            ],
-                        };
+                                "id"=>$item->GetId(),
+                            ];
+                        }
                     });
         });
 
