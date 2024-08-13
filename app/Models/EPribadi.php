@@ -17,4 +17,9 @@ class EPribadi extends Model
     {
         return $this->hasOne(EPengangkatan::class, 'nip', 'nip')->select('nip', 'unit_kerja');
     }
+
+    function payroll(): HasOne
+    {
+        return $this->hasOne(Payroll::class, 'nip', 'nip')->select('nip', 'tgl_keluar');
+    }
 }

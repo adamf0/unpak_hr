@@ -7,6 +7,7 @@ use App\Models\Absen;
 use App\Models\Cuti;
 use App\Models\EPribadi;
 use App\Models\Izin;
+use App\Models\Klaim;
 use App\Models\NPribadi;
 use App\Models\SppdAnggota;
 use Architecture\Application\Abstractions\Messaging\ICommandBus;
@@ -35,13 +36,19 @@ class LaporanAbsenController extends Controller
 
     public function Index(Request $request)
     {
-        $dosen = EPribadi::with('pengangkatan')
+        $dosen = EPribadi::with(['pengangkatan', 'payroll'])
             ->selectRaw('TRIM(nip) as nip, TRIM(nidn) as nik, REPLACE(TRIM(nama), CHAR(9), "") as nama, "DOSEN" as status')
             ->whereNotIn('nidn', ['', '-', '0', 'KONTRAK'])
+            ->whereHas('payroll', function ($query) {
+                $query->whereIn('tgl_keluar', ['', null]);
+            })
             ->get();
-        $tendik = NPribadi::with('pengangkatan')
+        $tendik = NPribadi::with(['pengangkatan', 'payroll'])
             ->selectRaw('TRIM(nip) as nip, TRIM(nip) as nik, REPLACE(TRIM(nama), CHAR(9), "") as nama, "TENDIK" as status')
             ->whereNotIn('nip', ['56'])
+            ->whereHas('payroll', function ($query) {
+                $query->whereIn('tgl_keluar', ['', null]);
+            })
             ->get();
         $pegawai = collect($dosen)->merge($tendik);
 
@@ -52,8 +59,15 @@ class LaporanAbsenController extends Controller
                 $q->where('tanggal', '>=', $start)
                     ->where('tanggal', '<=', $end);
             })->whereNot('absen_masuk', null)->get();
-        echo $start . " sd ";
-        echo $end;
+
+        $klaim = Klaim::with('absen:id,tanggal')
+            ->selectRaw('IF(nip = "", nidn, nip) as nik, id_presensi, jam_masuk, jam_keluar')
+            ->whereHas('absen', function ($query) use ($start, $end) {
+                $query->where('tanggal', '>=', $start)
+                    ->where('tanggal', '<=', $end);
+            })
+            ->where('status', 'terima')->get();
+
         $cuti = Cuti::selectRaw('IF(nip = "", nidn, nip) as nik, tanggal_mulai, tanggal_akhir, status')
             ->when($start && $end, function ($q) use ($start, $end) {
                 $q->where(function ($q) use ($start) {
@@ -94,6 +108,7 @@ class LaporanAbsenController extends Controller
         return view('laporan_absen.index', [
             'listpegawai' => $pegawai,
             'listpresensi' => $presensi,
+            'listklaim' => $klaim,
             'listcuti' => $cuti,
             'listizin' => $izin,
             'listsppd' => $sppd,

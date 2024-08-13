@@ -25,7 +25,7 @@
                 </div>
                 <div class="col-12">
                     <div class="card">
-                        <form method="get">
+                        <form method="get" class="m-0">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-4">
@@ -46,7 +46,6 @@
                             </div>
                             <div class="card-footer">
                                 <button class="btn btn-primary">Filter</button>
-                                <button class="btn btn-success">Cetak</button>
                             </div>
                         </form>
                     </div>
@@ -108,6 +107,8 @@
             <script>
                 $(document).ready(function() {
                     const listdata = JSON.parse('<?= json_encode($listpegawai, JSON_HEX_APOS) ?>');
+                    const listklaim = JSON.parse('<?= json_encode($listklaim) ?>');
+
                     const listpresensi = JSON.parse('<?= json_encode($listpresensi) ?>');
                     const listcuti = JSON.parse('<?= json_encode($listcuti) ?>');
                     const listizin = JSON.parse('<?= json_encode($listizin) ?>');
@@ -247,7 +248,7 @@
                                         }
                                     });
 
-                                    let sppd = listsppd.filter(item => item.nik == '2110718457');
+                                    let sppd = listsppd.filter(item => item.nik == row.nik);
 
                                     sppd.map(function(item) {
                                         let startDateSppd = new Date(item.sppd.tanggal_berangkat);
@@ -285,6 +286,8 @@
                                     data: 'nik',
                                     render: function(data) {
                                         let currentdate = "{{ $startdate->format('Y-m-d') }}";
+                                        let klaim = listklaim.find(item => item.nik == data && item.absen
+                                            .tanggal == currentdate);
                                         let getPresensi = listpresensi.find(item => item.nik == data &&
                                             item.tanggal == currentdate);
                                         let getCuti = listcuti.find(item => item.nik == data &&
@@ -302,19 +305,31 @@
                                         let absenKeluarTime = '';
                                         let showTime = '';
                                         if (getPresensi) {
-                                            absenMasukTime = getPresensi.absen_masuk ? new Date(
-                                                getPresensi.absen_masuk).toLocaleTimeString(
-                                                'id-ID', {
-                                                    hour: '2-digit',
-                                                    minute: '2-digit',
-                                                    second: '2-digit',
-                                                    hour12: false
-                                                }) : '';
-                                            absenKeluarTime = getPresensi.absen_keluar ?? '';
+                                            if (klaim) {
+                                                showTime = klaim.jam_masuk + ":00 - " + klaim.jam_keluar +
+                                                    ':00';
+                                            } else {
+                                                absenMasukTime = getPresensi.absen_masuk ? new Date(
+                                                    getPresensi.absen_masuk).toLocaleTimeString(
+                                                    'us-US', {
+                                                        hour: '2-digit',
+                                                        minute: '2-digit',
+                                                        second: '2-digit',
+                                                        hour12: false
+                                                    }) : '';
+                                                absenKeluarTime = getPresensi.absen_keluar ? new Date(
+                                                    getPresensi.absen_keluar).toLocaleTimeString(
+                                                    'us-US', {
+                                                        hour: '2-digit',
+                                                        minute: '2-digit',
+                                                        second: '2-digit',
+                                                        hour12: false
+                                                    }) : '';
 
-                                            showTime = (minggu != 0) ? absenMasukTime + (
-                                                absenMasukTime ?
-                                                ' - ' : '') + absenKeluarTime : '';
+                                                showTime = (minggu != 0) ? absenMasukTime + (
+                                                    absenMasukTime ?
+                                                    ' - ' : '') + absenKeluarTime : '';
+                                            }
                                         } else if (getSppd) {
                                             showTime = (minggu != 0) ? 'SPPD' : '';
                                         } else if (getCuti) {
