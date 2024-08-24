@@ -26,10 +26,10 @@ class DatatableJenisCutiController extends Controller
         return DataTables::of($listJenisCuti)
         ->addIndexColumn()
         ->addColumn('action', function ($row) {
-            $actionBtn = '
+            $actionBtn = '<div class="row gap-2">
             <a href="'.route('jenis_cuti.edit',['id'=>$row->id]).'" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
             <a href="'.route('jenis_cuti.delete',['id'=>$row->id]).'" class="btn btn-danger"><i class="bi bi-trash"></i></a>
-            ';
+            </div>';
             return $actionBtn;
         })
         ->rawColumns(['action'])

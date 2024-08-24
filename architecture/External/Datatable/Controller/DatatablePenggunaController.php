@@ -31,10 +31,10 @@ class DatatablePenggunaController extends Controller
         return DataTables::of($listPengguna)
         ->addIndexColumn()
         ->addColumn('action', function ($row) {
-            $actionBtn = '
+            $actionBtn = '<div class="row gap-2">
             <a href="'.route('pengguna.edit',['id'=>$row->id]).'" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
             <a href="'.route('pengguna.delete',['id'=>$row->id]).'" class="btn btn-danger"><i class="bi bi-trash"></i></a>
-            ';
+            </div>';
             return $actionBtn;
         })
         ->rawColumns(['action'])

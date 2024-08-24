@@ -85,9 +85,9 @@ class DatatableKlaimAbsenController extends Controller
             $render = '';
             if(in_array($level,['dosen','pegawai'])){
                 if(in_array($row->status, ['menunggu','tolak'])){
-                    $render = '<div class="row">
-                    <a href="'.route('klaim_absen.edit',['id'=>$row->id]).'" class="col-6 btn btn-warning"><i class="bi bi-pencil-square"></i></a>
-                    <a href="'.route('klaim_absen.delete',['id'=>$row->id]).'" class="mx-2 col-6 btn btn-danger"><i class="bi bi-trash"></i></a>
+                    $render = '<div class="row gap-2">
+                    <a href="'.route('klaim_absen.edit',['id'=>$row->id]).'" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
+                    <a href="'.route('klaim_absen.delete',['id'=>$row->id]).'" class="btn btn-danger"><i class="bi bi-trash"></i></a>
                     </div>
                     ';
                 } 
@@ -96,9 +96,10 @@ class DatatableKlaimAbsenController extends Controller
                 // }
             }
             else if($level=="sdm"){
-                $render = '
+                $render = '<div class="row gap-2">
                     <a href="'.route('klaim_absen.approval',['id'=>$row->id,'type'=>'terima']).'" class="btn btn-success"><i class="bi bi-check-lg"></i></a>
-                    <a href="#" class="mx-2 btn btn-danger btn-reject"><i class="bi bi-x-lg"></i></a>
+                    <a href="#" class="btn btn-danger btn-reject"><i class="bi bi-x-lg"></i></a>
+                    </div>
                 ';
                 // if($row->status=="terima"){
                 // $render .= '<a href="#" class="btn btn-info btn-download-pdf"><i class="bi bi-file-earmark-pdf"></i></a>';

@@ -37,10 +37,10 @@ class DatatableMasterKalendarController extends Controller
             return $render;
         })
         ->addColumn('action', function ($row) {
-            $render = '
+            $render = '<div class="row gap-2">
             <a href="'.route('master_kalendar.edit',['id'=>$row->id]).'" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
             <a href="'.route('master_kalendar.delete',['id'=>$row->id]).'" class="btn btn-danger"><i class="bi bi-trash"></i></a>
-            ';
+            </div>';
             return $render;
         })
         ->rawColumns(['action'])

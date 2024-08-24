@@ -26,10 +26,10 @@ class DatatableJenisSPPDController extends Controller
         return DataTables::of($listJenisSPPD)
         ->addIndexColumn()
         ->addColumn('action', function ($row) {
-            $actionBtn = '
+            $actionBtn = '<div class="row gap-2">
             <a href="'.route('jenis_sppd.edit',['id'=>$row->id]).'" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
             <a href="'.route('jenis_sppd.delete',['id'=>$row->id]).'" class="btn btn-danger"><i class="bi bi-trash"></i></a>
-            ';
+            </div>';
             return $actionBtn;
         })
         ->rawColumns(['action'])
