@@ -41,11 +41,13 @@ class DatatableSPPDController extends Controller
                                     // ($type=="dosen" && !empty($item->GetDosen()) && $item->GetDosen()?->GetNidn()==$nidn) || 
                                     // ($type=="tendik" && !empty($item->GetPegawai()) && $item->GetPegawai()?->GetNip()==$nip);
                                 } else {
-                                    dump(
-                                        $type=="dosen" && !empty($item->GetDosen()),
-                                        $type=="tendik" && !empty($item->GetPegawai()),
-                                        in_array($item->GetStatus(), ["menunggu verifikasi sdm","terima sdm","tolak sdm"])
-                                    );
+                                    if($item->GetId()==43){
+                                        dump(
+                                            $type=="dosen" && !empty($item->GetDosen()),
+                                            $type=="tendik" && !empty($item->GetPegawai()),
+                                            in_array($item->GetStatus(), ["menunggu verifikasi sdm","terima sdm","tolak sdm"])
+                                        );
+                                    }
                                     return (
                                         ($type=="dosen" && !empty($item->GetDosen())) || 
                                         ($type=="tendik" && !empty($item->GetPegawai()))
