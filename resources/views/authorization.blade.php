@@ -51,7 +51,7 @@
                           <div class="row gy-3 overflow-hidden">
                             <div class="col-12">
                               <div class="form-floating mb-3">
-                                <input type="text" name="username" class="form-control" id="yourUsername" required>
+                                <input type="text" name="username" class="form-control" id="yourUsername" placeholder="Username" required>
                                 <label for="username" class="form-label">Username</label>
                               </div>
                             </div>
