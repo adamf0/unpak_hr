@@ -43,8 +43,8 @@ class DatatableSPPDController extends Controller
                                 } else {
                                     if($item->GetId()==43){
                                         dump(
-                                            $type=="dosen" && !empty($item->GetDosen()),
-                                            $type=="tendik" && !empty($item->GetPegawai()),
+                                            $type=="dosen", $item->GetDosen(),
+                                            $type=="tendik", $item->GetPegawai(),
                                             in_array($item->GetStatus(), ["menunggu verifikasi sdm","terima sdm","tolak sdm"])
                                         );
                                     }
