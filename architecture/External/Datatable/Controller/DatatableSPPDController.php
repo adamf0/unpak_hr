@@ -41,7 +41,7 @@ class DatatableSPPDController extends Controller
                                     // ($type=="dosen" && !empty($item->GetDosen()) && $item->GetDosen()?->GetNidn()==$nidn) || 
                                     // ($type=="tendik" && !empty($item->GetPegawai()) && $item->GetPegawai()?->GetNip()==$nip);
                                 } else {
-                                    return in_array($item->GetStatus(), ["menunggu verifikasi sdm","terima sdm","tolak sdm"];
+                                    return in_array($item->GetStatus(), ["menunggu verifikasi sdm","terima sdm","tolak sdm"]);
                                 }
                             })
                             ->map(function($item) use($level,$verifikasi){
