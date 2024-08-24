@@ -25,23 +25,23 @@
                     <div class="card">
                         <div class="card-body row">
                             @if (in_array($type,['dosen','tendik']))
-                            <div class="col-3">
+                            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
                                 <x-input-select title="Nama" name="nama" class="nama"></x-input-select>
                             </div>
                             @endif
-                            <div class="col-3">
+                            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
                                 <x-input-select title="Jenis SPPD" name="jenis_sppd" class="jenis_sppd"></x-input-select>
                             </div>
-                            <div class="col-3">
+                            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
                                 <x-input-select title="Status" name="status" class="status"></x-input-select>
                             </div>
-                            <div class="col-5">
+                            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
                                 <x-input-text title="Tanggal Mulai" name="tanggal_berangkat" class="tanggal_berangkat" default=""/>
                             </div>
-                            <div class="col-5">
+                            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
                                 <x-input-text title="tanggal Akhir" name="tanggal_kembali" class="tanggal_kembali" default=""/>
                             </div>
-                            <div class="col-2">
+                            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
                                 <x-input-select title="Cetak Sebagai" name="type_export" class="type_export"></x-input-select>
                             </div>
                             <div class="col-12">
