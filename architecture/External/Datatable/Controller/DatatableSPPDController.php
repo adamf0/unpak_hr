@@ -148,6 +148,8 @@ class DatatableSPPDController extends Controller
                 }
                 else if($row->status=='menunggu verifikasi sdm' && $level=="sdm"){
                     $render .= '
+                    <a href="'.route('sppd.delete',['id'=>$row->id]).'" class="btn btn-danger"><i class="bi bi-trash"></i></a>
+
                     <a href="'.route('sppd.approval',['id'=>$row->id,'type'=>$level]).'" class="btn btn-success"><i class="bi bi-check-lg"></i></a>
                     <a href="#" class="btn btn-danger btn-reject"><i class="bi bi-x-lg"></i></a>';
                 }

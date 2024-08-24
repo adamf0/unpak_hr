@@ -109,6 +109,8 @@ class DatatableCutiController extends Controller
                 ) || 
                 in_array($row->status, ["menunggu","menunggu verifikasi sdm"])){
                 $render = '<div class="row gap-2">
+                    <a href="'.route('cuti.delete',['id'=>$row->id]).'" class="btn btn-danger"><i class="bi bi-trash"></i></a>
+
                     <a href="'.route('cuti.approval',['id'=>$row->id,'type'=>($level=="sdm"? 'terima sdm':'menunggu verifikasi sdm')]).'" class="btn btn-success"><i class="bi bi-check-lg"></i></a>
                     <a href="#" class="btn btn-danger btn-reject"><i class="bi bi-x-lg"></i></a>
                     </div>

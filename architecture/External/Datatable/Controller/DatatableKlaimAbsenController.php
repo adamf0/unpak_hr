@@ -97,6 +97,8 @@ class DatatableKlaimAbsenController extends Controller
             }
             else if($level=="sdm"){
                 $render = '<div class="row gap-2">
+                    <a href="'.route('klaim_absen.delete',['id'=>$row->id]).'" class="btn btn-danger"><i class="bi bi-trash"></i></a>
+
                     <a href="'.route('klaim_absen.approval',['id'=>$row->id,'type'=>'terima']).'" class="btn btn-success"><i class="bi bi-check-lg"></i></a>
                     <a href="#" class="btn btn-danger btn-reject"><i class="bi bi-x-lg"></i></a>
                     </div>
