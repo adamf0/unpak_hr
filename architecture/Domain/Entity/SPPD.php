@@ -29,7 +29,7 @@ class SPPD extends BaseEntity{
         $rencana_waktu_tindak_lanjut=null,
         ?Collection $foto_kegiatan=null,
         ?Collection $undangan=null,
-        ?File $file_sppd_laporan
+        ?File $file_sppd_laporan=null
     ){
         $this->id = $id;
         $this->dosen = $dosen;

@@ -30,7 +30,7 @@ trait SPPDBase
     public $rencana_waktu_tindak_lanjut=null;
     public ?Collection $foto_kegiatan=null;
     public ?Collection $undangan=null;
-    public ?File $file_sppd_laporan;
+    public ?File $file_sppd_laporan=null;
 
     public function GetFileSppdLaporan(){
         return $this->file_sppd_laporan;
