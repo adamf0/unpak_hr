@@ -41,6 +41,7 @@ class DatatableSPPDController extends Controller
                                     // ($type=="dosen" && !empty($item->GetDosen()) && $item->GetDosen()?->GetNidn()==$nidn) || 
                                     // ($type=="tendik" && !empty($item->GetPegawai()) && $item->GetPegawai()?->GetNip()==$nip);
                                 } else {
+                                    dump($item);
                                     return (
                                         ($type=="dosen" && !empty($item->GetDosen())) || 
                                         ($type=="tendik" && !empty($item->GetPegawai()))
