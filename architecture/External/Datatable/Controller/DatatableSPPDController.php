@@ -158,6 +158,8 @@ class DatatableSPPDController extends Controller
                 }
                 else if($row->status=="terima sdm"){
                     $render .= '
+                        <a href="'.route('sppd.delete',['id'=>$row->id]).'" class="btn btn-danger"><i class="bi bi-trash"></i></a>
+
                         <a href="#" class="btn btn-secondary btn-download-anggaran"><i class="bi bi-wallet2"></i></a>
                         <a href="#" class="btn btn-info btn-download-pengajuan-pdf"><i class="bi bi-file-earmark-pdf"></i></a>
                         <a href="#" class="btn btn-info btn-detail">Detail</i></a>';
