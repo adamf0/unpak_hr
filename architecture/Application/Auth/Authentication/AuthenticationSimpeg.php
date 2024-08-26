@@ -21,8 +21,9 @@ class AuthenticationSimpeg implements IAuthentication {
                                     'NPribadi'=>fn($query)=>$query->select('id_n_pribadi','nip','nama','status_pegawai')]
                                 )
                                 ->where('username',$pengguna->GetUsername())
-                                ->get()
-                                ->transform(function($row){
+                                ->get();
+        dump($listPengguna);
+        $listPengguna = $listPengguna->transform(function($row){
                                     return Creator::buildPengguna(PenggunaEntitas::make(
                                         $row->id,
                                         null,
@@ -40,6 +41,7 @@ class AuthenticationSimpeg implements IAuthentication {
                                     ));
                                 })
                                 ->filter(fn($data)=> $data->AuthenticationSimpeg($pengguna->GetUsername(),$pengguna->GetPassword()) );
+        dd($listPengguna);
 
         if($listPengguna->count()>1) throw new Exception("akun ".$pengguna->GetUsername()." lebih dari 1");
         if($listPengguna->count()==0) throw new Exception("akun tidak ditemukan");
