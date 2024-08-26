@@ -94,8 +94,7 @@ class DatatableKlaimAbsenController extends Controller
                 // else {
                 //     $render = '<a href="#" class="btn btn-info btn-download-pdf"><i class="bi bi-file-earmark-pdf"></i></a>';
                 // }
-            }
-            else if($level=="sdm"){
+            } else if($level=="sdm"){
                 $render = '<div class="row gap-2">
                     <a href="'.route('klaim_absen.delete',['id'=>$row->id]).'" class="btn btn-danger"><i class="bi bi-trash"></i></a>
 
@@ -106,6 +105,11 @@ class DatatableKlaimAbsenController extends Controller
                 // if($row->status=="terima"){
                 // $render .= '<a href="#" class="btn btn-info btn-download-pdf"><i class="bi bi-file-earmark-pdf"></i></a>';
                 // }
+            } else if($row->status="terima sdm"){
+                $render = '<div class="row gap-2">
+                <a href="'.route('klaim_absen.delete',['id'=>$row->id]).'" class="btn btn-danger"><i class="bi bi-trash"></i></a>
+                </div>
+            ';
             }
             return $render;
         })

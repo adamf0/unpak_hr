@@ -110,6 +110,11 @@ class DatatableIzinController extends Controller
                 // if($row->status=="terima"){
                 // $render .= '<a href="#" class="btn btn-info btn-download-pdf"><i class="bi bi-file-earmark-pdf"></i></a>';
                 // }
+            } else if($row->status="terima sdm"){
+                $render = '<div class="row gap-2">
+                <a href="'.route('izin.delete',['id'=>$row->id]).'" class="btn btn-danger"><i class="bi bi-trash"></i></a>
+                </div>
+            ';
             }
             return $render;
         })
