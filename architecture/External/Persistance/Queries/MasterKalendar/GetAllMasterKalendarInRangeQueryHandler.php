@@ -26,8 +26,10 @@ class GetAllMasterKalendarInRangeQueryHandler extends Query
             $datas = $datas->orWhere(function($q) use($dates){
                 $q->where('tanggal_berangkat','>=',$dates[1])->where('tanggal_kembali','<=',$dates[1]);
             }); 
+            $datas = $datas->get();
         } else if(count($query->GetDateRange())==1){
             $datas = ModelMasterKalendar::where('tanggal_berangkat','>=',$dates[0])->where('tanggal_kembali','<=',$dates[0]);
+            $datas = $datas->get();
         } else{
             $datas = ModelMasterKalendar::get();
         }
