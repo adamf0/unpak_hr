@@ -12,6 +12,7 @@ use Architecture\Application\Izin\Delete\DeleteIzinCommandHandler;
 use Architecture\Application\Izin\FirstData\GetIzinQuery;
 use Architecture\Application\Izin\List\GetAllIzinByNIDNQuery;
 use Architecture\Application\Izin\List\GetAllIzinByNIPQuery;
+use Architecture\Application\Izin\List\GetAllIzinInRangeQuery;
 use Architecture\Application\Izin\List\GetAllIzinQuery;
 use Architecture\Application\Izin\Update\ApprovalIzinCommand;
 use Architecture\Application\Izin\Update\ApprovalIzinCommandHandler;
@@ -20,6 +21,7 @@ use Architecture\Application\Izin\Update\UpdateIzinCommandHandler;
 use Architecture\External\Persistance\Queries\Izin\CountIzinQueryHandler;
 use Architecture\External\Persistance\Queries\Izin\GetAllIzinByNIDNQueryHandler;
 use Architecture\External\Persistance\Queries\Izin\GetAllIzinByNIPQueryHandler;
+use Architecture\External\Persistance\Queries\Izin\GetAllIzinInRangeQueryHandler;
 use Architecture\External\Persistance\Queries\Izin\GetAllIzinQueryHandler;
 use Architecture\External\Persistance\Queries\Izin\GetIzinQueryHandler;
 use Illuminate\Support\ServiceProvider;
@@ -52,6 +54,7 @@ class IzinServiceProvider extends ServiceProvider
 
         app(QueryBusImpl::class)->register([
             GetAllIzinQuery::class             => GetAllIzinQueryHandler::class,
+            GetAllIzinInRangeQuery::class      => GetAllIzinInRangeQueryHandler::class,
             GetAllIzinByNIDNQuery::class       => GetAllIzinByNIDNQueryHandler::class,
             GetAllIzinByNIPQuery::class        => GetAllIzinByNIPQueryHandler::class,
             GetIzinQuery::class                => GetIzinQueryHandler::class,

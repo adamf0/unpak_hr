@@ -19,6 +19,7 @@ use Architecture\Application\SPPD\Delete\DeleteSPPDCommandHandler;
 use Architecture\Application\SPPD\FirstData\GetSPPDQuery;
 use Architecture\Application\SPPD\List\GetAllSPPDByNIDNQuery;
 use Architecture\Application\SPPD\List\GetAllSPPDByNIPQuery;
+use Architecture\Application\SPPD\List\GetAllSPPDInRangeQuery;
 use Architecture\Application\SPPD\List\GetAllSPPDQuery;
 use Architecture\Application\SPPD\Update\ApprovalSPPDCommand;
 use Architecture\Application\SPPD\Update\ApprovalSPPDCommandHandler;
@@ -32,6 +33,7 @@ use Architecture\Application\SPPD\Update\UpdateSPPDLaporanCommand;
 use Architecture\Application\SPPD\Update\UpdateSPPDLaporanCommandHandler;
 use Architecture\External\Persistance\Queries\SPPD\GetAllSPPDByNIDNQueryHandler;
 use Architecture\External\Persistance\Queries\SPPD\GetAllSPPDByNIPQueryHandler;
+use Architecture\External\Persistance\Queries\SPPD\GetAllSPPDInRangeQueryHandler;
 use Architecture\External\Persistance\Queries\SPPD\GetAllSPPDQueryHandler;
 use Architecture\External\Persistance\Queries\SPPD\GetSPPDQueryHandler;
 use Illuminate\Support\ServiceProvider;
@@ -72,6 +74,7 @@ class SPPDServiceProvider extends ServiceProvider
 
         app(QueryBusImpl::class)->register([
             GetAllSPPDQuery::class             => GetAllSPPDQueryHandler::class,
+            GetAllSPPDInRangeQuery::class      => GetAllSPPDInRangeQueryHandler::class,
             GetAllSPPDByNIDNQuery::class       => GetAllSPPDByNIDNQueryHandler::class,
             GetAllSPPDByNIPQuery::class        => GetAllSPPDByNIPQueryHandler::class,
             GetSPPDQuery::class                => GetSPPDQueryHandler::class,

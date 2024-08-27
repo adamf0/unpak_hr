@@ -13,9 +13,11 @@ use Architecture\Application\Presensi\FirstData\GetPresensiByNIPQuery;
 use Architecture\Application\Presensi\FirstData\GetPresensiQuery;
 use Architecture\Application\Presensi\List\GetAllPresensiByNIDNQuery;
 use Architecture\Application\Presensi\List\GetAllPresensiByNIPQuery;
+use Architecture\Application\Presensi\List\GetAllPresensiInRangeQuery;
 use Architecture\Application\Presensi\List\GetAllPresensiQuery;
 use Architecture\External\Persistance\Queries\Presensi\GetAllPresensiByNIDNQueryHandler;
 use Architecture\External\Persistance\Queries\Presensi\GetAllPresensiByNIPQueryHandler;
+use Architecture\External\Persistance\Queries\Presensi\GetAllPresensiInRangeQueryHandler;
 use Architecture\External\Persistance\Queries\Presensi\GetAllPresensiQueryHandler;
 use Architecture\External\Persistance\Queries\Presensi\GetPresensiByNIDNQueryHandler;
 use Architecture\External\Persistance\Queries\Presensi\GetPresensiByNIPQueryHandler;
@@ -47,6 +49,7 @@ class PresensiServiceProvider extends ServiceProvider
         ]);
 
         app(QueryBusImpl::class)->register([
+            GetAllPresensiInRangeQuery::class      => GetAllPresensiInRangeQueryHandler::class,
             GetAllPresensiQuery::class             => GetAllPresensiQueryHandler::class,
             GetAllPresensiByNIDNQuery::class       => GetAllPresensiByNIDNQueryHandler::class,
             GetAllPresensiByNIPQuery::class        => GetAllPresensiByNIPQueryHandler::class,

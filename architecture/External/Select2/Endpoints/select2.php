@@ -24,6 +24,7 @@ use Architecture\External\Select2\Controller\Select2JenisSPPDController;
 use Architecture\External\Select2\Controller\Select2PegawaiController;
 use Architecture\External\Select2\Controller\Select2PresensiController;
 use Architecture\External\Select2\Controller\Select2VerifikatorController;
+use Architecture\External\Select2\Controller\TestSelect2PresensiController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('dosen', [Select2DosenController::class,'List'])->name('select2.Dosen.List');
@@ -32,6 +33,9 @@ Route::get('dosen_pegawai', [Select2DosenPegawaiController::class,'List'])->name
 Route::get('jenis_cuti', [Select2JenisCutiController::class,'List'])->name('select2.JenisCuti.List');
 Route::get('jenis_izin', [Select2JenisIzinController::class,'List'])->name('select2.JenisIzin.List');
 Route::get('jenis_sppd', [Select2JenisSPPDController::class,'List'])->name('select2.JenisSPPD.List');
+
 Route::get('tanggal_absen', [Select2PresensiController::class,'List'])->name('select2.Presensi.List');
+Route::get('tanggal_absen_test', [TestSelect2PresensiController::class,'List'])->name('select2.TestPresensi.List');
+
 Route::get('list_pegawai', [Select2VerifikatorController::class,'List'])->name('select2.PegawaiV2.List');
 Route::get('filter_monitoring', [Select2FilterMonitorController::class,'List'])->name('select2.FilterMonitor.List');

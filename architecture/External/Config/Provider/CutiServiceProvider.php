@@ -13,6 +13,7 @@ use Architecture\Application\Cuti\FirstData\GetCutiQuery;
 use Architecture\Application\Cuti\List\GetAllActiveCutiQuery;
 use Architecture\Application\Cuti\List\GetAllCutiByNIDNQuery;
 use Architecture\Application\Cuti\List\GetAllCutiByNIPQuery;
+use Architecture\Application\Cuti\List\GetAllCutiInRangeQuery;
 use Architecture\Application\Cuti\List\GetAllCutiQuery;
 use Architecture\Application\Cuti\Update\ApprovalCutiCommand;
 use Architecture\Application\Cuti\Update\ApprovalCutiCommandHandler;
@@ -22,6 +23,7 @@ use Architecture\External\Persistance\Queries\Cuti\CountCutiQueryHandler;
 use Architecture\External\Persistance\Queries\Cuti\GetAllActiveCutiQueryHandler;
 use Architecture\External\Persistance\Queries\Cuti\GetAllCutiByNIDNQueryHandler;
 use Architecture\External\Persistance\Queries\Cuti\GetAllCutiByNIPQueryHandler;
+use Architecture\External\Persistance\Queries\Cuti\GetAllCutiInRangeQueryHandler;
 use Architecture\External\Persistance\Queries\Cuti\GetAllCutiQueryHandler;
 use Architecture\External\Persistance\Queries\Cuti\GetCutiQueryHandler;
 use Illuminate\Support\ServiceProvider;
@@ -54,6 +56,7 @@ class CutiServiceProvider extends ServiceProvider
 
         app(QueryBusImpl::class)->register([
             GetAllCutiQuery::class             => GetAllCutiQueryHandler::class,
+            GetAllCutiInRangeQuery::class      => GetAllCutiInRangeQueryHandler::class,
             GetAllActiveCutiQuery::class       => GetAllActiveCutiQueryHandler::class,
             GetAllCutiByNIDNQuery::class       => GetAllCutiByNIDNQueryHandler::class,
             GetAllCutiByNIPQuery::class        => GetAllCutiByNIPQueryHandler::class,
