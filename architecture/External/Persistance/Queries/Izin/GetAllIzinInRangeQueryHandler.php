@@ -35,7 +35,7 @@ class GetAllIzinInRangeQueryHandler extends Query
             $datas = $datas->whereIn('tanggal_pengajuan',$query->GetDateRange());
         }
         $datas = $datas->orderBy('id', 'DESC');
-        Log::info($datas->toRawSql());
+        Log::channel('mysql_query')->info($datas->toRawSql());
         $datas = $datas->get();
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);

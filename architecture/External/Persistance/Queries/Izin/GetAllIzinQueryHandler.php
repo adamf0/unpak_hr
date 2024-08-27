@@ -39,7 +39,7 @@ class GetAllIzinQueryHandler extends Query
             $datas = $datas->where(DB::raw('YEAR(tanggal_pengajuan)'),$query->GetTahun());
         }
         $datas = $datas->orderBy('id', 'DESC');
-        Log::info($datas->toRawSql());
+        Log::channel('mysql_query')->info($datas->toRawSql());
         $datas = $datas->get();
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);

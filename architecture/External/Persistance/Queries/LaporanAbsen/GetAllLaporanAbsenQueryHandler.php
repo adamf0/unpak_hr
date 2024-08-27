@@ -116,7 +116,7 @@ class GetAllLaporanAbsenQueryHandler extends Query
         } else if($query->GetType()=="tendik"){
             $this->list_pengguna = $this->list_pengguna->where(DB::raw("TRIM(nip)"),'<>','');
         }
-        Log::info("sql: ".$this->list_pengguna->toRawSql());
+        Log::channel('mysql_query')->info($this->list_pengguna->toRawSql());
         
         $this->list_pengguna = $this->list_pengguna->get();
                                     // ->filter(function($item) use($query){
