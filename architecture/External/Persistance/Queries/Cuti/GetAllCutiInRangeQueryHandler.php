@@ -42,7 +42,7 @@ class GetAllCutiInRangeQueryHandler extends Query
         } else if(count($query->GetDateRange())==1){
             $datas = $datas->where('tanggal_mulai','>=',$dates[0])->where('tanggal_akhir','<=',$dates[0]);
         }
-        return $datas = $datas->orderBy('id', 'DESC')->toRawSql();
+        $datas = $datas->orderBy('id', 'DESC')->get();
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 

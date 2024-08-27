@@ -56,7 +56,7 @@ class GetAllPresensiInRangeQueryHandler extends Query
             $datas = $datas->where('nip_pegawai',$query->GetNIP())->orWhere('nip_dosen',$query->GetNIP());
         }
         $datas = $datas->whereIn('tanggal',$query->GetDateRange());
-        return $datas = $datas->orderBy('absen_masuk','DESC')->toRawSql();
+        $datas = $datas->orderBy('absen_masuk','DESC')->get();
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 
