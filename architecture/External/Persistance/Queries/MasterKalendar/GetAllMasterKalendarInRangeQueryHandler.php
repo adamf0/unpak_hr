@@ -21,14 +21,14 @@ class GetAllMasterKalendarInRangeQueryHandler extends Query
         $dates = $query->GetDateRange();
         if(count($query->GetDateRange())==2){
             $datas = ModelMasterKalendar::where(function($q) use($dates){
-                $q->where('tanggal_berangkat','>=',$dates[0])->where('tanggal_kembali','<=',$dates[0]);
+                $q->where('tanggal_mulai','>=',$dates[0])->where('tanggal_berakhir','<=',$dates[0]);
             }); 
             $datas = $datas->orWhere(function($q) use($dates){
-                $q->where('tanggal_berangkat','>=',$dates[1])->where('tanggal_kembali','<=',$dates[1]);
+                $q->where('tanggal_mulai','>=',$dates[1])->where('tanggal_berakhir','<=',$dates[1]);
             }); 
             $datas = $datas->get();
         } else if(count($query->GetDateRange())==1){
-            $datas = ModelMasterKalendar::where('tanggal_berangkat','>=',$dates[0])->where('tanggal_kembali','<=',$dates[0]);
+            $datas = ModelMasterKalendar::where('tanggal_mulai','>=',$dates[0])->where('tanggal_berakhir','<=',$dates[0]);
             $datas = $datas->get();
         } else{
             $datas = ModelMasterKalendar::get();
