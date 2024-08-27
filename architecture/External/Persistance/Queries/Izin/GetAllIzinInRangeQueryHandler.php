@@ -36,7 +36,7 @@ class GetAllIzinInRangeQueryHandler extends Query
         }
         $datas = $datas->orderBy('id', 'DESC');
         Log::info($datas->toRawSql());
-        $datas = $datas->toRawSql();
+        $datas = $datas->get();
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 
