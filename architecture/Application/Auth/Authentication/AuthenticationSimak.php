@@ -60,7 +60,7 @@ class AuthenticationSimak implements IAuthentication {
             "status"=>"dosen",
         ]); 
 
-        Log::info("Nama: ".$penggunaSimak->GetNIDN()."; Struktural:".$penggunaSimak->GetStruktural());
+        // Log::info("Nama: ".$penggunaSimak->GetNIDN()."; Struktural:".$penggunaSimak->GetStruktural());
         Log::channel('sync_auth')->info($data);
         
         return $penggunaSimak;
