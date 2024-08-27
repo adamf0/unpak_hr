@@ -25,6 +25,8 @@ class AuthenticationSimak implements IAuthentication {
                                 ->where('username',$pengguna->GetUsername())
                                 ->get()
                                 ->transform(function($row){
+                                    Log::info(json_encode($row));
+
                                     return Creator::buildPengguna(PenggunaEntitas::make(
                                         $row->userid,
                                         $row->Dosen?->NIDN,
@@ -59,8 +61,6 @@ class AuthenticationSimak implements IAuthentication {
             "password"=>$pengguna->GetPassword(),
             "status"=>"dosen",
         ]); 
-
-        // Log::info("Nama: ".$penggunaSimak->GetNIDN()."; Struktural:".$penggunaSimak->GetStruktural());
         Log::channel('sync_auth')->info($data);
         
         return $penggunaSimak;
