@@ -45,7 +45,7 @@ class GetAllSPPDInRangeQueryHandler extends Query
         } else if(count($query->GetDateRange())==1){
             $datas = $datas->where('tanggal_berangkat','>=',$dates[0])->where('tanggal_kembali','<=',$dates[0]);
         }
-        $datas = $datas->orderBy('id', 'DESC')->get();
+        return $datas = $datas->orderBy('id', 'DESC')->toRawSql();
         // if(!is_null($query->GetNIDN())){
         //     $datas = $datas->filter( function($item) use($query){
         //         $asMember = ($item->Anggota??collect([]))->filter(fn($itemAnggota)=>$itemAnggota?->Dosen?->NIDN==$query->GetNIDN())->count()>0;  

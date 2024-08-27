@@ -26,14 +26,15 @@ class GetAllMasterKalendarInRangeQueryHandler extends Query
             $datas = $datas->orWhere(function($q) use($dates){
                 $q->where('tanggal_mulai','>=',$dates[1])->where('tanggal_berakhir','<=',$dates[1]);
             }); 
-            $datas = $datas->get();
+            $datas = $datas->toRawSql();
         } else if(count($query->GetDateRange())==1){
             $datas = ModelMasterKalendar::where('tanggal_mulai','>=',$dates[0])->where('tanggal_berakhir','<=',$dates[0]);
-            $datas = $datas->get();
+            $datas = $datas->toRawSql();
         } else{
-            $datas = ModelMasterKalendar::get();
+            $datas = ModelMasterKalendar::toRawSql();
         }
         if($query->getOption()==TypeData::Default) return new Collection($datas);
+        return $datas;
 
         return $datas->transform(fn($data)=> Creator::buildMasterKalendar(MasterKalendarEntitas::make(
             $data->id,
