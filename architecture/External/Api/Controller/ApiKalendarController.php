@@ -45,7 +45,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
             $list_absen = in_array($level, ["dosen", "pegawai"]) ? $this->queryBus->ask(new GetAllPresensiQuery($nidn, $nip, $tahun, null, TypeData::Default)) : collect([]);
             $list_klaim_absen = in_array($level, ["dosen", "pegawai"]) ? $this->queryBus->ask(new GetAllKlaimAbsenQuery($nidn, $nip, $tahun, TypeData::Default)) : collect([]);
             $master_kalendar = $this->queryBus->ask(new GetAllMasterKalendarQuery(1, 1, $tahun, TypeData::Default));
-            dd($list_cuti, $list_izin, $list_sppd, $master_kalendar);
+            // dd($list_cuti, $list_izin, $list_sppd, $master_kalendar);
 
             $key = match(true){
                 !empty($nidn) => $nidn,
@@ -201,6 +201,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                     }
                     return $carry;
                 }, []);
+                dd($listSPPD);
     
                 $skip_tanggal = array_merge($list_libur_, $list_cuti_, $list_izin_, $list_sppd_);
                 $listAbsen = $list_absen->reduce(function ($carry, $item) use ($format, $list_klaim_absen,$skip_tanggal) {
