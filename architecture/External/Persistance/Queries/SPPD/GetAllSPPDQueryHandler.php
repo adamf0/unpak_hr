@@ -18,6 +18,7 @@ use Architecture\External\Persistance\ORM\SPPD as SPPDModel;
 use Architecture\Shared\TypeData;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class GetAllSPPDQueryHandler extends Query
 {
@@ -40,6 +41,7 @@ class GetAllSPPDQueryHandler extends Query
         if(!empty($query->GetTahun())){
             $datas = $datas->where(DB::raw('YEAR(tanggal_berangkat)'),'>=',$query->GetTahun())->where(DB::raw('YEAR(tanggal_kembali)'),'<=',$query->GetTahun());
         }
+        Log::info($datas->toRawSql());
         $datas = $datas->orderBy('id', 'DESC')->get();
         // if(!is_null($query->GetNIDN())){
         //     $datas = $datas->filter( function($item) use($query){
