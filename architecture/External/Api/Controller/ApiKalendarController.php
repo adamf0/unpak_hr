@@ -201,7 +201,6 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                     }
                     return $carry;
                 }, []);
-                dd($listSPPD);
     
                 $skip_tanggal = array_merge($list_libur_, $list_cuti_, $list_izin_, $list_sppd_);
                 $listAbsen = $list_absen->reduce(function ($carry, $item) use ($format, $list_klaim_absen,$skip_tanggal) {
