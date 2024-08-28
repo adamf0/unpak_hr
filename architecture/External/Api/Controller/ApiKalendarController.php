@@ -248,6 +248,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
                 }, []);
                 
                 $list = array_merge($listAbsen, $listKalendar, $listCuti, $listIzin, $listSPPD);
+                dd($list, $listSPPD);
                 $from = "db";
                 // Log::channel('cache_redis')->info("cache dengan key 'kalender-$key' tidak ditemukan. data akan di simpan ke redis!");
                 // Redis::setex("kalender-$key", 5*60, json_encode($list));
