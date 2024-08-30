@@ -133,20 +133,27 @@ class KlaimAbsenController extends Controller
     }
     public function delete($id){
         $request = request()->merge(["id"=> $id]);
+        $klaim_absen = $this->queryBus->ask(new GetKlaimAbsenQuery($id));
+        $redirect = match(true){
+            Session::get('levelActive')=='sdm' && !is_null($klaim_absen->GetDosen())=>redirect()->route('klaim_absen.index2',['type'=>'dosen']),
+            Session::get('levelActive')=='sdm' && !is_null($klaim_absen->GetPegawai())=>redirect()->route('klaim_absen.index2',['type'=>'tendik']),
+            default=>redirect()->route('klaim_absen.index'),
+        };
+
         try {
             $validator      = validator($request->all(), DeleteKlaimAbsenRuleReq::create());
 
             if(count($validator->errors())){
-                return redirect()->route('klaim_absen.index')->withErrors($validator->errors()->toArray());    
+                return $redirect->withErrors($validator->errors()->toArray());    
             } 
             
             $this->commandBus->dispatch(new DeleteKlaimAbsenCommand($id));
             Session::flash(TypeNotif::Create->val(), "berhasil hapus data");
 
-            return redirect()->route('klaim_absen.index');
+            return $redirect;
         } catch (Exception $e) {
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
-            return redirect()->route('klaim_absen.index');
+            return $redirect;
         }
     }
     public function approval($id,$type){
