@@ -13,6 +13,7 @@ class GetAllSPPDQuery extends Query
         public $nidn=null,
         public $nip=null,
         public $tahun=null,
+        public $verifikasi=0,
         public TypeData $option = TypeData::Entity,
         public $semua=true,
     ) {
@@ -24,6 +25,9 @@ class GetAllSPPDQuery extends Query
     }
     public function GetNip(){
         return $this->nip;
+    }
+    public function IsVerificator(){
+        return $this->verifikasi;
     }
     public function GetTahun(){
         return $this->tahun;

@@ -39,7 +39,7 @@ class Select2PresensiController extends Controller
             return $list;
         }, []);
 
-        $list_cuti = $this->queryBus->ask(new GetAllCutiQuery($nidn, $nip, date('Y-m-d')));
+        $list_cuti = $this->queryBus->ask(new GetAllCutiQuery($nidn, $nip, 0, date('Y-m-d')));
         $listCuti = $list_cuti->reduce(function ($list, $item) {
             $start  = $item->GetTanggalMulai()->val();
             $end    = $item->GetTanggalAkhir()->val();
@@ -55,7 +55,7 @@ class Select2PresensiController extends Controller
             return $list;
         }, []);
 
-        $list_sppd = $this->queryBus->ask(new GetAllSPPDQuery($nidn, $nip, date('Y')));
+        $list_sppd = $this->queryBus->ask(new GetAllSPPDQuery($nidn, $nip, 0, date('Y')));
         $listSppd = $list_sppd->reduce(function ($list, $item) {
             $start  = $item->GetTanggalBerangkat()->val();
             $end    = $item->GetTanggalKembali()->val();
