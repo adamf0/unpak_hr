@@ -28,7 +28,6 @@ class DatatableIzinController extends Controller
         // $q->SetOffset($request->get('start')??null)->SetLimit($request->get('length')??null);
         
         $listIzin = $this->queryBus->ask($q);
-        dump($listIzin);
         $listIzin = $listIzin->filter(function($item) use($level,$type,$verifikasi,$nidn,$nip){
                         $rule1 = (
                             (!empty($item->GetVerifikasi()?->GetNidn()) && $item->GetVerifikasi()?->GetNidn()==$nidn) ||
