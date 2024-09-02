@@ -24,7 +24,7 @@ class DatatableIzinController extends Controller
         $level = $request->has('level')? $request->query('level'):null;
         $type = $request->has('type')? $request->query('type'):null;
         $verifikasi = $request->has('verifikasi')? (int) $request->query('verifikasi'):0;
-        $q = new GetAllIzinQuery($nidn,$nip);
+        $q = new GetAllIzinQuery($nidn,$nip,$verifikasi);
         // $q->SetOffset($request->get('start')??null)->SetLimit($request->get('length')??null);
         
         $listIzin = $this->queryBus->ask($q);

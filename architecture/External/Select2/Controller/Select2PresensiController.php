@@ -32,7 +32,7 @@ class Select2PresensiController extends Controller
 
         $listPresensi = $this->queryBus->ask(new GetAllPresensiQuery($nidn, $nip, date('Y')));
 
-        $list_izin = $this->queryBus->ask(new GetAllIzinQuery($nidn, $nip, date('Y-m-d')));
+        $list_izin = $this->queryBus->ask(new GetAllIzinQuery($nidn, $nip, 0, date('Y-m-d')));
         $listIzin = $list_izin->reduce(function ($list, $item) {
             $list[] = $item->GetTanggalPengajuan()?->toFormat(FormatDate::Default);
 

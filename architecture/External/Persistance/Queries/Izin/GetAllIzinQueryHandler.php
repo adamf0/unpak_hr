@@ -27,13 +27,18 @@ class GetAllIzinQueryHandler extends Query
         $datas = IzinModel::with(['JenisIzin','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','PayrollPegawai','PayrollVerifikasi','EPribadiRemote']);
         if(!empty($query->GetNIDN())){
             if($query->GetSemua()){
-                $datas = $datas->where('nidn',$query->GetNIDN())->orWhereHas('EPribadiRemote', fn($subQuery) => $subQuery->where('nidn', $query->GetNIDN()) );
+                $datas = $datas->where('verifikasi',$query->GetNIDN())
+                                ->orWhere(fn($q)=> $q->where('nidn',$query->GetNIDN())->orWhereHas('EPribadiRemote', fn($subQuery) => $subQuery->where('nidn', $query->GetNIDN()) ) );
             } else{
-                $datas = $datas->where('nidn',$query->GetNIDN());
+                $datas = $query->IsVerificator()? 
+                    $datas->where('nidn',$query->GetNIDN())->orWhere('verifikasi',$query->GetNIDN()):
+                    $datas->where('nidn',$query->GetNIDN());
             }
         }
         if(!empty($query->GetNIP())){
-            $datas = $datas->where('nip',$query->GetNIP());
+            $datas = $query->IsVerificator()? 
+                        $datas->where('nip',$query->GetNIP())->orWhere('verifikasi',$query->GetNIP()) : 
+                        $datas->where('nip',$query->GetNIP());
         }
         if(!empty($query->GetTahun())){
             $datas = $datas->where(DB::raw('YEAR(tanggal_pengajuan)'),$query->GetTahun());

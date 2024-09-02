@@ -12,6 +12,7 @@ class GetAllIzinQuery extends Query
     public function __construct(
         public $nidn=null,
         public $nip=null,
+        public $verifikasi=0,
         public $tahun=null,
         public TypeData $option = TypeData::Entity,
         public $semua=true,
@@ -24,6 +25,9 @@ class GetAllIzinQuery extends Query
     }
     public function GetNip(){
         return $this->nip;
+    }
+    public function IsVerificator(){
+        return $this->verifikasi;
     }
     public function GetTahun(){
         return $this->tahun;
