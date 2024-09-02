@@ -57,7 +57,8 @@ class GetAllPresensiInRangeQueryHandler extends Query
         }
         $datas = $datas->whereIn('tanggal',$query->GetDateRange());
         $datas = $datas->orderBy('absen_masuk','DESC')->get();
-
+        DB::disconnect('mysql');
+        
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 
         return $datas->transform(fn($data)=> Creator::buildPresensi(PresensiEntitas::make(

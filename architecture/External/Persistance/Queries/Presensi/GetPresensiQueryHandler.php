@@ -48,7 +48,8 @@ class GetPresensiQueryHandler extends Query
     public function handle(GetPresensiQuery $query)
     {
         $data = DB::table('presensi_view')->where('id',$query->GetId())->first();
-
+        DB::disconnect('mysql');
+        
         if($query->getOption()==TypeData::Default) return $data;
 
         return Creator::buildPresensi(PresensiEntitas::make(

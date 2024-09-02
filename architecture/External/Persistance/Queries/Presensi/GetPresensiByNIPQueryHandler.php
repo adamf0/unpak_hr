@@ -54,6 +54,7 @@ class GetPresensiByNIPQueryHandler extends Query
         })
         ->where('tanggal',date('Y-m-d'))
         ->first();
+        DB::disconnect('mysql');
 
         if($query->getOption()==TypeData::Default) return $data;
 

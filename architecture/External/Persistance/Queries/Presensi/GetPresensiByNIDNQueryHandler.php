@@ -55,6 +55,7 @@ class GetPresensiByNIDNQueryHandler extends Query
                     ->where('nidn_dosen', $query->GetNIDN())
                     ->where('tanggal', date('Y-m-d'))
                     ->first();
+        DB::disconnect('mysql');
 
         if ($query->getOption() == TypeData::Default) return $data;
 

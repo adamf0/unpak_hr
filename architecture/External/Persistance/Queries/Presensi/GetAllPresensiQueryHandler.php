@@ -62,7 +62,8 @@ class GetAllPresensiQueryHandler extends Query
             $datas = $datas->where('tanggal',$query->GetTanggalSpesifik());
         }
         $datas = $datas->orderBy('absen_masuk','DESC')->get();
-
+        DB::disconnect('mysql');
+        
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 
         return $datas->transform(fn($data)=> Creator::buildPresensi(PresensiEntitas::make(
