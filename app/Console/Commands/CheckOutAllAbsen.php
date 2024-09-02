@@ -35,7 +35,7 @@ class CheckOutAllAbsen extends Command
             DB::beginTransaction();
             $absenKeluar = match(Carbon::now()->dayOfWeek){
                 5=>Carbon::now()->format("Y-m-d 14:00:00"),
-                6=>Carbon::now()->format("Y-m-d 12:00:00"),
+                // 6=>Carbon::now()->format("Y-m-d 12:00:00"),
                 default=>Carbon::now()->format("Y-m-d 15:00:00")
             };
             $absen = Absensi::whereNotNull('absen_masuk')->whereNull('absen_keluar')->where('tanggal',date('Y-m-d'))->get();
