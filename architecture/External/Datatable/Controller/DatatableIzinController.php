@@ -29,6 +29,8 @@ class DatatableIzinController extends Controller
         
         $listIzin = $this->queryBus->ask($q);
         $listIzin = $listIzin->filter(function($item) use($level,$type,$verifikasi,$nidn,$nip){
+                        dump($item->GetVerifikasi()?->GetNip());
+
                         $rule1 = (
                             (!empty($item->GetVerifikasi()?->GetNidn()) && $item->GetVerifikasi()?->GetNidn()==$nidn) ||
                             (!empty($item->GetVerifikasi()?->GetNip()) && $item->GetVerifikasi()?->GetNip()==$nip)
