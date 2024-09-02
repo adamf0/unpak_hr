@@ -15,6 +15,7 @@ use Architecture\Domain\ValueObject\Date;
 use Architecture\External\Persistance\ORM\Cuti as CutiModel;
 use Architecture\Shared\TypeData;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class GetAllActiveCutiQueryHandler extends Query
@@ -30,7 +31,7 @@ class GetAllActiveCutiQueryHandler extends Query
         if($query->IsNIP()){
             $datas = $datas->whereNotNull('nip');
         }
-        $datas = $datas->where('tanggal_mulai','>=',date('Y-m-d'))->where('tanggal_akhir','<=',date('Y-m-d'))
+        $datas = $datas->whereBetween(DB::raw('CURDATE()'), [DB::raw('tanggal_mulai'),DB::raw('tanggal_akhir')])
                         ->where('status','terima sdm')
                         ->orderBy('id', 'DESC');
         Log::channel('mysql_query')->info($datas->toRawSql());
