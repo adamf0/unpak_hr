@@ -39,8 +39,8 @@ class DatatableSPPDController extends Controller
                                     !empty($item->GetVerifikasi()?->GetNip()), $item->GetVerifikasi()?->GetNip()==$nip
                                 );
                                 
-                                if($verifikasi && in_array($level, ["dosen","pegawai"])){
-                                    return $rule1;
+                                if($verifikasi){
+                                    return $item;
                                 } else if(in_array($level, ["dosen","pegawai"])){
                                     return $item;
                                     // return 
