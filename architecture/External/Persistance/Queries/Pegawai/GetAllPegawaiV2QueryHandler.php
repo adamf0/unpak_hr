@@ -16,7 +16,7 @@ class GetAllPegawaiV2QueryHandler extends Query
     public function handle(GetAllPegawaiV2Query $query)
     {
         $datas = PayrollPegawai::select('e_pribadi.nidn','payroll_m_pegawai.nama','payroll_m_pegawai.struktural')
-                    ->join('e_pribadi', 'payroll_m_pegawai.nip = e_pribadi.nip')
+                    ->join('e_pribadi', 'payroll_m_pegawai.nip', '=', 'e_pribadi.nip')
                     ->whereRaw('LENGTH(nip)>=3');
         if($query->GetStruktural()=="verifikator"){
             $datas = $datas->where('struktural','like','%Wakil Rektor Bid SDM dan Keuangan%')->orWhere('struktural','like','%Wakil Dekan 2%');
