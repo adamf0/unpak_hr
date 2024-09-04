@@ -23,8 +23,8 @@ class Select2VerifikatorController extends Controller
         $list_verifikator = $this->queryBus->ask(new GetAllPegawaiV2Query($struktural));
         $listVerifikator = $list_verifikator->reduce(function ($carry, $item){
             $carry[] = [
-                "id"=>$item->GetNIP(),
-                "text"=>!empty($item->GetStruktural())? $item->GetNama()." - ".$item->GetNIP()." - ".$item->GetStruktural():$item->GetNama()." - ".$item->GetNIP(),
+                "id"=>$item->GetNIDN(),
+                "text"=>!empty($item->GetStruktural())? $item->GetNama()." - ".$item->GetNIDN()." - ".$item->GetStruktural():$item->GetNama()." - ".$item->GetNIDN(),
                 // "fakultas_unit"=>,
             ];
             return $carry;
