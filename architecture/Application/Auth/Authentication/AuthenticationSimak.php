@@ -30,7 +30,7 @@ class AuthenticationSimak implements IAuthentication {
                                     return Creator::buildPengguna(PenggunaEntitas::make(
                                         $row->userid,
                                         $row->Dosen?->NIDN,
-                                        null,
+                                        $row->Dosen?->EPribadi?->nip,
                                         $row->username,
                                         $row->password,
                                         $row->nama,
