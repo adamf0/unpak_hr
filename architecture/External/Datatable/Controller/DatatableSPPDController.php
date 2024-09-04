@@ -28,12 +28,17 @@ class DatatableSPPDController extends Controller
         // $q->SetOffset($request->get('start')??null)->SetLimit($request->get('length')??null);
         
         $listSPPD = $this->queryBus->ask($q);
-        dd($listSPPD);
+        dump($listSPPD);
         $listSPPD = $listSPPD->filter(function($item) use($level,$type,$verifikasi,$nidn,$nip){
                                 $rule1 = (
                                     (!empty($item->GetVerifikasi()?->GetNidn()) && $item->GetVerifikasi()?->GetNidn()==$nidn) ||
                                     (!empty($item->GetVerifikasi()?->GetNip()) && $item->GetVerifikasi()?->GetNip()==$nip)
                                 );
+                                dump(
+                                    !empty($item->GetVerifikasi()?->GetNidn()), $item->GetVerifikasi()?->GetNidn()==$nidn,
+                                    !empty($item->GetVerifikasi()?->GetNip()), $item->GetVerifikasi()?->GetNip()==$nip
+                                );
+                                
                                 if($verifikasi && in_array($level, ["dosen","pegawai"])){
                                     return $rule1;
                                 } else if(in_array($level, ["dosen","pegawai"])){
@@ -113,6 +118,7 @@ class DatatableSPPDController extends Controller
                                 };
                             });
         
+        dd($listSPPD);
         return DataTables::of($listSPPD)
         ->addIndexColumn()
         ->addColumn('action', function ($row) use($level,$nidn,$nip,$verifikasi){
