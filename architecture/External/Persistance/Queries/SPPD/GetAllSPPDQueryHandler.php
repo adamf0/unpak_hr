@@ -42,7 +42,6 @@ class GetAllSPPDQueryHandler extends Query
             $datas = $datas->where('verifikasi',$query->GetNIDN())
                         ->orWhere(fn($q)=> $q->where('nip',$query->GetNIP())->orWhereHas('Anggota', fn($subQuery) => $subQuery->where('nip', $query->GetNIP()) ));
         }
-        dd($query);
         if(!empty($query->GetTahun())){
             $datas = $datas->where(DB::raw('YEAR(tanggal_berangkat)'),'>=',$query->GetTahun())->where(DB::raw('YEAR(tanggal_kembali)'),'<=',$query->GetTahun());
         }
