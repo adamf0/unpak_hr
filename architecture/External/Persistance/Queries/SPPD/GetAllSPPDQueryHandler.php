@@ -29,25 +29,17 @@ class GetAllSPPDQueryHandler extends Query
         $datas = SPPDModel::with(['JenisSPPD','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','Anggota','Anggota.Dosen','Anggota.Dosen.Fakultas','Anggota.Dosen.Prodi','Anggota.Pegawai','FileLaporan','PayrollPegawai','PayrollVerifikasi','EPribadiRemote']);
         if(!empty($query->GetNIDN())){
             if($query->GetSemua()){
-                $datas = $datas->where(function($q) use($query){
-                    $q->where('verifikasi',$query->GetNIDN())->orWhere('verifikasi',$query->GetNIP());
-                })
-                ->orWhere(function($q) use($query){
+                $datas = $datas->where('verifikasi',$query->GetNIDN())->orWhere(function($q) use($query){
                     $q->where('nidn',$query->GetNIDN())->orWhereHas('Anggota', fn($subQuery) => $subQuery->where('nidn', $query->GetNIDN()) );
                 });
                 // ->orWhereHas('EPribadiRemote', fn($subQuery) => $subQuery->where('nidn', $query->GetNIDN()) );
             } else{
-                $datas = $datas->where(function($q) use($query){
-                                    $q->where('verifikasi',$query->GetNIDN())->orWhere('verifikasi',$query->GetNIP());
-                                })
-                                ->orWhere(fn($q)=> 
-                                    $q->where('nidn',$query->GetNIDN())->orWhereHas('Anggota', fn($subQuery) => $subQuery->where('nidn', $query->GetNIDN()) )
-                                );
+                $datas = $datas->where('verifikasi',$query->GetNIDN())
+                                ->orWhere(fn($q)=> $q->where('nidn',$query->GetNIDN())->orWhereHas('Anggota', fn($subQuery) => $subQuery->where('nidn', $query->GetNIDN()) ));
             }
-        }else if(!empty($query->GetNIP())){
-            $datas = $datas->where(function($q) use($query){
-                            $q->where('verifikasi',$query->GetNIDN())->orWhere('verifikasi',$query->GetNIP());
-                        })
+        }
+        if(!empty($query->GetNIP())){
+            $datas = $datas->where('verifikasi',$query->GetNIDN())
                         ->orWhere(fn($q)=> $q->where('nip',$query->GetNIP())->orWhereHas('Anggota', fn($subQuery) => $subQuery->where('nip', $query->GetNIP()) ));
         }
         if(!empty($query->GetTahun())){
