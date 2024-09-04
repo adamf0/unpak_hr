@@ -12,8 +12,8 @@ class GetAllSPPDQuery extends Query
     public function __construct(
         public $nidn=null,
         public $nip=null,
-        public $tahun=null,
         public $verifikasi=0,
+        public $tahun=null,
         public TypeData $option = TypeData::Entity,
         public $semua=true,
     ) {
