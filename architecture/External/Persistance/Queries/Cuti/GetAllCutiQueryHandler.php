@@ -46,11 +46,12 @@ class GetAllCutiQueryHandler extends Query
             } else{
                 $datas = $datas->where('nip',$query->GetNIP());
             }
+        } else if($query->IsVerificator()){
+            $datas = $datas->whereIn('status',["menunggu verifikasi sdm","tolak sdm","terima sdm"]);
         }
         if(!empty($query->GetTahun())){
             $datas = $datas->where(DB::raw('YEAR(tanggal_mulai)'),'>=',$query->GetTahun())->where(DB::raw('YEAR(tanggal_akhir)'),'<=',$query->GetTahun());
         }
-        dd($datas->toRawSql());
         Log::channel('mysql_query')->info($datas->toRawSql());
         $datas = $datas->orderBy('id', 'DESC')->get();
 
