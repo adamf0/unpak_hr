@@ -59,6 +59,7 @@ class DatatableCutiController extends Controller
                                 ],
                                 "verifikator_nidn"=>$item->GetVerifikasi()?->GetNidn(),
                                 "verifikator_nip"=>$item->GetVerifikasi()?->GetNip(),
+                                "verifikator_nama"=>$item->GetVerifikasi()?->GetNama(),
                                 "status"=>$item->GetStatus(),
                                 "catatan"=>$item->GetCatatan(),
                             ],
