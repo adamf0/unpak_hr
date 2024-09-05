@@ -40,8 +40,7 @@ class GetAllIzinQueryHandler extends Query
                     $datas->where('nidn',$query->GetNIDN())->orWhere('verifikasi',$query->GetNIDN()):
                     $datas->where('nidn',$query->GetNIDN());
             }
-        }
-        if(!empty($query->GetNIP())){
+        } else if(!empty($query->GetNIP())){
             if($query->IsVerificator()){
                 $datas = $datas->whereIn('verifikasi',[$query->GetNIP(),$nip]);
             } else{

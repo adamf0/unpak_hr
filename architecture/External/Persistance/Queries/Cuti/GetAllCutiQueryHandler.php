@@ -40,8 +40,7 @@ class GetAllCutiQueryHandler extends Query
                     $datas->where('nidn',$query->GetNIDN())->orWhere('verifikasi',$query->GetNIDN()):
                     $datas->where('nidn',$query->GetNIDN());
             }
-        }
-        if(!empty($query->GetNIP())){
+        } else if(!empty($query->GetNIP())){
             if($query->IsVerificator()){
                 $datas = $datas->whereIn('verifikasi',[$query->GetNIP(),$nip]);
             } else{
@@ -51,6 +50,7 @@ class GetAllCutiQueryHandler extends Query
         if(!empty($query->GetTahun())){
             $datas = $datas->where(DB::raw('YEAR(tanggal_mulai)'),'>=',$query->GetTahun())->where(DB::raw('YEAR(tanggal_akhir)'),'<=',$query->GetTahun());
         }
+        dd($datas->toRawSql());
         Log::channel('mysql_query')->info($datas->toRawSql());
         $datas = $datas->orderBy('id', 'DESC')->get();
 

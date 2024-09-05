@@ -43,8 +43,7 @@ class GetAllSPPDQueryHandler extends Query
                 $datas = $datas->where('verifikasi',$query->GetNIDN())
                                 ->orWhere(fn($q)=> $q->where('nidn',$query->GetNIDN())->orWhereHas('Anggota', fn($subQuery) => $subQuery->where('nidn', $query->GetNIDN()) ));
             }
-        }
-        if(!empty($query->GetNIP())){
+        } else if(!empty($query->GetNIP())){
             if($query->IsVerificator()){
                 $datas = $datas->whereIn('verifikasi',[$query->GetNIP(),$nip]);
             } else{
