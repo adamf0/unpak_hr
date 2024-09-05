@@ -57,6 +57,7 @@ class DatatableIzinController extends Controller
                                 ],
                                 "verifikator_nidn"=>$item->GetVerifikasi()?->GetNidn(),
                                 "verifikator_nip"=>$item->GetVerifikasi()?->GetNip(),
+                                "verifikator_nama"=>$item->GetVerifikasi()?->GetNama(),
                                 "catatan" => $item->GetCatatan(),
                                 "status" => $item->GetStatus(),
                             ],

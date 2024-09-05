@@ -60,6 +60,7 @@ class DatatableSPPDController extends Controller
                                         "dokumen_anggaran"=> empty($item->GetDokumenAnggaran())? null:Utility::loadAsset("dokumen_anggaran/".$item->GetDokumenAnggaran()),
                                         "verifikator_nidn"=>$item->GetVerifikasi()?->GetNidn(),
                                         "verifikator_nip"=>$item->GetVerifikasi()?->GetNip(),
+                                        "verifikator_nama"=>$item->GetVerifikasi()?->GetNama(),
                                         "status"=> $item->GetStatus(),
                                         "intisari"=> $item->GetIntisari(),
                                         "kontribusi"=> $item->GetKontribusi(),

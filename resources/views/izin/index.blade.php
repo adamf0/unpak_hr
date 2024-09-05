@@ -67,6 +67,9 @@
                                         <th>Tujuan</th>
                                         <th>Dokumen</th>
                                         <th>Catatan</th>
+                                        @if (in_array(Session::get('levelActive'),["pegawai","dosen"]) && $verifikasi==0)
+                                        <th>Verifikasi</th>
+                                        @endif
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -142,6 +145,13 @@
                 {
                     data: 'catatan', 
                     name: 'catatan',
+                    render: function ( data, type, row, meta ) {
+                        return data;
+                    }
+                },
+                {
+                    data: 'verifikator_nama', 
+                    name: 'verifikator_nama',
                     render: function ( data, type, row, meta ) {
                         return data;
                     }
