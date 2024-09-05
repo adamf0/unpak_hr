@@ -81,6 +81,9 @@
                                         <th>Tujuan</th>
                                         <th>Keterangan</th>
                                         <th>Anggota</th>
+                                        @if (in_array(Session::get('levelActive'),["pegawai","dosen"]) && $verifikasi==0)
+                                        <th>Verifikasi</th>
+                                        @endif
                                         <th>Status</th>
                                         <th>Catatan</th>
                                         <th>Action</th>
@@ -171,6 +174,13 @@
                         })
                         list_anggota += '</ol>';
                         return list_anggota;
+                    }
+                },
+                {
+                    data: 'verifikator_nama', 
+                    name: 'verifikator_nama',
+                    render: function ( data, type, row, meta ) {
+                        return data;
                     }
                 },
                 {
