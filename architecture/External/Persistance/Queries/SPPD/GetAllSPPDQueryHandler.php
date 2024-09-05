@@ -14,6 +14,7 @@ use Architecture\Domain\Entity\ProdiEntitas;
 use Architecture\Domain\Entity\SPPDEntitas;
 use Architecture\Domain\ValueObject\Date;
 use Architecture\Domain\ValueObject\File;
+use Architecture\External\Persistance\ORM\EPribadi;
 use Architecture\External\Persistance\ORM\SPPD as SPPDModel;
 use Architecture\Shared\TypeData;
 use Illuminate\Database\Eloquent\Collection;
@@ -26,11 +27,12 @@ class GetAllSPPDQueryHandler extends Query
 
     public function handle(GetAllSPPDQuery $query)
     {
+        $nip = EPribadi::where('nidn',$query->GetNIDN())->first()?->nip;
         $datas = SPPDModel::with(['JenisSPPD','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','Anggota','Anggota.Dosen','Anggota.Dosen.Fakultas','Anggota.Dosen.Prodi','Anggota.Pegawai','FileLaporan','PayrollPegawai','PayrollVerifikasi','EPribadiRemote']);
         if(!empty($query->GetNIDN())){
             if($query->GetSemua()){
                 if($query->IsVerificator()){
-                    $datas = $datas->where('verifikasi',$query->GetNIDN());
+                    $datas = $datas->whereIn('verifikasi', [$query->GetNIDN(),$nip,$query->GetNIP()]);
                 } else{
                     $datas = $datas->where(function($q) use($query){
                         $q->where('nidn',$query->GetNIDN())->orWhereHas('Anggota', fn($subQuery) => $subQuery->where('nidn', $query->GetNIDN()) );
@@ -44,7 +46,7 @@ class GetAllSPPDQueryHandler extends Query
         }
         if(!empty($query->GetNIP())){
             if($query->IsVerificator()){
-                $datas = $datas->where('verifikasi',$query->GetNIDN());
+                $datas = $datas->whereIn('verifikasi',[$query->GetNIP(),$nip]);
             } else{
                 $datas = $datas->where(fn($q)=> $q->where('nip',$query->GetNIP())->orWhereHas('Anggota', fn($subQuery) => $subQuery->where('nip', $query->GetNIP()) ));
             }

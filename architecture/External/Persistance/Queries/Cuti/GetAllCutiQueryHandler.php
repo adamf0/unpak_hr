@@ -13,6 +13,7 @@ use Architecture\Domain\Entity\PegawaiEntitas;
 use Architecture\Domain\Entity\ProdiEntitas;
 use Architecture\Domain\ValueObject\Date;
 use Architecture\External\Persistance\ORM\Cuti as CutiModel;
+use Architecture\External\Persistance\ORM\EPribadi;
 use Architecture\Shared\TypeData;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
@@ -23,11 +24,12 @@ class GetAllCutiQueryHandler extends Query
 
     public function handle(GetAllCutiQuery $query)
     {
+        $nip = EPribadi::where('nidn',$query->GetNIDN())->first()?->nip;
         $datas = CutiModel::with(['JenisCuti','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','PayrollPegawai','PayrollVerifikasi','EPribadiRemote']);
         if(!empty($query->GetNIDN())){
             if($query->GetSemua()){
                 if($query->IsVerificator()){
-                    $datas = $datas->where('verifikasi',$query->GetNIDN());
+                    $datas = $datas->whereIn('verifikasi', [$query->GetNIDN(),$nip,$query->GetNIP()]);
                 } else{
                     $datas = $datas->where(fn($q)=> $q->where('nidn',$query->GetNIDN())->orWhereHas('EPribadiRemote', fn($subQuery) => $subQuery->where('nidn', $query->GetNIDN()) ) );
                 }
@@ -39,7 +41,7 @@ class GetAllCutiQueryHandler extends Query
         }
         if(!empty($query->GetNIP())){
             if($query->IsVerificator()){
-                $datas = $datas->where('verifikasi',$query->GetNIDN());
+                $datas = $datas->whereIn('verifikasi',[$query->GetNIP(),$nip]);
             } else{
                 $datas = $datas->where('nip',$query->GetNIP());
             }

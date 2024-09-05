@@ -12,6 +12,7 @@ use Architecture\Domain\Entity\JenisIzinEntitas;
 use Architecture\Domain\Entity\PegawaiEntitas;
 use Architecture\Domain\Entity\ProdiEntitas;
 use Architecture\Domain\ValueObject\Date;
+use Architecture\External\Persistance\ORM\EPribadi;
 use Architecture\External\Persistance\ORM\Izin as IzinModel;
 use Architecture\Shared\TypeData;
 use Illuminate\Database\Eloquent\Collection;
@@ -24,11 +25,12 @@ class GetAllIzinQueryHandler extends Query
 
     public function handle(GetAllIzinQuery $query)
     {
+        $nip = EPribadi::where('nidn',$query->GetNIDN())->first()?->nip;
         $datas = IzinModel::with(['JenisIzin','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','PayrollPegawai','PayrollVerifikasi','EPribadiRemote']);
         if(!empty($query->GetNIDN())){
             if($query->GetSemua()){
                 if($query->IsVerificator()){
-                    $datas = $datas->where('verifikasi',$query->GetNIDN());
+                    $datas = $datas->whereIn('verifikasi', [$query->GetNIDN(),$nip,$query->GetNIP()]);
                 } else{
                     $datas = $datas->where(fn($q)=> $q->where('nidn',$query->GetNIDN())->orWhereHas('EPribadiRemote', fn($subQuery) => $subQuery->where('nidn', $query->GetNIDN()) ) );
                 }
@@ -40,7 +42,7 @@ class GetAllIzinQueryHandler extends Query
         }
         if(!empty($query->GetNIP())){
             if($query->IsVerificator()){
-                $datas = $datas->where('verifikasi',$query->GetNIDN());
+                $datas = $datas->whereIn('verifikasi',[$query->GetNIP(),$nip]);
             } else{
                 $datas = $datas->where('nip',$query->GetNIP());
             }

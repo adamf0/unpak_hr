@@ -15,7 +15,7 @@ class GetAllPegawaiV2QueryHandler extends Query
 
     public function handle(GetAllPegawaiV2Query $query)
     {
-        $datas = PayrollPegawai::select('e_pribadi.nidn','payroll_m_pegawai.nama','payroll_m_pegawai.struktural')
+        $datas = PayrollPegawai::select('payroll_m_pegawai.nip','payroll_m_pegawai.nama','payroll_m_pegawai.struktural')
                     ->join('e_pribadi', 'payroll_m_pegawai.nip', '=', 'e_pribadi.nip')
                     ->whereRaw('LENGTH(payroll_m_pegawai.nip)>=3');
         if($query->GetStruktural()=="verifikator"){
@@ -28,8 +28,8 @@ class GetAllPegawaiV2QueryHandler extends Query
         if($query->getOption()==TypeData::Default) return $datas;
 
         return $datas->transForm(fn($data)=> Creator::buildPegawai(PegawaiEntitas::make(
-            $data->nidn,
             null,
+            $data->nip,
             $data->nama,
             null,
             $data->struktural,
