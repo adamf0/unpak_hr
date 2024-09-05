@@ -17,6 +17,7 @@ use Architecture\External\Persistance\ORM\EPribadi;
 use Architecture\Shared\TypeData;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class GetAllCutiQueryHandler extends Query
 {
@@ -50,7 +51,7 @@ class GetAllCutiQueryHandler extends Query
         if(!empty($query->GetTahun())){
             $datas = $datas->where(DB::raw('YEAR(tanggal_mulai)'),'>=',$query->GetTahun())->where(DB::raw('YEAR(tanggal_akhir)'),'<=',$query->GetTahun());
         }
-        dd($datas->toRawSql());
+        Log::channel('mysql_query')->info($datas->toRawSql());
         $datas = $datas->orderBy('id', 'DESC')->get();
 
         if($query->getOption()==TypeData::Default) return new Collection($datas);

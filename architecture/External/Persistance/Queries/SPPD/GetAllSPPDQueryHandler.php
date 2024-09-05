@@ -55,7 +55,7 @@ class GetAllSPPDQueryHandler extends Query
         if(!empty($query->GetTahun())){
             $datas = $datas->where(DB::raw('YEAR(tanggal_berangkat)'),'>=',$query->GetTahun())->where(DB::raw('YEAR(tanggal_kembali)'),'<=',$query->GetTahun());
         }
-        Log::info($datas->toRawSql());
+        Log::channel('mysql_query')->info($datas->toRawSql());
         $datas = $datas->orderBy('id', 'DESC')->get();
         // if(!is_null($query->GetNIDN())){
         //     $datas = $datas->filter( function($item) use($query){
