@@ -31,7 +31,8 @@ class GetAllCutiQueryHandler extends Query
                 if($query->IsVerificator()){
                     $datas = $datas->whereIn('verifikasi', [$nip,$query->GetNIP()]);
                 } else{
-                    $datas = $datas->where(fn($q)=> $q->where('nidn',$query->GetNIDN())->orWhereHas('EPribadiRemote', fn($subQuery) => $subQuery->where('nidn', $query->GetNIDN()) ) );
+                    $datas = $datas->where(fn($q)=> $q->where('nidn',$query->GetNIDN()));
+                    // ->orWhereHas('EPribadiRemote', fn($subQuery) => $subQuery->where('nidn', $query->GetNIDN()) ) );
                 }
             } else{
                 $datas = $query->IsVerificator()? 
