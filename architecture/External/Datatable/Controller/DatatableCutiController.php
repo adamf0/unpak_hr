@@ -38,7 +38,8 @@ class DatatableCutiController extends Controller
                         } else if(in_array($level, ["dosen","pegawai"]) && $verifikasi){
                             return $item;
                         } else if($level=="sdm" && $verifikasi){
-                            return $rule1;
+                            dd(!is_null($item->GetDosen()),!is_null($item->GetPegawai()));
+                            return $type=="dosen"? !is_null($item->GetDosen()):!is_null($item->GetPegawai());
                         } else {
                             return in_array($item->GetStatus(), ["menunggu verifikasi sdm","terima sdm","tolak sdm"]);
                         }
