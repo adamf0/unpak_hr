@@ -38,6 +38,7 @@ class DatatableSPPDController extends Controller
                                 } else if(in_array($level, ["dosen","pegawai"]) && $verifikasi){
                                     return $item;
                                 } else if($level=="sdm" && $verifikasi){
+                                    dd($item, $rule1);
                                     return $rule1;
                                 } else {
                                     return in_array($item->GetStatus(), ["menunggu verifikasi sdm","terima sdm","tolak sdm"]);
