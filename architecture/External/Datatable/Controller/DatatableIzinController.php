@@ -33,13 +33,12 @@ class DatatableIzinController extends Controller
                             (!empty($item->GetVerifikasi()?->GetNidn()) && $item->GetVerifikasi()?->GetNidn()==$nidn) ||
                             (!empty($item->GetVerifikasi()?->GetNip()) && $item->GetVerifikasi()?->GetNip()==$nip)
                         );
-                        if($verifikasi){
+                        if(in_array($level, ["dosen","pegawai"])){
                             return $item;
-                        } else if(in_array($level, ["dosen","pegawai"])){
+                        } else if(in_array($level, ["dosen","pegawai"]) && $verifikasi){
                             return $item;
-                            // return 
-                            // ($type=="dosen" && !empty($item->GetDosen()) && $item->GetDosen()?->GetNidn()==$nidn) || 
-                            // ($type=="tendik" && !empty($item->GetPegawai()) && $item->GetPegawai()?->GetNip()==$nip);
+                        } else if($level=="sdm" && $verifikasi){
+                            return $rule1;
                         } else {
                             return in_array($item->GetStatus(), ["menunggu verifikasi sdm","terima sdm","tolak sdm"]);
                         }
