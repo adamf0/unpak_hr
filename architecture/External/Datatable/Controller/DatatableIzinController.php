@@ -29,16 +29,16 @@ class DatatableIzinController extends Controller
         
         $listIzin = $this->queryBus->ask($q);
         $listIzin = $listIzin->filter(function($item) use($level,$type,$verifikasi,$nidn,$nip){
-                        $rule1 = (
-                            (!empty($item->GetVerifikasi()?->GetNidn()) && $item->GetVerifikasi()?->GetNidn()==$nidn) ||
-                            (!empty($item->GetVerifikasi()?->GetNip()) && $item->GetVerifikasi()?->GetNip()==$nip)
-                        );
+                        // $rule1 = (
+                        //     (!empty($item->GetVerifikasi()?->GetNidn()) && $item->GetVerifikasi()?->GetNidn()==$nidn) ||
+                        //     (!empty($item->GetVerifikasi()?->GetNip()) && $item->GetVerifikasi()?->GetNip()==$nip)
+                        // );
                         if(in_array($level, ["dosen","pegawai"])){
                             return $item;
                         } else if(in_array($level, ["dosen","pegawai"]) && $verifikasi){
                             return $item;
                         } else if($level=="sdm" && $verifikasi){
-                            return $rule1;
+                            return $type=="dosen"? !is_null($item->GetDosen()):!is_null($item->GetPegawai());
                         } else {
                             return in_array($item->GetStatus(), ["menunggu verifikasi sdm","terima sdm","tolak sdm"]);
                         }
