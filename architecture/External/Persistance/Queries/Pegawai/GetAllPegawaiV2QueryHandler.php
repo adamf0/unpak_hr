@@ -19,7 +19,7 @@ class GetAllPegawaiV2QueryHandler extends Query
                     ->join('e_pribadi', 'payroll_m_pegawai.nip', '=', 'e_pribadi.nip')
                     ->whereRaw('LENGTH(payroll_m_pegawai.nip)>=3');
         if($query->GetStruktural()=="verifikator"){
-            $datas = $datas->where('struktural','like','%Wakil Rektor Bid SDM dan Keuangan%')->orWhere('struktural','like','%Wakil Dekan 2%');
+            $datas = $datas->where('struktural','like','%Wakil Rektor Bid SDM dan Keuangan%')->orWhere('struktural','like','%Wakil Dekan 2%')->orWhere('struktural','like','%Wakil Dekan II%');
         } else if($query->GetStruktural()=="struktural_only"){
             $datas = $datas->where('struktural','!=','');
         }
