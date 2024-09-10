@@ -15,24 +15,24 @@ class GetAllPegawaiV2QueryHandler extends Query
 
     public function handle(GetAllPegawaiV2Query $query)
     {
-        $datas = PayrollPegawai::select('payroll_m_pegawai.nip','payroll_m_pegawai.nama','payroll_m_pegawai.struktural')
-                    ->join('e_pribadi', 'payroll_m_pegawai.nip', '=', 'e_pribadi.nip')
-                    ->whereRaw('LENGTH(payroll_m_pegawai.nip)>=3');
-        if($query->GetStruktural()=="verifikator"){
-            $datas = $datas->where('struktural','like','%Wakil Rektor Bid SDM dan Keuangan%')->orWhere('struktural','like','%Wakil Dekan 2%')->orWhere('struktural','like','%Wakil Dekan II%');
-        } else if($query->GetStruktural()=="struktural_only"){
-            $datas = $datas->where('struktural','!=','');
+        $datas = PayrollPegawai::select('payroll_m_pegawai.nip', 'payroll_m_pegawai.nama', 'payroll_m_pegawai.struktural')
+            ->leftJoin('e_pribadi', 'payroll_m_pegawai.nip', '=', 'e_pribadi.nip')
+            ->whereRaw('LENGTH(payroll_m_pegawai.nip)>=3');
+        if ($query->GetStruktural() == "verifikator") {
+            $datas = $datas->where('struktural', 'like', '%Wakil Rektor Bid SDM dan Keuangan%')->orWhere('struktural', 'like', '%Wakil Dekan 2%')->orWhere('struktural', 'like', '%Wakil Dekan II%');
+        } else if ($query->GetStruktural() == "struktural_only") {
+            $datas = $datas->where('struktural', '!=', '');
         }
         $datas = $datas->get();
 
-        if($query->getOption()==TypeData::Default) return $datas;
+        if ($query->getOption() == TypeData::Default) return $datas;
 
-        return $datas->transForm(fn($data)=> Creator::buildPegawai(PegawaiEntitas::make(
+        return $datas->transForm(fn($data) => Creator::buildPegawai(PegawaiEntitas::make(
             null,
             $data->nip,
             $data->nama,
             null,
             $data->struktural,
-        )) );
+        )));
     }
 }
