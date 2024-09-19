@@ -40,6 +40,6 @@ class SPPD extends Model
       return $this->hasOne(PayrollPegawai::class, 'nip' ,'verifikasi');
    }
    public function EPribadiRemote(){
-      return $this->hasOne(EPribadiRemote::class, 'nip' ,'verifikasi');
+      return $this->hasOne(EPribadi::class, 'nip' ,'verifikasi');
    }
 }

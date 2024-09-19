@@ -328,7 +328,7 @@ class SPPDController extends Controller
             $type_export    = $request->has('type_export') ? $request->query('type_export') : null;
 
             $file_name = "sppd";
-            $sppd = SPPD::with(['SDM', 'EPribadiRemote', 'Dosen', 'Pegawai', 'JenisSPPD', 'Anggota', 'Anggota.Dosen', 'Anggota.Pegawai','FileLaporan']);
+            $sppd = SPPD::with(['SDM', 'EPribadi', 'Dosen', 'Pegawai', 'JenisSPPD', 'Anggota', 'Anggota.Dosen', 'Anggota.Pegawai','FileLaporan']);
 
             if (is_null($type_export)) {
                 throw new Exception("belum pilih cetak sebagai apa");

@@ -24,7 +24,7 @@ class GetAllActiveCutiQueryHandler extends Query
 
     public function handle(GetAllActiveCutiQuery $query)
     {
-        $datas = CutiModel::with(['JenisCuti','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','PayrollPegawai','PayrollVerifikasi','EPribadiRemote']);
+        $datas = CutiModel::with(['JenisCuti','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','PayrollPegawai','PayrollVerifikasi','EPribadi']);
         if($query->IsNIDN()){
             $datas = $datas->whereNotNull('nidn');
         }
@@ -73,7 +73,7 @@ class GetAllActiveCutiQueryHandler extends Query
             $data->tujuan,
             $data->dokumen,
             !is_null($data->PayrollVerifikasi)? Creator::buildPegawai(PegawaiEntitas::make(
-                $data->EPribadiRemote?->nidn,
+                $data->EPribadi?->nidn,
                 $data->PayrollVerifikasi?->nip,
                 $data->PayrollVerifikasi?->nama,
                 $data->PayrollVerifikasi?->fakultas,

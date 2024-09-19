@@ -28,7 +28,7 @@ class GetAllSPPDQueryHandler extends Query
     public function handle(GetAllSPPDQuery $query)
     {
         $nip = EPribadi::where('nidn',$query->GetNIDN())->first()?->nip;
-        $datas = SPPDModel::with(['JenisSPPD','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','Anggota','Anggota.Dosen','Anggota.Dosen.Fakultas','Anggota.Dosen.Prodi','Anggota.Pegawai','FileLaporan','PayrollPegawai','PayrollVerifikasi','EPribadiRemote']);
+        $datas = SPPDModel::with(['JenisSPPD','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','Anggota','Anggota.Dosen','Anggota.Dosen.Fakultas','Anggota.Dosen.Prodi','Anggota.Pegawai','FileLaporan','PayrollPegawai','PayrollVerifikasi','EPribadi']);
         if(!empty($query->GetNIDN())){
             if($query->GetSemua()){
                 if($query->IsVerificator()){
@@ -131,7 +131,7 @@ class GetAllSPPDQueryHandler extends Query
                 $data->keterangan,
                 $data->sarana_transportasi,
                 !is_null($data->PayrollVerifikasi)? Creator::buildPegawai(PegawaiEntitas::make(
-                    $data->EPribadiRemote?->nidn,
+                    $data->EPribadi?->nidn,
                     $data->PayrollVerifikasi?->nip,
                     $data->PayrollVerifikasi?->nama,
                     $data->PayrollVerifikasi?->fakultas,

@@ -23,9 +23,9 @@ class GetAllCutiInRangeQueryHandler extends Query
 
     public function handle(GetAllCutiInRangeQuery $query)
     {
-        $datas = CutiModel::with(['JenisCuti','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','PayrollPegawai','PayrollVerifikasi','EPribadiRemote']);
+        $datas = CutiModel::with(['JenisCuti','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','PayrollPegawai','PayrollVerifikasi','EPribadi']);
         if(!empty($query->GetNIDN())){
-            $datas = $datas->where('nidn',$query->GetNIDN())->orWhereHas('EPribadiRemote', fn($subQuery) => $subQuery->where('nidn', $query->GetNIDN()) );
+            $datas = $datas->where('nidn',$query->GetNIDN())->orWhereHas('EPribadi', fn($subQuery) => $subQuery->where('nidn', $query->GetNIDN()) );
         }
         if(!empty($query->GetNIP())){
             $datas = $datas->where('nip',$query->GetNIP());
@@ -80,7 +80,7 @@ class GetAllCutiInRangeQueryHandler extends Query
             $data->tujuan,
             $data->dokumen,
             !is_null($data->PayrollVerifikasi)? Creator::buildPegawai(PegawaiEntitas::make(
-                $data->EPribadiRemote?->nidn,
+                $data->EPribadi?->nidn,
                 $data->PayrollVerifikasi?->nip,
                 $data->PayrollVerifikasi?->nama,
                 $data->PayrollVerifikasi?->fakultas,

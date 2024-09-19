@@ -26,7 +26,7 @@ class GetAllCutiQueryHandler extends Query
     public function handle(GetAllCutiQuery $query)
     {
         $nip = EPribadi::where('nidn',$query->GetNIDN())->first()?->nip;
-        $datas = CutiModel::with(['JenisCuti','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','PayrollPegawai','PayrollVerifikasi','EPribadiRemote']);
+        $datas = CutiModel::with(['JenisCuti','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','PayrollPegawai','PayrollVerifikasi','EPribadi']);
         if(!empty($query->GetNIDN())){
             if($query->GetSemua()){
                 if($query->IsVerificator()){
@@ -91,7 +91,7 @@ class GetAllCutiQueryHandler extends Query
             $data->tujuan,
             $data->dokumen,
             !is_null($data->PayrollVerifikasi)? Creator::buildPegawai(PegawaiEntitas::make(
-                $data->EPribadiRemote?->nidn,
+                $data->EPribadi?->nidn,
                 $data->PayrollVerifikasi?->nip,
                 $data->PayrollVerifikasi?->nama,
                 $data->PayrollVerifikasi?->fakultas,

@@ -24,7 +24,7 @@ class GetSPPDQueryHandler extends Query
 
     public function handle(GetSPPDQuery $query)
     {
-        $data = SPPDModel::with(['JenisSPPD','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','Anggota','Anggota.Dosen','Anggota.Pegawai','FileLaporan','PayrollPegawai','PayrollVerifikasi','EPribadiRemote'])->where('id',$query->GetId())->first();
+        $data = SPPDModel::with(['JenisSPPD','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','Anggota','Anggota.Dosen','Anggota.Pegawai','FileLaporan','PayrollPegawai','PayrollVerifikasi','EPribadi'])->where('id',$query->GetId())->first();
         if($query->getOption()==TypeData::Default) return $data;
 
         $list_anggota = collect([]);
@@ -83,7 +83,7 @@ class GetSPPDQueryHandler extends Query
             $data->keterangan,
             $data->sarana_transportasi,
             !is_null($data->PayrollVerifikasi)? Creator::buildPegawai(PegawaiEntitas::make(
-                $data->EPribadiRemote?->nidn,
+                $data->EPribadi?->nidn,
                 $data->PayrollVerifikasi?->nip,
                 $data->PayrollVerifikasi?->nama,
                 $data->PayrollVerifikasi?->fakultas,

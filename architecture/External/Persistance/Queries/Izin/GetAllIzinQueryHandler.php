@@ -26,7 +26,7 @@ class GetAllIzinQueryHandler extends Query
     public function handle(GetAllIzinQuery $query)
     {
         $nip = EPribadi::where('nidn',$query->GetNIDN())->first()?->nip;
-        $datas = IzinModel::with(['JenisIzin','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','PayrollPegawai','PayrollVerifikasi','EPribadiRemote']);
+        $datas = IzinModel::with(['JenisIzin','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','PayrollPegawai','PayrollVerifikasi','EPribadi']);
         if(!empty($query->GetNIDN())){
             if($query->GetSemua()){
                 if($query->IsVerificator()){
@@ -86,7 +86,7 @@ class GetAllIzinQueryHandler extends Query
             )),
             $data->dokumen,
             !is_null($data->PayrollVerifikasi)? Creator::buildPegawai(PegawaiEntitas::make(
-                $data->EPribadiRemote?->nidn,
+                $data->EPribadi?->nidn,
                 $data->PayrollVerifikasi?->nip,
                 $data->PayrollVerifikasi?->nama,
                 $data->PayrollVerifikasi?->fakultas,
