@@ -26,7 +26,10 @@ class Izin extends Model
    public function PayrollVerifikasi(){
       return $this->hasOne(PayrollPegawai::class, 'nip' ,'verifikasi');
    }
-   public function EPribadiRemote(){
+   public function EPribadi(){
       return $this->hasOne(EPribadi::class, 'nip' ,'verifikasi');
+   }
+   public function EPribadiRemote(){
+      return $this->hasOne(EPribadiRemote::class, 'nip' ,'verifikasi');
    }
 }
