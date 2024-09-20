@@ -30,7 +30,23 @@ class TesController extends Controller
                 'created_at', 
                 'updated_at'
             )
+            ->with([
+                'Pribadi' => function ($query) {
+                    $query->select('nip', 'nama');
+                },
+                'Dosen' => function ($query) {
+                    $query->with([
+                        'Fakultas' => function ($fakultasQuery) {
+                            $fakultasQuery->select('kode_fakultas', 'nama_fakultas');
+                        },
+                        'Prodi' => function ($prodiQuery) {
+                            $prodiQuery->select('kode_prodi', 'nama_prodi');
+                        }
+                    ])->select('NIDN', 'kode_fak', 'kode_prodi', 'nama_dosen');
+                },
+            ])
             ->where('nip',$nip)
+            ->orWhere('nidn',$nidn)
             ->get();
 
             dd($presensiData);
