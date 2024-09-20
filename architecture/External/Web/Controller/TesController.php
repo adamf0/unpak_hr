@@ -30,12 +30,9 @@ class TesController extends Controller
                 'created_at', 
                 'updated_at'
             )
-            // ->where(DB::raw('YEAR(tanggal)'),date('Y'))
-            // ->where('nip_pegawai',$nip)
-            // ->orWhere('nip_dosen',$nip)
-            // ->orderBy('absen_masuk','DESC')
             ->get();
 
+            dd($presensiData);
             // Map the result to match the desired format
             // $mappedData = $presensiData->reduce(function($carry,$item) {
             //     $carry[] = [
