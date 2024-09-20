@@ -15,4 +15,7 @@ class NPribadi extends Model
    public function PayrollPegawai(){
       return $this->hasOne(PayrollPegawai::class, 'nip' ,'nip');
    }
+   public function Pengangkatan(){
+      return $this->hasOne(NPengangkatan::class, 'nip' ,'nip');
+   }
 }

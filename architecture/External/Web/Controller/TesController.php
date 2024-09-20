@@ -3,7 +3,9 @@
 namespace Architecture\External\Web\Controller;
 
 use App\Http\Controllers\Controller;
+use Architecture\External\Persistance\ORM\Absensi;
 use Architecture\Shared\Facades\Utility;
+use Illuminate\Support\Facades\DB;
 
 class TesController extends Controller
 {
@@ -11,62 +13,74 @@ class TesController extends Controller
     ) {}
     
     public function tes(){
-        $jam_masuk = "2024-08-02 08:00:04";
-        $jam_keluar = "2024-08-02 14:00:00";
-        $tanggal = "2024-08-02";
+        $nip = "4102302214";
+        $nidn = "0409098601";
 
-        if( 
-            Utility::isLate($jam_masuk, $tanggal) &&
-            !Utility::is8Hour($tanggal, $jam_masuk, $jam_keluar)
-        ){
-            $label1 = "(PULANG CEPAT)";
-        } else if( 
-            !Utility::isLate($jam_masuk, $tanggal) &&
-            !Utility::is8Hour($tanggal, $jam_masuk, $jam_keluar)
-        ){
-            $label1 = "<>(PULANG CEPAT)";
-        } else{
-            $label1 = "ok";
-        }
-        dump($label1);
+        $presensiData = Absensi::with([
+            'Pribadi' => function ($query) {
+                $query->select('nip', 'nama');
+            },
+            'Dosen' => function ($query) {
+                $query->with([
+                    'Fakultas' => function ($fakultasQuery) {
+                        $fakultasQuery->select('kode_fakultas', 'nama_fakultas');
+                    },
+                    'Prodi' => function ($prodiQuery) {
+                        $prodiQuery->select('kode_prodi', 'nama_prodi');
+                    }
+                ])->select('NIDN', 'kode_fak', 'kode_prodi', 'nama_dosen');
+            },
+            'Pribadi.Pengangkatan' => function ($pengangkatanQuery) {
+                $pengangkatanQuery->where('status_n_pengangkatan', 'berlaku')
+                    ->select('nip', 'unit_kerja');
+            }
+        ])->select(
+            'id', 
+            'nidn', 
+            'nip', 
+            'tanggal', 
+            'absen_masuk', 
+            'absen_keluar', 
+            'catatan_telat', 
+            'catatan_pulang', 
+            'otomatis_keluar', 
+            'created_at', 
+            'updated_at'
+        )
+        // ->where(DB::raw('YEAR(tanggal)'),date('Y'))
+        // ->where('nip_pegawai',$nip)
+        // ->orWhere('nip_dosen',$nip)
+        // ->orderBy('absen_masuk','DESC')
+        ->get();
 
-        $jam_masuk = "2024-08-03 08:14:46";
-        $jam_keluar = "2024-08-03 12:00:00";
-        $tanggal = "2024-08-03";
+        // Map the result to match the desired format
+        $mappedData = $presensiData->reduce(function($carry,$item) {
+            $carry[] = [
+                'nip_pegawai' => $item?->Pribadi?->nip ?? null,
+                'nama_pegawai' => $item?->Pribadi?->nama ?? null,
+                'nip_dosen' => $item?->Dosen?->nip ?? null,
+                'nidn_dosen' => $item?->Dosen?->nidn ?? null,
+                'nama_dosen' => $item?->Dosen?->nama_dosen ?? null,
+                'kode_fakultas' => $item?->Dosen?->Fakultas?->kode_fakultas ?? null,
+                'nama_fakultas' => $item?->Dosen?->Fakultas?->nama_fakultas ?? null,
+                'kode_prodi' => $item?->Dosen?->Prodi?->kode_prodi ?? null,
+                'nama_prodi' => $item?->Dosen?->Prodi?->nama_prodi ?? null,
+                'unit_kerja' => $item?->Pribadi?->Pengangkatan?->unit_kerja ?? null,
+                'status' => $item?->Pribadi?->Pengangkatan?->status,
+                'id' => $item?->id,
+                'tanggal' => $item?->tanggal,
+                'absen_masuk' => $item?->absen_masuk,
+                'absen_keluar' => $item?->absen_keluar,
+                'catatan_telat' => $item?->catatan_telat,
+                'catatan_pulang' => $item?->catatan_pulang,
+                'otomatis_keluar' => $item?->otomatis_keluar,
+                'created_at' => $item?->created_at,
+                'updated_at' => $item?->updated_at,
+            ];
 
-        if( 
-            Utility::isLate($jam_masuk, $tanggal) &&
-            !Utility::is8Hour($tanggal, $jam_masuk, $jam_keluar)
-        ){
-            $label2 = "(PULANG CEPAT)";
-        } else if( 
-            !Utility::isLate($jam_masuk, $tanggal) &&
-            !Utility::is8Hour($tanggal, $jam_masuk, $jam_keluar)
-        ){
-            $label2 = "<>(PULANG CEPAT)";
-        } else{
-            $label2 = "ok";
-        }
-        dump($label2);
+            return $carry;
+        });
 
-        $jam_masuk = "2024-07-29 08:32:25";
-        $jam_keluar = "2024-07-29 15:00:00";
-        $tanggal = "2024-07-29";
-
-        if( 
-            Utility::isLate($jam_masuk, $tanggal) &&
-            !Utility::is8Hour($tanggal, $jam_masuk, $jam_keluar)
-        ){
-            $label3 = "(PULANG CEPAT)";
-        } else if( 
-            !Utility::isLate($jam_masuk, $tanggal) &&
-            !Utility::is8Hour($tanggal, $jam_masuk, $jam_keluar)
-        ){
-            $label3 = "<>(PULANG CEPAT)";
-        } else{
-            $label3 = "ok";
-        }
-
-        dd($label3);
+        return response()->json($mappedData);
     }
 }

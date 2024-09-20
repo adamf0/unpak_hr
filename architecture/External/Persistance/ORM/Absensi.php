@@ -17,4 +17,8 @@ class Absensi extends Model
    public function Dosen(){
       return $this->hasOne(Dosen::class, 'NIDN' ,'nidn');
    }
+   public function Pribadi()
+   {
+        return $this->belongsTo(NPribadi::class, 'nip', 'nip');
+   }
 }
