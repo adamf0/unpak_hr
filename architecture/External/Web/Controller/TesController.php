@@ -17,7 +17,6 @@ class TesController extends Controller
             $nip = "4102302214";
             $nidn = "0409098601";
 
-            dd("hello");
             $presensiData = Absensi::select(
                 'id', 
                 'nidn', 
