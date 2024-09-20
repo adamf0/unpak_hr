@@ -44,9 +44,16 @@ class TesController extends Controller
                         }
                     ])->select('NIDN', 'kode_fak', 'kode_prodi', 'nama_dosen');
                 },
+                'Dosen.EPribadi' => function ($pribadiQuery) {
+                    $pribadiQuery->select('nidn','nip');
+                },
+                'Pribadi.Pengangkatan' => function ($pengangkatanQuery) {
+                    $pengangkatanQuery->where('status_n_pengangkatan', 'berlaku')->select('nip', 'unit_kerja');
+                }
             ])
-            ->where('nip',$nip)
-            ->orWhere('nidn',$nidn)
+            // ->where('nip',$nip)
+            ->where('nidn',$nidn)
+            ->limit(10)
             ->get();
 
             dd($presensiData);
