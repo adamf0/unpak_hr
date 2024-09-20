@@ -89,11 +89,10 @@ class TesController extends Controller
                     ];
                 }
                 return $carry;
-            });
+            },[]);
 
             $datas = DB::table('presensi_view');        
-            $datas = $datas->where('nidn_dosen',$nidn);
-            $datas = $datas->where('nip_pegawai',$nip)->orWhere('nip_dosen',$nip_dosen);
+            $datas = $datas->where('nidn_dosen',$nidn)->orWhere('nip_pegawai',$nip)->orWhere('nip_dosen',$nip_dosen);
             $datas = $datas->orderBy('absen_masuk','DESC')->groupBy('nidn_dosen','nip_pegawai','nip_dosen')->limit(2)->get();
             dd($mappedData,$datas);
 
