@@ -30,6 +30,7 @@ class TesController extends Controller
                 'created_at', 
                 'updated_at'
             )
+            ->where('nip',$nip)
             ->get();
 
             dd($presensiData);
