@@ -54,7 +54,6 @@ class TesController extends Controller
             ])
             ->groupBy('nidn','nip')
             ->orderBy('absen_masuk','DESC')
-            ->limit(10)
             ->get();
 
             dump($presensiData);
