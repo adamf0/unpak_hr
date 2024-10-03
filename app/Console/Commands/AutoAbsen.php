@@ -33,7 +33,17 @@ class AutoAbsen extends Command
         try {
             DB::beginTransaction();
                 Absensi::where('tanggal',date('Y-m-d'))
-                        ->whereIn('nip',[4102206194,2110816436,4102302214,2111018464,2110816439,2110718457,207241098534,2110816441,2110121489])
+                        ->whereIn('nip',[
+                            4102206194,
+                            2110816436,
+                            4102302214,
+                            2111018464,
+                            2110816439,
+                            2110718457,
+                            207241098534,
+                            2110816441,
+                            2110121489
+                        ])
                         ->update(['absen_masuk' => date('Y-m-d 06:00:00')]);
             DB::commit();
             echo "success create absent"; 
