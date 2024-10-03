@@ -34,6 +34,7 @@ class ApiKalendarController extends Controller //data cuti, izin, sppd, absen be
 
     public function index(Request $request, $tahun, $format = 'default')
     {
+        throw new Exception("di matikan fitur ini");
         try {
             $nidn = $request->has('nidn') ? $request->query('nidn') : null;
             $nip = $request->has('nip') ? $request->query('nip') : null;
