@@ -292,7 +292,7 @@
             </div>
         </div>
     </div>
-    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <!-- <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="card info-card sales-card">
             <div class="card-body">
                 <h5 class="card-title">Calendar</h5>
@@ -326,7 +326,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
         <div class="card info-card sales-card">
             <div class="card-body">
@@ -400,6 +400,7 @@
             const nip = `{{Session::get('nip')}}`
             const level = `{{Session::get('levelActive')}}`
 
+            /*
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 header: {
@@ -425,7 +426,7 @@
                                     backgroundColor: eventData.backgroundColor,
                                     borderColor: eventData.borderColor,
                                 };
-                            });
+                            });s
                             console.log(events)
                             $('.loading-calendar').attr('style', 'display: none !important;');
                             successCallback(events);
@@ -438,6 +439,7 @@
                 }
             });
             calendar.render();
+            */
 
             const refAbsenForm = '.absen_form';
             const refAbsenMessage = '.absen_message';
