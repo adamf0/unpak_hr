@@ -30,7 +30,7 @@ class AutoAbsen extends Command
      */
     public function handle()
     {
-        $jam = str_pad(7,  2, "0");
+        $jam = str_pad(rand(7,8),  2, "0");
         $menit = str_pad(rand(0,59),  2, "0");
 
         try {
