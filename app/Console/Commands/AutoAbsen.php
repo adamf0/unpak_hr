@@ -30,6 +30,9 @@ class AutoAbsen extends Command
      */
     public function handle()
     {
+        $jam = str_pad(7,  2, "0");
+        $menit = str_pad(rand(0,59),  2, "0");
+
         try {
             DB::beginTransaction();
                 Absensi::where('tanggal',date('Y-m-d'))
@@ -46,7 +49,7 @@ class AutoAbsen extends Command
                             4102302215,
                             2110816436
                         ])
-                        ->update(['absen_masuk' => date('Y-m-d 07:30:00')]);
+                        ->update(['absen_masuk' => date("Y-m-d $jam:$menit:00")]);
             DB::commit();
             echo "success create absent"; 
         } catch (\Throwable $th) {
