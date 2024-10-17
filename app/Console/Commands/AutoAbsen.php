@@ -31,7 +31,7 @@ class AutoAbsen extends Command
     public function handle()
     {
         $menit = str_pad(rand(0,59),  2, "0");
-        $jam = str_pad($menit>15? 7:8,  2, "0");
+        $jam = str_pad((int) $menit>15? 7:8,  2, "0");
 
         try {
             DB::beginTransaction();
