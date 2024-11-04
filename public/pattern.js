@@ -142,7 +142,7 @@ class SlipGajiDosen extends Template {
                         </tr>
                     </tbody>
                 </table>
-                <table width="355px" style="border-collapse: collapse; border: 1px solid;" cellpadding="0" cellspacing="0">
+                <table width="355px" style="border-collapse: collapse; border: 1px solid;font-size: 12px;" cellpadding="0" cellspacing="0">
                     <tbody>
                         <tr align="center">
                             <td align="left" style="width: 100px; vertical-align: top">
@@ -348,7 +348,7 @@ class SlipGajiDosen extends Template {
                         </tr>
                     </tbody>
                 </table>
-                <table width="355px" cellpadding="0" cellspacing="0" style="padding: 0px 30px">
+                <table width="355px" cellpadding="0" cellspacing="0" style="padding: 0px 30px; font-size: 12px;">
                     <tbody>
                         <tr align="center">
                             <td align="left" style="width:45%; vertical-align: top">&nbsp;<b></b></td>
@@ -399,7 +399,7 @@ class SlipGajiPegawai extends Template {
                         </tr>
                     </tbody>
                 </table>
-                <table width="355px" style="border-collapse: collapse; border: 1px solid;" cellpadding="0" cellspacing="0">
+                <table width="355px" style="border-collapse: collapse; border: 1px solid;font-size: 12px;" cellpadding="0" cellspacing="0">
                     <tbody>
                         <tr align="center">
                             <td align="left" style="width: 100px; vertical-align: top">
@@ -605,7 +605,7 @@ class SlipGajiPegawai extends Template {
                         </tr>
                     </tbody>
                 </table>
-                <table width="355px" cellpadding="0" cellspacing="0" style="padding: 0px 30px">
+                <table width="355px" cellpadding="0" cellspacing="0" style="padding: 0px 30px; font-size: 12px;">
                     <tbody>
                         <tr align="center">
                             <td align="left" style="width:45%; vertical-align: top">&nbsp;<b></b></td>
