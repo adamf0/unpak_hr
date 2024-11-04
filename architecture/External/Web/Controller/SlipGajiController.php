@@ -21,7 +21,7 @@ class SlipGajiController extends Controller
         $nidn = Session::get('nidn');
         $nip  = Session::get('nip');
 
-        $list_tahun = SlipGaji::select('tahun')->where('nip',$nip)->get()->unique()->values()->reduce(function($carry, int $item){
+        $list_tahun = SlipGaji::select('tahun')->where('nip',$nip)->get()->unique()->values()->reduce(function($carry, $item){
             $carry[] = [
                 "id"=>$item->tahun,
                 "text"=>$item->tahun,
