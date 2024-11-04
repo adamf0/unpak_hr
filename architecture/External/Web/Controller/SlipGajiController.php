@@ -23,7 +23,7 @@ class SlipGajiController extends Controller
         $nip  = Session::get('nip');
         if($nip==null){
             $nip  = EPribadi::where('nidn',$nidn)->first();
-            dd($nip);
+            $nip = $nip==null? null:->nip;
         }
 
         $list_tahun = SlipGaji::select('tahun')->where('nip',$nip)->get()->unique()->values()->reduce(function($carry, $item){
