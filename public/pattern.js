@@ -28,7 +28,6 @@ class SlipGajiDosen extends Template {
     }
     draw() {
         const responApi = this.response.data;
-        const lengthStep = responApi.stepper.length        
         if(this.withClear) this.element.empty()
 
         let astek_dlpk = responApi.gajikotor>0? (responApi.gajikotor-responApi.gajibersih):0;
@@ -381,7 +380,6 @@ class SlipGajiPegawai extends Template {
     }
     draw() {
         const responApi = this.response.data;
-        const lengthStep = responApi.stepper.length        
         if(this.withClear) this.element.empty()
 
         let astek_dlpk = responApi.gajikotor>0? (responApi.gajikotor-responApi.gajibersih):0;
