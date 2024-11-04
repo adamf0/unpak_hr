@@ -18,7 +18,7 @@ class ApiSlipGajiController extends Controller
     ) {}
     
     function namaBulan($number){
-        return match($number){
+        return match((int) $number){
             1=>"Januari",
             2=>"Februari",
             3=>"Maret",
