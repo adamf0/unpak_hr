@@ -9,6 +9,7 @@ use Architecture\External\Persistance\ORM\SlipGaji;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Architecture\External\Persistance\ORM\EPribadi;
 
 class SlipGajiController extends Controller
 {
@@ -20,6 +21,9 @@ class SlipGajiController extends Controller
     public function Index(){
         $nidn = Session::get('nidn');
         $nip  = Session::get('nip');
+        if($nip==null){
+            $nip  = EPribadi::where('nidn',$nidn)->first()?->nip;
+        }
 
         $list_tahun = SlipGaji::select('tahun')->where('nip',$nip)->get()->unique()->values()->reduce(function($carry, $item){
             $carry[] = [
