@@ -134,7 +134,7 @@
                         $(`.slip_gaji`).html(``);
 
                         if(response.status=="ok"){
-                            let factory = new SlipGajiFactory($(`.slip_gaji`),true,response);
+                            let factory = new SlipGajiFactory($(`.slip_gaji`),true,response,(nidn!=null||nidn!=""? "dosen":"pegawai"));
                             factory.draw();
                         }
                     },
