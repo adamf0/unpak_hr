@@ -48,7 +48,6 @@
             const nidn = `{{Session::get('nidn')}}`
             const nip = `{{$nip}}`
             let tahun = null;
-            let bulan = null;
             
             const bulan = [
                 {
