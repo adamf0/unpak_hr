@@ -2,7 +2,7 @@ class SlipGajiFactory {
     createShape(element,withClear=false,response,type) {
         switch (type) {
         case 'dosen':
-            return new SlipGajiDosenInternal(element,withClear,response);
+            return new SlipGajiDosen(element,withClear,response);
         case 'pegawai':
             return new SlipGajiPegawai(element,withClear,response);
         default:
@@ -19,7 +19,7 @@ class Template {
         return angka.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".");
     }
 }
-class SlipGajiDosenInternal extends Template {
+class SlipGajiDosen extends Template {
     constructor(element,withClear,response){
         super();
         this.element = element;
@@ -372,7 +372,7 @@ class SlipGajiDosenInternal extends Template {
     }
 }
 
-class SlipGajiPegawaiInternal extends Template {
+class SlipGajiPegawai extends Template {
     constructor(element,withClear,response){
         super();
         this.element = element;
