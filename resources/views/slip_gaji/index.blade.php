@@ -46,7 +46,7 @@
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             
             const nidn = `{{Session::get('nidn')}}`
-            const nip = `{{Session::get('nip')}}`
+            const nip = `{{$nip}}`
             let tahun = null;
             let bulan = null;
             
