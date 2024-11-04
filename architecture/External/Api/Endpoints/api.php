@@ -23,6 +23,7 @@ use Architecture\External\Api\Controller\ApiKalendarController;
 use Architecture\External\Api\Controller\ApiKlaimAbsenController;
 use Architecture\External\Api\Controller\ApiPresensiController;
 use Architecture\External\Api\Controller\ApiSPPDController;
+use Architecture\External\Api\Controller\ApiSlipGajiController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
