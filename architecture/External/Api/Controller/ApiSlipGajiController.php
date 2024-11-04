@@ -43,14 +43,14 @@ class ApiSlipGajiController extends Controller
                     "data"=>null,
                 ]);
             }
-            $bulan = $this->namaBulan($bulan);
+            $bulan = $this->namaBulan($request->bulan);
 
             $nip = $request->nip; //10411006520 = aries
             $slip_gaji = SlipGaji::where('tahun',$request->tahun)
                                 ->where('bulan',(int) $request->bulan)
                                 ->where('nip',$nip)
                                 ->first();
-                                
+
             if($slip_gaji==null){
                 return response()->json([
                     "status"=>"fail",
