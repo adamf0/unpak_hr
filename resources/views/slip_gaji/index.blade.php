@@ -121,7 +121,7 @@
 
                 $.ajax({
                     url: `{{route('api.slip_gaji.index')}}`,
-                    data: fd,
+                    data: data,
                     contentType: 'application/json',
                     processData: false,
                     contentType: false,
