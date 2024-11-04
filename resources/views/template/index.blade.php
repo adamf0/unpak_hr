@@ -277,6 +277,8 @@
       </x-sidebar-item-menu-dropdown>
       @endif
 
+      <x-sidebar-item-menu title="Slip Gaji" class="text-primary" icon="bi bi-journals" link="{{route('slip_gaji.index')}}" :active="Utility::stateMenu(['slip_gaji'],request())" />
+
       @if (Utility::hasSDM())
       <li class="nav-heading">Data Master</li>
       <x-sidebar-item-menu title="Master Kalendar" icon="bi bi-menu-button-wide" link="{{route('master_kalendar.index')}}" :active="Utility::stateMenu(['master_kalendar'],request())" />

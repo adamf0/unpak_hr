@@ -12,6 +12,7 @@ use Architecture\External\Web\Controller\LaporanAbsenController;
 use Architecture\External\Web\Controller\MasterKalendarController;
 use Architecture\External\Web\Controller\MonitoringController;
 use Architecture\External\Web\Controller\PenggunaController;
+use Architecture\External\Web\Controller\SlipGajiController;
 use Architecture\External\Web\Controller\SPPDController;
 use Architecture\External\Web\Controller\TesController;
 use Architecture\External\Web\Controller\VideoKegiatanController;
@@ -123,4 +124,6 @@ Route::middleware(['throwSession'])->group(function () {
 
     Route::get('laporan_absen/export', [LaporanAbsenController::class,'export'])->name('laporan_absen.export');
     Route::get('laporan_absen', [LaporanAbsenController::class,'index'])->name('laporan_absen.index');
+
+    Route::get('slip_gaji', [SlipGajiController::class,'index'])->name('slip_gaji.index');
 });
