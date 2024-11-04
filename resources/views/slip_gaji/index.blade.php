@@ -47,7 +47,8 @@
             
             const nidn = `{{Session::get('nidn')}}`
             const nip = `{{$nip}}`
-            let tahun = null;
+            let input_tahun = null;
+            let input_bulan = null;
             
             const bulan = [
                 {
@@ -104,19 +105,19 @@
 
             $('.tahun').on('select2:select', function(e) {
                 // var data = e.params.data;
-                tahun = $(this).val()
+                input_tahun = $(this).val()
             });
             $('.bulan').on('select2:select', function(e) {
                 // var data = e.params.data;
-                bulan = $(this).val()
+                input_bulan = $(this).val()
             });
             $('.btn_show').click(function(e){
                 e.preventDefault();
 
                 var data = new FormData();    
                 data.append('nip', nip);
-                data.append('tahun', tahun);
-                data.append('bulan', bulan);
+                data.append('tahun', input_tahun);
+                data.append('bulan', input_bulan);
 
                 $.ajax({
                     url: `{{route('api.slip_gaji.index')}}`,
