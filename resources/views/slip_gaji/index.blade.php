@@ -134,7 +134,7 @@
                         $(`.slip_gaji`).html(``);
 
                         if(response.status=="ok"){
-                            let factory = SlipGajiFactory($(`.slip_gaji`),true,response);
+                            let factory = new SlipGajiFactory($(`.slip_gaji`),true,response);
                             factory.draw();
                         }
                     },
