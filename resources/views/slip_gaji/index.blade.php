@@ -30,7 +30,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12">
+            <div class="col-12 slip_gaji">
                 Masih dalam masa pengembangan
             </div>
         </div>
@@ -40,6 +40,7 @@
 
 @push('scripts')
     <script type="text/javascript" src="{{ Utility::loadAsset('my.js') }}"></script>
+    <script type="text/javascript" src="{{ Utility::loadAsset('pattern.js') }}"></script>
     <script>
         $(document).ready(function () {
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
@@ -62,6 +63,32 @@
             });
             $('.btn_show').click(function(e){
                 e.preventDefault();
+
+                var data = new FormData();    
+                data.append('nip', nip);
+
+                $.ajax({
+                    url: `{{route('api.slip_gaji.index')}}`,
+                    data: fd,
+                    contentType: 'application/json',
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    beforeSend: function(){
+                        $(`.slip_gaji`).html(`loading...`);
+                    },
+                    success: function(response){
+                        console.log(response);
+                        $(`.slip_gaji`).html(``);
+
+                        if(response.status=="ok"){
+                            let factory = SlipGajiFactory($(`.slip_gaji`),true,response);
+                        }
+                    },
+                    complete: function(){
+
+                    }
+                });
             });
 
         });

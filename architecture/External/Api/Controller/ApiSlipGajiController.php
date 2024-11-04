@@ -34,9 +34,9 @@ class ApiSlipGajiController extends Controller
             default=>null,
         };
     }
-    public function index(Request $request, $tahun=null, $bulan=null){
+    public function index(Request $request){
         try {
-            if($tahun==null || $bulan==null){
+            if($request->tahun==null || $request->bulan==null){
                 return response()->json([
                     "status"=>"fail",
                     "message"=>"tahun / bulan tidak boleh kosong",
@@ -45,8 +45,19 @@ class ApiSlipGajiController extends Controller
             }
             $bulan = $this->namaBulan($bulan);
 
-            $nip = 10411006520; //aries
-            $slip_gaji = SlipGaji::where('nip',$nip)->first();
+            $nip = $request->nip; //10411006520 = aries
+            $slip_gaji = SlipGaji::where('tahun',$request->tahun)
+                                ->where('bulan',(int) $request->bulan)
+                                ->where('nip',$nip)
+                                ->first();
+                                
+            if($slip_gaji==null){
+                return response()->json([
+                    "status"=>"fail",
+                    "message"=>"slip gaji tidak ditemukan",
+                    "data"=>null,
+                ]);
+            }
             $slip_gaji->bulan=$bulan;
 
             return response()->json([
