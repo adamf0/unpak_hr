@@ -99,7 +99,7 @@
                     "text":"Desember"
                 },
             ];
-            load_dropdown('.tahun', {!! $tahun !!}}, null, null, '-- Pilih Tahun --');
+            load_dropdown('.tahun', {!! $tahun !!}, null, null, '-- Pilih Tahun --');
             load_dropdown('.bulan', bulan, null, null, '-- Pilih Bulan --');
 
             $('.tahun').on('select2:select', function(e) {
