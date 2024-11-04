@@ -37,7 +37,7 @@ Route::post('izin/approval/reject', [ApiIzinController::class,'reject'])->name('
 Route::post('sppd/approval/approval', [ApiSPPDController::class,'approval'])->name('api.sppd.approval');
 Route::post('sppd/approval/reject', [ApiSPPDController::class,'reject'])->name('api.sppd.reject');
 Route::post('klaim_absen/approval/reject', [ApiKlaimAbsenController::class,'reject'])->name('api.klaim_absen.reject');
-Route::get('slip_gaji', [ApiSlipGajiController::class,'index'])->name('api.slip_gaji.index');
+Route::post('slip_gaji', [ApiSlipGajiController::class,'index'])->name('api.slip_gaji.index');
 
 Route::get('source-absen', function(){
     return response()->json(DB::table('laporan_merge_absen_izin_cuti')->get());
