@@ -13,9 +13,9 @@
 
 @section('content')
 <style>
-@print {
-    @page .btn-print {
-        display: none
+@media print {
+    .btn-print {
+        display: none !important;
     }
 }
 </style>
