@@ -147,6 +147,7 @@
                                 <i class="fa fa-print"></i> 
                                 <b>Print</b>
                             </button>
+                            <div class="clearfix"></div>
                             `);
                             let factory = new SlipGajiFactory();
                             let slipGaji = factory.createShape($(`.slip_gaji`),false,response,(nidn!=null||nidn!=""? "dosen":"pegawai"));
