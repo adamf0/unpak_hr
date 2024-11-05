@@ -141,7 +141,7 @@
                             </button>
                             `);
                             let factory = new SlipGajiFactory();
-                            let slipGaji = factory.createShape($(`.slip_gaji`),true,response,(nidn!=null||nidn!=""? "dosen":"pegawai"));
+                            let slipGaji = factory.createShape($(`.slip_gaji`),false,response,(nidn!=null||nidn!=""? "dosen":"pegawai"));
                             slipGaji.draw();
                         } else{
                             $(`.slip_gaji`).html(`tidak ada data`);
