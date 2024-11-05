@@ -31,7 +31,7 @@
                 </div>
             </div>
             <div class="col-12 slip_gaji">
-                Masih dalam masa pengembangan
+                
             </div>
         </div>
     </div>
@@ -137,7 +137,13 @@
                             let factory = new SlipGajiFactory();
                             let slipGaji = factory.createShape($(`.slip_gaji`),true,response,(nidn!=null||nidn!=""? "dosen":"pegawai"));
                             slipGaji.draw();
+                        } else{
+                            $(`.slip_gaji`).html(`tidak ada data`);
                         }
+                    },
+                    error: function(xhr, status, error){
+                        const err = handleAjaxError(xhr, status, error, false, `{{route('api.slip_gaji.index')}}`);
+                        $(`.slip_gaji`).html(err);
                     },
                     complete: function(){
 
