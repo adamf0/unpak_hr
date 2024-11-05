@@ -26,7 +26,7 @@
                         </div>
                         <div class="col-12">
                             <button class="btn btn-primary mt-2 btn_show">Tampilkan</button>
-                            <button onclick="printDiv('printMe')" class="d-none btn btn-sm btn-success btn-print">
+                            <button onclick="printDiv('printMe')" class="d-none btn btn-success btn-print">
                                 <i class="fa fa-print"></i> 
                                 <b>Print</b>
                             </button>

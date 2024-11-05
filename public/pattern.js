@@ -16,6 +16,7 @@ class Template {
     }
     formatRupiah(angka)
     {
+        angka = angka==null? "0":angka;
         return angka.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".");
     }
 }
