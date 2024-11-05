@@ -26,13 +26,16 @@ class SlipGajiController extends Controller
             $nip = $nip==null? null:$nip->nip;
         }
 
-        $list_tahun = SlipGaji::select('tahun')->where('nip',$nip)->get()->unique()->values()->reduce(function($carry, $item){
-            $carry[] = [
-                "id"=>$item->tahun,
-                "text"=>$item->tahun,
+        $list_tahun = SlipGaji::select('tahun')
+        ->where('nip',$nip)
+        ->distinct()
+        ->get()
+        ->map(function ($item) {
+            return [
+                'id' => $item->tahun,
+                'text' => $item->tahun,
             ];
-            return $carry;
-        },[]);
+        });
 
         return view('slip_gaji.index',['tahun'=>json_encode($list_tahun),'nip'=>$nip,'nidn'=>$nidn]);
     }
