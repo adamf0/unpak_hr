@@ -12,6 +12,13 @@
 @stop
 
 @section('content')
+<style>
+@print {
+    @page .btn-print {
+        display: none
+    }
+}
+</style>
 <div class="row">
     <div class="col-lg-12">
         <div class="row">
@@ -143,11 +150,10 @@
 
                         if(response.status=="ok"){
                             $(`.slip_gaji`).html(`
-                            <button onclick="printDiv('printMe')" class="btn btn-sm btn-success">
+                            <button onclick="printDiv('printMe')" class="btn btn-sm btn-success btn-print">
                                 <i class="fa fa-print"></i> 
                                 <b>Print</b>
                             </button>
-                            <div class="clearfix"></div>
                             `);
                             let factory = new SlipGajiFactory();
                             let slipGaji = factory.createShape($(`.slip_gaji`),false,response,(nidn!=null||nidn!=""? "dosen":"pegawai"));
