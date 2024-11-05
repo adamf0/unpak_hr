@@ -30,7 +30,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 slip_gaji">
+            <div class="col-12 slip_gaji" id="printMe">
                 
             </div>
         </div>
@@ -42,6 +42,14 @@
     <script type="text/javascript" src="{{ Utility::loadAsset('my.js') }}"></script>
     <script type="text/javascript" src="{{ Utility::loadAsset('pattern.js') }}"></script>
     <script>
+        function printDiv(divName) {
+                var printContents = document.getElementById(divName).innerHTML;
+                var originalContents = document.body.innerHTML;
+
+                document.body.innerHTML = printContents;
+                window.print();
+                document.body.innerHTML = originalContents;
+        }
         $(document).ready(function () {
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             
@@ -156,15 +164,6 @@
                     }
                 });
             });
-
-            function printDiv(divName) {
-                var printContents = document.getElementById(divName).innerHTML;
-                var originalContents = document.body.innerHTML;
-
-                document.body.innerHTML = printContents;
-                window.print();
-                document.body.innerHTML = originalContents;
-            }
         });
     </script>
 @endpush
