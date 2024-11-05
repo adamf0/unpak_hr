@@ -12,13 +12,6 @@
 @stop
 
 @section('content')
-<style>
-@media print {
-    .btn-print {
-        display: none !important;
-    }
-}
-</style>
 <div class="row">
     <div class="col-lg-12">
         <div class="row">
@@ -33,6 +26,10 @@
                         </div>
                         <div class="col-12">
                             <button class="btn btn-primary mt-2 btn_show">Tampilkan</button>
+                            <button onclick="printDiv('printMe')" class="d-none btn btn-sm btn-success btn-print">
+                                <i class="fa fa-print"></i> 
+                                <b>Print</b>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -143,21 +140,18 @@
                     type: 'POST',
                     beforeSend: function(){
                         $(`.slip_gaji`).html(`loading...`);
+                        $('.btn-print').addClass('d-none');
                     },
                     success: function(response){
                         console.log(response);
                         $(`.slip_gaji`).html(``);
 
                         if(response.status=="ok"){
-                            $(`.slip_gaji`).html(`
-                            <button onclick="printDiv('printMe')" class="btn btn-sm btn-success btn-print">
-                                <i class="fa fa-print"></i> 
-                                <b>Print</b>
-                            </button>
-                            `);
+                            $(`.slip_gaji`).html(``);
                             let factory = new SlipGajiFactory();
-                            let slipGaji = factory.createShape($(`.slip_gaji`),false,response,(nidn!=null||nidn!=""? "dosen":"pegawai"));
+                            let slipGaji = factory.createShape($(`.slip_gaji`),true,response,(nidn!=null||nidn!=""? "dosen":"pegawai"));
                             slipGaji.draw();
+                            $('.btn-print').removeClass('d-none');
                         } else{
                             $(`.slip_gaji`).html(`tidak ada data`);
                         }
