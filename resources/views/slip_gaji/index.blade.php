@@ -134,6 +134,12 @@
                         $(`.slip_gaji`).html(``);
 
                         if(response.status=="ok"){
+                            $(`.slip_gaji`).html(`
+                            <button onclick="printDiv('printMe')" class="btn btn-sm btn-success">
+                                <i class="fa fa-print"></i> 
+                                <b>Print</b>
+                            </button>
+                            `);
                             let factory = new SlipGajiFactory();
                             let slipGaji = factory.createShape($(`.slip_gaji`),true,response,(nidn!=null||nidn!=""? "dosen":"pegawai"));
                             slipGaji.draw();
@@ -151,6 +157,14 @@
                 });
             });
 
+            function printDiv(divName) {
+                var printContents = document.getElementById(divName).innerHTML;
+                var originalContents = document.body.innerHTML;
+
+                document.body.innerHTML = printContents;
+                window.print();
+                document.body.innerHTML = originalContents;
+            }
         });
     </script>
 @endpush
