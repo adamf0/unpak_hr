@@ -154,10 +154,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12">
-                        <b>Sisa Cuti Tahunan: </b>
-                        {{ $sisa_cuti_tahun }} Hari
-                    </div>
                 </div>
             </div>
         </div>
@@ -217,6 +213,35 @@
         </div>
     </div>
     <div class="col-xxl-8 col-xl-8 col-lg-8 col-md-8 col-sm-12 col-xs-12">
+        <div class="card info-card sales-card">
+            <div class="card-body">
+                <h5 class="card-title">Laporan Cuti</h5>
+                <div class="row">
+                    <div class="col-12">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td>Jenis Cuti</td>
+                                    <td>Maksimal Cuti</td>
+                                    <td>Sisa Cuti</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($laporan_cuti as $laporan)
+                                <tr>
+                                    <td>{{$laporan->nama}}</td>
+                                    <td>{{$laporan->max}} Hari</td>
+                                    <td>{{$laporan->sisa_cuti}} Hari</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="card info-card sales-card">
             <div class="card-body">
                 <h5 class="card-title">Informasi</h5>
