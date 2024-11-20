@@ -234,7 +234,7 @@
 
                                     $warna = match (true) {
                                         $laporan->sisa_cuti <= $one_third => 'bg-danger text-white',
-                                        $laporan->sisa_cuti <= $two_third => 'bg-danger text-black',
+                                        $laporan->sisa_cuti <= $two_third => 'bg-warning text-black',
                                         default => 'bg-success text-white',
                                     };
                                 @endphp
