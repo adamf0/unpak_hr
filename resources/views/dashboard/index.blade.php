@@ -264,7 +264,7 @@
                                 @endphp
                                 <tr>
                                     <td>{{$laporan->nama}}</td>
-                                    <td>{{$max}} Hari</td>
+                                    <td>{{$max}}</td>
                                     <td class="{{$warna}}">{{$sisa}}</td>
                                 </tr>
                                 @endforeach
