@@ -35,7 +35,7 @@ class DashboardController extends Controller
 
                 return view('dashboard.index',[
                     "presensi"=>$presensi,
-                    "sisa_cuti_tahun"=>$sisa_cuti_tahun,
+                    "sisa_cuti_tahun"=>$sisa_cuti_tahun<0? 0:$sisa_cuti_tahun,
                 ]);
             } else if(!is_null(Session::get('nip'))){
                 $presensi = $this->queryBus->ask(new GetPresensiByNIPQuery(Session::get('nip')));
@@ -47,13 +47,13 @@ class DashboardController extends Controller
 
                 return view('dashboard.index',[
                     "presensi"=>$presensi,
-                    "sisa_cuti_tahun"=>$sisa_cuti_tahun,
+                    "sisa_cuti_tahun"=>$sisa_cuti_tahun<0? 0:$sisa_cuti_tahun,
                 ]);
             }
 
             return view('dashboard.index',[
                 "presensi"=>$presensi,
-                "sisa_cuti_tahun"=>$sisa_cuti_tahun,
+                "sisa_cuti_tahun"=>$sisa_cuti_tahun<0? 0:$sisa_cuti_tahun,
             ]);
         } catch (Exception $e) {
             Session::flash(TypeNotif::Error->val(), $e->getMessage());
