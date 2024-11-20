@@ -29,6 +29,7 @@ class DashboardController extends Controller
                 $presensi = $this->queryBus->ask(new GetPresensiByNIDNQuery(Session::get('nidn')));
                 $total_cuti = Cuti::select("lama_cuti")->where('nidn',Session::get('nidn'))
                                         ->where(DB::raw("YEAR(tanggal_mulai)"),DB::raw("YEAR(now())"))
+                                        ->where("id_jenis_cuti","1")
                                         ->get()
                                         ->pluck("lama_cuti")
                                         ->sum()??0;
@@ -42,6 +43,7 @@ class DashboardController extends Controller
                 $presensi = $this->queryBus->ask(new GetPresensiByNIPQuery(Session::get('nip')));
                 $total_cuti = Cuti::select("lama_cuti")->where('nip',Session::get('nip'))
                                         ->where(DB::raw("YEAR(tanggal_mulai)"),DB::raw("YEAR(now())"))
+                                        ->where("id_jenis_cuti","1")
                                         ->get()
                                         ->pluck("lama_cuti")
                                         ->sum()??0;
