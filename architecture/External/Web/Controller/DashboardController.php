@@ -27,10 +27,11 @@ class DashboardController extends Controller
 
             if(!is_null(Session::get('nidn'))){
                 $presensi = $this->queryBus->ask(new GetPresensiByNIDNQuery(Session::get('nidn')));
-                $total_cuti = DB::table("laporan_cuti_tahunan")
-                                        ->where('nidn',Session::get('nidn'))
-                                        ->where("tahun_cuti",date("Y"))
-                                        ->first()?->total_cuti??0;
+                $total_cuti = Cuti::select("lama_cuti")->where('nidn',Session::get('nidn'))
+                                        ->where(DB::raw("YEAR(tanggal_mulai)"),DB::raw("YEAR(now())"))
+                                        ->get()
+                                        ->pluck("lama_cuti")
+                                        ->sum()??0;
                 $sisa_cuti_tahun = 12 - $total_cuti;
 
                 return view('dashboard.index',[
@@ -39,10 +40,11 @@ class DashboardController extends Controller
                 ]);
             } else if(!is_null(Session::get('nip'))){
                 $presensi = $this->queryBus->ask(new GetPresensiByNIPQuery(Session::get('nip')));
-                $total_cuti = DB::table("laporan_cuti_tahunan")
-                                        ->where('nip',Session::get('nip'))
-                                        ->where("tahun_cuti",date("Y"))
-                                        ->first()?->total_cuti??0;
+                $total_cuti = Cuti::select("lama_cuti")->where('nip',Session::get('nip'))
+                                        ->where(DB::raw("YEAR(tanggal_mulai)"),DB::raw("YEAR(now())"))
+                                        ->get()
+                                        ->pluck("lama_cuti")
+                                        ->sum()??0;
                 $sisa_cuti_tahun = 12 - $total_cuti;
 
                 return view('dashboard.index',[
