@@ -79,38 +79,38 @@ class CutiController extends Controller
                 throw new Exception("pengajuan di tolak karena masih ada pengajuan izin yg masih menunggu persetujuan SDM");
             }
 
-            $tanggalMulai = Carbon::parse($request->get("tanggal_mulai"));
-            $tanggalAkhir = Carbon::parse($request->get("tanggal_akhir"));
-            $dataPerTahun = [];
-            while ($tanggalMulai->lte($tanggalAkhir)) {
-                if(!$tanggalMulai->isSunday()){
-                    $tahun = $tanggalMulai->year;
-                    if (!isset($dataPerTahun[$tahun])) {
-                        $dataPerTahun[$tahun] = 1;
-                    } else {
-                        $dataPerTahun[$tahun]++;
-                    }
+            // $tanggalMulai = Carbon::parse($request->get("tanggal_mulai"));
+            // $tanggalAkhir = Carbon::parse($request->get("tanggal_akhir"));
+            // $dataPerTahun = [];
+            // while ($tanggalMulai->lte($tanggalAkhir)) {
+            //     if(!$tanggalMulai->isSunday()){
+            //         $tahun = $tanggalMulai->year;
+            //         if (!isset($dataPerTahun[$tahun])) {
+            //             $dataPerTahun[$tahun] = 1;
+            //         } else {
+            //             $dataPerTahun[$tahun]++;
+            //         }
         
-                    $tanggalMulai->addDay();   
-                }
-            }
+            //         $tanggalMulai->addDay();   
+            //     }
+            // }
 
-            dd($dataPerTahun);
-            foreach($dataPerTahun as $tahun => $total_tanggal){
-                $total_cuti_sebelum = Cuti::select("lama_cuti")
-                                ->where(DB::raw("YEAR(tanggal_mulai)"),$tahun)
-                                ->where(fn($query)=> $query->where('nidn',Session::get('nidn'))->orWhere('nip',Session::get('nip')))
-                                ->get()
-                                ->pluck("lama_cuti")
-                                ->sum()??0;
+            // dd($dataPerTahun);
+            // foreach($dataPerTahun as $tahun => $total_tanggal){
+            //     $total_cuti_sebelum = Cuti::select("lama_cuti")
+            //                     ->where(DB::raw("YEAR(tanggal_mulai)"),$tahun)
+            //                     ->where(fn($query)=> $query->where('nidn',Session::get('nidn'))->orWhere('nip',Session::get('nip')))
+            //                     ->get()
+            //                     ->pluck("lama_cuti")
+            //                     ->sum()??0;
 
-                $max_cuti = JenisCuti::select("max")->find($request->get("jenis_cuti"))?->max??0;
-                $total_cuti = $total_tanggal + $total_cuti_sebelum;
+            //     $max_cuti = JenisCuti::select("max")->find($request->get("jenis_cuti"))?->max??0;
+            //     $total_cuti = $total_tanggal + $total_cuti_sebelum;
 
-                if($total_cuti > $max_cuti){
-                    throw new Exception("Sisa cuti anda di tahun $tahun melebihi batas maksimum.");
-                }
-            }            
+            //     if($total_cuti > $max_cuti){
+            //         throw new Exception("Sisa cuti anda di tahun $tahun melebihi batas maksimum.");
+            //     }
+            // }            
             
             $file = null;
             if($request->has("dokumen") && $request->file("dokumen")!=null){
