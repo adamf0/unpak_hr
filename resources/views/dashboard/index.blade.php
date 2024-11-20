@@ -233,8 +233,8 @@
                                     $two_third = 2 * $one_third;
 
                                     $warna = match (true) {
-                                        $sisa <= $one_third => 'bg-danger text-white',
-                                        $sisa <= $two_third => 'bg-danger text-black',
+                                        $laporan->sisa_cuti <= $one_third => 'bg-danger text-white',
+                                        $laporan->sisa_cuti <= $two_third => 'bg-danger text-black',
                                         default => 'bg-success text-white',
                                     };
                                 @endphp
