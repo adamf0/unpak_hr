@@ -85,18 +85,14 @@ class CutiController extends Controller
 
             $tanggalRange = [];
             while ($tanggalMulai->lte($tanggalAkhir)) {
-                // Menambahkan tanggal ke dalam array hanya jika bukan hari Minggu
                 if (!$tanggalMulai->isSunday()) {
-                    $tanggalRange[] = $tanggalMulai->copy(); // Gunakan copy() agar tidak memodifikasi objek asli
+                    $tanggalRange[] = $tanggalMulai->copy();
                 }
                 $tanggalMulai->addDay();
             }
 
-            // Gunakan reduce untuk menghitung jumlah hari per tahun
             $dataPerTahun = collect($tanggalRange)->reduce(function ($carry, $tanggal) {
                 $tahun = $tanggal->year;
-
-                // Tambahkan hitungan tahun yang sesuai
                 if (!isset($carry[$tahun])) {
                     $carry[$tahun] = 1;
                 } else {
@@ -106,22 +102,21 @@ class CutiController extends Controller
                 return $carry;
             }, []);
 
-            dd($dataPerTahun);
-            // foreach($dataPerTahun as $tahun => $total_tanggal){
-            //     $total_cuti_sebelum = Cuti::select("lama_cuti")
-            //                     ->where(DB::raw("YEAR(tanggal_mulai)"),$tahun)
-            //                     ->where(fn($query)=> $query->where('nidn',Session::get('nidn'))->orWhere('nip',Session::get('nip')))
-            //                     ->get()
-            //                     ->pluck("lama_cuti")
-            //                     ->sum()??0;
+            foreach($dataPerTahun as $tahun => $total_tanggal){
+                $total_cuti_sebelum = Cuti::select("lama_cuti")
+                                ->where(DB::raw("YEAR(tanggal_mulai)"),$tahun)
+                                ->where(fn($query)=> $query->where('nidn',Session::get('nidn'))->orWhere('nip',Session::get('nip')))
+                                ->get()
+                                ->pluck("lama_cuti")
+                                ->sum()??0;
 
-            //     $max_cuti = JenisCuti::select("max")->find($request->get("jenis_cuti"))?->max??0;
-            //     $total_cuti = $total_tanggal + $total_cuti_sebelum;
+                $max_cuti = JenisCuti::select("max")->find($request->get("jenis_cuti"))?->max??0;
+                $total_cuti = $total_tanggal + $total_cuti_sebelum;
 
-            //     if($total_cuti > $max_cuti){
-            //         throw new Exception("Sisa cuti anda di tahun $tahun melebihi batas maksimum.");
-            //     }
-            // }            
+                if($total_cuti > $max_cuti){
+                    throw new Exception("Sisa cuti anda di tahun $tahun melebihi batas maksimum.");
+                }
+            }            
             
             $file = null;
             if($request->has("dokumen") && $request->file("dokumen")!=null){
