@@ -217,8 +217,8 @@
             <div class="card-body">
                 <h5 class="card-title">Laporan Cuti</h5>
                 <div class="row">
-                    <div class="col-12">
-                        <table>
+                    <div class="col-12 table-responsive">
+                        <table class="table table-stripped">
                             <thead>
                                 <tr>
                                     <td>Jenis Cuti</td>
