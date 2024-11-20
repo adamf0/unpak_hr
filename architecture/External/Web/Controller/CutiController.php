@@ -105,7 +105,7 @@ class CutiController extends Controller
             foreach($dataPerTahun as $tahun => $total_tanggal){
                 $total_cuti_sebelum = Cuti::select("lama_cuti")
                                 ->where(DB::raw("YEAR(tanggal_mulai)"),$tahun)
-                                ->where(fn($query)=> $query->where('nidn',Session::get('nidn'))->orWhere('nip',Session::get('nip')))
+                                ->where(fn($query)=> $query->where('nidn',Session::get('nidn'))->where('nip',Session::get('nip')))
                                 ->get()
                                 ->pluck("lama_cuti")
                                 ->sum()??0;
