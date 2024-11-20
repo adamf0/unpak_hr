@@ -111,10 +111,11 @@ class CutiController extends Controller
                                 ->sum()??0;
 
                 $max_cuti = JenisCuti::select("max")->find($request->get("jenis_cuti"))?->max??0;
+                $sisa_cuti = $max_cuti - $total_cuti_sebelum;
                 $total_cuti = $total_tanggal + $total_cuti_sebelum;
 
                 if($total_cuti > $max_cuti){
-                    throw new Exception("Sisa cuti anda di tahun $tahun melebihi batas maksimum.");
+                    throw new Exception("Sisa cuti anda di tahun $tahun tinggal $sisa_cuti");
                 }
             }            
             
