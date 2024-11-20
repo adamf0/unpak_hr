@@ -34,7 +34,8 @@ class DashboardController extends Controller
                 $sisa_cuti_tahun = 12 - $total_cuti;
 
                 return view('dashboard.index',[
-                    "presensi"=>$presensi
+                    "presensi"=>$presensi,
+                    "sisa_cuti_tahun"=>$sisa_cuti_tahun,
                 ]);
             } else if(!is_null(Session::get('nip'))){
                 $presensi = $this->queryBus->ask(new GetPresensiByNIPQuery(Session::get('nip')));
@@ -45,7 +46,8 @@ class DashboardController extends Controller
                 $sisa_cuti_tahun = 12 - $total_cuti;
 
                 return view('dashboard.index',[
-                    "presensi"=>$presensi
+                    "presensi"=>$presensi,
+                    "sisa_cuti_tahun"=>$sisa_cuti_tahun,
                 ]);
             }
 
