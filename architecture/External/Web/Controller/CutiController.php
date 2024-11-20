@@ -115,7 +115,7 @@ class CutiController extends Controller
                 $total_cuti = $total_tanggal + $total_cuti_sebelum;
 
                 if($total_cuti > $max_cuti){
-                    throw new Exception("Sisa cuti anda di tahun $tahun tinggal $total_cuti_sebelum");
+                    throw new Exception("Sisa cuti anda di tahun $tahun tinggal $max_cuti");
                 }
             }            
             
