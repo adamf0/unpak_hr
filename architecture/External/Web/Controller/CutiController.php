@@ -117,11 +117,7 @@ class CutiController extends Controller
                     $max_cuti,
                     $total_cuti_sebelum,
                     $total_cuti,
-                    $sisa_cuti,
-                    Cuti::select("lama_cuti")
-                                ->where(DB::raw("YEAR(tanggal_mulai)"),$tahun)
-                                ->where(fn($query)=> $query->where('nidn',Session::get('nidn'))->orWhere('nip',Session::get('nip')))
-                                ->toRawSql()
+                    $sisa_cuti                
                 ]);
 
                 if($total_cuti > $max_cuti){
