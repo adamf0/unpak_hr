@@ -95,6 +95,7 @@ class CutiController extends Controller
                 }
             }
 
+            dd($dataPerTahun);
             foreach($dataPerTahun as $tahun => $total_tanggal){
                 $total_cuti_sebelum = Cuti::select("lama_cuti")
                                 ->where(DB::raw("YEAR(tanggal_mulai)"),$tahun)
