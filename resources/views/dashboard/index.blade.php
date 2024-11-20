@@ -229,7 +229,7 @@
                             <tbody>
                                 @foreach ($laporan_cuti as $laporan)
                                 @php
-                                    $one_third = $max_data / 3;
+                                    $one_third = $laporan->max / 3;
                                     $two_third = 2 * $one_third;
 
                                     $warna = match (true) {
