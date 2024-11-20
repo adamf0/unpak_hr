@@ -228,10 +228,20 @@
                             </thead>
                             <tbody>
                                 @foreach ($laporan_cuti as $laporan)
+                                @php
+                                    $one_third = $max_data / 3;
+                                    $two_third = 2 * $one_third;
+
+                                    $warna = match (true) {
+                                        $sisa <= $one_third => 'bg-danger text-white',
+                                        $sisa <= $two_third => 'bg-danger text-black',
+                                        default => 'bg-success text-white',
+                                    };
+                                @endphp
                                 <tr>
                                     <td>{{$laporan->nama}}</td>
                                     <td>{{$laporan->max}} Hari</td>
-                                    <td>{{$laporan->sisa_cuti}} Hari</td>
+                                    <td class="{{$warna}}">{{$laporan->sisa_cuti}} Hari</td>
                                 </tr>
                                 @endforeach
                             </tbody>
