@@ -154,6 +154,10 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-12">
+                        <b>Sisa Cuti Tahunan: </b>
+                        {{ $sisa_cuti_tahun }} Hari
+                    </div>
                 </div>
             </div>
         </div>
