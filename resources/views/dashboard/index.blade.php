@@ -237,11 +237,25 @@
                                         $laporan->sisa_cuti <= $two_third => 'bg-warning text-black',
                                         default => 'bg-success text-white',
                                     };
+
+                                    $years = intdiv($laporan->max, 365);
+                                    $remainingDays = $laporan->max % 365;
+
+                                    $months = intdiv($remainingDays, 30);
+                                    $days = $remainingDays % 30;
+                                    $max = "$years tahun $months bulan $days Hari";
+
+                                    $years = intdiv($laporan->sisa_cuti, 365);
+                                    $remainingDays = $laporan->sisa_cuti % 365;
+
+                                    $months = intdiv($remainingDays, 30);
+                                    $days = $remainingDays % 30;
+                                    $sisa = "$years tahun $months bulan $days Hari";
                                 @endphp
                                 <tr>
                                     <td>{{$laporan->nama}}</td>
-                                    <td>{{$laporan->max}} Hari</td>
-                                    <td class="{{$warna}}">{{$laporan->sisa_cuti}} Hari</td>
+                                    <td>{{$max}} Hari</td>
+                                    <td class="{{$warna}}">{{$sisa}} Hari</td>
                                 </tr>
                                 @endforeach
                             </tbody>

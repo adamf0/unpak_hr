@@ -28,7 +28,7 @@ class DashboardController extends Controller
 
             if(!is_null(Session::get('nidn'))){
                 $presensi = $this->queryBus->ask(new GetPresensiByNIDNQuery(Session::get('nidn')));
-                $jenis_cuti = JenisCuti::get();
+                $jenis_cuti = JenisCuti::where("id","1")->get();
                 foreach($jenis_cuti as $jc){
                     $total_cuti = Cuti::select("lama_cuti")
                                     ->where('nidn',Session::get('nidn'))
