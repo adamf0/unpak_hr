@@ -106,6 +106,7 @@ class CutiController extends Controller
                 $total_cuti_sebelum = Cuti::select("lama_cuti")
                                 ->where(DB::raw("YEAR(tanggal_mulai)"),$tahun)
                                 ->where(fn($query)=> $query->where('nidn',Session::get('nidn'))->where('nip',Session::get('nip')))
+                                ->where("status","terima sdm")
                                 ->get()
                                 ->pluck("lama_cuti")
                                 ->sum()??0;
@@ -179,6 +180,47 @@ class CutiController extends Controller
                 $file = $cuti->GetDokumen();
             }
 
+            $tanggalMulai = Carbon::parse($request->get("tanggal_mulai"));
+            $tanggalAkhir = Carbon::parse($request->get("tanggal_akhir"));
+            $dataPerTahun = [];
+
+            $tanggalRange = [];
+            while ($tanggalMulai->lte($tanggalAkhir)) {
+                if (!$tanggalMulai->isSunday()) {
+                    $tanggalRange[] = $tanggalMulai->copy();
+                }
+                $tanggalMulai->addDay();
+            }
+
+            $dataPerTahun = collect($tanggalRange)->reduce(function ($carry, $tanggal) {
+                $tahun = $tanggal->year;
+                if (!isset($carry[$tahun])) {
+                    $carry[$tahun] = 1;
+                } else {
+                    $carry[$tahun]++;
+                }
+
+                return $carry;
+            }, []);
+
+            foreach($dataPerTahun as $tahun => $total_tanggal){
+                $total_cuti_sebelum = Cuti::select("lama_cuti")
+                                ->where(DB::raw("YEAR(tanggal_mulai)"),$tahun)
+                                ->where(fn($query)=> $query->where('nidn',Session::get('nidn'))->where('nip',Session::get('nip')))
+                                ->where("status","terima sdm")
+                                ->get()
+                                ->pluck("lama_cuti")
+                                ->sum()??0;
+
+                $max_cuti = JenisCuti::select("max")->find($request->get("jenis_cuti"))?->max??0;
+                $sisa_cuti = $max_cuti - $total_cuti_sebelum;
+                $total_cuti = $total_tanggal + $total_cuti_sebelum;
+
+                if($total_cuti > $max_cuti){
+                    throw new Exception("Sisa cuti anda di tahun $tahun tinggal $sisa_cuti hari sedangkan pengajuan $total_tanggal hari");
+                }
+            }
+            
             $this->commandBus->dispatch(new UpdateCutiCommand(
                 $request->get("id"),
                 Session::has("nidn")? Creator::buildDosen(DosenReferensi::make(Session::get("nidn"))):null,
