@@ -243,19 +243,29 @@
 
                                     $months = intdiv($remainingDays, 30);
                                     $days = $remainingDays % 30;
-                                    $max = "$years tahun $months bulan $days Hari";
+    
+                                    $parts = [];
+                                    if ($years > 0) $parts[] = "$years tahun";
+                                    if ($months > 0) $parts[] = "$months bulan";
+                                    if ($days > 0) $parts[] = "$days hari";
+                                    $max = implode(" ", $parts) ?: "0 hari";
 
                                     $years = intdiv($laporan->sisa_cuti, 365);
                                     $remainingDays = $laporan->sisa_cuti % 365;
 
                                     $months = intdiv($remainingDays, 30);
                                     $days = $remainingDays % 30;
-                                    $sisa = "$years tahun $months bulan $days Hari";
+                                    $parts = [];
+                                    if ($years > 0) $parts[] = "$years tahun";
+                                    if ($months > 0) $parts[] = "$months bulan";
+                                    if ($days > 0) $parts[] = "$days hari";
+                                    $sisa = implode(" ", $parts) ?: "0 hari";
+
                                 @endphp
                                 <tr>
                                     <td>{{$laporan->nama}}</td>
                                     <td>{{$max}} Hari</td>
-                                    <td class="{{$warna}}">{{$sisa}} Hari</td>
+                                    <td class="{{$warna}}">{{$sisa}}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
