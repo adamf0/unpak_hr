@@ -41,6 +41,7 @@ class DashboardController extends Controller
 
                     $sisa_cuti_tahun = $jc->max - $total_cuti;
                     $jenis_cuti->sisa_cuti = $sisa_cuti_tahun<0? 0:$sisa_cuti_tahun;
+                    dump($jenis_cuti, $jc, $sisa_cuti_tahun);
                 }
 
                 return view('dashboard.index',[
