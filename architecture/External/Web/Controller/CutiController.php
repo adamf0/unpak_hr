@@ -82,17 +82,31 @@ class CutiController extends Controller
             $tanggalMulai = Carbon::parse($request->get("tanggal_mulai"));
             $tanggalAkhir = Carbon::parse($request->get("tanggal_akhir"));
             $dataPerTahun = [];
-            $dataPerTahun = collect();
 
-            $tanggalMulai->daysUntil($tanggalAkhir)->each(function($tanggal) use ($dataPerTahun) {
-                if (!$tanggal->isSunday()) {
-                    $tahun = $tanggal->year;
-                    $dataPerTahun->put($tahun, $dataPerTahun->get($tahun, 0) + 1);
+            $tanggalRange = [];
+            while ($tanggalMulai->lte($tanggalAkhir)) {
+                // Menambahkan tanggal ke dalam array hanya jika bukan hari Minggu
+                if (!$tanggalMulai->isSunday()) {
+                    $tanggalRange[] = $tanggalMulai->copy(); // Gunakan copy() agar tidak memodifikasi objek asli
                 }
-            });
-            $dataPerTahun = $dataPerTahun->toArray();
+                $tanggalMulai->addDay();
+            }
+
+            // Gunakan reduce untuk menghitung jumlah hari per tahun
+            $dataPerTahun = collect($tanggalRange)->reduce(function ($carry, $tanggal) {
+                $tahun = $tanggal->year;
+
+                // Tambahkan hitungan tahun yang sesuai
+                if (!isset($carry[$tahun])) {
+                    $carry[$tahun] = 1;
+                } else {
+                    $carry[$tahun]++;
+                }
+
+                return $carry;
+            }, []);
+
             dd($dataPerTahun);
-            
             // foreach($dataPerTahun as $tahun => $total_tanggal){
             //     $total_cuti_sebelum = Cuti::select("lama_cuti")
             //                     ->where(DB::raw("YEAR(tanggal_mulai)"),$tahun)
