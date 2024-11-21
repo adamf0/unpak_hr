@@ -49,7 +49,7 @@ class DashboardController extends Controller
                 ]);
             } else if(!is_null(Session::get('nip'))){
                 $presensi = $this->queryBus->ask(new GetPresensiByNIPQuery(Session::get('nip')));
-                $jenis_cuti = JenisCuti::get();
+                $jenis_cuti = JenisCuti::where("id","1")->get();
                 foreach($jenis_cuti as $jc){
                     $total_cuti = Cuti::select("lama_cuti")
                                     ->where('nip',Session::get('nip'))
