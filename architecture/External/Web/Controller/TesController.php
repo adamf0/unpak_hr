@@ -19,7 +19,6 @@ class TesController extends Controller
         //return Hash::make("251423");
 
         try {
-            DB::beginTransaction();
             $list_pegawai = NPribadi::select('nip')->get();
             foreach($list_pegawai as $pegawai){
                 $check = Absensi::where('nip', $pegawai->nip)
@@ -54,10 +53,8 @@ class TesController extends Controller
                         ]);
                     }
             }
-            DB::commit();
             echo "success create absent"; 
         } catch (\Throwable $th) {
-            DB::rollBack();
             throw $th;
         }
 
