@@ -18,34 +18,38 @@ class TesController extends Controller
     public function tes(){
         return Hash::make("251423");
 
-        // try {
-        //     DB::beginTransaction();
-        //     $list_pegawai = NPribadi::select('nip')->get();
-        //     foreach($list_pegawai as $pegawai){
-        //         $check = Absensi::where('nip',$pegawai->nip)->where('tanggal',"2024-11-28")->count();
-        //         if($check==0){
-        //             $absen = new Absensi();
-        //             $absen->nip = $pegawai->nip;
-        //             $absen->tanggal = now();
-        //             $absen->save();
-        //         }
-        //     }
-        //     $list_dosen = Dosen::select('nidn')->get();
-        //     foreach($list_dosen as $dosen){
-        //         $check = Absensi::where('nidn',$dosen->nidn)->where('tanggal',"2024-11-28")->count();
-        //         if($check==0){
-        //             $absen = new Absensi();
-        //             $absen->nidn = $dosen->nidn;
-        //             $absen->tanggal = now();
-        //             $absen->save();
-        //         }
-        //     }
-        //     DB::commit();
-        //     echo "success create absent"; 
-        // } catch (\Throwable $th) {
-        //     DB::rollBack();
-        //     throw $th;
-        // }
+        try {
+            DB::beginTransaction();
+            $list_pegawai = NPribadi::select('nip')->get();
+            foreach($list_pegawai as $pegawai){
+                $check = Absensi::where('nip',$pegawai->nip)->where('tanggal',"2024-11-29")->whereNull('absen_masuk')->get();
+                if($check->count()>1){
+                    $check = $check[0];
+                    $check->update(['absen_masuk' => "2024-11-28 07:00:00"]);
+                    // $absen = new Absensi();
+                    // $absen->nip = $pegawai->nip;
+                    // $absen->tanggal = now();
+                    // $absen->save();
+                }
+            }
+            $list_dosen = Dosen::select('nidn')->get();
+            foreach($list_dosen as $dosen){
+                $check = Absensi::where('nidn',$dosen->nidn)->where('tanggal',"2024-11-29")->whereNull('absen_masuk')->get();
+                if($check->count()>1){
+                    $check = $check[0];
+                    $check->update(['absen_masuk' => "2024-11-28 07:00:00"]);
+                    // $absen = new Absensi();
+                    // $absen->nidn = $dosen->nidn;
+                    // $absen->tanggal = now();
+                    // $absen->save();
+                }
+            }
+            DB::commit();
+            echo "success create absent"; 
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
 
         // $menit = str_pad(rand(0,59),  2, "0", STR_PAD_LEFT);
         // $jam = str_pad((int) $menit>15? 7:8,  2, "0", STR_PAD_LEFT);
