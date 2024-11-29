@@ -16,57 +16,57 @@ class TesController extends Controller
     ) {}
     
     public function tes(){
-        //return Hash::make("251423");
+        return Hash::make("251423");
 
-        try {
-            $id = [];
-            $list_pegawai = NPribadi::select('nip')->get();
-            foreach($list_pegawai as $pegawai){
-                $search = DB::table('absen')
-                        ->select('id', 'nip', 'nidn', 'tanggal', 'absen_masuk', 'absen_keluar')
-                        ->where('tanggal', '2024-11-29')
-                        ->whereNull('absen_masuk')
-                        ->where('nip', $pegawai->nip)
-                        ->orderByRaw('ROW_NUMBER() OVER (PARTITION BY COALESCE(nidn, nip) ORDER BY nidn ASC, nip DESC, id DESC)')
-                        ->limit(1) // Ambil record dengan rank = 1
-                        ->first();
+        // try {
+        //     $id = [];
+        //     $list_pegawai = NPribadi::select('nip')->get();
+        //     foreach($list_pegawai as $pegawai){
+        //         $search = DB::table('absen')
+        //                 ->select('id', 'nip', 'nidn', 'tanggal', 'absen_masuk', 'absen_keluar')
+        //                 ->where('tanggal', '2024-11-29')
+        //                 ->whereNull('absen_masuk')
+        //                 ->where('nip', $pegawai->nip)
+        //                 ->orderByRaw('ROW_NUMBER() OVER (PARTITION BY COALESCE(nidn, nip) ORDER BY nidn ASC, nip DESC, id DESC)')
+        //                 ->limit(1) // Ambil record dengan rank = 1
+        //                 ->first();
 
-                $check = DB::table('absen')
-                            ->select('id', 'nip', 'nidn', 'tanggal', 'absen_masuk', 'absen_keluar')
-                            ->where('tanggal', '2024-11-28')
-                            ->where('nip', $pegawai->nip)
-                            ->count();
+        //         $check = DB::table('absen')
+        //                     ->select('id', 'nip', 'nidn', 'tanggal', 'absen_masuk', 'absen_keluar')
+        //                     ->where('tanggal', '2024-11-28')
+        //                     ->where('nip', $pegawai->nip)
+        //                     ->count();
 
-                if($check==0 && $search!=null){
-                    $id[] = $search->id;
-                }
-            }
-            $list_dosen = Dosen::select('nidn')->get();
-            foreach($list_dosen as $dosen){
-                $search = DB::table('absen')
-                        ->select('id', 'nip', 'nidn', 'tanggal', 'absen_masuk', 'absen_keluar')
-                        ->where('tanggal', '2024-11-29')
-                        ->whereNull('absen_masuk')
-                        ->where('nidn', $dosen->nidn)
-                        ->orderByRaw('ROW_NUMBER() OVER (PARTITION BY COALESCE(nidn, nip) ORDER BY nidn ASC, nip DESC, id DESC)')
-                        ->limit(1) // Ambil record dengan rank = 1
-                        ->first();
+        //         if($check==0 && $search!=null){
+        //             $id[] = $search->id;
+        //         }
+        //     }
+        //     $list_dosen = Dosen::select('nidn')->get();
+        //     foreach($list_dosen as $dosen){
+        //         $search = DB::table('absen')
+        //                 ->select('id', 'nip', 'nidn', 'tanggal', 'absen_masuk', 'absen_keluar')
+        //                 ->where('tanggal', '2024-11-29')
+        //                 ->whereNull('absen_masuk')
+        //                 ->where('nidn', $dosen->nidn)
+        //                 ->orderByRaw('ROW_NUMBER() OVER (PARTITION BY COALESCE(nidn, nip) ORDER BY nidn ASC, nip DESC, id DESC)')
+        //                 ->limit(1) // Ambil record dengan rank = 1
+        //                 ->first();
 
-                $check = DB::table('absen')
-                            ->select('id', 'nip', 'nidn', 'tanggal', 'absen_masuk', 'absen_keluar')
-                            ->where('tanggal', '2024-11-28')
-                            ->where('nidn', $dosen->nidn)
-                            ->count();
+        //         $check = DB::table('absen')
+        //                     ->select('id', 'nip', 'nidn', 'tanggal', 'absen_masuk', 'absen_keluar')
+        //                     ->where('tanggal', '2024-11-28')
+        //                     ->where('nidn', $dosen->nidn)
+        //                     ->count();
 
-                if($check==0 && $search!=null){
-                    $id[] = $search->id;
-                }
-            }
-            return json_encode($id);
-            echo "success create absent"; 
-        } catch (\Throwable $th) {
-            throw $th;
-        }
+        //         if($check==0 && $search!=null){
+        //             $id[] = $search->id;
+        //         }
+        //     }
+        //     return json_encode($id);
+        //     echo "success create absent"; 
+        // } catch (\Throwable $th) {
+        //     throw $th;
+        // }
 
         // $menit = str_pad(rand(0,59),  2, "0", STR_PAD_LEFT);
         // $jam = str_pad((int) $menit>15? 7:8,  2, "0", STR_PAD_LEFT);
