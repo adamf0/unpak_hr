@@ -24,7 +24,7 @@ class TesController extends Controller
             foreach($list_pegawai as $pegawai){
                 $check = Absensi::where('nip',$pegawai->nip)->where('tanggal',"2024-11-29")->whereNull('absen_masuk')->get();
                 if($check->count()>1){
-                    $check = $check[0];
+                    $check = $check[1];
                     $check->update(['absen_masuk' => "2024-11-28 07:00:00"]);
                     // $absen = new Absensi();
                     // $absen->nip = $pegawai->nip;
@@ -36,7 +36,7 @@ class TesController extends Controller
             foreach($list_dosen as $dosen){
                 $check = Absensi::where('nidn',$dosen->nidn)->where('tanggal',"2024-11-29")->whereNull('absen_masuk')->get();
                 if($check->count()>1){
-                    $check = $check[0];
+                    $check = $check[1];
                     $check->update(['absen_masuk' => "2024-11-28 07:00:00"]);
                     // $absen = new Absensi();
                     // $absen->nidn = $dosen->nidn;
