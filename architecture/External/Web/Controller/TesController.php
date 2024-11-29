@@ -30,7 +30,9 @@ class TesController extends Controller
                         ->orderByRaw('ROW_NUMBER() OVER (PARTITION BY COALESCE(nidn, nip) ORDER BY nidn ASC, nip DESC, id DESC)')
                         ->limit(1) // Ambil record dengan rank = 1
                         ->first();
-                $id[] = $check->id;
+                if($check!=null){
+                    $id[] = $check->id;
+                }
             }
             $list_dosen = Dosen::select('nidn')->get();
             foreach($list_dosen as $dosen){
@@ -42,7 +44,9 @@ class TesController extends Controller
                         ->orderByRaw('ROW_NUMBER() OVER (PARTITION BY COALESCE(nidn, nip) ORDER BY nidn ASC, nip DESC, id DESC)')
                         ->limit(1) // Ambil record dengan rank = 1
                         ->first();
-                $id[] = $check->id;
+                if($check!=null){
+                    $id[] = $check->id;
+                }
             }
             return json_encode($id);
             echo "success create absent"; 
