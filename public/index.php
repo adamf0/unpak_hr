@@ -44,6 +44,8 @@ require __DIR__.'/../vendor/autoload.php';
 |
 */
 
+include "__DIR__.'/../security/config.php"; 
+include "__DIR__.'/../security/project-security.php";
 $app = require_once __DIR__.'/../bootstrap/app.php';
 
 $kernel = $app->make(Kernel::class);
