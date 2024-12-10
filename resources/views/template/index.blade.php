@@ -4,6 +4,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="robots" content="noindex, nofollow">
+  <!-- Meta Generator -->
+  <meta name="generator" content="HR Portal Universitas Pakuan">
+
+  <!-- Meta Keywords -->
+  <meta name="keywords" content="HRPortal, Universitas Pakuan, UNPAK, HR Portal Unpak, Sistem Informasi HR Unpak">
+
+  <!-- Meta Description -->
+  <meta name="description" content="HRPortal Universitas Pakuan (UNPAK) adalah platform yang dirancang untuk pengelolaan sumber daya manusia secara efisien dan efektif di lingkungan Universitas Pakuan.">
+  
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta name="csrf-token" content="{{ csrf_token() }}" />
   <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" /> -->
