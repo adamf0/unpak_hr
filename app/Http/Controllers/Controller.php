@@ -1,7 +1,4 @@
 <?php
-require_once "/../../public/security/config.php"; 
-require_once "/../../public/security/project-security.php";
-
 namespace App\Http\Controllers;
 
 
