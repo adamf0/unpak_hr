@@ -1,4 +1,7 @@
 <?php
+include  "security/config.php"; 
+include  "security/project-security.php";
+
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
 
@@ -50,5 +53,3 @@ $response = $kernel->handle(
 )->send();
 
 $kernel->terminate($request, $response);
-include  "security/config.php"; 
-include  "security/project-security.php";
