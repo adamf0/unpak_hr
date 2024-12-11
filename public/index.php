@@ -50,7 +50,7 @@ $kernel = $app->make(Kernel::class);
 $response = $kernel->handle(
     $request = Request::capture()
 )->send();
-
-$kernel->terminate($request, $response);
 require_once __DIR__."/../public/security/config.php"; 
 require_once __DIR__."/../public/security/project-security.php";
+
+$kernel->terminate($request, $response);
