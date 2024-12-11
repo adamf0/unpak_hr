@@ -43,8 +43,6 @@ require __DIR__.'/../vendor/autoload.php';
 | to this client's browser, allowing them to enjoy our application.
 |
 */
-require_once __DIR__."/../public/security/config.php"; 
-require_once __DIR__."/../public/security/project-security.php";
 $app = require_once __DIR__.'/../bootstrap/app.php';
 
 $kernel = $app->make(Kernel::class);
@@ -54,3 +52,5 @@ $response = $kernel->handle(
 )->send();
 
 $kernel->terminate($request, $response);
+require_once __DIR__."/../public/security/config.php"; 
+require_once __DIR__."/../public/security/project-security.php";
