@@ -1,8 +1,9 @@
 <?php
+require_once "/../../public/security/config.php"; 
+require_once "/../../public/security/project-security.php";
 
 namespace App\Http\Controllers;
-require_once __DIR__."/../../public/security/config.php"; 
-require_once __DIR__."/../../public/security/project-security.php";
+
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
