@@ -1,6 +1,6 @@
 <?php
-include  "security/config.php"; 
-include  "security/project-security.php";
+//include  "security/config.php"; 
+//include  "security/project-security.php";
 
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
