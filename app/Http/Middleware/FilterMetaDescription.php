@@ -22,6 +22,7 @@ class FilterMetaDescription
 
         // Check if the meta description is present in the request
         $metaDescription = $request->input('meta_description');
+        dump($request->all());
 
         if ($metaDescription) {
             foreach ($blockedKeywords as $keyword) {

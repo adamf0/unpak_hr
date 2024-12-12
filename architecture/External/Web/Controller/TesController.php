@@ -16,7 +16,6 @@ class TesController extends Controller
     ) {}
     
     public function tes(){
-        dd($_SERVER,$_REQUEST);
         return Hash::make("251423");
 
         // try {
