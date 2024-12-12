@@ -22,16 +22,11 @@ class FilterMetaDescription
 
         // Check if the meta description is present in the request
         $metaDescription = $request->input('meta_description');
-        dump($request->all());
-
-        if ($metaDescription) {
-            foreach ($blockedKeywords as $keyword) {
-                if (stripos($metaDescription, $keyword) !== false) {
-                    return response()->json([
-                        'error' => 'Meta description contains forbidden content.'
-                    ], 403);
-                }
-            }
+        
+        if (in_array($metaDescription, $blockedKeywords)) {
+            return response()->json([
+                'error' => 'Meta description contains forbidden content.'
+            ], 403);
         }
 
         return $next($request);
