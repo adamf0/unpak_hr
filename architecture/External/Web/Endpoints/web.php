@@ -32,12 +32,12 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-Route::get('/', [AuthController::class,'Authorization'])->name('auth.authorization');
-Route::post('login', [AuthController::class,'Authentication'])->name('auth.authentication');
+Route::get('/', [AuthController::class,'Authorization'])->name('auth.authorization')->middleware('filter.meta');
+Route::post('login', [AuthController::class,'Authentication'])->name('auth.authentication')->middleware('filter.meta');
 Route::get('logout', [AuthController::class,'Logout'])->name('auth.logout');
-Route::get('/tes', [TesController::class,'tes'])->name('tes');
+Route::get('/tes', [TesController::class,'tes'])->name('tes')->middleware('filter.meta');
 
-Route::middleware(['throwSession'])->group(function () {
+Route::middleware(['throwSession','filter.meta'])->group(function () {
     Route::get('dashboard', [DashboardController::class,'index'])->name('dashboard.index');
     
     Route::get('pengguna', [PenggunaController::class,'index'])->name('pengguna.index');
