@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="utf-8">
+  <link rel="canonical" href="https://hrportal.unpak.ac.id/" />
   <meta name="robots" content="noindex, nofollow">
   <!-- Meta Generator -->
   <meta name="generator" content="HR Portal Universitas Pakuan">
