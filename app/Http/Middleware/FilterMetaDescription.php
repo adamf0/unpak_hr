@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Exception;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -27,7 +26,9 @@ class FilterMetaDescription
         if ($metaDescription) {
             foreach ($blockedKeywords as $keyword) {
                 if (stripos($metaDescription, $keyword) !== false) {
-                   throw new Exception('Meta description contains forbidden content.');
+                    return response()->json([
+                        'error' => 'Meta description contains forbidden content.'
+                    ], 403);
                 }
             }
         }
