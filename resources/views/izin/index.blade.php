@@ -231,6 +231,7 @@
 
             let table = eTable({
                 url: `{{ route('datatable.Izin.index') }}?level=${level}&nidn=${nidn}&nip=${nip}&type=${type}&verifikasi=${verifikasi}`,
+                type: 'POST'
             }, column);
 
             let modal = new bootstrap.Modal(document.getElementById('modal'));

@@ -52,6 +52,7 @@
             
             let table = eTable({
                 url: `{{ route('datatable.Pengguna.index') }}`,
+                type: 'POST'
             }, [
                 {
                     data: 'DT_RowIndex', 

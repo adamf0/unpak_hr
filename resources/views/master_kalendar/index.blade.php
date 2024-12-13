@@ -53,6 +53,7 @@
             
             let table = eTable({
                 url: `{{ route('datatable.MasterKalendar.index') }}`,
+                type: 'POST'
             }, [
                 {
                     data: 'DT_RowIndex', 

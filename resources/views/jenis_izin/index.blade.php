@@ -50,6 +50,7 @@
             
             let table = eTable({
                 url: `{{ route('datatable.JenisIzin.index') }}`,
+                type: 'POST'
             }, [
                 {
                     data: 'DT_RowIndex', 

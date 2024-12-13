@@ -204,6 +204,7 @@
 
             table_absen_dosen = eTable({
                 url: `{{ route('datatable.Presensi.index') }}?filter=dosen&nidn=${nidn}&nip=${nip}`,
+                type: 'POST'
             }, column,
             function( row, data ){},
             function( settings ){},
@@ -211,6 +212,7 @@
 
             table_absen_pegawai = eTable({
                 url: `{{ route('datatable.Presensi.index') }}?filter=pegawai&nidn=${nidn}&nip=${nip}`,
+                type: 'POST'
             }, column,
             function( row, data ){},
             function( settings ){},

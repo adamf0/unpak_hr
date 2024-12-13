@@ -51,6 +51,7 @@
             
             let table = eTable({
                 url: `{{ route('datatable.VideoKegiatan.index') }}`,
+                type: 'POST'
             }, [
                 {
                     data: 'DT_RowIndex', 
