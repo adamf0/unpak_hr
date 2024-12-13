@@ -72,11 +72,11 @@
                                 <label for="password" class="form-label">Password</label>
                               </div>
                             </div>
-                            <div class="col-12 d-grid gap-2">
+                            <div class="col-12 d-grid gap-5">
                               <button class="btn btn-dark btn-lg" type="submit">Login</button>
-                              <div class="d-grid gap-2 d-md-block">
-                                  <a href="{{ Utility::loadAsset('USER GUIDE DOSEN & TENDIK NON STRUKTURAL (26-08-2024).pdf')}}" target="_blank" class="btn btn-primary btn-sm">Manual Guide</a>
-                                  <a href="https://unpak.link/hrportal_app" target="_blank" class="btn btn-success btn-md"><i class="bi bi-android2"></i> Versi Android</a>
+                              <div class="row">
+                                <a href="{{ Utility::loadAsset('USER GUIDE DOSEN & TENDIK NON STRUKTURAL (26-08-2024).pdf')}}" target="_blank" class="btn btn-primary btn-md col-6">Manual Guide</a>
+                                <a href="https://unpak.link/hrportal_app" target="_blank" class="btn btn-success btn-md col-6"><i class="bi bi-android2"></i> Versi Android</a>
                               </div>
                             </div>
                           </div>
