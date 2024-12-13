@@ -921,11 +921,17 @@
                     },
             ];
             $('#tbCutiDosen').DataTable( {
-                ajax: `{{route('datatable.ActiveCuti.index')}}?filter=nidn`,
+                ajax: {
+                    url: `{{route('datatable.ActiveCuti.index')}}?filter=nidn`,
+                    type: `POST`
+                },
                 columns: columns
             });
             $('#tbCutiPegawai').DataTable( {
-                ajax: `{{route('datatable.ActiveCuti.index')}}?filter=nip`,
+                ajax: {
+                    url: `{{route('datatable.ActiveCuti.index')}}?filter=nip`,
+                    type: `POST`
+                },
                 columns: columns
             });
         });
