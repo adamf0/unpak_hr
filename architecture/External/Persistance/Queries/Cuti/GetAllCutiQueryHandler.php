@@ -26,7 +26,9 @@ class GetAllCutiQueryHandler extends Query
     public function handle(GetAllCutiQuery $query)
     {
         $nip = EPribadi::where('nidn',$query->GetNIDN())->first()?->nip;
-        $datas = CutiModel::with(['JenisCuti','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','PayrollPegawai','PayrollVerifikasi','EPribadi']);
+        $datas = CutiModel::with(['JenisCuti'])->get();
+        dd($datas);
+        
         if(!empty($query->GetNIDN())){
             if($query->GetSemua()){
                 if($query->IsVerificator()){
