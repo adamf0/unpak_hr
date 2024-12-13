@@ -134,7 +134,7 @@ class DatatableCutiController extends Controller
             ->rawColumns(['action'])
             ->make(true);
         } catch (\Exception $e) {
-            throw $e;
+            return $e->getMessage();
         }
     }
 }

@@ -26,7 +26,7 @@ class GetAllCutiQueryHandler extends Query
     public function handle(GetAllCutiQuery $query)
     {
         $nip = EPribadi::where('nidn',$query->GetNIDN())->first()?->nip;
-        $datas = CutiModel::with(['JenisCuti'])->get();
+        $datas = CutiModel::with(['JenisCuti']);
         
         // if(!empty($query->GetNIDN())){
         //     if($query->GetSemua()){
@@ -55,7 +55,6 @@ class GetAllCutiQueryHandler extends Query
         // }
         Log::channel('mysql_query')->info($datas->toRawSql());
         $datas = $datas->orderBy('id', 'DESC')->get();
-        dd($datas);
         
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 
