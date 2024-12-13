@@ -74,7 +74,14 @@
                             </div>
                             <div class="col-12 d-grid gap-2">
                               <button class="btn btn-dark btn-lg" type="submit">Login</button>
-                              <a href="{{ Utility::loadAsset('USER GUIDE DOSEN & TENDIK NON STRUKTURAL (26-08-2024).pdf')}}" class="btn btn-primary btn-lg">Manual Guide</a>
+                              <div class="row">
+                                <div class="col-6">
+                                <a href="{{ Utility::loadAsset('USER GUIDE DOSEN & TENDIK NON STRUKTURAL (26-08-2024).pdf')}}" class="btn btn-primary btn-lg">Manual Guide</a>
+                                </div>
+                                <div class="col-6">
+                                <a href="https://unpak.link/hrportal_app" class="btn tbn-success">Unduh Versi Android</a>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </form>
