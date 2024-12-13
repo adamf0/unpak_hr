@@ -79,7 +79,7 @@
                                 <a href="{{ Utility::loadAsset('USER GUIDE DOSEN & TENDIK NON STRUKTURAL (26-08-2024).pdf')}}" class="btn btn-primary btn-lg">Manual Guide</a>
                                 </div>
                                 <div class="col-6">
-                                <a href="https://unpak.link/hrportal_app" class="btn tbn-success">Unduh Versi Android</a>
+                                <a href="https://unpak.link/hrportal_app" class="btn btn-success">Unduh Versi Android</a>
                                 </div>
                               </div>
                             </div>
