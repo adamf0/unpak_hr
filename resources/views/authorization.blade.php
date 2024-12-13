@@ -76,7 +76,7 @@
                               <button class="btn btn-dark btn-lg" type="submit">Login</button>
                               <div class="row gap-2">
                                 <a href="https://unpak.link/hrportal_app" target="_blank" class="btn btn-success btn-md col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12"><i class="bi bi-android2"></i> Versi Android</a>
-                                <a href="{{ Utility::loadAsset('USER GUIDE DOSEN & TENDIK NON STRUKTURAL (26-08-2024).pdf')}}" target="_blank" class="btn btn-primary btn-md col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">Manual Guide</a>
+                                <a href="{{ Utility::loadAsset('USER GUIDE DOSEN & TENDIK NON STRUKTURAL (26-08-2024).pdf')}}" target="_blank" class="btn btn-primary btn-md col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12"><i class="bi bi-journal-album"></i> Manual Guide</a>
                               </div>
                             </div>
                           </div>
