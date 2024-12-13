@@ -2,27 +2,19 @@
 <html lang="en">
 
 <head>
+  <title>HR Portal</title>
   <meta charset="utf-8">
-  <link rel="canonical" href="https://hrportal.unpak.ac.id/" />
-  <meta name="robots" content="noindex, nofollow">
-  <!-- Meta Generator -->
-  <meta name="generator" content="HR Portal Universitas Pakuan">
-
-  <!-- Meta Keywords -->
-  <meta name="keywords" content="HRPortal, Universitas Pakuan, UNPAK, HR Portal Unpak, Sistem Informasi HR Unpak">
-
-  <!-- Meta Description -->
-  <meta name="description" content="HRPortal Universitas Pakuan (UNPAK) adalah platform yang dirancang untuk pengelolaan sumber daya manusia secara efisien dan efektif di lingkungan Universitas Pakuan.">
-  
+  <meta http-equiv=content-type content="text/html; charset=utf-8"/>
+  <meta name=keywords content="HRPortal, Universitas Pakuan, UNPAK, HR Portal Unpak, Sistem Informasi HR Unpak"/>
+  <meta name=robots content="index, follow"/>
+  <meta name=description content="HRPortal Universitas Pakuan (UNPAK) adalah platform yang dirancang untuk pengelolaan sumber daya manusia secara efisien dan efektif di lingkungan Universitas Pakuan."/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta name="csrf-token" content="{{ csrf_token() }}" />
-  <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" /> -->
-  <title>HR Portal</title>
+  
   <link href="{{ Utility::loadAsset('assets/css/style.css') }}" rel="stylesheet">
   <link href="{{ Utility::loadAsset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
   <link href="{{ Utility::loadAsset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
-
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
   <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> -->

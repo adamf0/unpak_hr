@@ -2,21 +2,16 @@
 <html lang="en">
 
 <head>
+  <title>HR Portal</title>
   <meta charset="utf-8">
-  <link rel="canonical" href="https://hrportal.unpak.ac.id/" />
-  <meta name="robots" content="noindex, nofollow">
-  <!-- Meta Generator -->
-  <meta name="generator" content="HR Portal Universitas Pakuan">
-
-  <!-- Meta Keywords -->
-  <meta name="keywords" content="HRPortal, Universitas Pakuan, UNPAK, HR Portal Unpak, Sistem Informasi HR Unpak">
-
-  <!-- Meta Description -->
-  <meta name="description" content="HRPortal Universitas Pakuan (UNPAK) adalah platform yang dirancang untuk pengelolaan sumber daya manusia secara efisien dan efektif di lingkungan Universitas Pakuan.">
-  
+  <meta http-equiv=content-type content="text/html; charset=utf-8"/>
+  <meta name=keywords content="HRPortal, Universitas Pakuan, UNPAK, HR Portal Unpak, Sistem Informasi HR Unpak"/>
+  <meta name=robots content="index, follow"/>
+  <meta name=description content="HRPortal Universitas Pakuan (UNPAK) adalah platform yang dirancang untuk pengelolaan sumber daya manusia secara efisien dan efektif di lingkungan Universitas Pakuan."/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta name="csrf-token" content="{{ csrf_token() }}" />
-  <title>HR Portal</title>
+  
+  <link rel="canonical" href="https://hrportal.unpak.ac.id/" />
   <link href="{{ Utility::loadAsset('assets/css/style.css') }}" rel="stylesheet">
   <link href="{{ Utility::loadAsset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
   <link href="{{ Utility::loadAsset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
