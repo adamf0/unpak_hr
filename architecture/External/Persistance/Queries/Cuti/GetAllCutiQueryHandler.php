@@ -26,36 +26,35 @@ class GetAllCutiQueryHandler extends Query
     public function handle(GetAllCutiQuery $query)
     {
         $nip = EPribadi::where('nidn',$query->GetNIDN())->first()?->nip;
-        $datas = CutiModel::with(['JenisCuti']);
-        
-        // if(!empty($query->GetNIDN())){
-        //     if($query->GetSemua()){
-        //         if($query->IsVerificator()){
-        //             $datas = $datas->whereIn('verifikasi', [$nip,$query->GetNIP()]);
-        //         } else{
-        //             $datas = $datas->where(fn($q)=> $q->where('nidn',$query->GetNIDN()));
-        //             // ->orWhereHas('EPribadiRemote', fn($subQuery) => $subQuery->where('nidn', $query->GetNIDN()) ) );
-        //         }
-        //     } else{
-        //         $datas = $query->IsVerificator()? 
-        //             $datas->where('nidn',$query->GetNIDN())->orWhere('verifikasi',$query->GetNIDN()):
-        //             $datas->where('nidn',$query->GetNIDN());
-        //     }
-        // } else if(!empty($query->GetNIP())){
-        //     if($query->IsVerificator()){
-        //         $datas = $datas->whereIn('verifikasi',[$query->GetNIP(),$nip]);
-        //     } else{
-        //         $datas = $datas->where('nip',$query->GetNIP());
-        //     }
-        // } else if($query->IsVerificator()){
-        //     $datas = $datas->whereIn('status',["menunggu verifikasi sdm","tolak sdm","terima sdm"]);
-        // }
-        // if(!empty($query->GetTahun())){
-        //     $datas = $datas->where(DB::raw('YEAR(tanggal_mulai)'),'>=',$query->GetTahun())->where(DB::raw('YEAR(tanggal_akhir)'),'<=',$query->GetTahun());
-        // }
+        $datas = CutiModel::with(['JenisCuti','Dosen','Dosen.Fakultas','Dosen.Prodi','Pegawai','PayrollPegawai','PayrollVerifikasi','EPribadi']);
+        if(!empty($query->GetNIDN())){
+            if($query->GetSemua()){
+                if($query->IsVerificator()){
+                    $datas = $datas->whereIn('verifikasi', [$nip,$query->GetNIP()]);
+                } else{
+                    $datas = $datas->where(fn($q)=> $q->where('nidn',$query->GetNIDN()));
+                    // ->orWhereHas('EPribadiRemote', fn($subQuery) => $subQuery->where('nidn', $query->GetNIDN()) ) );
+                }
+            } else{
+                $datas = $query->IsVerificator()? 
+                    $datas->where('nidn',$query->GetNIDN())->orWhere('verifikasi',$query->GetNIDN()):
+                    $datas->where('nidn',$query->GetNIDN());
+            }
+        } else if(!empty($query->GetNIP())){
+            if($query->IsVerificator()){
+                $datas = $datas->whereIn('verifikasi',[$query->GetNIP(),$nip]);
+            } else{
+                $datas = $datas->where('nip',$query->GetNIP());
+            }
+        } else if($query->IsVerificator()){
+            $datas = $datas->whereIn('status',["menunggu verifikasi sdm","tolak sdm","terima sdm"]);
+        }
+        if(!empty($query->GetTahun())){
+            $datas = $datas->where(DB::raw('YEAR(tanggal_mulai)'),'>=',$query->GetTahun())->where(DB::raw('YEAR(tanggal_akhir)'),'<=',$query->GetTahun());
+        }
         Log::channel('mysql_query')->info($datas->toRawSql());
         $datas = $datas->orderBy('id', 'DESC')->get();
-        
+
         if($query->getOption()==TypeData::Default) return new Collection($datas);
 
         return $datas->transform(fn($data)=> Creator::buildCuti(CutiEntitas::make(
