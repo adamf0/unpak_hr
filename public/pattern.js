@@ -138,7 +138,7 @@ class SlipGajiDosen extends Template {
                                 <h4 style="font-weight: bold; margin: 0px" class="fs-6">UNIT KERJA/FAKULTAS REKTORAT</h4>
                                 <h4 style="font-weight: bold; margin: 0px" class="fs-6">UNIVERSITAS PAKUAN</h4>
                                 <h3 style="font-weight: bold; margin: 0px" class="fs-5"><u>GAJI dan TUNJANGAN</u></h3>
-                                <h4 style="font-weight: bold; margin: 3px" class="fs-6">Bulan/Tahun : Januari/2024</h4>
+                                <h4 style="font-weight: bold; margin: 3px" class="fs-6">Bulan/Tahun : ${responApi.bulan}/${responApi.tahun}</h4>
                             </td>
                         </tr>
                     </tbody>
@@ -395,7 +395,7 @@ class SlipGajiPegawai extends Template {
                                 <h4 style="font-weight: bold; margin: 0px" class="fs-6">UNIT KERJA/FAKULTAS REKTORAT</h4>
                                 <h4 style="font-weight: bold; margin: 0px" class="fs-6">UNIVERSITAS PAKUAN</h4>
                                 <h3 style="font-weight: bold; margin: 0px" class="fs-5"><u>GAJI dan TUNJANGAN</u></h3>
-                                <h4 style="font-weight: bold; margin: 3px" class="fs-6">Bulan/Tahun : Januari/2024</h4>
+                                <h4 style="font-weight: bold; margin: 3px" class="fs-6">Bulan/Tahun : ${responApi.bulan}/${responApi.tahun}</h4>
                             </td>
                         </tr>
                     </tbody>
