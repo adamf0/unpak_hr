@@ -19,6 +19,7 @@ use Architecture\Shared\TypeData;
 use Carbon\Carbon;
 use Exception;
 use Architecture\Shared\Facades\Utility;
+use Illuminate\Support\Facades\DB;
 
 class ApiInfoDashboardController extends Controller
 {
@@ -61,8 +62,9 @@ class ApiInfoDashboardController extends Controller
                 if($tgl->isSunday()){
                     $total_libur += 1;
                 }
+                $rule_libur = DB::table("view_master_kalender_flat")->where("tanggal",$tgl->format('Y-m-d'))->exists();
                 $rule_belum_absen = empty($masuk) && !$tgl->isSunday() && $tgl->format('Y-m-d')==Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d');
-                $rule_tidak_masuk = empty($masuk) && !$tgl->isSunday() && $tgl->format('Y-m-d')!=Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d');
+                $rule_tidak_masuk = $rule_libur || (empty($masuk) && !$tgl->isSunday() && $tgl->format('Y-m-d')!=Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d'));
                 
                 if($rule_belum_absen){
                     $belum_absen += 1;
@@ -80,8 +82,8 @@ class ApiInfoDashboardController extends Controller
                 }
             });
 
-            $sppd_tunggu = $sppd->filter(fn($c)=>in_array($c->GetStatus(), ["tolak","menunggu"]))->count();
-            $sppd_total = $sppd->count();
+            // $sppd_tunggu = $sppd->filter(fn($c)=>in_array($c->GetStatus(), ["tolak","menunggu"]))->count();
+            // $sppd_total = $sppd->count();
 
             return response()->json([
                 "status"=>"ok",
