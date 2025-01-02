@@ -59,19 +59,22 @@ class ApiInfoDashboardController extends Controller
                 $keluar = $klaim?->jam_keluar??$item->absen_keluar;
 
                 $tgl = Carbon::parse($item->tanggal)->setTimezone('Asia/Jakarta');
-                if($tgl->isSunday()){
+                $rule_libur = DB::table("view_master_kalender_flat")->where("tanggal",$tgl->format('Y-m-d'))->exists();
+                if($tgl->isSunday() || $rule_libur){
                     $total_libur += 1;
                 }
-                $rule_libur = DB::table("view_master_kalender_flat")->where("tanggal",$tgl->format('Y-m-d'))->exists();
                 $rule_belum_absen = empty($masuk) && !$tgl->isSunday() && $tgl->format('Y-m-d')==Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d');
-                $rule_tidak_masuk = $rule_libur || (empty($masuk) && !$tgl->isSunday() && $tgl->format('Y-m-d')!=Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d'));
+                $rule_tidak_masuk = empty($masuk) && !$tgl->isSunday() && $tgl->format('Y-m-d')!=Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d');
                 
                 if($rule_belum_absen){
                     $belum_absen += 1;
                 }
-                if($rule_tidak_masuk){
+                if(!$rule_libur && $rule_tidak_masuk){
                     $tidak_masuk += 1;
                 }
+                // if($rule_tidak_masuk){
+                //     $tidak_masuk += 1;
+                // }
                 if(!empty($masuk) && !$tgl->isSunday()){
                     $tepat += !Utility::isLate($masuk, $item->tanggal)? 1:0;
                     $telat += Utility::isLate($masuk, $item->tanggal)? 1:0;
