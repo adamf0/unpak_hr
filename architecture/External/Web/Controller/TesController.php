@@ -16,7 +16,7 @@ class TesController extends Controller
     ) {}
     
     public function tes(){
-        return Hash::make("251423");
+        return Hash::make("sdmUng9ul80");
 
         // try {
         //     $id = [];
